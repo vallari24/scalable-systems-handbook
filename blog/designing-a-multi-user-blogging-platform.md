@@ -687,6 +687,62 @@ shard = hash(user_id) % number_of_shards
 
 Then all data for that user can be routed to the same shard.
 
+For the blogging platform, the shard key depends on the access pattern.
+
+```text
+blogs table
+shard_key = blog_id
+```
+
+This is good when the common query is:
+
+```text
+GET /blogs/:blog_id
+```
+
+Each blog spreads across shards by `blog_id`.
+
+A bad shard key is:
+
+```text
+shard_key = status
+```
+
+There are only a few values:
+
+```text
+draft / published / deleted
+```
+
+Most rows may be `published`, so one shard becomes hot.
+
+Another risky shard key is:
+
+```text
+shard_key = author_id
+```
+
+This is useful for author pages, but if one famous author gets huge traffic, all traffic for that author hits one shard.
+
+For high-write likes on a viral blog, use buckets:
+
+```text
+blog_like_events
+shard_key = blog_id + bucket_id
+
+bucket_id = hash(user_id) % 32
+```
+
+Now likes for one viral blog spread across 32 buckets instead of one hot shard.
+
+Rule of thumb for choosing a shard key:
+
+- it appears in common queries
+- it has many distinct values
+- it spreads reads and writes evenly
+- it avoids always-increasing values like timestamps
+- it does not put one celebrity user, viral blog, or hot tenant on one shard
+
 Some databases and data systems have sharding built in, such as Cassandra, MongoDB clusters, and Redis Cluster. In other systems, the application, a proxy, or a custom routing layer decides which database connection to use.
 
 Sharding introduces hard design questions:
@@ -951,6 +1007,38 @@ API -> fan-out publisher
 ```
 
 In AWS, this is commonly done with SNS publishing to multiple SQS queues.
+
+```text
+SNS topic receives BlogPublished
+          |
+          +------------------> SQS 1 --> Search worker
+          |
+          +------------------> SQS 2 --> Counter worker
+          |
+          +------------------> SQS 3 --> Analytics worker
+```
+
+Each SQS queue gets its own copy of the message. Search can delete its copy after indexing, while counters still keep their copy until counter workers process it.
+
+One limitation: queues added later do not get old messages.
+
+```text
+Time 1:
+
+SNS publishes m1
+      |
+      +--> SQS 1 has m1
+      +--> SQS 2 has m1
+
+Time 2:
+
+New SQS 3 is subscribed
+
+SQS 3 does not receive old m1.
+It only receives future messages, such as m2, m3, ...
+```
+
+This is different from a retained stream like Kafka, where a new consumer group can start reading older retained events if they are still inside the retention window.
 
 ### Message Streams
 
@@ -1577,6 +1665,18 @@ The rule is simple: if two requests modify the same logical value, the modificat
 ## Communication
 
 Communication is how clients, servers, databases, and services exchange data. The shape of communication matters because every open connection, request, response, retry, and timeout consumes resources.
+
+In networking terms:
+
+```text
+Layer 7: Application layer
+         HTTP, WebSocket, SSE, gRPC
+
+Layer 4: Transport layer
+         TCP, UDP
+```
+
+HTTP is an application-layer protocol. It usually runs over TCP, which is a transport-layer protocol. UDP is also transport layer, but it is connectionless and used by protocols that prefer lower overhead or can handle packet loss differently.
 
 ### Before HTTP: TCP Handshake
 
