@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" role="img" aria-labelledby="title desc">
+  <title id="title">Pessimistic lock flow</title>
+  <desc id="desc">Transaction 1 acquires a lock, performs the critical section, releases it, and then transaction 2 proceeds.</desc>
+  <defs>
+    <marker id="arrow-white" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/></marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#ff8a8a"/></marker>
+    <style>
+      .bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.box{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:8}.life{stroke:#f5f5f5;stroke-width:2}.arrow{stroke:#f5f5f5;stroke-width:3;fill:none;marker-end:url(#arrow-white)}.wait{stroke:#ff8a8a;stroke-width:3;stroke-dasharray:9 7;fill:none;marker-end:url(#arrow-red)}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.text{fill:#f5f5f5;font:24px system-ui,sans-serif}.small{fill:#f5f5f5;font:21px system-ui,sans-serif}.pink{fill:#ff8a8a}.green{fill:#8aff8a}
+    </style>
+  </defs>
+  <rect class="bg" width="1120" height="560"/>
+  <g class="rule"><line x1="0" y1="75" x2="1120" y2="75"/><line x1="0" y1="150" x2="1120" y2="150"/><line x1="0" y1="225" x2="1120" y2="225"/><line x1="0" y1="300" x2="1120" y2="300"/><line x1="0" y1="375" x2="1120" y2="375"/><line x1="0" y1="450" x2="1120" y2="450"/></g>
+  <text class="title" x="56" y="52">Core idea: acquire the lock before proceeding</text>
+  <rect class="box" x="80" y="105" width="220" height="62"/><rect class="box" x="450" y="105" width="220" height="62"/><rect class="box" x="820" y="105" width="220" height="62"/>
+  <text class="text" x="190" y="144" text-anchor="middle">Transaction 1</text><text class="text" x="560" y="144" text-anchor="middle">Seat row</text><text class="text" x="930" y="144" text-anchor="middle">Transaction 2</text>
+  <line class="life" x1="190" y1="167" x2="190" y2="490"/><line class="life" x1="560" y1="167" x2="560" y2="490"/><line class="life" x1="930" y1="167" x2="930" y2="490"/>
+  <path class="arrow" d="M190 215 H548"/><text class="small pink" x="369" y="202" text-anchor="middle">ACQ_LOCK()</text>
+  <path class="arrow" d="M190 280 H548"/><text class="small" x="369" y="267" text-anchor="middle">read / update critical section</text>
+  <path class="wait" d="M930 330 H572"/><text class="small pink" x="751" y="318" text-anchor="middle">tries same lock</text>
+  <path class="arrow" d="M190 390 H548"/><text class="small green" x="369" y="378" text-anchor="middle">REL_LOCK()</text>
+  <path class="arrow" d="M560 445 H918"/><text class="small green" x="739" y="432" text-anchor="middle">lock granted</text>
+  <path class="arrow" d="M930 485 H572"/><text class="small" x="751" y="475" text-anchor="middle">T2 enters critical section</text>
+</svg>

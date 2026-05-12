@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="640" viewBox="0 0 1180 640" role="img" aria-labelledby="title desc">
+  <title id="title">ACID properties for airline check-in</title>
+  <desc id="desc">Atomicity, consistency, isolation, and durability explained through a seat reservation transaction.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/>
+    </marker>
+    <style>
+      .bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.card{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.head{fill:#8aff8a;font:27px system-ui,sans-serif;font-weight:700}.text{fill:#f5f5f5;font:22px system-ui,sans-serif}.small{fill:#cfcfcf;font:20px system-ui,sans-serif}.arrow{stroke:#f5f5f5;stroke-width:3;fill:none;marker-end:url(#arrow)}.pink{fill:#ff8a8a}.blue{fill:#b7b7ff}
+    </style>
+  </defs>
+  <rect class="bg" width="1180" height="640"/>
+  <g class="rule">
+    <line x1="0" y1="80" x2="1180" y2="80"/><line x1="0" y1="160" x2="1180" y2="160"/><line x1="0" y1="240" x2="1180" y2="240"/><line x1="0" y1="320" x2="1180" y2="320"/><line x1="0" y1="400" x2="1180" y2="400"/><line x1="0" y1="480" x2="1180" y2="480"/><line x1="0" y1="560" x2="1180" y2="560"/>
+  </g>
+  <text class="title" x="55" y="55">ACID: what a transaction promises</text>
+
+  <rect class="card" x="70" y="115" width="455" height="170"/>
+  <text class="head" x="105" y="158">Atomicity</text>
+  <text class="text" x="105" y="202">All-or-nothing.</text>
+  <text class="small" x="105" y="238">Reserve seat + update booking</text>
+  <text class="small" x="105" y="265">both commit, or both roll back.</text>
+
+  <rect class="card" x="655" y="115" width="455" height="170"/>
+  <text class="head" x="690" y="158">Consistency</text>
+  <text class="text" x="690" y="202">Valid state to valid state.</text>
+  <text class="small" x="690" y="238">One seat cannot have</text>
+  <text class="small" x="690" y="265">two confirmed passengers.</text>
+
+  <rect class="card" x="70" y="355" width="455" height="170"/>
+  <text class="head" x="105" y="398">Isolation</text>
+  <text class="text" x="105" y="442">Concurrent work stays safe.</text>
+  <text class="small" x="105" y="478">Two passengers racing for 6A</text>
+  <text class="small" x="105" y="505">cannot both win.</text>
+
+  <rect class="card" x="655" y="355" width="455" height="170"/>
+  <text class="head" x="690" y="398">Durability</text>
+  <text class="text" x="690" y="442">Committed means remembered.</text>
+  <text class="small" x="690" y="478">After COMMIT, seat 6A survives</text>
+  <text class="small" x="690" y="505">a database restart.</text>
+
+  <path class="arrow" d="M525 200 H645"/>
+  <path class="arrow" d="M525 440 H645"/>
+  <text class="text blue" x="590" y="328" text-anchor="middle">seat reservation transaction</text>
+</svg>

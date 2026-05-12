@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="760" viewBox="0 0 1240 760" role="img" aria-labelledby="title desc">
+  <title id="title">Exclusive locks</title>
+  <desc id="desc">Transaction 1 locks seats 1, 2, and 6 for update. Transaction 2 wants 3, 4, and 6 but waits because 6 is locked.</desc>
+  <defs>
+    <marker id="r" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#ff7a7a"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#78f078"/></marker>
+    <style>.bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.table{stroke:#f5f5f5;stroke-width:3;fill:none}.text{fill:#f5f5f5;font:28px system-ui,sans-serif}.small{fill:#f5f5f5;font:23px system-ui,sans-serif}.label{fill:#fff7a8;font:32px system-ui,sans-serif;font-weight:700}.pink{fill:#ff8a8a}.green{fill:#8aff8a}.muted{fill:#cfcfcf}.red{stroke:#ff7a7a;stroke-width:4;fill:none;marker-end:url(#r)}.greenLine{stroke:#78f078;stroke-width:4;fill:none;marker-end:url(#g)}.blocked{stroke:#ff7a7a;stroke-width:4;stroke-dasharray:9 7;fill:none;marker-end:url(#r)}.note{fill:#202020;stroke:#ff8a8a;stroke-width:2;rx:8}</style>
+  </defs>
+  <rect class="bg" width="1240" height="760"/>
+  <g class="rule"><line x1="0" y1="70" x2="1240" y2="70"/><line x1="0" y1="140" x2="1240" y2="140"/><line x1="0" y1="210" x2="1240" y2="210"/><line x1="0" y1="280" x2="1240" y2="280"/><line x1="0" y1="350" x2="1240" y2="350"/><line x1="0" y1="420" x2="1240" y2="420"/><line x1="0" y1="490" x2="1240" y2="490"/><line x1="0" y1="560" x2="1240" y2="560"/><line x1="0" y1="630" x2="1240" y2="630"/><line x1="0" y1="700" x2="1240" y2="700"/></g>
+  <text class="label" x="70" y="55">Exclusive lock: writers own the rows</text>
+  <line class="table" x1="90" y1="115" x2="540" y2="115"/><line class="table" x1="90" y1="180" x2="540" y2="180"/><line class="table" x1="215" y1="80" x2="215" y2="650"/><line class="table" x1="410" y1="80" x2="410" y2="650"/>
+  <text class="text" x="150" y="150" text-anchor="middle">id</text><text class="text" x="310" y="150" text-anchor="middle">seat_id</text><text class="text" x="475" y="150" text-anchor="middle">...</text>
+  <text class="text" x="310" y="245" text-anchor="middle">1</text><text class="text" x="310" y="315" text-anchor="middle">2</text><text class="text" x="310" y="385" text-anchor="middle">3</text><text class="text" x="310" y="455" text-anchor="middle">4</text><text class="text" x="310" y="525" text-anchor="middle">5</text><text class="text" x="310" y="595" text-anchor="middle">6</text>
+  <text class="label" x="730" y="125">Transaction 1</text><text class="small" x="730" y="180">SELECT ...</text><text class="small" x="730" y="225">WHERE seat_id IN (1, 2, 6)</text><text class="small pink" x="730" y="270">FOR UPDATE;</text><text class="small muted" x="730" y="315">read and modify</text>
+  <text class="label" x="730" y="430">Transaction 2</text><text class="small" x="730" y="490">SELECT ...</text><text class="small" x="730" y="535">WHERE seat_id IN (3, 4, 6)</text><text class="small green" x="730" y="580">FOR UPDATE;</text><text class="small muted" x="730" y="625">3 and 4 are free</text>
+  <rect class="note" x="720" y="660" width="410" height="65"/><text class="small pink" x="925" y="703" text-anchor="middle">seat 6 is locked, so T2 waits</text>
+  <path class="red" d="M330 235 C450 235, 590 195, 710 220"/><path class="red" d="M330 305 C460 305, 590 235, 710 250"/><path class="red" d="M330 585 C470 585, 590 315, 710 280"/>
+  <path class="greenLine" d="M330 375 C470 395, 590 500, 710 505"/><path class="greenLine" d="M330 445 C470 465, 590 535, 710 535"/><path class="blocked" d="M345 600 C500 645, 615 690, 720 690"/>
+</svg>

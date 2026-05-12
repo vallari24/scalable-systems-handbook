@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="500" viewBox="0 0 1160 500" role="img" aria-labelledby="title desc">
+  <title id="title">Transaction boundary</title>
+  <desc id="desc">A transaction wraps lock seat, reserve seat, update booking, and write audit event.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#78f078"/></marker><style>.bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.outer{fill:none;stroke:#fff7a8;stroke-width:4;rx:16}.step{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.text{fill:#f5f5f5;font:23px system-ui,sans-serif}.small{fill:#cfcfcf;font:20px system-ui,sans-serif}.green{fill:#8aff8a}.pink{fill:#ff8a8a}.arrow{stroke:#78f078;stroke-width:4;fill:none;marker-end:url(#a)}</style></defs>
+  <rect class="bg" width="1160" height="500"/>
+  <g class="rule"><line x1="0" y1="80" x2="1160" y2="80"/><line x1="0" y1="160" x2="1160" y2="160"/><line x1="0" y1="240" x2="1160" y2="240"/><line x1="0" y1="320" x2="1160" y2="320"/><line x1="0" y1="400" x2="1160" y2="400"/></g>
+  <text class="title" x="55" y="55">A transaction is the boundary around the whole operation</text>
+  <rect class="outer" x="55" y="120" width="1050" height="300"/>
+  <text class="text green" x="105" y="165">BEGIN</text><text class="text pink" x="1010" y="385">COMMIT</text>
+  <rect class="step" x="115" y="210" width="190" height="95"/><text class="text" x="210" y="248" text-anchor="middle">lock seat</text><text class="small" x="210" y="280" text-anchor="middle">6A</text>
+  <rect class="step" x="365" y="210" width="190" height="95"/><text class="text" x="460" y="248" text-anchor="middle">reserve seat</text><text class="small" x="460" y="280" text-anchor="middle">status = reserved</text>
+  <rect class="step" x="615" y="210" width="190" height="95"/><text class="text" x="710" y="248" text-anchor="middle">update booking</text><text class="small" x="710" y="280" text-anchor="middle">checked_in_at</text>
+  <rect class="step" x="865" y="210" width="190" height="95"/><text class="text" x="960" y="248" text-anchor="middle">write audit</text><text class="small" x="960" y="280" text-anchor="middle">who got 6A</text>
+  <path class="arrow" d="M305 258 H355"/><path class="arrow" d="M555 258 H605"/><path class="arrow" d="M805 258 H855"/>
+  <text class="small" x="580" y="465" text-anchor="middle">If any step fails before COMMIT, the database can roll the whole thing back.</text>
+</svg>

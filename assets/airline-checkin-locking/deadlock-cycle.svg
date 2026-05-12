@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" role="img" aria-labelledby="title desc">
+  <title id="title">Deadlock cycle</title>
+  <desc id="desc">Transaction 1 holds seat 1 and waits for seat 2. Transaction 2 holds seat 2 and waits for seat 1.</desc>
+  <defs><marker id="r" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#ff7a7a"/></marker><marker id="g" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#78f078"/></marker><style>.bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.circle{fill:#202020;stroke:#fff7a8;stroke-width:3}.row{fill:#202020;stroke:#f5f5f5;stroke-width:3;rx:8}.title{fill:#b7b7ff;font:32px system-ui,sans-serif;font-weight:700}.text{fill:#f5f5f5;font:24px system-ui,sans-serif}.small{fill:#f5f5f5;font:20px system-ui,sans-serif}.green{stroke:#78f078;stroke-width:4;fill:none;marker-end:url(#g)}.red{stroke:#ff7a7a;stroke-width:4;fill:none;marker-end:url(#r)}</style></defs>
+  <rect class="bg" width="960" height="500"/><g class="rule"><line x1="0" y1="70" x2="960" y2="70"/><line x1="0" y1="140" x2="960" y2="140"/><line x1="0" y1="210" x2="960" y2="210"/><line x1="0" y1="280" x2="960" y2="280"/><line x1="0" y1="350" x2="960" y2="350"/><line x1="0" y1="420" x2="960" y2="420"/></g>
+  <text class="title" x="55" y="55">Risk: transactional deadlock</text>
+  <circle class="circle" cx="170" cy="250" r="45"/><circle class="circle" cx="790" cy="250" r="45"/><text class="text" x="170" y="259" text-anchor="middle">T1</text><text class="text" x="790" y="259" text-anchor="middle">T2</text>
+  <rect class="row" x="405" y="110" width="155" height="72"/><rect class="row" x="405" y="315" width="155" height="72"/><text class="text" x="482" y="155" text-anchor="middle">Seat 1</text><text class="text" x="482" y="360" text-anchor="middle">Seat 2</text>
+  <path class="green" d="M210 225 C285 170, 335 146, 400 146"/><text class="small" x="305" y="135" text-anchor="middle">T1 holds</text>
+  <path class="green" d="M750 275 C675 335, 620 351, 565 351"/><text class="small" x="665" y="392" text-anchor="middle">T2 holds</text>
+  <path class="red" d="M210 280 C290 360, 335 351, 400 351"/><text class="small" x="300" y="415" text-anchor="middle">T1 waits for Seat 2</text>
+  <path class="red" d="M750 220 C675 140, 620 146, 565 146"/><text class="small" x="665" y="100" text-anchor="middle">T2 waits for Seat 1</text>
+  <text class="small" x="480" y="465" text-anchor="middle">The database aborts one transaction to break the cycle.</text>
+</svg>

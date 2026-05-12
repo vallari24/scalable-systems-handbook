@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="540" viewBox="0 0 1160 540" role="img" aria-labelledby="title desc">
+  <title id="title">Lock behavior map</title>
+  <desc id="desc">Shared lock allows reads but blocks writes. Exclusive lock blocks competing updates. Skip locked skips locked rows. Nowait fails immediately.</desc>
+  <style>.bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.card{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.head{font:27px system-ui,sans-serif;font-weight:700}.text{fill:#f5f5f5;font:22px system-ui,sans-serif}.small{fill:#cfcfcf;font:19px system-ui,sans-serif}.green{fill:#8aff8a}.pink{fill:#ff8a8a}.blue{fill:#b7b7ff}.yellow{fill:#ffd166}</style>
+  <rect class="bg" width="1160" height="540"/>
+  <g class="rule"><line x1="0" y1="80" x2="1160" y2="80"/><line x1="0" y1="160" x2="1160" y2="160"/><line x1="0" y1="240" x2="1160" y2="240"/><line x1="0" y1="320" x2="1160" y2="320"/><line x1="0" y1="400" x2="1160" y2="400"/><line x1="0" y1="480" x2="1160" y2="480"/></g>
+  <text class="title" x="55" y="55">Lock behavior cheat sheet</text>
+  <rect class="card" x="65" y="120" width="500" height="150"/><text class="head green" x="100" y="165">FOR SHARE</text><text class="text" x="100" y="205">I only need to read.</text><text class="small" x="100" y="238">Other readers can enter. Writers wait.</text>
+  <rect class="card" x="595" y="120" width="500" height="150"/><text class="head pink" x="630" y="165">FOR UPDATE</text><text class="text" x="630" y="205">I may write this row.</text><text class="small" x="630" y="238">Competing writers wait.</text>
+  <rect class="card" x="65" y="330" width="500" height="150"/><text class="head yellow" x="100" y="375">SKIP LOCKED</text><text class="text" x="100" y="415">Do not wait for busy rows.</text><text class="small" x="100" y="448">Return only rows that are free right now.</text>
+  <rect class="card" x="595" y="330" width="500" height="150"/><text class="head blue" x="630" y="375">NOWAIT</text><text class="text" x="630" y="415">Do not wait at all.</text><text class="small" x="630" y="448">If the row is locked, return an error immediately.</text>
+</svg>

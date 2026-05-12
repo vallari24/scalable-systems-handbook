@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Index lookup versus table scan</title>
+  <desc id="desc">Without an index the database scans many table blocks. With an index it searches a smaller ordered structure and fetches the matching row.</desc>
+  <defs>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#78f078"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ff7a7a"/>
+    </marker>
+    <style>
+      .bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.box{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:8}.hot{fill:#252015;stroke:#fff7a8;stroke-width:3;rx:8}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.head{fill:#8aff8a;font:27px system-ui,sans-serif;font-weight:700}.text{fill:#f5f5f5;font:22px system-ui,sans-serif}.small{fill:#cfcfcf;font:19px system-ui,sans-serif}.pink{fill:#ff8a8a}.green{fill:#8aff8a}.redLine{stroke:#ff7a7a;stroke-width:4;fill:none;marker-end:url(#arrow-red)}.greenLine{stroke:#78f078;stroke-width:4;fill:none;marker-end:url(#arrow-green)}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <g class="rule">
+    <line x1="0" y1="80" x2="1200" y2="80"/><line x1="0" y1="160" x2="1200" y2="160"/><line x1="0" y1="240" x2="1200" y2="240"/><line x1="0" y1="320" x2="1200" y2="320"/><line x1="0" y1="400" x2="1200" y2="400"/><line x1="0" y1="480" x2="1200" y2="480"/><line x1="0" y1="560" x2="1200" y2="560"/><line x1="0" y1="640" x2="1200" y2="640"/>
+  </g>
+  <text class="title" x="55" y="55">Why an index makes a seat lookup faster</text>
+
+  <text class="head pink" x="90" y="125">Without index: table scan</text>
+  <rect class="box" x="90" y="160" width="170" height="72"/><text class="text" x="175" y="204" text-anchor="middle">Block 1</text>
+  <rect class="box" x="285" y="160" width="170" height="72"/><text class="text" x="370" y="204" text-anchor="middle">Block 2</text>
+  <rect class="box" x="480" y="160" width="170" height="72"/><text class="text" x="565" y="204" text-anchor="middle">Block 3</text>
+  <rect class="box" x="675" y="160" width="170" height="72"/><text class="text" x="760" y="204" text-anchor="middle">...</text>
+  <rect class="hot" x="870" y="160" width="210" height="72"/><text class="text" x="975" y="204" text-anchor="middle">seat 6A row</text>
+  <path class="redLine" d="M175 250 C305 305, 845 305, 975 250"/>
+  <text class="small" x="575" y="330" text-anchor="middle">database may inspect many blocks before it finds flight 42, seat 6A</text>
+
+  <text class="head green" x="90" y="410">With index: lookup first, fetch second</text>
+  <rect class="box" x="90" y="455" width="300" height="150"/>
+  <text class="text" x="240" y="492" text-anchor="middle">index on</text>
+  <text class="text green" x="240" y="528" text-anchor="middle">(flight_id, seat_number)</text>
+  <text class="small" x="240" y="568" text-anchor="middle">(42, 6A) -> row id 8842</text>
+
+  <rect class="hot" x="735" y="490" width="250" height="90"/>
+  <text class="text" x="860" y="526" text-anchor="middle">table row</text>
+  <text class="text green" x="860" y="558" text-anchor="middle">flight 42, seat 6A</text>
+
+  <path class="greenLine" d="M390 530 H725"/>
+  <text class="small" x="557" y="512" text-anchor="middle">fetch matching row id</text>
+  <text class="small" x="600" y="665" text-anchor="middle">The index is smaller and ordered, so the database avoids a broad scan.</text>
+</svg>
