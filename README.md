@@ -1,6 +1,6 @@
 # Scalable Systems Handbook
 
-Eight original essays on designing scalable systems, data platforms, and large-scale application architecture.
+Eight essays on designing scalable systems, data platforms, and large-scale application architecture.
 
 ## Essays
 
