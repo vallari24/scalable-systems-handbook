@@ -140,6 +140,240 @@ Only one incompatible transaction can own the same row at the same time. The oth
 
 ![Lock behavior map](../assets/airline-checkin-locking/lock-behavior-map.svg)
 
+## Locking Demonstration
+
+Now make the problem concrete.
+
+All 120 passengers on the same trip press check-in at nearly the same time. The application asks the database for the first empty seat:
+
+Remember the pattern:
+
+```text
+fixed inventory + contention = locking
+```
+
+Seats, vaccine slots, train tickets, movie tickets, and flash-sale inventory all have the same shape. Many users are racing for a small set of concrete items. If the system does not coordinate the race, the product can promise the same item twice.
+
+```sql
+SELECT id, name, trip_id, user_id
+FROM seats
+WHERE trip_id = 1
+  AND user_id IS NULL
+ORDER BY id
+LIMIT 1;
+```
+
+Before looking at the answers, predict what happens in each version:
+
+- plain `SELECT`
+- `SELECT ... FOR UPDATE`
+- `SELECT ... FOR UPDATE SKIP LOCKED`
+- `SELECT ... FOR UPDATE NOWAIT`
+
+The useful question is not "which passenger clicked first?" The useful question is "what does the database do when multiple transactions reach the same first empty row?"
+
+![Seat allocation scenarios](../assets/airline-checkin-locking/seat-allocation-scenarios.svg)
+
+Each scenario below uses three transactions to explain the mechanism. After that, the text map shows the full 120-seat result for the whole check-in run.
+
+For the text maps, read each block as 120 seats: 6 rows with 20 seats per row.
+
+```text
+. = available
+X = booked
+D = booked row with duplicate claims
+```
+
+### Scenario 1: Plain `SELECT`
+
+Question: if transaction `T1`, `T2`, and `T3` all run the query before anyone commits, which row do they read?
+
+Answer: they may all read the same row.
+
+```text
+time 0: seat 1B has user_id = NULL
+
+T1 SELECT -> seat 1B
+T2 SELECT -> seat 1B
+T3 SELECT -> seat 1B
+
+T1 UPDATE seats SET user_id = 101 WHERE id = 1
+T2 UPDATE seats SET user_id = 102 WHERE id = 1
+T3 UPDATE seats SET user_id = 103 WHERE id = 1
+```
+
+The terminal may print two passengers assigned to the same seat because the read did not reserve anything. It only observed an old value.
+
+```text
+Zoila Rau was assigned the seat 1-B
+Mr. Ferne King was assigned the seat 1-B
+```
+
+This is the unsafe version. It has high apparent concurrency, but the concurrency is not controlled.
+
+```text
+plain SELECT after 120 concurrent attempts
+
+D . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+
+This is one possible unsafe outcome. The exact map is timing-dependent.
+The `D` seat is booked in the database, but more than one transaction may have claimed it.
+In the worst case, all 120 transactions read the same first seat before any commit, so 120 users can be told they got one seat even though the row can store only one final `user_id`.
+```
+
+### Scenario 2: `FOR UPDATE`
+
+Now add the lock:
+
+```sql
+SELECT id, name, trip_id, user_id
+FROM seats
+WHERE trip_id = 1
+  AND user_id IS NULL
+ORDER BY id
+LIMIT 1
+FOR UPDATE;
+```
+
+Question: if `T1` locks seat `1B`, does `T2` immediately take seat `1C`?
+
+Answer: no. `T2` usually waits behind the locked first row.
+
+```text
+T1 SELECT ... FOR UPDATE -> locks 1B
+T2 SELECT ... FOR UPDATE -> waits on 1B
+T3 SELECT ... FOR UPDATE -> waits on 1B
+
+T1 UPDATE 1B
+T1 COMMIT -> releases lock
+
+T2 wakes up, rechecks 1B, sees user_id is no longer NULL
+T2 moves to the next matching row -> locks 1C
+```
+
+This version is correct. Two transactions do not claim the same row. But it can serialize the workload because many transactions wait on the same first available seat.
+
+The allocation order is mostly seat order because of `ORDER BY id`, but the passenger order is not guaranteed. The database does not promise that the first request, first connection, or lowest user id gets the next seat.
+
+```text
+seat order:       1B, 1C, 1D, ...
+passenger order:  scheduler-dependent
+```
+
+```text
+FOR UPDATE after 120 concurrent attempts
+
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+
+Correct result: all 120 seats are booked exactly once.
+Cost: many transactions may wait behind the first locked row.
+```
+
+### Scenario 3: `FOR UPDATE SKIP LOCKED`
+
+Now tell the database not to wait on busy rows:
+
+```sql
+SELECT id, name, trip_id, user_id
+FROM seats
+WHERE trip_id = 1
+  AND user_id IS NULL
+ORDER BY id
+LIMIT 1
+FOR UPDATE SKIP LOCKED;
+```
+
+Question: if `T1` has locked seat `1B`, what should `T2` do?
+
+Answer: skip `1B` and try the next available unlocked row.
+
+```text
+T1 SELECT ... FOR UPDATE SKIP LOCKED -> locks 1B
+T2 SELECT ... FOR UPDATE SKIP LOCKED -> skips 1B, locks 1C
+T3 SELECT ... FOR UPDATE SKIP LOCKED -> skips 1B and 1C, locks 1D
+
+T1 UPDATE 1B
+T2 UPDATE 1C
+T3 UPDATE 1D
+```
+
+This is why `SKIP LOCKED` is powerful for fixed-inventory allocation, job queues, flash sales, and standby seat assignment. The workers spread out over different rows instead of forming one long waiting line.
+
+The tradeoff is fairness. The system gets throughput, not strict first-come-first-served behavior.
+
+```text
+correctness: no duplicate seats
+throughput:  high
+fairness:    not guaranteed
+```
+
+```text
+FOR UPDATE SKIP LOCKED after 120 concurrent attempts
+
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X X X X X X
+
+Same correct final shape as FOR UPDATE: all 120 seats booked exactly once.
+The difference is the path: workers skip busy rows and spread out in parallel.
+```
+
+### Scenario 4: `FOR UPDATE NOWAIT`
+
+Now tell the database to fail instead of waiting:
+
+```sql
+SELECT id, name, trip_id, user_id
+FROM seats
+WHERE trip_id = 1
+  AND user_id IS NULL
+ORDER BY id
+LIMIT 1
+FOR UPDATE NOWAIT;
+```
+
+Question: if `T1` has locked the first available seat, should `T2` block?
+
+Answer: no. `T2` gets a lock error immediately.
+
+```text
+T1 SELECT ... FOR UPDATE NOWAIT -> locks 1B
+T2 SELECT ... FOR UPDATE NOWAIT -> error, row is locked
+T3 SELECT ... FOR UPDATE NOWAIT -> error, row is locked
+```
+
+This is useful when waiting would create a bad user experience. For example, if a passenger explicitly chose seat `6E`, the app can fail fast, refresh the seat map, and ask them to pick another seat.
+
+For automatic allocation of the next available seat, `NOWAIT` is usually less useful than `SKIP LOCKED`, unless the application has a retry loop.
+
+```text
+FOR UPDATE NOWAIT after 120 concurrent attempts without retry
+
+X . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+
+One transaction got the lock and booked the seat.
+The other 119 attempts failed fast and must retry or return an error to the app.
+With retries, more seats can be booked, but each retry is a new attempt.
+```
+
 ## Shared Locks
 
 A shared lock is a read lock.

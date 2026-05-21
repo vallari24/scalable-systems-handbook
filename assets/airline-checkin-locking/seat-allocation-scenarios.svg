@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860" role="img" aria-labelledby="title desc">
+  <title id="title">Seat allocation under different locking strategies</title>
+  <desc id="desc">Four panels compare plain select, for update, skip locked, and nowait when three transactions try to reserve seats at the same time.</desc>
+  <style>
+    .bg{fill:#171717}
+    .rule{stroke:#333;stroke-width:2}
+    .panel{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}
+    .title{fill:#fff7a8;font:36px system-ui,sans-serif;font-weight:700}
+    .subtitle{fill:#cfcfcf;font:21px system-ui,sans-serif}
+    .head{font:27px system-ui,sans-serif;font-weight:700}
+    .text{fill:#f5f5f5;font:20px system-ui,sans-serif}
+    .small{fill:#cfcfcf;font:17px system-ui,sans-serif}
+    .tiny{fill:#111;font:15px system-ui,sans-serif;font-weight:700}
+    .yellow{fill:#ffd166}
+    .green{fill:#8aff8a}
+    .pink{fill:#ff8a8a}
+    .blue{fill:#b7b7ff}
+    .orange{fill:#ffb86b}
+    .seat{fill:#2b2b2b;stroke:#777;stroke-width:1.5;rx:6}
+    .seatFree{fill:#2b2b2b;stroke:#777;stroke-width:1.5;rx:6}
+    .seatLocked{fill:#ffd166;stroke:#fff7a8;stroke-width:2;rx:6}
+    .seatTaken{fill:#8aff8a;stroke:#d7ffd7;stroke-width:2;rx:6}
+    .seatBad{fill:#ff8a8a;stroke:#ffd0d0;stroke-width:2;rx:6}
+    .seatFail{fill:#b7b7ff;stroke:#eeeeff;stroke-width:2;rx:6}
+    .arrow{stroke:#f5f5f5;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    .dimArrow{stroke:#888;stroke-width:2;fill:none;marker-end:url(#arrowDim)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/>
+    </marker>
+    <marker id="arrowDim" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1280" height="860"/>
+  <g class="rule">
+    <line x1="0" y1="88" x2="1280" y2="88"/>
+    <line x1="0" y1="172" x2="1280" y2="172"/>
+    <line x1="0" y1="256" x2="1280" y2="256"/>
+    <line x1="0" y1="340" x2="1280" y2="340"/>
+    <line x1="0" y1="424" x2="1280" y2="424"/>
+    <line x1="0" y1="508" x2="1280" y2="508"/>
+    <line x1="0" y1="592" x2="1280" y2="592"/>
+    <line x1="0" y1="676" x2="1280" y2="676"/>
+    <line x1="0" y1="760" x2="1280" y2="760"/>
+  </g>
+
+  <text class="title" x="54" y="55">Fixed inventory + contention = locking</text>
+  <text class="subtitle" x="54" y="118">First three contenders show the behavior. The full 120-seat result is shown as text in the article.</text>
+
+  <rect class="panel" x="44" y="156" width="580" height="302"/>
+  <text class="head pink" x="74" y="204">1. Plain SELECT</text>
+  <text class="small" x="74" y="235">Question: if T1, T2, and T3 read before any commit, who sees seat 1A?</text>
+  <rect class="seatBad" x="82" y="282" width="72" height="48"/><text class="tiny" x="105" y="312">1A</text>
+  <rect class="seatFree" x="166" y="282" width="72" height="48"/><text class="small" x="188" y="312">1B</text>
+  <rect class="seatFree" x="250" y="282" width="72" height="48"/><text class="small" x="272" y="312">1C</text>
+  <path class="dimArrow" d="M92 360 C110 342, 124 338, 118 330"/>
+  <path class="dimArrow" d="M202 360 C178 342, 152 338, 136 330"/>
+  <path class="dimArrow" d="M312 360 C250 340, 190 336, 146 330"/>
+  <text class="text" x="74" y="383">T1 -> 1A</text>
+  <text class="text" x="184" y="383">T2 -> 1A</text>
+  <text class="text" x="294" y="383">T3 -> 1A</text>
+  <text class="small" x="74" y="424">Answer: duplicate claims are possible; timing decides the final writer.</text>
+
+  <rect class="panel" x="656" y="156" width="580" height="302"/>
+  <text class="head yellow" x="686" y="204">2. FOR UPDATE</text>
+  <text class="small" x="686" y="235">Question: if T1 locks 1A, do T2 and T3 take 1B and 1C?</text>
+  <rect class="seatLocked" x="694" y="282" width="72" height="48"/><text class="tiny" x="716" y="312">1A</text>
+  <rect class="seatTaken" x="778" y="282" width="72" height="48"/><text class="tiny" x="800" y="312">1B</text>
+  <rect class="seatTaken" x="862" y="282" width="72" height="48"/><text class="tiny" x="884" y="312">1C</text>
+  <text class="text" x="686" y="364">T1 locks 1A</text>
+  <text class="text" x="686" y="394">T2 waits, then rechecks -> 1B</text>
+  <text class="text" x="686" y="424">T3 waits, then rechecks -> 1C</text>
+  <text class="small" x="982" y="312">correct, but serialized</text>
+
+  <rect class="panel" x="44" y="498" width="580" height="302"/>
+  <text class="head green" x="74" y="546">3. FOR UPDATE SKIP LOCKED</text>
+  <text class="small" x="74" y="577">Question: can workers avoid waiting behind the first locked seat?</text>
+  <rect class="seatTaken" x="82" y="624" width="72" height="48"/><text class="tiny" x="105" y="654">1A</text>
+  <rect class="seatTaken" x="166" y="624" width="72" height="48"/><text class="tiny" x="189" y="654">1B</text>
+  <rect class="seatTaken" x="250" y="624" width="72" height="48"/><text class="tiny" x="273" y="654">1C</text>
+  <text class="text" x="74" y="706">T1 locks 1A</text>
+  <text class="text" x="74" y="736">T2 skips 1A -> locks 1B</text>
+  <text class="text" x="74" y="766">T3 skips 1A and 1B -> locks 1C</text>
+  <text class="small" x="356" y="654">correct and parallel</text>
+
+  <rect class="panel" x="656" y="498" width="580" height="302"/>
+  <text class="head blue" x="686" y="546">4. FOR UPDATE NOWAIT</text>
+  <text class="small" x="686" y="577">Question: if the first row is busy, should the request wait?</text>
+  <rect class="seatLocked" x="694" y="624" width="72" height="48"/><text class="tiny" x="716" y="654">1A</text>
+  <rect class="seatFail" x="778" y="624" width="72" height="48"/><text class="tiny" x="800" y="654">ERR</text>
+  <rect class="seatFail" x="862" y="624" width="72" height="48"/><text class="tiny" x="884" y="654">ERR</text>
+  <text class="text" x="686" y="706">T1 locks 1A</text>
+  <text class="text" x="686" y="736">T2 tries 1A -> lock error</text>
+  <text class="text" x="686" y="766">T3 tries 1A -> lock error</text>
+  <text class="small" x="982" y="654">fast failure, app retries</text>
+</svg>

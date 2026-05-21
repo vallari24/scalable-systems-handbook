@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="620" viewBox="0 0 1180 620" role="img" aria-labelledby="title desc">
+  <title id="title">Day-zero KV architecture with one MySQL primary</title>
+  <desc id="desc">Clients go through a load balancer to multiple KV API servers. The API servers read and write one MySQL primary. A batch cleanup worker deletes expired rows from the primary.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.sub{fill:#d6d6d6;font:20px system-ui,sans-serif}.box{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}.db{fill:#202020;stroke:#ffd166;stroke-width:2}.worker{fill:#202020;stroke:#fff7a8;stroke-width:2;rx:10}.head{fill:#f5f5f5;font:22px system-ui,sans-serif;font-weight:700}.small{fill:#cfcfcf;font:17px system-ui,sans-serif}.yellow{fill:#ffd166}.green{fill:#8aff8a}.pink{fill:#ff8a8a}.arrow{stroke:#f5f5f5;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.cleanup{stroke:#fff7a8;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.muted{stroke:#888;stroke-width:2;fill:none;marker-end:url(#arrowDim)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/></marker>
+    <marker id="arrowDim" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#888"/></marker>
+  </defs>
+  <rect class="bg" width="1180" height="620"/>
+  <g class="rule"><line x1="0" y1="92" x2="1180" y2="92"/><line x1="0" y1="184" x2="1180" y2="184"/><line x1="0" y1="276" x2="1180" y2="276"/><line x1="0" y1="368" x2="1180" y2="368"/><line x1="0" y1="460" x2="1180" y2="460"/><line x1="0" y1="552" x2="1180" y2="552"/></g>
+  <text class="title" x="54" y="58">1. Start with one primary</text>
+  <text class="sub" x="54" y="122">Scale KV API servers first, as long as MySQL can handle the incoming load.</text>
+
+  <rect class="box" x="70" y="260" width="130" height="82"/>
+  <text class="head" x="105" y="295">Client</text>
+  <text class="small" x="94" y="322">GET PUT DEL TTL</text>
+
+  <rect class="box" x="270" y="230" width="92" height="140"/>
+  <text class="head" x="292" y="276">Load</text>
+  <text class="head" x="284" y="306">Balancer</text>
+  <path class="arrow" d="M200 301 L270 301"/>
+
+  <rect class="box" x="450" y="156" width="188" height="62"/>
+  <text class="head" x="496" y="195">KV API</text>
+  <rect class="box" x="450" y="270" width="188" height="62"/>
+  <text class="head" x="496" y="309">KV API</text>
+  <rect class="box" x="450" y="384" width="188" height="62"/>
+  <text class="head" x="496" y="423">KV API</text>
+  <path class="arrow" d="M362 264 L450 187"/><path class="arrow" d="M362 301 L450 301"/><path class="arrow" d="M362 338 L450 415"/>
+
+  <ellipse class="db" cx="850" cy="270" rx="82" ry="32"/>
+  <path class="db" d="M768 270 L768 360 C768 378 932 378 932 360 L932 270"/>
+  <text class="head yellow" x="788" y="328">MySQL primary</text>
+  <text class="small" x="798" y="354">all reads + writes</text>
+  <path class="arrow" d="M638 187 L768 258"/><path class="arrow" d="M638 301 L768 301"/><path class="arrow" d="M638 415 L768 346"/>
+
+  <rect class="worker" x="748" y="472" width="218" height="58"/>
+  <text class="head yellow" x="778" y="510">Batch cleanup</text>
+  <path class="cleanup" d="M858 472 L858 384"/>
+  <text class="small" x="54" y="570">Cleanup deletes expired and ttl=-1 rows from the primary in bounded batches.</text>
+</svg>

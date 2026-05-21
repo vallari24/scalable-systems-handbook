@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="660" viewBox="0 0 1180 660" role="img" aria-labelledby="title desc">
+  <title id="title">KV architecture with read replicas</title>
+  <desc id="desc">For a read-heavy workload, KV API servers send writes to the master and eligible reads to read replicas. The master replicates updates to replicas. Batch cleanup runs on the master.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.sub{fill:#d6d6d6;font:20px system-ui,sans-serif}.box{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}.db{fill:#202020;stroke:#ffd166;stroke-width:2}.rep{fill:#202020;stroke:#8aff8a;stroke-width:2}.worker{fill:#202020;stroke:#fff7a8;stroke-width:2;rx:10}.head{fill:#f5f5f5;font:22px system-ui,sans-serif;font-weight:700}.small{fill:#cfcfcf;font:17px system-ui,sans-serif}.yellow{fill:#ffd166}.green{fill:#8aff8a}.pink{fill:#ff8a8a}.blue{fill:#b7b7ff}.arrow{stroke:#f5f5f5;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.read{stroke:#8aff8a;stroke-width:2.5;fill:none;marker-end:url(#arrowGreen)}.write{stroke:#ff8a8a;stroke-width:2.5;fill:none;marker-end:url(#arrowPink)}.repl{stroke:#b7b7ff;stroke-width:2.5;stroke-dasharray:8 8;fill:none;marker-end:url(#arrowBlue)}.cleanup{stroke:#fff7a8;stroke-width:2.5;fill:none;marker-end:url(#arrowYellow)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/></marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#8aff8a"/></marker>
+    <marker id="arrowPink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#ff8a8a"/></marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#b7b7ff"/></marker>
+    <marker id="arrowYellow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#fff7a8"/></marker>
+  </defs>
+  <rect class="bg" width="1180" height="660"/>
+  <g class="rule"><line x1="0" y1="92" x2="1180" y2="92"/><line x1="0" y1="184" x2="1180" y2="184"/><line x1="0" y1="276" x2="1180" y2="276"/><line x1="0" y1="368" x2="1180" y2="368"/><line x1="0" y1="460" x2="1180" y2="460"/><line x1="0" y1="552" x2="1180" y2="552"/></g>
+  <text class="title" x="54" y="58">2. Add read replicas only for read-heavy traffic</text>
+  <text class="sub" x="54" y="122">Good fit: stale reads are acceptable and read:write is around 99:1. Otherwise route reads to the master.</text>
+
+  <rect class="box" x="70" y="286" width="92" height="140"/><text class="head" x="92" y="332">Load</text><text class="head" x="84" y="362">Balancer</text>
+  <rect class="box" x="250" y="226" width="170" height="58"/><text class="head" x="298" y="263">KV API</text>
+  <rect class="box" x="250" y="344" width="170" height="58"/><text class="head" x="298" y="381">KV API</text>
+  <path class="arrow" d="M162 322 L250 255"/><path class="arrow" d="M162 390 L250 373"/>
+
+  <ellipse class="db" cx="650" cy="324" rx="76" ry="30"/><path class="db" d="M574 324 L574 402 C574 420 726 420 726 402 L726 324"/>
+  <text class="head yellow" x="606" y="378">Master</text><text class="small" x="598" y="402">writes + cleanup</text>
+  <path class="write" d="M420 255 C500 258 530 300 574 330"/><path class="write" d="M420 373 C500 370 530 344 574 342"/>
+
+  <ellipse class="rep" cx="940" cy="210" rx="68" ry="28"/><path class="rep" d="M872 210 L872 278 C872 294 1008 294 1008 278 L1008 210"/>
+  <text class="head green" x="900" y="258">Replica</text>
+  <ellipse class="rep" cx="940" cy="452" rx="68" ry="28"/><path class="rep" d="M872 452 L872 520 C872 536 1008 536 1008 520 L1008 452"/>
+  <text class="head green" x="900" y="500">Replica</text>
+
+  <path class="read" d="M420 238 C585 170 710 168 872 222"/><path class="read" d="M420 388 C585 510 710 510 872 464"/>
+  <text class="small green" x="512" y="172">eligible reads</text>
+  <path class="repl" d="M726 326 C798 288 820 250 872 236"/><path class="repl" d="M726 388 C798 424 820 456 872 472"/>
+  <text class="small blue" x="748" y="318">replication lag</text>
+
+  <rect class="worker" x="540" y="520" width="218" height="58"/><text class="head yellow" x="570" y="558">Batch cleanup</text>
+  <path class="cleanup" d="M650 520 L650 432"/>
+  <text class="small" x="62" y="604">Rule: if a read must be up to date, send it to the master. Replicas buy read capacity by accepting lag.</text>
+</svg>

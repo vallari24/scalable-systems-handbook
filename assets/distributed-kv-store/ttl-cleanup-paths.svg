@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="620" viewBox="0 0 1180 620" role="img" aria-labelledby="title desc">
+  <title id="title">TTL cleanup paths</title>
+  <desc id="desc">GET filters expired rows immediately. Batch cleanup removes expired and soft-deleted rows later. In-memory lazy deletion removes hot expired keys during GET.</desc>
+  <style>
+    .bg{fill:#171717}
+    .rule{stroke:#333;stroke-width:2}
+    .title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}
+    .sub{fill:#d6d6d6;font:20px system-ui,sans-serif}
+    .panel{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}
+    .head{font:25px system-ui,sans-serif;font-weight:700}
+    .text{fill:#f5f5f5;font:19px system-ui,sans-serif}
+    .small{fill:#cfcfcf;font:17px system-ui,sans-serif}
+    .green{fill:#8aff8a}
+    .yellow{fill:#ffd166}
+    .pink{fill:#ff8a8a}
+    .blue{fill:#b7b7ff}
+    .arrow{stroke:#f5f5f5;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    .dim{stroke:#777;stroke-width:2;fill:none;marker-end:url(#arrowDim)}
+    .box{fill:#2b2b2b;stroke:#777;stroke-width:1.5;rx:8}
+    .hot{stroke:#8aff8a}
+    .cold{stroke:#ffd166}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/>
+    </marker>
+    <marker id="arrowDim" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#777"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1180" height="620"/>
+  <g class="rule">
+    <line x1="0" y1="92" x2="1180" y2="92"/>
+    <line x1="0" y1="184" x2="1180" y2="184"/>
+    <line x1="0" y1="276" x2="1180" y2="276"/>
+    <line x1="0" y1="368" x2="1180" y2="368"/>
+    <line x1="0" y1="460" x2="1180" y2="460"/>
+    <line x1="0" y1="552" x2="1180" y2="552"/>
+  </g>
+  <text class="title" x="54" y="58">TTL: correctness on read, cleanup later</text>
+  <text class="sub" x="54" y="122">Expired rows can still exist physically. GET must hide them before cleanup removes them.</text>
+
+  <rect class="panel" x="54" y="164" width="330" height="390"/>
+  <text class="head green" x="84" y="210">GET path</text>
+  <rect class="box hot" x="96" y="246" width="210" height="58"/>
+  <text class="text" x="126" y="282">GET key k</text>
+  <path class="arrow" d="M200 304 L200 352"/>
+  <rect class="box" x="86" y="352" width="230" height="70"/>
+  <text class="small" x="108" y="382">WHERE key = k</text>
+  <text class="small" x="108" y="406">AND ttl &gt; now</text>
+  <path class="arrow" d="M200 422 L200 470"/>
+  <text class="text" x="98" y="504">expired row hidden</text>
+
+  <rect class="panel" x="424" y="164" width="330" height="390"/>
+  <text class="head yellow" x="454" y="210">Batch cleanup</text>
+  <rect class="box cold" x="466" y="246" width="210" height="58"/>
+  <text class="text" x="492" y="282">cron tick</text>
+  <path class="arrow" d="M570 304 L570 352"/>
+  <rect class="box" x="456" y="352" width="230" height="70"/>
+  <text class="small" x="478" y="382">DELETE WHERE</text>
+  <text class="small" x="478" y="406">ttl &lt;= now</text>
+  <path class="arrow" d="M570 422 L570 470"/>
+  <text class="text" x="464" y="504">bounded hard delete</text>
+
+  <rect class="panel" x="794" y="164" width="330" height="390"/>
+  <text class="head blue" x="824" y="210">Lazy deletion</text>
+  <rect class="box hot" x="836" y="246" width="210" height="58"/>
+  <text class="text" x="858" y="282">GET hot key</text>
+  <path class="arrow" d="M940 304 L940 352"/>
+  <rect class="box" x="826" y="352" width="230" height="70"/>
+  <text class="small" x="846" y="382">if expired</text>
+  <text class="small" x="846" y="406">delete now</text>
+  <path class="arrow" d="M940 422 L940 470"/>
+  <text class="text" x="836" y="504">fast in memory</text>
+  <text class="small" x="828" y="532">cold keys need periodic cleanup</text>
+</svg>

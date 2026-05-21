@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="560" viewBox="0 0 1180 560" role="img" aria-labelledby="title desc">
+  <title id="title">KV row lifecycle</title>
+  <desc id="desc">A key starts missing, becomes live after PUT, can expire by TTL, can be soft deleted by setting ttl to -1, and is physically removed by cleanup.</desc>
+  <style>
+    .bg{fill:#171717}
+    .rule{stroke:#333;stroke-width:2}
+    .title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}
+    .sub{fill:#d6d6d6;font:20px system-ui,sans-serif}
+    .box{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}
+    .live{stroke:#8aff8a}
+    .expired{stroke:#ffd166}
+    .deleted{stroke:#ff8a8a}
+    .gone{stroke:#b7b7ff}
+    .head{fill:#f5f5f5;font:25px system-ui,sans-serif;font-weight:700}
+    .text{fill:#cfcfcf;font:18px system-ui,sans-serif}
+    .green{fill:#8aff8a}
+    .yellow{fill:#ffd166}
+    .pink{fill:#ff8a8a}
+    .blue{fill:#b7b7ff}
+    .arrow{stroke:#f5f5f5;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    .dim{stroke:#777;stroke-width:2;fill:none;marker-end:url(#arrowDim)}
+    .label{fill:#f5f5f5;font:17px system-ui,sans-serif;font-weight:700}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/>
+    </marker>
+    <marker id="arrowDim" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#777"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1180" height="560"/>
+  <g class="rule">
+    <line x1="0" y1="92" x2="1180" y2="92"/>
+    <line x1="0" y1="184" x2="1180" y2="184"/>
+    <line x1="0" y1="276" x2="1180" y2="276"/>
+    <line x1="0" y1="368" x2="1180" y2="368"/>
+    <line x1="0" y1="460" x2="1180" y2="460"/>
+  </g>
+  <text class="title" x="54" y="58">One key, four logical states</text>
+  <text class="sub" x="54" y="122">The foreground path updates ttl. The background cleanup path physically removes old rows.</text>
+
+  <rect class="box gone" x="70" y="224" width="180" height="96"/>
+  <text class="head blue" x="112" y="264">Missing</text>
+  <text class="text" x="100" y="294">no row yet</text>
+
+  <rect class="box live" x="340" y="224" width="190" height="96"/>
+  <text class="head green" x="395" y="264">Live</text>
+  <text class="text" x="382" y="294">ttl &gt; now</text>
+
+  <rect class="box expired" x="620" y="138" width="210" height="96"/>
+  <text class="head yellow" x="672" y="178">Expired</text>
+  <text class="text" x="665" y="208">ttl &lt;= now</text>
+
+  <rect class="box deleted" x="620" y="316" width="210" height="96"/>
+  <text class="head pink" x="670" y="356">Deleted</text>
+  <text class="text" x="674" y="386">ttl = -1</text>
+
+  <rect class="box gone" x="930" y="224" width="180" height="96"/>
+  <text class="head blue" x="972" y="264">Gone</text>
+  <text class="text" x="974" y="294">hard delete</text>
+
+  <path class="arrow" d="M250 272 L340 272"/>
+  <text class="label" x="280" y="250">PUT</text>
+
+  <path class="arrow" d="M530 248 C570 220, 580 194, 620 186"/>
+  <text class="label" x="548" y="206">ttl passes</text>
+
+  <path class="arrow" d="M530 296 C570 324, 580 356, 620 364"/>
+  <text class="label" x="548" y="342">DEL</text>
+
+  <path class="dim" d="M620 204 C540 174, 470 176, 430 224"/>
+  <text class="label" x="454" y="174">PUT same key</text>
+
+  <path class="dim" d="M620 392 C500 452, 405 424, 380 320"/>
+  <text class="label" x="414" y="444">PUT same key</text>
+
+  <path class="arrow" d="M830 186 C882 194, 900 220, 930 246"/>
+  <text class="label" x="858" y="178">cleanup</text>
+
+  <path class="arrow" d="M830 364 C882 356, 900 326, 930 296"/>
+  <text class="label" x="858" y="388">cleanup</text>
+</svg>

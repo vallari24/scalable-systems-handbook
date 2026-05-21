@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="780" viewBox="0 0 1280 780" role="img" aria-labelledby="title desc">
+  <title id="title">Slack Realtime Fanout with Edge Servers and Pub/Sub</title>
+  <desc id="desc">Two edge servers hold local WebSocket connections. A message is delivered locally, published to a channel topic, received by subscribed edge servers, and forwarded to their local users.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7cf29a"/>
+    </marker>
+    <marker id="arrowPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff8fb3"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .title { fill: #fff59d; font: 700 39px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .edge { fill: #171b22; stroke: #e8ecf3; stroke-width: 2.5; rx: 16; }
+      .pool { fill: #121820; stroke: #6d7280; stroke-width: 2; rx: 12; }
+      .topic { fill: #202017; stroke: #ffd166; stroke-width: 3; rx: 18; }
+      .kafka { fill: #1a1722; stroke: #b6a3ff; stroke-width: 3; rx: 14; }
+      .db { fill: #18191c; stroke: #ffd166; stroke-width: 3; rx: 14; }
+      .greenBox { fill: #16211b; stroke: #7cf29a; stroke-width: 3; rx: 12; }
+      .label { fill: #f5f7fb; font: 700 22px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #d7dae0; font: 500 17px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 15px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .step { fill: #fff59d; font: 800 21px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .green { fill: #7cf29a; }
+      .pink { fill: #ff8fb3; }
+      .arrow { stroke: #f5f7fb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .arrowGreen { stroke: #7cf29a; stroke-width: 3; fill: none; marker-end: url(#arrowGreen); }
+      .arrowPink { stroke: #ff8fb3; stroke-width: 3; fill: none; marker-end: url(#arrowPink); }
+      .dash { stroke-dasharray: 8 8; }
+    </style>
+  </defs>
+  <rect class="bg" width="1280" height="780"/>
+  <g>
+    <line class="grid" x1="0" y1="132" x2="1280" y2="132"/>
+    <line class="grid" x1="0" y1="412" x2="1280" y2="412"/>
+    <line class="grid" x1="0" y1="642" x2="1280" y2="642"/>
+  </g>
+
+  <text class="title" x="58" y="64">Realtime fanout: local sockets plus pub/sub</text>
+  <text class="subtitle" x="58" y="102">Edge servers keep WebSocket connections. Pub/Sub bridges the gap between edge servers.</text>
+
+  <rect class="edge" x="70" y="170" width="330" height="300"/>
+  <text class="label" x="162" y="210">Edge server 1</text>
+  <rect class="pool" x="100" y="238" width="270" height="185"/>
+  <text class="small" x="128" y="270">local connection pool</text>
+  <text class="tiny" x="128" y="302">A -> socket a</text>
+  <text class="tiny" x="128" y="330">C -> socket c</text>
+  <text class="tiny" x="128" y="358">D -> socket d</text>
+  <text class="tiny green" x="128" y="392">subscribed: C2, C4</text>
+  <text class="tiny" x="128" y="412">local send to C</text>
+
+  <rect class="edge" x="880" y="170" width="330" height="300"/>
+  <text class="label" x="972" y="210">Edge server 2</text>
+  <rect class="pool" x="910" y="238" width="270" height="185"/>
+  <text class="small" x="938" y="270">local connection pool</text>
+  <text class="tiny" x="938" y="302">E -> socket e</text>
+  <text class="tiny" x="938" y="330">F -> socket f</text>
+  <text class="tiny green" x="938" y="392">subscribed: C2</text>
+  <text class="tiny" x="938" y="412">local send to E</text>
+
+  <rect class="topic" x="500" y="215" width="280" height="170"/>
+  <text class="label" x="548" y="260">Realtime Pub/Sub</text>
+  <text class="small" x="558" y="300">topic: channel C2</text>
+  <text class="tiny" x="548" y="332">Redis Pub/Sub, NATS, etc.</text>
+  <text class="tiny" x="548" y="358">one topic per hot channel</text>
+
+  <text class="step" x="74" y="535">1</text>
+  <text class="small" x="105" y="535">A sends message to channel C2 over WebSocket.</text>
+  <text class="step" x="74" y="575">2</text>
+  <text class="small" x="105" y="575">Edge 1 delivers to local C2 members and publishes on topic C2.</text>
+  <text class="step" x="74" y="615">3</text>
+  <text class="small" x="105" y="615">Edge 2 receives because it subscribed to C2, then forwards to E locally.</text>
+
+  <path class="arrowGreen" d="M355 313 C430 296 438 285 500 285"/>
+  <text class="tiny green" x="405" y="265">publish C2</text>
+  <path class="arrowGreen" d="M780 285 C825 285 833 305 910 313"/>
+  <text class="tiny green" x="806" y="265">receive C2</text>
+  <path class="arrowPink dash" d="M236 470 C286 555 438 675 548 675"/>
+  <rect class="kafka" x="548" y="620" width="180" height="85"/>
+  <text class="label" x="604" y="654">Kafka</text>
+  <text class="tiny" x="582" y="681">durable stream</text>
+  <path class="arrowPink dash" d="M728 662 L842 662"/>
+  <rect class="db" x="842" y="620" width="210" height="85"/>
+  <text class="label" x="884" y="654">Messages DB</text>
+  <text class="tiny" x="888" y="681">partitioned history</text>
+
+  <rect class="greenBox" x="1068" y="606" width="150" height="112"/>
+  <text class="label" x="1103" y="645">Scroll</text>
+  <text class="tiny" x="1094" y="674">recovers missed</text>
+  <text class="tiny" x="1094" y="698">realtime pushes</text>
+
+  <text class="small pink" x="515" y="750">Storage and realtime are different paths: persist for history, publish for live delivery.</text>
+</svg>

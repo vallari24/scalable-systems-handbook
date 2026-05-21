@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="700" viewBox="0 0 1180 700" role="img" aria-labelledby="title desc">
+  <title id="title">KV architecture with partitioned primaries</title>
+  <desc id="desc">When writes exceed one primary, the keyspace is partitioned. KV API servers route each key to the owning master. Each master owns an exclusive fragment and can have its own replica and cleanup worker.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#333;stroke-width:2}.title{fill:#fff7a8;font:34px system-ui,sans-serif;font-weight:700}.sub{fill:#d6d6d6;font:20px system-ui,sans-serif}.box{fill:#202020;stroke:#f5f5f5;stroke-width:2;rx:10}.db{fill:#202020;stroke:#ffd166;stroke-width:2}.rep{fill:#202020;stroke:#8aff8a;stroke-width:2}.worker{fill:#202020;stroke:#fff7a8;stroke-width:2;rx:10}.head{fill:#f5f5f5;font:22px system-ui,sans-serif;font-weight:700}.small{fill:#cfcfcf;font:17px system-ui,sans-serif}.yellow{fill:#ffd166}.green{fill:#8aff8a}.pink{fill:#ff8a8a}.blue{fill:#b7b7ff}.arrow{stroke:#f5f5f5;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.routeA{stroke:#fff7a8;stroke-width:2.5;fill:none;marker-end:url(#arrowYellow)}.routeB{stroke:#ff9bd5;stroke-width:2.5;fill:none;marker-end:url(#arrowPink)}.repl{stroke:#8aff8a;stroke-width:2.5;stroke-dasharray:8 8;fill:none;marker-end:url(#arrowGreen)}.cleanup{stroke:#fff7a8;stroke-width:2.5;fill:none;marker-end:url(#arrowYellow)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#f5f5f5"/></marker>
+    <marker id="arrowYellow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#fff7a8"/></marker>
+    <marker id="arrowPink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#ff9bd5"/></marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#8aff8a"/></marker>
+  </defs>
+  <rect class="bg" width="1180" height="700"/>
+  <g class="rule"><line x1="0" y1="92" x2="1180" y2="92"/><line x1="0" y1="184" x2="1180" y2="184"/><line x1="0" y1="276" x2="1180" y2="276"/><line x1="0" y1="368" x2="1180" y2="368"/><line x1="0" y1="460" x2="1180" y2="460"/><line x1="0" y1="552" x2="1180" y2="552"/><line x1="0" y1="644" x2="1180" y2="644"/></g>
+  <text class="title" x="54" y="58">3. Partition only when one primary cannot handle writes</text>
+  <text class="sub" x="54" y="122">The API can own simple routing logic first. Add a router only when that logic needs to become a separate service.</text>
+
+  <rect class="box" x="70" y="300" width="92" height="140"/><text class="head" x="92" y="346">Load</text><text class="head" x="84" y="376">Balancer</text>
+  <rect class="box" x="250" y="210" width="170" height="58"/><text class="head" x="298" y="247">KV API</text>
+  <rect class="box" x="250" y="342" width="170" height="58"/><text class="head" x="298" y="379">KV API</text>
+  <rect class="box" x="250" y="474" width="170" height="58"/><text class="head" x="298" y="511">KV API</text>
+  <path class="arrow" d="M162 330 L250 239"/><path class="arrow" d="M162 370 L250 371"/><path class="arrow" d="M162 410 L250 503"/>
+
+  <text class="small yellow" x="470" y="158">route by key range or hash</text>
+  <text class="small" x="470" y="186">example: key a-m -> master 1</text>
+  <text class="small" x="470" y="214">example: key n-z -> master 2</text>
+
+  <ellipse class="db" cx="770" cy="246" rx="76" ry="30"/><path class="db" d="M694 246 L694 326 C694 344 846 344 846 326 L846 246"/>
+  <text class="head yellow" x="722" y="302">Master 1</text><text class="small" x="728" y="326">owns [a-m]</text>
+  <ellipse class="db" cx="770" cy="482" rx="76" ry="30"/><path class="db" d="M694 482 L694 562 C694 580 846 580 846 562 L846 482"/>
+  <text class="head yellow" x="722" y="538">Master 2</text><text class="small" x="728" y="562">owns [n-z]</text>
+
+  <path class="routeA" d="M420 239 C530 208 594 222 694 254"/><path class="routeA" d="M420 371 C540 306 594 280 694 282"/><path class="routeA" d="M420 503 C560 410 610 340 694 318"/>
+  <path class="routeB" d="M420 239 C540 336 590 430 694 490"/><path class="routeB" d="M420 371 C540 420 600 462 694 506"/><path class="routeB" d="M420 503 C540 502 600 512 694 522"/>
+
+  <ellipse class="rep" cx="1010" cy="254" rx="58" ry="24"/><path class="rep" d="M952 254 L952 310 C952 324 1068 324 1068 310 L1068 254"/>
+  <text class="small green" x="982" y="296">replica</text>
+  <ellipse class="rep" cx="1010" cy="492" rx="58" ry="24"/><path class="rep" d="M952 492 L952 548 C952 562 1068 562 1068 548 L1068 492"/>
+  <text class="small green" x="982" y="534">replica</text>
+  <path class="repl" d="M846 274 L952 274"/><path class="repl" d="M846 512 L952 512"/>
+
+  <rect class="worker" x="672" y="610" width="218" height="52"/><text class="head yellow" x="702" y="644">Cleanup per shard</text>
+  <path class="cleanup" d="M732 610 L732 586"/><path class="cleanup" d="M830 610 L830 586"/>
+  <text class="small" x="54" y="674">Each master owns an exclusive fragment of the keyspace. Hot partitions are a separate problem.</text>
+</svg>
