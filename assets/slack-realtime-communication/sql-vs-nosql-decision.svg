@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="820" viewBox="0 0 1280 820" role="img" aria-labelledby="title desc">
+  <title id="title">SQL and NoSQL Both Scale Under Different Assumptions</title>
+  <desc id="desc">A decision diagram showing SQL as a good fit for ACID, relations, constraints, and flexible startup queries, while NoSQL fits denormalized, shardable, access-pattern-specific workloads.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .title { fill: #fff59d; font: 700 38px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .sql { fill: #171b22; stroke: #ffd166; stroke-width: 3; rx: 14; }
+      .nosql { fill: #1b2420; stroke: #7cf29a; stroke-width: 3; rx: 14; }
+      .center { fill: #171a2b; stroke: #b8b3ff; stroke-width: 3; rx: 14; }
+      .warn { fill: #241920; stroke: #ff9db8; stroke-width: 3; rx: 12; }
+      .label { fill: #f5f7fb; font: 700 24px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #d7dae0; font: 500 18px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 15px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .note { fill: #fff59d; font: 700 19px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .greenText { fill: #7cf29a; }
+      .yellowText { fill: #ffd166; }
+      .arrow { stroke: #f5f7fb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .rule { stroke: #6d7280; stroke-width: 2; fill: none; stroke-dasharray: 8 7; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="820"/>
+  <g>
+    <line class="grid" x1="0" y1="120" x2="1280" y2="120"/>
+    <line class="grid" x1="0" y1="330" x2="1280" y2="330"/>
+    <line class="grid" x1="0" y1="585" x2="1280" y2="585"/>
+    <line class="grid" x1="0" y1="750" x2="1280" y2="750"/>
+  </g>
+
+  <text class="title" x="56" y="62">SQL and NoSQL both scale</text>
+  <text class="subtitle" x="56" y="100">The real question is what guarantees, query flexibility, and partitioning shape the workload needs.</text>
+
+  <rect class="sql" x="60" y="160" width="430" height="330"/>
+  <text class="label" x="100" y="205">Use SQL when</text>
+  <text class="small" x="100" y="248">ACID matters</text>
+  <text class="small" x="100" y="286">relations and constraints matter</text>
+  <text class="small" x="100" y="324">foreign keys protect integrity</text>
+  <text class="small" x="100" y="362">schema and ad-hoc queries help</text>
+  <text class="small" x="100" y="400">data can live together or by shard</text>
+  <text class="tiny yellowText" x="100" y="450">Examples: payments, ledger, booking flows</text>
+
+  <rect class="center" x="545" y="195" width="190" height="260"/>
+  <text class="label" x="600" y="240">Ask</text>
+  <text class="small" x="575" y="286">What is the</text>
+  <text class="small" x="575" y="314">access pattern?</text>
+  <path class="rule" d="M575 342 L705 342"/>
+  <text class="tiny" x="575" y="376">single-shard?</text>
+  <text class="tiny" x="575" y="402">multi-row ACID?</text>
+  <text class="tiny" x="575" y="428">ad-hoc analytics?</text>
+
+  <rect class="nosql" x="790" y="160" width="430" height="330"/>
+  <text class="label" x="830" y="205">Use NoSQL when</text>
+  <text class="small" x="830" y="248">relations are not central</text>
+  <text class="small" x="830" y="286">data can be denormalized</text>
+  <text class="small" x="830" y="324">access pattern is fixed</text>
+  <text class="small" x="830" y="362">data can be sharded cleanly</text>
+  <text class="small" x="830" y="400">eventual consistency is acceptable</text>
+  <text class="tiny greenText" x="830" y="450">Examples: key-value, document, graph, analytics</text>
+
+  <path class="arrow" d="M490 325 L545 325"/>
+  <path class="arrow" d="M735 325 L790 325"/>
+
+  <rect class="warn" x="95" y="545" width="1090" height="130"/>
+  <text class="label" x="135" y="585">The nuance</text>
+  <text class="small" x="135" y="620">Foreign keys and cross-row constraints are easy inside one relational database.</text>
+  <text class="small" x="135" y="646">Across distributed shards, the application often owns integrity and accepts eventual consistency.</text>
+
+  <text class="note" x="56" y="785">Memory hook: SQL gives flexibility and integrity; NoSQL gives scale when the model is intentionally limited and shardable.</text>
+</svg>

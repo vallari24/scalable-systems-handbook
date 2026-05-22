@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="920" viewBox="0 0 1280 920" role="img" aria-labelledby="title desc">
+  <!-- SVG QA: after editing, render to PNG and check all four edges, text alignment, box padding, arrow labels, arrowheads, symmetry, and clipping. Do not rely on XML validity alone. -->
+  <title id="title">Scaling WebSocket fanout with realtime Pub/Sub</title>
+  <desc id="desc">Users are connected to different edge servers. A central Pub/Sub layer lets edge servers publish to group topics and subscribe only to topics with local members.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8fd3ff"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7cf29a"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .title { fill: #fff59d; font: 700 38px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .box { fill: #171b22; stroke: #e8ecf3; stroke-width: 2.5; rx: 14; }
+      .edge { fill: #151d23; stroke: #8fd3ff; stroke-width: 2.8; rx: 14; }
+      .pubsub { fill: #18221b; stroke: #7cf29a; stroke-width: 3; rx: 18; }
+      .meta { fill: #1a1722; stroke: #fff59d; stroke-width: 2.8; rx: 14; }
+      .label { fill: #f5f7fb; font: 700 22px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #d7dae0; font: 500 17px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 14px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .note { fill: #fff59d; font: 700 18px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .pink { fill: #ff9db8; }
+      .green { fill: #7cf29a; }
+      .blue { fill: #8fd3ff; }
+      .yellow { fill: #fff59d; }
+      .center { text-anchor: middle; }
+      .arrow { stroke: #f5f7fb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .arrowBlue { stroke: #8fd3ff; stroke-width: 3; fill: none; marker-end: url(#arrowBlue); }
+      .arrowGreen { stroke: #7cf29a; stroke-width: 3; fill: none; marker-end: url(#arrowGreen); }
+      .sub { stroke: #7cf29a; stroke-width: 2.5; fill: none; marker-end: url(#arrowGreen); }
+      .local { stroke: #8fd3ff; stroke-width: 2.5; fill: none; marker-end: url(#arrowBlue); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="920"/>
+  <g>
+    <line class="grid" x1="0" y1="120" x2="1280" y2="120"/>
+    <line class="grid" x1="0" y1="292" x2="1280" y2="292"/>
+    <line class="grid" x1="0" y1="465" x2="1280" y2="465"/>
+    <line class="grid" x1="0" y1="642" x2="1280" y2="642"/>
+    <line class="grid" x1="0" y1="795" x2="1280" y2="795"/>
+  </g>
+
+  <text class="title" x="56" y="62">Scaling WebSocket fanout</text>
+  <text class="subtitle" x="56" y="100">Use a central realtime Pub/Sub layer so edge servers do not form a mesh.</text>
+
+  <rect class="edge" x="86" y="185" width="185" height="115"/>
+  <text class="label center" x="178" y="230">ES1</text>
+  <text class="tiny center" x="178" y="258">local users: A, B, C, D</text>
+  <text class="tiny green center" x="178" y="280">subscribes: G1, G2</text>
+
+  <rect class="edge" x="436" y="185" width="185" height="115"/>
+  <text class="label center" x="528" y="230">ES2</text>
+  <text class="tiny center" x="528" y="258">local user: E</text>
+  <text class="tiny green center" x="528" y="280">subscribes: G1</text>
+
+  <rect class="edge" x="86" y="565" width="185" height="88"/>
+  <text class="label center" x="178" y="613">ES3</text>
+  <text class="tiny center" x="178" y="637">other live users</text>
+
+  <rect class="edge" x="436" y="565" width="185" height="88"/>
+  <text class="label center" x="528" y="613">ES4</text>
+  <text class="tiny center" x="528" y="637">other live users</text>
+
+  <text class="small yellow" x="80" y="160">A</text>
+  <path class="local" d="M102 166 L120 185"/>
+  <text class="tiny" x="55" y="193">send G1</text>
+
+  <text class="small yellow" x="80" y="222">B</text>
+  <path class="local" d="M112 222 L86 222"/>
+  <text class="small yellow" x="284" y="150">C</text>
+  <path class="local" d="M284 156 L256 185"/>
+  <text class="small yellow" x="288" y="190">D</text>
+  <path class="local" d="M288 196 L271 215"/>
+
+  <text class="small yellow" x="410" y="160">E</text>
+  <path class="local" d="M430 166 L455 185"/>
+
+  <rect class="pubsub" x="350" y="402" width="330" height="78"/>
+  <text class="label center" x="515" y="435">Realtime Pub/Sub</text>
+  <text class="tiny center" x="515" y="459">topics: G1, G2, G3 ...</text>
+
+  <path class="sub" d="M178 300 L178 360 C178 402 305 432 350 440"/>
+  <text class="tiny green" x="193" y="360">sub(G1,G2)</text>
+  <path class="sub" d="M528 300 L528 402"/>
+  <text class="tiny green" x="543" y="360">sub(G1)</text>
+  <path class="sub" d="M271 609 C330 594 386 520 426 480"/>
+  <text class="tiny green" x="255" y="540">sub(active groups)</text>
+  <path class="sub" d="M528 565 L528 480"/>
+
+  <path class="arrowBlue" d="M271 242 C332 242 377 252 436 242"/>
+  <text class="tiny blue center" x="354" y="228">ES1 does not know E</text>
+
+  <path class="arrowGreen" d="M271 250 C330 312 400 372 455 402"/>
+  <text class="tiny green" x="282" y="326">publish G1</text>
+
+  <path class="arrowGreen" d="M680 440 C750 380 746 294 621 248"/>
+  <text class="tiny green" x="710" y="352">fanout G1</text>
+
+  <rect class="meta" x="810" y="190" width="380" height="172"/>
+  <text class="label center" x="1000" y="232">Metadata</text>
+  <text class="tiny center" x="1000" y="258">membership, not socket routing</text>
+  <text class="small" x="865" y="292">G1: A, B, C, D, E</text>
+  <text class="small" x="865" y="324">G2: A, B, E</text>
+  <text class="tiny yellow" x="865" y="348">backend checks group members</text>
+
+  <path class="arrow" d="M621 230 C710 215 755 220 810 248"/>
+  <text class="tiny center" x="720" y="202">lookup group</text>
+
+  <rect class="box" x="830" y="510" width="365" height="126"/>
+  <text class="label center" x="1012" y="550">No edge-server mesh</text>
+  <text class="tiny" x="865" y="580">Naive: ES1 connects to every other edge server.</text>
+  <text class="tiny" x="865" y="604">Better: ES1 publishes to topic G1 once.</text>
+  <text class="tiny green" x="865" y="628">Only edge servers subscribed to G1 receive it.</text>
+
+  <text class="note" x="56" y="835">Memory hook: edge knows local sockets. Pub/Sub knows topics. The DB owns history.</text>
+  <text class="tiny" x="56" y="865">Realtime Pub/Sub is live fanout only. If an edge server is disconnected, it can miss the event.</text>
+</svg>

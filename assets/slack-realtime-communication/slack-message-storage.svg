@@ -36,8 +36,8 @@
     <line class="grid" x1="0" y1="700" x2="1280" y2="700"/>
   </g>
 
-  <text class="title" x="60" y="64">Message History: shard by channel</text>
-  <text class="subtitle" x="60" y="102">One channel maps to one shard, so scrolling history does not fan out across the database.</text>
+  <text class="title" x="60" y="64">Slack schema: DMs are channels</text>
+  <text class="subtitle" x="60" y="102">Model every destination as a channel, then shard message history by channel_id.</text>
 
   <rect class="box" x="60" y="178" width="150" height="92"/>
   <text class="label" x="97" y="216">Client</text>
@@ -75,29 +75,35 @@
   <path class="arrowPink" d="M750 224 C790 230 800 334 850 339"/>
   <text class="tiny pinkText" x="768" y="294">C2 -> shard 2</text>
 
-  <rect class="soft" x="70" y="565" width="260" height="120"/>
-  <text class="label" x="102" y="603">workspace</text>
-  <text class="tiny" x="102" y="633">contains channels</text>
-  <text class="tiny" x="102" y="657">contains DMs too</text>
+  <rect class="soft" x="70" y="565" width="190" height="120"/>
+  <text class="label" x="98" y="603">workspace</text>
+  <text class="tiny" x="98" y="633">id, name</text>
+  <text class="tiny" x="98" y="657">W1, W2</text>
 
-  <rect class="soft" x="390" y="565" width="260" height="120"/>
-  <text class="label" x="430" y="603">channel</text>
-  <text class="tiny" x="430" y="633">id, workspace_id, name</text>
-  <text class="tiny" x="430" y="657">DM = channel with 2 members</text>
+  <rect class="soft" x="305" y="565" width="190" height="120"/>
+  <text class="label" x="345" y="603">user</text>
+  <text class="tiny" x="345" y="633">id, name</text>
+  <text class="tiny" x="345" y="657">A, B, C</text>
 
-  <rect class="soft" x="710" y="565" width="260" height="120"/>
-  <text class="label" x="750" y="603">message</text>
-  <text class="tiny" x="750" y="633">id, channel_id, user_id</text>
-  <text class="tiny" x="750" y="657">text, timestamp</text>
+  <rect class="soft" x="540" y="565" width="225" height="120"/>
+  <text class="label" x="580" y="603">channel</text>
+  <text class="tiny" x="580" y="633">id, workspace_id, name</text>
+  <text class="tiny" x="580" y="657">type: dm / channel / group</text>
 
-  <rect class="soft" x="1010" y="565" width="200" height="120"/>
-  <text class="label" x="1042" y="603">membership</text>
-  <text class="tiny" x="1042" y="633">channel_id, user_id</text>
-  <text class="tiny" x="1042" y="657">checkpoint</text>
+  <rect class="soft" x="810" y="565" width="210" height="120"/>
+  <text class="label" x="842" y="603">membership</text>
+  <text class="tiny" x="842" y="633">user_id, channel_id</text>
+  <text class="tiny" x="842" y="657">checkpoint = last read</text>
 
-  <path class="arrow" d="M330 625 L390 625"/>
-  <path class="arrow" d="M650 625 L710 625"/>
-  <path class="arrow" d="M970 625 L1010 625"/>
+  <rect class="soft" x="1050" y="565" width="200" height="120"/>
+  <text class="label" x="1080" y="603">message</text>
+  <text class="tiny" x="1080" y="633">channel_id, sender_id</text>
+  <text class="tiny" x="1080" y="657">text, created_at</text>
 
-  <text class="note" x="60" y="725">Memory hook: DMs are channels. Store by channel_id. Read history from one shard.</text>
+  <path class="arrow" d="M260 625 L305 625"/>
+  <path class="arrow" d="M495 625 L540 625"/>
+  <path class="arrow" d="M765 625 L810 625"/>
+  <path class="arrow" d="M1020 625 L1050 625"/>
+
+  <text class="note" x="60" y="725">Memory hook: DMs are channels. Membership tracks readers. Messages live under channel_id.</text>
 </svg>

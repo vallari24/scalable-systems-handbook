@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="780" viewBox="0 0 1280 780" role="img" aria-labelledby="title desc">
+  <title id="title">Graph Databases as Auxiliary Analytical Stores</title>
+  <desc id="desc">Operational databases feed a graph database, where nodes and edges support graph algorithms such as shortest path, similarity, link prediction, and fraud ring detection.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"/>
+    </marker>
+    <marker id="arrowPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff9db8"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .title { fill: #fff59d; font: 700 38px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .box { fill: #171b22; stroke: #e8ecf3; stroke-width: 2.5; rx: 12; }
+      .db { fill: #18191c; stroke: #ffd166; stroke-width: 3; rx: 12; }
+      .graphBox { fill: #1b2420; stroke: #7cf29a; stroke-width: 3; rx: 14; }
+      .warn { fill: #241920; stroke: #ff9db8; stroke-width: 3; rx: 12; }
+      .blue { fill: #171a2b; stroke: #b8b3ff; stroke-width: 3; rx: 12; }
+      .label { fill: #f5f7fb; font: 700 23px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #d7dae0; font: 500 17px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 14px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .note { fill: #fff59d; font: 700 19px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .pinkText { fill: #ff9db8; }
+      .greenText { fill: #7cf29a; }
+      .node { fill: #171b22; stroke: #f5f7fb; stroke-width: 2.5; }
+      .nodeHot { fill: #263529; stroke: #7cf29a; stroke-width: 3; }
+      .nodeWarn { fill: #2a1d24; stroke: #ff9db8; stroke-width: 3; }
+      .edge { stroke: #aeb5c2; stroke-width: 2.5; fill: none; }
+      .edgeHot { stroke: #7cf29a; stroke-width: 3.5; fill: none; }
+      .edgeWarn { stroke: #ff9db8; stroke-width: 3.5; fill: none; stroke-dasharray: 8 7; }
+      .arrow { stroke: #f5f7fb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .arrowPink { stroke: #ff9db8; stroke-width: 3; fill: none; marker-end: url(#arrowPink); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="780"/>
+  <g>
+    <line class="grid" x1="0" y1="120" x2="1280" y2="120"/>
+    <line class="grid" x1="0" y1="330" x2="1280" y2="330"/>
+    <line class="grid" x1="0" y1="585" x2="1280" y2="585"/>
+    <line class="grid" x1="0" y1="720" x2="1280" y2="720"/>
+  </g>
+
+  <text class="title" x="56" y="62">Graph databases answer relationship questions</text>
+  <text class="subtitle" x="56" y="100">Keep product writes in the source of truth. Project nodes and edges into a graph store for traversals and algorithms.</text>
+
+  <rect class="db" x="60" y="160" width="270" height="118"/>
+  <text class="label" x="92" y="202">Source of truth</text>
+  <text class="small" x="92" y="232">SQL / NoSQL product DB</text>
+  <text class="tiny" x="92" y="256">orders, follows, payments</text>
+
+  <rect class="blue" x="390" y="160" width="230" height="118"/>
+  <text class="label" x="430" y="202">Graph ingest</text>
+  <text class="small" x="430" y="232">events or batch jobs</text>
+  <text class="tiny" x="430" y="256">build nodes and edges</text>
+
+  <rect class="graphBox" x="690" y="145" width="500" height="292"/>
+  <text class="label" x="730" y="187">Graph DB</text>
+  <text class="small" x="730" y="216">nodes + edges</text>
+
+  <g transform="translate(760 305)">
+    <line class="edgeHot" x1="0" y1="0" x2="126" y2="-55"/>
+    <line class="edge" x1="126" y1="-55" x2="260" y2="0"/>
+    <line class="edgeHot" x1="0" y1="0" x2="118" y2="72"/>
+    <line class="edge" x1="118" y1="72" x2="260" y2="0"/>
+    <line class="edgeWarn" x1="126" y1="-55" x2="118" y2="72"/>
+
+    <circle class="nodeHot" cx="0" cy="0" r="38"/>
+    <text class="tiny" x="-17" y="5">U1</text>
+    <circle class="node" cx="126" cy="-55" r="38"/>
+    <text class="tiny" x="109" y="-50">U2</text>
+    <circle class="node" cx="260" cy="0" r="38"/>
+    <text class="tiny" x="244" y="5">I1</text>
+    <circle class="nodeWarn" cx="118" cy="72" r="38"/>
+    <text class="tiny" x="99" y="77">Card</text>
+
+    <text class="tiny greenText" x="10" y="-42">follows</text>
+    <text class="tiny" x="176" y="-34">bought</text>
+    <text class="tiny greenText" x="10" y="88">shared device</text>
+    <text class="tiny pinkText" x="168" y="56">missing edge?</text>
+  </g>
+
+  <path class="arrow" d="M330 219 L390 219"/>
+  <text class="tiny" x="344" y="198">CDC / events</text>
+  <path class="arrow" d="M620 219 L690 219"/>
+  <text class="tiny" x="632" y="198">projection</text>
+
+  <rect class="warn" x="60" y="500" width="330" height="116"/>
+  <text class="label" x="92" y="542">Do not start here</text>
+  <text class="small" x="92" y="572">Direct follows and simple lists</text>
+  <text class="small" x="92" y="598">are usually fine in SQL/NoSQL.</text>
+
+  <rect class="box" x="455" y="500" width="330" height="116"/>
+  <text class="label" x="488" y="542">Use graph when</text>
+  <text class="small" x="488" y="572">relationships are the query,</text>
+  <text class="small" x="488" y="598">not just stored attributes.</text>
+
+  <rect class="graphBox" x="850" y="500" width="340" height="116"/>
+  <text class="label" x="882" y="542">Algorithm answers</text>
+  <text class="small" x="882" y="572">shortest path, similarity,</text>
+  <text class="small" x="882" y="598">fraud rings, recommendations</text>
+
+  <path class="arrowPink" d="M390 558 L455 558"/>
+  <path class="arrow" d="M785 558 L850 558"/>
+
+  <rect class="box" x="105" y="640" width="1070" height="76"/>
+  <text class="note" x="145" y="674">Memory hook: graph databases are usually auxiliary stores for relationship-heavy analysis.</text>
+  <text class="note" x="145" y="698">They are usually not the transactional source of truth.</text>
+</svg>

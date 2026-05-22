@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="920" viewBox="0 0 1280 920" role="img" aria-labelledby="title desc">
+  <!-- SVG QA: after editing, render to PNG and check all four edges, text alignment, box padding, arrow labels, arrowheads, symmetry, and clipping. Do not rely on XML validity alone. -->
+  <title id="title">Slack realtime messaging architecture</title>
+  <desc id="desc">Users connect to a thin WebSocket edge fleet. Edge servers append message events to Kafka. Message workers persist those events into a partitioned messages database. A REST API reads history from the same database.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"/>
+    </marker>
+    <marker id="arrowPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff9db8"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7cf29a"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .title { fill: #fff59d; font: 700 38px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .box { fill: #171b22; stroke: #e8ecf3; stroke-width: 2.5; rx: 14; }
+      .edge { fill: #151d23; stroke: #8fd3ff; stroke-width: 3; rx: 14; }
+      .kafka { fill: #1a1722; stroke: #b6a3ff; stroke-width: 3; rx: 14; }
+      .worker { fill: #1b2420; stroke: #7cf29a; stroke-width: 3; rx: 14; }
+      .db { fill: #18191c; stroke: #ffd166; stroke-width: 3; rx: 14; }
+      .rest { fill: #171b22; stroke: #fff59d; stroke-width: 2.5; rx: 14; }
+      .label { fill: #f5f7fb; font: 700 22px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #d7dae0; font: 500 17px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 14px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .note { fill: #fff59d; font: 700 19px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .pink { fill: #ff9db8; }
+      .green { fill: #7cf29a; }
+      .blue { fill: #8fd3ff; }
+      .yellow { fill: #fff59d; }
+      .center { text-anchor: middle; }
+      .arrow { stroke: #f5f7fb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .arrowPink { stroke: #ff9db8; stroke-width: 3; fill: none; marker-end: url(#arrowPink); }
+      .arrowGreen { stroke: #7cf29a; stroke-width: 3; fill: none; marker-end: url(#arrowGreen); }
+      .blocked { stroke: #ff9db8; stroke-width: 3; fill: none; stroke-dasharray: 8 7; marker-end: url(#arrowPink); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="920"/>
+  <g>
+    <line class="grid" x1="0" y1="124" x2="1280" y2="124"/>
+    <line class="grid" x1="0" y1="385" x2="1280" y2="385"/>
+    <line class="grid" x1="0" y1="540" x2="1280" y2="540"/>
+    <line class="grid" x1="0" y1="742" x2="1280" y2="742"/>
+    <line class="grid" x1="0" y1="850" x2="1280" y2="850"/>
+  </g>
+
+  <text class="title" x="56" y="62">Slack realtime messaging architecture</text>
+  <text class="subtitle" x="56" y="100">Keep edge servers thin: sockets in, Kafka out, messages persisted asynchronously.</text>
+
+  <rect class="box" x="48" y="178" width="170" height="168"/>
+  <text class="label center" x="133" y="216">Users</text>
+  <text class="small yellow" x="82" y="250">A</text>
+  <text class="small yellow" x="82" y="284">B</text>
+  <text class="small yellow" x="82" y="318">C</text>
+  <text class="tiny" x="112" y="250">web / mobile</text>
+  <text class="tiny" x="112" y="284">one socket</text>
+  <text class="tiny" x="112" y="318">per user</text>
+
+  <rect class="edge" x="300" y="150" width="250" height="210"/>
+  <text class="label center" x="425" y="194">Edge WS fleet</text>
+  <text class="small blue center" x="425" y="226">thin / brittle</text>
+  <text class="tiny" x="337" y="256">holds WebSockets</text>
+  <text class="tiny" x="337" y="280">accepts message events</text>
+  <text class="tiny" x="337" y="304">appends to Kafka</text>
+  <text class="tiny pink" x="337" y="328">no direct DB writes</text>
+
+  <rect class="kafka" x="630" y="160" width="250" height="190"/>
+  <text class="label center" x="755" y="204">Kafka</text>
+  <text class="tiny" x="690" y="238">durable append log</text>
+  <text class="tiny" x="690" y="264">fast ack to edge</text>
+  <text class="tiny" x="690" y="290">high write throughput</text>
+  <text class="tiny" x="690" y="316">replayable events</text>
+
+  <rect class="worker" x="960" y="160" width="250" height="190"/>
+  <text class="label center" x="1085" y="204">Message worker</text>
+  <text class="tiny" x="1018" y="238">consumes Kafka events</text>
+  <text class="tiny" x="1018" y="264">uses channel_id shard</text>
+  <text class="tiny" x="1018" y="290">persists messages</text>
+  <text class="tiny" x="1018" y="316">owns DB access</text>
+
+  <rect class="db" x="560" y="520" width="640" height="220"/>
+  <text class="label center" x="880" y="565">Partitioned messages DB</text>
+  <text class="tiny center" x="880" y="598">shard = partition(channel_id)</text>
+  <text class="tiny center" x="880" y="624">C2 history is read from one shard</text>
+
+  <rect class="box" x="665" y="650" width="120" height="42"/>
+  <text class="tiny center" x="725" y="676">shard 1</text>
+  <rect class="box" x="820" y="650" width="120" height="42"/>
+  <text class="tiny center" x="880" y="676">shard 2</text>
+  <rect class="box" x="975" y="650" width="120" height="42"/>
+  <text class="tiny center" x="1035" y="676">shard 3</text>
+  <text class="small green center" x="880" y="718">all messages for a channel stay together</text>
+
+  <rect class="rest" x="80" y="600" width="310" height="110"/>
+  <text class="label center" x="235" y="644">REST History API</text>
+  <text class="tiny center" x="235" y="674">refresh and scroll history</text>
+  <text class="tiny center" x="235" y="698">reads from messages DB</text>
+
+  <path class="arrowGreen" d="M218 252 L300 252"/>
+  <text class="tiny green" x="224" y="232">WebSocket</text>
+
+  <path class="arrowPink" d="M550 252 L630 252"/>
+  <text class="tiny pink center" x="590" y="232">event</text>
+
+  <path class="arrowGreen" d="M880 252 L960 252"/>
+  <text class="tiny green center" x="920" y="232">consume</text>
+
+  <path class="arrowGreen" d="M1085 350 C1078 426 1020 486 960 520"/>
+  <text class="tiny green" x="1045" y="448">persist</text>
+
+  <path class="blocked" d="M425 360 C430 440 482 506 560 585"/>
+  <text class="tiny pink" x="314" y="450">blocked: no direct DB write</text>
+
+  <path class="arrow" d="M138 346 C152 482 108 560 88 600"/>
+  <text class="tiny" x="74" y="535">refresh / scroll</text>
+
+  <path class="arrow" d="M390 655 L560 655"/>
+  <text class="tiny center" x="475" y="684">read history</text>
+
+  <text class="note" x="56" y="870">Memory hook: edge holds sockets. Kafka absorbs writes. Workers persist. The messages DB answers history.</text>
+</svg>

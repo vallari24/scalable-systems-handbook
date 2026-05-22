@@ -19,8 +19,9 @@ The memory hook is:
 
 ```text
 storage is channel-sharded
-realtime is edge-local plus pub/sub
-history recovers missed pushes
+edge servers stay thin
+Kafka buffers message writes
+history comes from the messages DB
 ```
 
 ## Start with the Database Question
@@ -35,41 +36,420 @@ A non-relational database is usually chosen because the data model and access pa
 systems scale when the data model matches the access pattern
 ```
 
+## When to Use SQL or NoSQL
+
+Question: why do non-relational databases often scale well?
+
+Because they usually remove or weaken something relational databases are good at:
+
+```text
+relations
+foreign-key constraints
+joins
+ad-hoc query flexibility
+multi-row transactional guarantees
+```
+
+That does not mean SQL cannot scale. It means SQL and NoSQL scale under different assumptions.
+
+![SQL vs NoSQL decision guide](../assets/slack-realtime-communication/sql-vs-nosql-decision.svg)
+
+A relational database is strong when correctness depends on relationships and constraints.
+
+For example, a foreign key can stop this:
+
+```text
+create blog post with user_id = 10
+but user_id = 10 does not exist
+```
+
+The database rejects the row. That protects the system from orphan data.
+
+This is especially useful when the related data lives in one database. Payments, ledgers, booking systems, and many IRCTC-style flows lean toward relational databases because ACID, constraints, and consistent updates matter.
+
+If the query pattern is transactional and can stay in one database or one shard, SQL can work very well:
+
+```text
+single-shard query
+data lives together
+ACID matters
+constraints matter
+fixed schema helps
+```
+
+NoSQL becomes attractive when the data can be modeled around a smaller access pattern.
+
+For example, a key-value store says:
+
+```text
+give me key K
+write key K
+delete key K
+```
+
+That is limiting, but the limitation helps. If every request starts with a key, the system can route the request to one partition.
+
+NoSQL systems often accept denormalization:
+
+```text
+copy display_name into many documents
+copy product snapshot into an order
+copy channel metadata into a message view
+```
+
+Denormalization avoids joins and can make reads faster. The tradeoff is redundancy.
+
+If the user's last name changes, every copied value may need to be updated later. Until all copies are updated, different parts of the system may show different values.
+
+That is eventual consistency.
+
+```text
+write happens at time T
+some replicas or denormalized copies update at T + 1
+all copies eventually converge
+until then, reads may see old data
+```
+
+Sometimes that is acceptable. Sometimes it is not.
+
+If a user's profile card shows an old last name for a few seconds, the product may tolerate it. If a ledger shows the wrong account balance, it should not.
+
+There is also a middle category: distributed SQL, often discussed as NewSQL. Systems such as [Google Spanner](https://research.google/pubs/pub39966) try to keep SQL-style modeling and strong transactional guarantees while spreading data across many nodes. The database takes on the hard coordination work: sharding, replication, and distributed transactions. That buys power, but it also brings latency, cost, and operational complexity.
+
+A SQL proxy or routing layer can route queries to shards, but it does not magically make foreign keys and transactions across shards cheap. The coordination still has to happen somewhere.
+
+For an early startup, the default should usually be boring:
+
+```text
+start with a relational database
+keep query flexibility
+use SELECT, JOIN, GROUP BY, ORDER BY
+learn the access patterns
+move only the painful parts later
+```
+
+Early on, data usually does not explode as fast as the team thinks. Product questions change. SQL gives the team room to ask new questions, such as:
+
+```text
+average revenue on day 1
+orders by customer segment
+failed payments by hour
+```
+
+Doing that in a pure key-value store like DynamoDB can be awkward unless the access pattern was designed ahead of time.
+
+The decision is not:
+
+```text
+SQL = does not scale
+NoSQL = scales
+```
+
+The decision is:
+
+```text
+SQL    -> flexibility, constraints, ACID, rich queries
+NoSQL  -> fixed access pattern, denormalization, easier partitioning
+NewSQL -> SQL plus distributed coordination, with extra complexity
+```
+
 For this lecture, the useful NoSQL categories are:
 
 ```text
 Document database
+  examples: MongoDB, Elasticsearch-style document indexes
   JSON-like documents
   flexible schema
+  partial document updates
   richer queries than a key-value store
+  good when fields inside the document matter
 
 Key-value store
+  examples: DynamoDB, Redis
   key-wise access pattern
   heavily partitioned
   no complex query model
+  good when every operation starts with a key
 
 Column-oriented database
+  examples: Amazon Redshift, Google BigQuery
   reads only the columns needed for analytics
   useful for large analytical scans
 
 Graph database
+  examples: Neo4j, Amazon Neptune, Dgraph, TigerGraph
   nodes and edges
   useful for traversals, fraud detection, and recommendations
 ```
 
-Slack message storage looks most like a partitioned message store. The important part is not the product label of the database. The important part is that the access pattern is almost always scoped to one channel.
+Question: what is the tradeoff between a document database and a key-value store?
+
+A document database is useful when the system needs to work with parts of a document. For example, a blog post document may have `title`, `body`, `tags`, `author`, and `updated_at`. If the request is "update only the title," partial document updates matter. The application should not need to fetch and rewrite the whole blob just to change one field.
+
+If the product often updates one field, filters by fields, searches text, or aggregates over document attributes, a document-shaped database gives the system more room.
+
+MongoDB is the common example. Elasticsearch is also document-shaped, but it is usually used as a search and analytics index. It is strong when the product needs search, filtering, and aggregations over document fields.
+
+A key-value store makes a different bet. It restricts the access pattern:
 
 ```text
-send message to channel C
-read recent messages from channel C
-scroll older messages from channel C
+GET key
+PUT key value
+DEL key
 ```
 
-That makes `channel_id` the natural partition key.
+That limitation is the feature.
+
+Because every request is key-bound, the database can partition aggressively:
+
+```text
+partition = hash(key)
+```
+
+The system does not need to solve arbitrary joins, broad scans, or general aggregations on the write path. That is why systems such as DynamoDB and Redis can scale so far for key-based workloads. They trade query flexibility for massive partitioning and predictable routing.
+
+## Graph Databases
+
+Question: should every follow/friend relationship go into a graph database?
+
+Not automatically.
+
+If the product only needs this:
+
+```text
+who does user A follow?
+who follows user A?
+```
+
+then SQL or a key-value/document store can work well. A follow table, an index, or a key like `followers:userA` may be enough.
+
+A graph database becomes interesting when the relationship itself is the query:
+
+```text
+what is the shortest path between A and B?
+which users are similar to this user?
+which missing edge should we recommend?
+which accounts form a suspicious fraud ring?
+```
+
+Graph databases store data as nodes and edges:
+
+```text
+User A --follows--> User B
+User A --bought----> Item X
+User C --used------> Card K
+Card K --used_at---> Merchant M
+```
+
+They are meant to make graph traversal and graph algorithms easier to run.
+
+![Graph database as auxiliary store](../assets/slack-realtime-communication/graph-database-auxiliary.svg)
+
+Common graph algorithms include:
+
+```text
+shortest path          -> how close are two nodes?
+connected components   -> which nodes belong to the same cluster?
+centrality / PageRank  -> which nodes are important?
+community detection    -> which groups naturally form?
+link prediction        -> which edge is missing but likely?
+similarity             -> which users/items behave alike?
+cycle detection        -> is there a suspicious loop?
+```
+
+For recommendations, the graph might connect users to items:
+
+```text
+User A bought item 1 and item 2
+User B bought item 1 and item 2
+User C bought item 1
+
+Question: what should we recommend to User C?
+Possible answer: item 2
+```
+
+For fraud detection, the graph might connect accounts, cards, devices, merchants, phone numbers, and IP addresses. If many accounts share strange paths through the same device or payment method, the graph can expose a pattern that is awkward to find with ordinary row lookups.
+
+This is a common graph database use case in financial fraud detection. The point is not that every bank must use the same graph product. The point is that fraud is relationship-heavy, and graph models are good at relationship-heavy questions.
+
+The tradeoff is operational cost. Graph databases can be high-maintenance and bulky. They are usually not the first transactional database for normal product writes.
+
+Use the graph as an auxiliary store:
+
+```text
+source-of-truth DB -> events / batch ingest -> graph DB -> graph answers
+```
+
+Keep the user-facing transaction in the system of record. Feed the graph from that data, then run graph queries and algorithms to compute recommendations, similarity, suspicious clusters, and missing edges.
+
+## Transactional vs Analytical Queries
+
+Question: why not run every query on the same kind of database?
+
+Because request-path queries and analytical queries have different jobs.
+
+A transactional query usually sits inside a user request:
+
+```text
+user clicks "send"
+API reads or writes a few rows
+response must come back quickly
+```
+
+That is the world of point lookups, small updates, locks, indexes, and correctness in the request context.
+
+An analytical query is different. It may scan terabytes or petabytes. It may run for minutes, hours, or as part of a batch pipeline that takes a day. The user is not waiting for it in the same way a checkout or chat-send request waits.
+
+```text
+transactional query -> serve this request now
+analytical query    -> scan a huge dataset and compute an answer
+```
+
+That difference explains why analytical column stores exist.
+
+## Analytical Column Stores
+
+Question: if a table has 100 columns, and the query needs only two columns, should the database read the other 98?
+
+For a transactional row store, it often reads row by row. That is useful when the request wants the whole row:
+
+```text
+SELECT * FROM orders WHERE id = 10;
+```
+
+But analytics looks different.
+
+Imagine a stock tick table:
+
+```text
+symbol | price | exchange | volume | ts
+AAPL   | 195   | NASDAQ   | 1000   | 10:00:00
+MSFT   | 424   | NASDAQ   | 800    | 10:00:00
+TSLA   | 177   | NASDAQ   | 500    | 10:00:00
+```
+
+Every second, the system bulk inserts new prices. Later, an analyst asks:
+
+```sql
+SELECT avg(price)
+FROM stock_ticks
+WHERE ts = current_second;
+```
+
+The query needs `price` and `ts`. It does not need `symbol`, `exchange`, or `volume`.
+
+That is the point of a column-oriented database.
+
+![Column-oriented analytical reads](../assets/slack-realtime-communication/columnar-analytics-access.svg)
+
+Day zero, think of a five-column table as five files:
+
+```text
+symbol file:   AAPL, MSFT, TSLA
+price file:    195, 424, 177
+exchange file: NASDAQ, NASDAQ, NASDAQ
+volume file:   1000, 800, 500
+ts file:       10:00:00, 10:00:00, 10:00:00
+```
+
+If the query needs `price` and `ts`, the engine reads those two column files and skips the others.
+
+That is why column-oriented databases are used for massive analytics and data warehouses.
+
+They are not a replacement for transactional databases. If the product is doing single-row updates, point lookups, account balance changes, or seat booking transactions, use a transactional store. Column stores shine when the workload scans huge data but only a few columns.
+
+The memory hook is:
+
+```text
+row store    -> read and update entities
+column store -> scan metrics across many rows
+```
+
+Cassandra sits in a different category. It is often called a wide-column store. It combines ideas around partitions, rows, and clustered columns. Do not confuse that with analytical columnar warehouses like Redshift or BigQuery.
+
+The foundational paper to know is [C-Store: A Column-oriented DBMS](https://web.eecs.umich.edu/~mozafari/fall2015/eecs584/papers/c-store.pdf). It is one of the classic papers behind modern column-store thinking.
+
+## Redshift and BigQuery
+
+Question: where do Redshift and BigQuery fit?
+
+They are analytical data warehouses.
+
+Amazon Redshift uses columnar storage for tabular data and combines it with massively parallel query processing. Google BigQuery stores table data in columnar format and separates storage from compute so analytical work can scale independently.
+
+Use this mental model:
+
+```text
+Redshift / BigQuery:
+  huge analytical scans
+  aggregations across many rows
+  dashboards and reporting
+  batch or streaming ingestion into analytical tables
+
+Not the default choice for:
+  per-request transactional writes
+  high-frequency row updates
+  lock-heavy booking flows
+```
+
+So when stock ticks are arriving every second, the warehouse is useful for later questions like:
+
+```text
+average price by minute
+max spread per exchange
+volume trend by symbol
+```
+
+It is not the system that should sit directly in the critical request path for every tiny transactional update.
+
+## HDFS and the Analytics Stack
+
+Question: where does HDFS fit in this picture?
+
+HDFS is separate from Redshift and BigQuery. It is not a managed warehouse by itself. HDFS is distributed file storage.
+
+The data sits in files. Those files are split into blocks. The NameNode tracks metadata about files and blocks. DataNodes store the actual blocks.
+
+To query that data, teams commonly add table metadata and a query engine:
+
+```text
+HDFS    -> stores files as blocks
+Parquet -> stores files in a columnar format
+Hive    -> gives table metadata
+Spark   -> executes analytical queries
+```
+
+![HDFS analytics stack](../assets/slack-realtime-communication/hdfs-analytics-stack.svg)
+
+This is why people often describe the old open-source warehouse stack like this:
+
+```text
+HDFS + Parquet + Hive + Spark
+```
+
+BigQuery gives a similar high-level product shape as a managed warehouse. It hides most of the storage, metadata, execution, and scaling work behind the service.
+
+That does not mean the systems are identical internally. It means the reader should understand the layers:
+
+```text
+storage layer  -> where files live
+format layer   -> how rows/columns are encoded
+catalog layer  -> what tables mean
+engine layer   -> who runs the query
+```
+
+References used for these database sections:
+
+- [Spanner: Google's Globally-Distributed Database](https://research.google/pubs/pub39966)
+- [Spanner reads, writes, and consistency](https://cloud.google.com/spanner/docs/whitepapers/life-of-reads-and-writes)
+- [Amazon Redshift columnar storage](https://docs.aws.amazon.com/redshift/latest/dg/c_columnar_storage_disk_mem_mgmnt.html)
+- [BigQuery storage overview](https://cloud.google.com/bigquery/docs/storage_overview)
+- [Apache HDFS architecture](https://hadoop.apache.org/docs/current3/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html)
+- [C-Store: A Column-oriented DBMS](https://web.eecs.umich.edu/~mozafari/fall2015/eecs584/papers/c-store.pdf)
 
 ## What Are We Designing?
 
-Question: what are the core requirements?
+**Question: what are the core requirements?**
 
 We need:
 
@@ -84,36 +464,37 @@ Similar systems show up everywhere:
 
 ```text
 Slack channels
+direct messages
 multiplayer games
 realtime polls
 collaborative creator tools
+Instagram live chat
+Zoom chat
 live comment streams
 ```
 
 The common problem is the same: many users are connected now, but the system must also remember what happened.
 
-## Model DMs as Channels
+## Insight: DMs Are Channels
 
-Question: should direct messages and channels be separate message systems?
+**Question: do we need one design for DMs and another design for channels?**
 
-No. That creates two designs for the same thing.
+No. A DM is a channel with two people.
 
-A direct message is just a channel with two members.
+That means the real modeling problem is:
 
 ```text
-channel C1:
-  members: A, B, C, D
-
-direct message DM7:
-  members: A, B
+model channels very well
 ```
 
-Once we accept this, we only need to model channels well.
-
-The basic entities are:
+A workspace has multiple channels. A channel has multiple messages. A membership row says which users belong to which channel.
 
 ```text
 workspace
+  id
+  name
+
+user
   id
   name
 
@@ -121,27 +502,63 @@ channel
   id
   workspace_id
   name
-
-message
-  id
-  channel_id
-  user_id
-  text
-  timestamp
+  type        // dm, public channel, private channel, group chat
 
 membership
   channel_id
   user_id
-  checkpoint
+  checkpoint // last message the user has read
+
+message
+  id
+  channel_id
+  from_user_id
+  text
+  created_at
 ```
 
-`checkpoint` can track where a user last read in a channel.
+So both of these become the same operation:
+
+```text
+send DM       -> write message to a dm channel
+post channel  -> write message to a public/private channel
+```
+
+The UI can still render them differently. The storage model does not need two message systems.
+
+## Message Storage: Shard by Channel
 
 Now ask the storage question.
 
-Question: if a channel has millions of messages, where should those messages live?
+**Question: if a channel has millions of messages, where should those messages live?**
 
-Put all messages for the same channel on the same shard.
+Messages tend to explode in size compared with users, channels, and memberships. They are append-heavy, naturally paginated, and usually read through one channel at a time.
+
+```text
+send message to channel C
+read recent messages from channel C
+scroll older messages from channel C
+```
+
+That makes `channel_id` the natural partition key.
+
+Pick any database that can be partitioned this way. Cassandra, MongoDB, DynamoDB-style systems, or even SQL can work if the sharding is designed around the access pattern.
+
+```text
+partition key = channel_id
+```
+
+The shard ownership must be mutually exclusive:
+
+```text
+one channel_id -> one owning shard
+```
+
+That gives the system the important property:
+
+```text
+channel C2 -> shard 7 -> all C2 messages
+```
 
 ![Slack message storage by channel](../assets/slack-realtime-communication/slack-message-storage.svg)
 
@@ -151,7 +568,7 @@ The routing rule can be simple:
 shard = partition(channel_id)
 ```
 
-This gives us a useful property:
+Now scrolling is simple:
 
 ```text
 read channel C history -> query one shard
@@ -160,36 +577,26 @@ scroll channel C older -> query the same shard again
 
 No cross-shard query is needed for normal channel scroll.
 
-That is why the data model matters. The system is not sharded randomly. It is sharded around the thing users read together: the channel.
-
-## The First Flow Is Not Realtime
-
-Question: what is the smallest useful message flow?
-
-Start with REST and storage.
+The basic write path can start as a REST call:
 
 ```text
 send_message(from_user, channel_id, text)
-  API server receives request
-  API server computes shard from channel_id
-  API server writes the message to that shard
+  API finds the shard using channel_id
+  API stores the message there
 ```
 
-Reading is similarly direct:
+The read path uses the same key:
 
 ```text
 read_messages(channel_id)
-  API server computes shard from channel_id
-  API server returns recent messages
+  API finds the shard using channel_id
+  API returns the latest page
 
-scroll_older(channel_id, before_timestamp)
-  API server queries the same shard
-  API server returns the next page
+scroll_older(channel_id, cursor)
+  API queries the same shard again
 ```
 
-This solves history.
-
-It does not solve realtime.
+This solves persisted history. It does not solve realtime delivery.
 
 If another user is sitting in the channel, they do not want to refresh the page or wait for short polling. Messaging with REST polling is a poor user experience because the client keeps asking:
 
@@ -201,316 +608,209 @@ any new messages?
 
 The answer is to keep a connection open.
 
-## Pick the Persistence Path
+Browsers also have practical limits on concurrent connections. A chat product should not open a separate socket for every channel, DM, typing indicator, and notification stream. Keep one WebSocket per user and piggyback realtime communication over that one connection.
 
-Question: should the system persist the message before pushing it live?
+## Three Ways To Persist A Message
 
-It depends on how critical message durability is.
+**Question: when should the sender get an ack?**
 
-There are a few possible shapes:
+That depends on the persistence guarantee the product gives.
+
+There are three common paths.
+
+![Three ways to persist a realtime message](../assets/slack-realtime-communication/slack-message-persistence-paths.svg)
+
+Path 1 is strong persistence:
 
 ```text
-Slack-like:
-  user -> API -> message DB
-
-WhatsApp-like:
-  user -> WebSocket -> Kafka -> message DB
-
-ephemeral massive chat:
-  user -> realtime fanout
-  no durable persistence
+user -> REST API -> message DB -> edge fanout -> receiver
 ```
 
-For Slack-like communication, messages are important. Once a user sends a message, the product should be able to show that message later. So we should design with durable history in mind.
+The API talks to the database first. The sender gets an ack only after the database write succeeds.
 
-That gives us a useful simplification:
+This is the right shape when message history must be strongly consistent. A Slack-like product may send the message over a normal REST API, persist it, and then use the realtime edge path only to notify connected receivers. Sending does not have to be over WebSocket. Receiving can still feel realtime.
+
+Path 2 is eventual persistence:
 
 ```text
-if realtime delivery fails, history still exists
+user -> edge WebSocket server -> Kafka -> worker -> message DB
 ```
 
-This matters later.
+The edge server accepts the socket event and appends it to Kafka. Once Kafka accepts the event, the edge can ack the sender and the worker persists the message later.
 
-## Add WebSockets
+This is useful when high throughput and quick ack matter more than immediate database visibility. A WhatsApp-like path can work this way: once the durable broker accepts the event, persistence is expected to happen eventually.
 
-Question: why not keep using REST?
-
-Because realtime communication wants a server-to-client path.
-
-A WebSocket gives each client one persistent connection to the backend. The client does not need to ask every second. The server can push an event when something happens.
-
-Browsers also have practical limits on concurrent TCP connections. So a Slack-like app should multiplex realtime features over one WebSocket:
+Path 3 has no persistence:
 
 ```text
-one WebSocket:
-  chat messages
-  typing indicators
-  notifications
-  presence
-  other realtime events
+user -> edge WebSocket server -> receiver
 ```
 
-This pushes us toward a fleet of edge servers.
+The system only relays the message to connected users. It does not write to the database.
 
-An edge server's job is to hold WebSocket connections. Each edge server knows which users are connected to it locally:
+This is valid when history is not part of the product guarantee. In a Zoom meeting chat, if the meeting started at 9 and you join later, you may not need to see every older chat message. The product can choose ephemeral delivery.
+
+The decision is not "WebSocket or REST". The decision is:
 
 ```text
-Edge server 1 local pool:
-  user A -> socket a
-  user B -> socket b
-  user C -> socket c
+what persistence guarantee do we need before ack?
 ```
 
-If A sends a direct message to B and both users are connected to the same edge server, the server can deliver it locally.
+## Edge, Kafka, and Messages DB
 
-But do not answer too quickly. What if the message is for a channel with 50 people? What if half of them are connected to other edge servers?
+**Question: what does the eventual persistence path look like?**
 
-That is where the next component appears.
-
-## Do Edge Servers Connect to Each Other?
-
-Question: if there are 100 edge servers, should every edge server open a TCP connection to every other edge server?
-
-No. That becomes a messy full mesh.
+Now zoom into path 2. Keep the architecture focused:
 
 ```text
-100 edge servers
-each connected to every other server
-lots of connections
-hard to reason about
-hard to rebalance
-```
-
-The better shape is a realtime pub/sub layer.
-
-Think of every Slack channel as having a corresponding pub/sub topic:
-
-```text
-Slack channel C2 -> realtime topic C2
-Slack channel C9 -> realtime topic C9
-```
-
-Each edge server subscribes only to topics it needs. It needs a topic if one of its locally connected users is a member of that channel.
-
-Example:
-
-```text
-Edge server 1 has users A, C, D
-A and C are in channel C2
-Edge server 1 subscribes to topic C2
-
-Edge server 2 has users E, F
-E is in channel C2
-Edge server 2 subscribes to topic C2
-```
-
-Now when A sends a message to C2:
-
-1. Edge server 1 receives the message.
-2. The message is persisted through the durable write path.
-3. Edge server 1 publishes an event to pub/sub topic C2.
-4. Edge server 2 receives that event because it subscribed to C2.
-5. Edge server 2 forwards the message to local user E.
-
-![Realtime fanout with edge servers and pubsub](../assets/slack-realtime-communication/slack-edge-pubsub.svg)
-
-This is the key realtime idea:
-
-```text
-edge servers do local delivery
-pub/sub moves events between edge servers
-```
-
-The edge server does not need to know every socket in the whole system. It only needs to know its own local sockets.
-
-## What About Membership?
-
-Question: how does an edge server know which channels to subscribe to?
-
-It needs membership information.
-
-When a user connects, the system can load the channels that user belongs to:
-
-```text
-user A connects to edge server 1
-edge server 1 loads A's channel memberships
-edge server 1 subscribes to those channel topics
-```
-
-When the user joins a new channel, the edge server subscribes to the new topic.
-
-When the user disconnects, the edge server can eventually drop subscriptions that no local user needs anymore.
-
-The exact implementation can vary. The concept is simple:
-
-```text
-local users determine local subscriptions
-```
-
-This avoids broadcasting every channel event to every edge server.
-
-## What If Realtime Delivery Misses?
-
-Question: if a socket disconnects for a moment, is the message lost?
-
-It should not be.
-
-This is why the history path exists.
-
-If a message is not delivered in realtime, the user can still fetch it when they open the channel:
-
-```text
-open channel C2
-  REST API reads recent messages from C2 shard
-  client catches up
-```
-
-For stronger recovery, the system can buffer delivery events in a durable stream and replay them when sockets reconnect:
-
-```text
-socket disconnects
-events continue through Kafka
-socket reconnects
-server replays missed events or client catches up from history
-```
-
-There is also a product optimization here. Not every message needs to be pushed.
-
-Muted channels are a good example. A user may belong to a channel but not want live pushes from it. Those messages can be loaded when the user clicks the channel.
-
-```text
-important active channel -> push realtime
-muted channel            -> load on click from history
-```
-
-That saves realtime fanout work without losing correctness.
-
-## Put the Architecture Together
-
-Question: what does the whole system look like now?
-
-We have two request paths.
-
-The realtime path:
-
-```text
-client
-  -> WebSocket edge server
-  -> realtime pub/sub topic
-  -> other subscribed edge servers
-  -> local connected users
-```
-
-The history path:
-
-```text
-client
-  -> REST API
-  -> partitioned messages DB
-  -> recent or older messages
-```
-
-The durable write path can use Kafka and workers:
-
-```text
-edge/API
+user
+  -> edge WebSocket server
   -> Kafka
-  -> messaging workers
+  -> message persistence worker
   -> partitioned messages DB
 ```
 
-![Slack realtime communication architecture](../assets/slack-realtime-communication/slack-final-architecture.svg)
+![Basic Slack messaging architecture](../assets/slack-realtime-communication/slack-basic-messaging-architecture.svg)
 
-The final design is easier to remember if we separate responsibilities:
-
-```text
-Edge WebSocket servers:
-  hold client connections
-  know local sockets
-  publish and receive realtime events
-
-Realtime Pub/Sub:
-  connects edge servers without full mesh
-  routes events by channel topic
-
-REST API:
-  sends messages when using HTTP
-  reads channel history
-  supports scroll and muted channels
-
-Kafka:
-  buffers durable message events
-  allows workers to persist reliably
-  can help replay missed delivery events
-
-Partitioned messages DB:
-  stores history
-  shards by channel_id
-  supports scrolling without cross-shard fanout
-
-Membership:
-  knows who belongs to which channel
-  lets edge servers subscribe to the right topics
-```
-
-## Why Channel Sharding Works
-
-Question: what would go wrong if messages were sharded by `message_id` instead?
-
-Scrolling a channel would scatter across shards.
+The edge server is the public-facing socket machine. It should stay thin:
 
 ```text
-channel C2 messages:
-  message 1 -> shard A
-  message 2 -> shard D
-  message 3 -> shard B
-  message 4 -> shard A
+edge server:
+  holds one WebSocket per user
+  accepts message events
+  writes events to Kafka
+  does not write directly to the DB
 ```
 
-Now `read_messages(C2)` has to query many shards and merge results by timestamp. That is unnecessary pain for the core product flow.
+**Why not let the edge server write to the message DB?**
 
-With `channel_id` sharding:
+Because then the public edge needs DB credentials and synchronous database write behavior. That is a poor boundary for a machine exposed to the public internet.
+
+It also couples the most connection-heavy part of the system to the database. If the DB is slow, the edge server becomes slow. If the DB is down, the edge server has to decide whether to block, retry, fail, or deliver a message that may never be persisted.
+
+The edge fleet also fans out across many machines. If every edge server writes synchronously to the database, the database gets a bursty write workload from all public-facing socket servers.
+
+The edge server should mainly do this:
 
 ```text
-all messages for C2 -> same shard
+hold TCP connections
+receive socket events
+append accepted events to Kafka
 ```
 
-This is why access patterns should drive partitioning.
-
-The tradeoff is that very large or very hot channels can become hot partitions. That is a later scaling problem. Start with the common case first:
+Kafka keeps the edge server thin:
 
 ```text
-most reads are channel-scoped
-therefore store messages by channel
+edge receives message
+edge appends event to Kafka
+edge can ack after Kafka accepts the event
+message worker persists later
 ```
 
-## What to Remember
+**Why Kafka instead of a simple queue?**
 
-Do not start with the final diagram. Build the system from the questions.
+Messaging needs high write throughput, fast append, ordered partitions, replay, and quick acknowledgement. Kafka is good at that shape. The durable history is still the messages DB. Kafka is the buffer and handoff layer.
+
+Once Kafka accepts the event, the edge can safely stop doing synchronous DB work. The message worker later consumes the event and persists it.
+
+**When is this safe?**
+
+It is safe when the message write does not depend on a later runtime check that may reject it. If a SQL database might reject the row because of a foreign-key check or a payment rule, the system cannot say the message is persisted until that validation passes.
+
+Here, the event is already shaped as a valid message append:
 
 ```text
-Can we model DMs and channels the same way?
-Yes: a DM is a channel with two users.
-
-Can history reads stay simple?
-Yes: shard messages by channel_id.
-
-Can REST polling give good realtime UX?
-No: use one WebSocket connection per user.
-
-Can every edge server connect to every other edge server?
-No: use pub/sub topics per channel.
-
-Can realtime delivery be the only source of truth?
-No: persist messages so scroll/catch-up recovers missed pushes.
+message event:
+  channel_id
+  from_user_id
+  text
+  created_at
 ```
 
-The compact version is:
+The worker computes the shard from `channel_id` and writes the row there.
+
+**What does the user see?**
+
+The edge can deliver the event in near realtime after Kafka accepts it. The message worker persists it shortly after.
+
+If a user refreshes the page, the app can load recent history from the messages DB. If a message has reached Kafka but the worker has not persisted it yet, that message may not appear in history for a moment. That is the cost of making persistence asynchronous.
+
+## Scaling WebSocket Fanout
+
+**Question: if A sends a message to group G1, and E is connected to another edge server, how does E receive it?**
+
+Assume we have four edge servers. Each edge server can hold only a limited number of WebSocket connections.
+
+```text
+ES1 has A, B, C, D
+ES2 has E
+G1 has A, B, C, D, E
+```
+
+A does not send the message to `B, C, D, E` directly. That would be the wrong API. Imagine a Telegram or Discord group with thousands of users. The client should not know the full membership list or decide who gets the message.
+
+The client sends this:
+
+```text
+send message to G1
+```
+
+The backend checks who belongs to `G1`.
+
+Now look at the edge server. `ES1` knows the sockets connected to `ES1`. It can deliver to local users such as `B`, `C`, and `D`. But `ES1` does not know that `E` is connected to `ES2`.
+
+One naive answer is to make every edge server talk to every other edge server.
+
+```text
+ES1 -> ES2
+ES1 -> ES3
+ES1 -> ES4
+...
+```
+
+That becomes a mesh topology. It is messy because every edge server must discover, connect to, and coordinate with many other edge servers.
+
+Use a star topology instead.
+
+Put a realtime Pub/Sub layer in the center. Edge servers subscribe to group topics only when they have local users in those groups.
+
+```text
+B connects to ES1 and joins G1, G2
+ES1 subscribes to G1 and G2
+
+E connects to ES2 and joins G1
+ES2 subscribes to G1
+```
+
+When `A` sends to `G1`, `ES1` can deliver to local sockets and publish the event to topic `G1`. The Pub/Sub layer forwards the event to every edge server subscribed to `G1`. `ES2` receives it and delivers to `E`.
+
+![Scaling WebSocket fanout with realtime Pub/Sub](../assets/slack-realtime-communication/slack-websocket-pubsub-fanout.svg)
+
+This Pub/Sub layer is not the durable message store. It is live fanout.
+
+Redis Pub/Sub is a common mental model for this. Publishers send messages to channels, and subscribers receive messages for the channels they subscribed to. Redis documents this as at-most-once delivery: if a subscriber is disconnected or cannot handle the message, the message can be lost. That is why history still belongs in the messages DB. If the product needs stronger queue-like guarantees, use a durable stream or broker instead of plain Pub/Sub.
+
+So the live path is:
+
+```text
+edge server -> realtime Pub/Sub topic -> subscribed edge servers -> local sockets
+```
+
+The history path is still:
+
+```text
+message DB -> recent messages / scrollback
+```
+
+The memory hook is:
 
 ```text
 DMs are channels.
-History is channel-sharded.
-WebSockets terminate at edge servers.
-Pub/Sub bridges edge servers.
-Kafka and the message store make realtime misses recoverable.
+Messages are sharded by channel_id.
+Edge holds sockets.
+Kafka absorbs message writes.
+Pub/Sub fans out live events across edge servers.
+Messages DB answers history.
 ```
+
+Reference for Pub/Sub semantics: [Redis Pub/Sub docs](https://redis.io/docs/latest/develop/pubsub/).

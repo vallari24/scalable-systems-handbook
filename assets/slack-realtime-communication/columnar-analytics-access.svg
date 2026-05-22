@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="820" viewBox="0 0 1280 820" role="img" aria-labelledby="title desc">
+  <title id="title">Column-Oriented Storage Reads Only the Needed Columns</title>
+  <desc id="desc">A row store reads complete rows for an analytical query, while a column store reads only the price and timestamp column files.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .title { fill: #fff59d; font: 700 38px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .panel { fill: #151922; stroke: #6d7280; stroke-width: 2; rx: 14; }
+      .panelHot { fill: #1b2420; stroke: #7cf29a; stroke-width: 3; rx: 14; }
+      .panelWarn { fill: #241920; stroke: #ff9db8; stroke-width: 3; rx: 14; }
+      .label { fill: #f5f7fb; font: 700 23px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #d7dae0; font: 500 17px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 14px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .note { fill: #fff59d; font: 700 19px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .pinkText { fill: #ff9db8; }
+      .greenText { fill: #7cf29a; }
+      .yellowText { fill: #ffd166; }
+      .cell { fill: #181c24; stroke: #e8ecf3; stroke-width: 2; rx: 4; }
+      .readCell { fill: #263529; stroke: #7cf29a; stroke-width: 3; rx: 4; }
+      .skipCell { fill: #191b20; stroke: #5f6570; stroke-width: 1.5; rx: 4; }
+      .rowLine { stroke: #ff9db8; stroke-width: 3; opacity: .75; }
+      .readLine { stroke: #7cf29a; stroke-width: 4; opacity: .95; }
+      .arrow { stroke: #f5f7fb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="820"/>
+  <g>
+    <line class="grid" x1="0" y1="120" x2="1280" y2="120"/>
+    <line class="grid" x1="0" y1="290" x2="1280" y2="290"/>
+    <line class="grid" x1="0" y1="475" x2="1280" y2="475"/>
+    <line class="grid" x1="0" y1="610" x2="1280" y2="610"/>
+    <line class="grid" x1="0" y1="760" x2="1280" y2="760"/>
+  </g>
+
+  <text class="title" x="56" y="62">Column stores are built for analytical reads</text>
+  <text class="subtitle" x="56" y="100">If the query needs only price and timestamp, do not drag symbol, exchange, and volume through the scan.</text>
+
+  <rect class="panelWarn" x="54" y="150" width="540" height="430"/>
+  <text class="label" x="88" y="192">Row-oriented table</text>
+  <text class="small" x="88" y="224">Rows are stored together.</text>
+
+  <g transform="translate(92 300)">
+    <text class="tiny pinkText" x="0" y="-16">R1</text>
+    <rect class="cell" x="42" y="-40" width="82" height="46"/>
+    <rect class="cell" x="124" y="-40" width="82" height="46"/>
+    <rect class="cell" x="206" y="-40" width="82" height="46"/>
+    <rect class="cell" x="288" y="-40" width="82" height="46"/>
+    <rect class="cell" x="370" y="-40" width="82" height="46"/>
+    <line class="rowLine" x1="32" y1="-17" x2="468" y2="-17"/>
+
+    <text class="tiny pinkText" x="0" y="72">R2</text>
+    <rect class="cell" x="42" y="48" width="82" height="46"/>
+    <rect class="cell" x="124" y="48" width="82" height="46"/>
+    <rect class="cell" x="206" y="48" width="82" height="46"/>
+    <rect class="cell" x="288" y="48" width="82" height="46"/>
+    <rect class="cell" x="370" y="48" width="82" height="46"/>
+    <line class="rowLine" x1="32" y1="71" x2="468" y2="71"/>
+
+    <text class="tiny pinkText" x="0" y="160">R3</text>
+    <rect class="cell" x="42" y="136" width="82" height="46"/>
+    <rect class="cell" x="124" y="136" width="82" height="46"/>
+    <rect class="cell" x="206" y="136" width="82" height="46"/>
+    <rect class="cell" x="288" y="136" width="82" height="46"/>
+    <rect class="cell" x="370" y="136" width="82" height="46"/>
+    <line class="rowLine" x1="32" y1="159" x2="468" y2="159"/>
+  </g>
+
+  <text class="small" x="88" y="528">Analytical scan touches full rows,</text>
+  <text class="small" x="88" y="554">then discards unused fields.</text>
+
+  <rect class="panelHot" x="686" y="150" width="540" height="430"/>
+  <text class="label" x="720" y="192">Column-oriented table</text>
+  <text class="small" x="720" y="224">Each column has its own file.</text>
+
+  <g transform="translate(725 315)">
+    <text class="tiny" x="0" y="-48">C1 symbol</text>
+    <rect class="skipCell" x="0" y="-35" width="78" height="125"/>
+    <text class="tiny greenText" x="92" y="-48">C2 price</text>
+    <rect class="readCell" x="92" y="-35" width="78" height="125"/>
+    <text class="tiny" x="184" y="-48">C3 exch</text>
+    <rect class="skipCell" x="184" y="-35" width="78" height="125"/>
+    <text class="tiny" x="276" y="-48">C4 vol</text>
+    <rect class="skipCell" x="276" y="-35" width="78" height="125"/>
+    <text class="tiny greenText" x="368" y="-48">C5 ts</text>
+    <rect class="readCell" x="368" y="-35" width="78" height="125"/>
+
+    <line class="grid" x1="0" y1="6" x2="446" y2="6"/>
+    <line class="grid" x1="0" y1="48" x2="446" y2="48"/>
+    <text class="tiny pinkText" x="462" y="-4">R1</text>
+    <text class="tiny pinkText" x="462" y="38">R2</text>
+    <text class="tiny pinkText" x="462" y="80">R3</text>
+
+    <line class="readLine" x1="131" y1="-16" x2="131" y2="112"/>
+    <line class="readLine" x1="407" y1="-16" x2="407" y2="112"/>
+  </g>
+
+  <text class="small" x="720" y="528">Query reads C2 and C5 only.</text>
+  <text class="small" x="720" y="554">Other column files are not scanned.</text>
+
+  <rect class="panel" x="166" y="625" width="948" height="100"/>
+  <text class="label" x="215" y="664">Stock tick query</text>
+  <text class="small" x="215" y="696">SELECT avg(price) WHERE ts = current_second;</text>
+  <text class="note" x="705" y="664">Read price + ts.</text>
+  <text class="note" x="705" y="696">Skip unused columns.</text>
+
+  <text class="note" x="56" y="790">Memory hook: row stores are great for transactions; column stores are great for giant scans over a few columns.</text>
+</svg>

@@ -13,6 +13,22 @@ DEL key      -> delete key
 TTL key t    -> expire key after time t
 ```
 
+Question: why can this simple shape scale so far?
+
+Because the system limits the access pattern. Every operation starts from one key. That key can decide where the data lives:
+
+```text
+partition = hash(key)
+```
+
+This is the core idea behind heavily partitioned key-value systems such as DynamoDB and Redis. They do not try to support arbitrary joins, broad aggregations, or flexible queries as the main contract. They optimize for `GET`, `PUT`, and `DEL` by key.
+
+The limitation is what makes the routing simple:
+
+```text
+key-bound access -> easy partitioning -> huge storage and throughput
+```
+
 The hard part is not the API. The hard part is storage growth, hot keys, cleanup, write contention, and deciding when one relational database is no longer enough.
 
 Start with a single MySQL node. Then scale only when the system demands it.

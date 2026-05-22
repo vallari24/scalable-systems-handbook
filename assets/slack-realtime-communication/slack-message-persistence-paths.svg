@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+  <!-- SVG QA: after editing, render to PNG and check all four edges, text alignment, box padding, arrow labels, arrowheads, symmetry, and clipping. Do not rely on XML validity alone. -->
+  <title id="title">Three ways to persist a realtime message</title>
+  <desc id="desc">Three persistence choices for a realtime messaging system: strong persistence through API and database, eventual persistence through WebSocket edge and Kafka, and ephemeral delivery without database persistence.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f5f7fb"/>
+    </marker>
+    <marker id="arrowPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff9db8"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7cf29a"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8fd3ff"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .lane { fill: #141820; stroke: #313846; stroke-width: 1.5; rx: 18; }
+      .lane2 { fill: #151b18; stroke: #313846; stroke-width: 1.5; rx: 18; }
+      .lane3 { fill: #17171d; stroke: #313846; stroke-width: 1.5; rx: 18; }
+      .title { fill: #fff59d; font: 700 38px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .heading { fill: #f5f7fb; font: 700 24px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .label { fill: #f5f7fb; font: 700 18px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #c4cad5; font: 500 15px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 13px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .note { fill: #fff59d; font: 700 18px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .pink { fill: #ff9db8; }
+      .green { fill: #7cf29a; }
+      .blue { fill: #8fd3ff; }
+      .yellow { fill: #fff59d; }
+      .center { text-anchor: middle; }
+      .box { fill: #171b22; stroke: #e8ecf3; stroke-width: 2.4; rx: 12; }
+      .api { fill: #1a1d24; stroke: #fff59d; stroke-width: 2.6; rx: 12; }
+      .edge { fill: #151d23; stroke: #8fd3ff; stroke-width: 2.6; rx: 12; }
+      .kafka { fill: #1a1722; stroke: #b6a3ff; stroke-width: 2.6; rx: 12; }
+      .worker { fill: #1b2420; stroke: #7cf29a; stroke-width: 2.6; rx: 12; }
+      .db { fill: #18191c; stroke: #ffd166; stroke-width: 2.8; rx: 12; }
+      .none { fill: #1d1820; stroke: #ff9db8; stroke-width: 2.4; rx: 12; }
+      .arrow { stroke: #f5f7fb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .arrowPink { stroke: #ff9db8; stroke-width: 3; fill: none; marker-end: url(#arrowPink); }
+      .arrowGreen { stroke: #7cf29a; stroke-width: 3; fill: none; marker-end: url(#arrowGreen); }
+      .arrowBlue { stroke: #8fd3ff; stroke-width: 3; fill: none; marker-end: url(#arrowBlue); }
+      .thin { stroke: #5a6270; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="900"/>
+  <g>
+    <line class="grid" x1="0" y1="120" x2="1280" y2="120"/>
+    <line class="grid" x1="0" y1="322" x2="1280" y2="322"/>
+    <line class="grid" x1="0" y1="535" x2="1280" y2="535"/>
+    <line class="grid" x1="0" y1="745" x2="1280" y2="745"/>
+    <line class="grid" x1="0" y1="850" x2="1280" y2="850"/>
+  </g>
+
+  <text class="title" x="56" y="62">Three ways to persist a message</text>
+  <text class="subtitle" x="56" y="100">Pick the path based on the guarantee the product needs before it acknowledges the sender.</text>
+
+  <rect class="lane" x="42" y="145" width="1196" height="175"/>
+  <circle cx="78" cy="184" r="16" fill="#201b24" stroke="#ff9db8" stroke-width="2.5"/>
+  <text class="label pink center" x="78" y="191">1</text>
+  <text class="heading" x="110" y="190">Strong persistence</text>
+  <text class="small" x="110" y="216">Ack only after the message is in the DB.</text>
+
+  <rect class="api" x="260" y="235" width="145" height="56"/>
+  <text class="label center" x="332" y="269">REST API</text>
+  <rect class="db" x="525" y="225" width="180" height="76"/>
+  <text class="label center" x="615" y="258">Message DB</text>
+  <text class="tiny center" x="615" y="280">strong write</text>
+  <rect class="edge" x="835" y="235" width="150" height="56"/>
+  <text class="label center" x="910" y="269">Edge fanout</text>
+  <rect class="box" x="1075" y="235" width="130" height="56"/>
+  <text class="label center" x="1140" y="269">Receiver</text>
+
+  <path class="arrow" d="M135 263 L260 263"/>
+  <path class="arrowPink" d="M405 263 L525 263"/>
+  <text class="tiny pink center" x="465" y="246">persist first</text>
+  <path class="arrowBlue" d="M705 263 L835 263"/>
+  <text class="tiny blue center" x="770" y="246">notify edge</text>
+  <path class="arrowBlue" d="M985 263 L1075 263"/>
+  <text class="tiny" x="110" y="300">Slack-like path: DB write succeeds before ack</text>
+
+  <rect class="lane2" x="42" y="355" width="1196" height="175"/>
+  <circle cx="78" cy="394" r="16" fill="#17221b" stroke="#7cf29a" stroke-width="2.5"/>
+  <text class="label green center" x="78" y="401">2</text>
+  <text class="heading" x="110" y="400">Eventual persistence</text>
+  <text class="small" x="110" y="426">Ack after Kafka accepts the event. A worker persists later.</text>
+
+  <rect class="edge" x="250" y="445" width="150" height="56"/>
+  <text class="label center" x="325" y="469">Edge WS</text>
+  <text class="tiny center" x="325" y="490">socket event</text>
+  <rect class="kafka" x="520" y="435" width="165" height="76"/>
+  <text class="label center" x="602" y="468">Kafka</text>
+  <text class="tiny center" x="602" y="490">durable append</text>
+  <rect class="worker" x="805" y="445" width="160" height="56"/>
+  <text class="label center" x="885" y="469">Worker</text>
+  <text class="tiny center" x="885" y="490">async persist</text>
+  <rect class="db" x="1070" y="445" width="150" height="56"/>
+  <text class="label center" x="1145" y="469">Message DB</text>
+  <text class="tiny center" x="1145" y="490">eventual</text>
+
+  <path class="arrowBlue" d="M135 473 L250 473"/>
+  <path class="arrowGreen" d="M400 473 L520 473"/>
+  <text class="tiny green center" x="460" y="454">append</text>
+  <path class="arrowGreen" d="M685 473 L805 473"/>
+  <text class="tiny green center" x="745" y="454">consume</text>
+  <path class="arrowGreen" d="M965 473 L1070 473"/>
+  <text class="tiny green center" x="1018" y="454">persist</text>
+  <path class="thin" d="M602 435 C600 398 430 390 325 445"/>
+  <text class="tiny green center" x="503" y="398">ack after Kafka accepts</text>
+  <text class="tiny" x="110" y="510">WhatsApp-like path: broker accepts first, DB catches up later</text>
+
+  <rect class="lane3" x="42" y="565" width="1196" height="175"/>
+  <circle cx="78" cy="604" r="16" fill="#23181e" stroke="#ff9db8" stroke-width="2.5"/>
+  <text class="label pink center" x="78" y="611">3</text>
+  <text class="heading" x="110" y="610">No persistence</text>
+  <text class="small" x="110" y="636">Deliver while users are connected. History is not guaranteed.</text>
+
+  <rect class="edge" x="315" y="655" width="160" height="56"/>
+  <text class="label center" x="395" y="679">Edge WS</text>
+  <text class="tiny center" x="395" y="700">relay only</text>
+  <rect class="box" x="660" y="655" width="150" height="56"/>
+  <text class="label center" x="735" y="679">Receiver</text>
+  <text class="tiny center" x="735" y="700">online now</text>
+  <rect class="none" x="955" y="650" width="175" height="66"/>
+  <text class="label pink center" x="1042" y="678">No DB write</text>
+  <text class="tiny center" x="1042" y="700">ephemeral chat</text>
+
+  <path class="arrowBlue" d="M135 683 L315 683"/>
+  <path class="arrowBlue" d="M475 683 L660 683"/>
+  <text class="tiny blue center" x="568" y="664">deliver</text>
+  <path class="arrowPink" d="M810 683 L955 683"/>
+  <text class="tiny pink center" x="883" y="664">no history</text>
+  <text class="tiny" x="110" y="720">Zoom-like path: online delivery only, no history guarantee</text>
+
+  <text class="note" x="56" y="825">Memory hook: stronger persistence means slower ack. Weaker persistence means faster delivery and less history guarantee.</text>
+</svg>
