@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860" role="img" aria-labelledby="title desc">
+  <title id="title">Load balancer health checks and monitoring</title>
+  <desc id="desc">An orchestrator checks backend health endpoints, pushes backend status updates through Pub/Sub, and reads Prometheus metrics for machine health.</desc>
+  <defs>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1.3,1.3 L7,4 L1.3,6.7 Z" fill="#6ee7a8"/>
+    </marker>
+    <marker id="arrowPink" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1.3,1.3 L7,4 L1.3,6.7 Z" fill="#ff9fba"/>
+    </marker>
+    <marker id="arrowYellow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1.3,1.3 L7,4 L1.3,6.7 Z" fill="#fff59d"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1.3,1.3 L7,4 L1.3,6.7 Z" fill="#a9b4ff"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1.3,1.3 L7,4 L1.3,6.7 Z" fill="#ffcf9f"/>
+    </marker>
+    <style>
+      .bg { fill: #0d1217; }
+      .lane { fill: #121821; stroke: #293241; stroke-width: 2; }
+      .box { fill: #18202b; stroke: #e5edf7; stroke-width: 3; rx: 8; }
+      .lb { fill: #1a2230; stroke: #a9b4ff; stroke-width: 4; rx: 8; }
+      .backend { fill: #14221b; stroke: #6ee7a8; stroke-width: 3; rx: 8; }
+      .orchestrator { fill: #221f16; stroke: #ffcf9f; stroke-width: 3; rx: 8; }
+      .pubsub { fill: #231923; stroke: #ff9fba; stroke-width: 3; rx: 8; }
+      .metrics { fill: #171b2a; stroke: #a9b4ff; stroke-width: 3; rx: 8; }
+      .muted { fill: #0f141b; stroke: #64748b; stroke-width: 2; rx: 8; }
+      .title { font: 700 36px Arial, sans-serif; fill: #fff59d; }
+      .subtitle { font: 500 18px Arial, sans-serif; fill: #dbe4ee; }
+      .section { font: 700 22px Arial, sans-serif; fill: #fff59d; }
+      .label { font: 700 19px Arial, sans-serif; fill: #f8fafc; }
+      .small { font: 500 16px Arial, sans-serif; fill: #dbe4ee; }
+      .tiny { font: 600 14px Arial, sans-serif; fill: #dbe4ee; }
+      .green { fill: #6ee7a8; }
+      .pink { fill: #ff9fba; }
+      .yellow { fill: #fff59d; }
+      .orange { fill: #ffcf9f; }
+      .blue { fill: #a9b4ff; }
+      .arrowGreen { stroke: #6ee7a8; stroke-width: 3; fill: none; marker-end: url(#arrowGreen); }
+      .arrowPink { stroke: #ff9fba; stroke-width: 3; fill: none; marker-end: url(#arrowPink); }
+      .arrowYellow { stroke: #fff59d; stroke-width: 3; fill: none; marker-end: url(#arrowYellow); }
+      .arrowBlue { stroke: #a9b4ff; stroke-width: 3; fill: none; marker-end: url(#arrowBlue); }
+      .arrowOrange { stroke: #ffcf9f; stroke-width: 3; fill: none; marker-end: url(#arrowOrange); }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1280" height="860"/>
+
+  <text class="title" x="60" y="58">Monitoring the Load Balancer Fleet</text>
+  <text class="subtitle" x="60" y="88">Use external health checks for service reachability and Prometheus metrics for machine health.</text>
+
+  <rect class="lane" x="44" y="118" width="1192" height="330" rx="14"/>
+  <text class="section" x="70" y="152">Service health: can this backend handle requests?</text>
+  <text class="small" x="70" y="180">The orchestrator probes backend /health and pushes status changes.</text>
+
+  <rect class="lb" x="80" y="245" width="215" height="105"/>
+  <text class="label blue" x="112" y="280">LB server</text>
+  <text class="small" x="112" y="310">local backend map</text>
+  <text class="small" x="112" y="334">routes healthy only</text>
+
+  <rect class="orchestrator" x="405" y="210" width="250" height="145"/>
+  <text class="label orange" x="445" y="246">Orchestrator</text>
+  <text class="small" x="445" y="276">reads config</text>
+  <text class="small" x="445" y="300">calls /health</text>
+  <text class="small" x="445" y="324">publishes status</text>
+
+  <path d="M405 374 H655" stroke="#ff9fba" stroke-width="3" fill="none"/>
+  <path d="M405 428 H655" stroke="#ff9fba" stroke-width="3" fill="none"/>
+  <ellipse cx="405" cy="401" rx="20" ry="27" fill="#231923" stroke="#ff9fba" stroke-width="3"/>
+  <ellipse cx="655" cy="401" rx="20" ry="27" fill="#231923" stroke="#ff9fba" stroke-width="3"/>
+  <text class="label pink" x="442" y="408">backend-health topic</text>
+
+  <path class="arrowPink" d="M405 402 C330 402, 320 320, 296 306"/>
+  <text class="tiny pink" x="316" y="388">status update</text>
+
+  <path d="M740 168 C740 146, 940 146, 940 168 V210 C940 232, 740 232, 740 210 Z" fill="#18202b" stroke="#fff59d" stroke-width="3"/>
+  <ellipse cx="840" cy="168" rx="100" ry="22" fill="#18202b" stroke="#fff59d" stroke-width="3"/>
+  <text class="label yellow" x="795" y="192">Config DB</text>
+  <text class="small" x="770" y="214">health path + ports</text>
+
+  <path class="arrowYellow" d="M740 190 C690 190, 685 222, 656 245"/>
+  <text class="tiny yellow" x="702" y="236">read config</text>
+
+  <rect class="backend" x="820" y="238" width="320" height="52"/>
+  <text class="label green" x="846" y="271">20.0.0.1:8080/health</text>
+
+  <rect class="backend" x="820" y="314" width="320" height="52"/>
+  <text class="label green" x="846" y="347">20.0.0.2:8080/health</text>
+
+  <rect class="backend" x="820" y="390" width="320" height="52"/>
+  <text class="label green" x="846" y="423">20.0.0.3:8080/health</text>
+
+  <path class="arrowGreen" d="M655 270 C710 235, 760 250, 820 264"/>
+  <path class="arrowGreen" d="M655 300 C710 330, 760 340, 820 340"/>
+  <path class="arrowGreen" d="M655 330 C710 410, 760 418, 820 416"/>
+  <text class="tiny green" x="690" y="310">HTTP health checks</text>
+
+  <rect class="lane" x="44" y="482" width="1192" height="300" rx="14"/>
+  <text class="section" x="70" y="516">Machine metrics: is this machine overloaded?</text>
+  <text class="small" x="70" y="544">Exporters run on machines; Prometheus scrapes them and stores time-series metrics.</text>
+
+  <rect class="backend" x="80" y="605" width="230" height="82"/>
+  <text class="label green" x="112" y="637">Backend machine</text>
+  <text class="small" x="112" y="662">REST service</text>
+  <text class="small" x="112" y="682">node_exporter:9100</text>
+
+  <rect class="lb" x="80" y="705" width="230" height="54"/>
+  <text class="label blue" x="112" y="739">LB machine exporter</text>
+
+  <rect class="metrics" x="465" y="620" width="245" height="105"/>
+  <text class="label blue" x="502" y="655">Prometheus</text>
+  <text class="small" x="502" y="685">scrapes metrics</text>
+  <text class="small" x="502" y="709">stores time series</text>
+
+  <path class="arrowBlue" d="M310 645 H465"/>
+  <text class="tiny blue" x="340" y="628">CPU, memory, disk, network</text>
+  <path class="arrowBlue" d="M310 732 C365 732, 405 718, 465 700"/>
+
+  <rect class="orchestrator" x="840" y="600" width="260" height="130"/>
+  <text class="label orange" x="878" y="635">Orchestrator</text>
+  <text class="small" x="878" y="665">queries metrics</text>
+  <text class="small" x="878" y="689">drains or replaces</text>
+  <text class="small" x="878" y="713">overloaded machines</text>
+
+  <path class="arrowOrange" d="M710 670 H840"/>
+  <text class="tiny orange" x="730" y="653">rules and alerts</text>
+
+  <rect class="muted" x="80" y="795" width="1080" height="36"/>
+  <text class="tiny green" x="104" y="818">green = service health checks</text>
+  <text class="tiny blue" x="345" y="818">blue = machine metrics</text>
+  <text class="tiny pink" x="555" y="818">pink = Pub/Sub update to LB</text>
+  <text class="tiny orange" x="805" y="818">orange = orchestrator decisions</text>
+</svg>

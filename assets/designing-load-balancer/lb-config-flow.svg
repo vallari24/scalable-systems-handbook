@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="880" viewBox="0 0 1280 880" role="img" aria-labelledby="title desc">
+  <title id="title">Load balancer request path and config path</title>
+  <desc id="desc">A load balancer routes user requests to backend servers from local in-memory config, while config changes are pushed through a config service and Pub/Sub topic.</desc>
+  <defs>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1.3,1.3 L7,4 L1.3,6.7 Z" fill="#6ee7a8"/>
+    </marker>
+    <marker id="arrowPink" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M1.3,1.3 L7,4 L1.3,6.7 Z" fill="#ff9fba"/>
+    </marker>
+    <style>
+      .bg { fill: #0d1217; }
+      .lane { fill: #121821; stroke: #293241; stroke-width: 2; }
+      .box { fill: #18202b; stroke: #e5edf7; stroke-width: 3; rx: 8; }
+      .lb { fill: #1a2230; stroke: #a9b4ff; stroke-width: 4; rx: 8; }
+      .config { fill: #221f16; stroke: #fff59d; stroke-width: 3; rx: 8; }
+      .pubsub { fill: #231923; stroke: #ff9fba; stroke-width: 3; rx: 8; }
+      .backend { fill: #14221b; stroke: #6ee7a8; stroke-width: 3; rx: 8; }
+      .muted { fill: #0f141b; stroke: #64748b; stroke-width: 2; rx: 8; }
+      .title { font: 700 36px Arial, sans-serif; fill: #fff59d; }
+      .subtitle { font: 500 18px Arial, sans-serif; fill: #dbe4ee; }
+      .section { font: 700 22px Arial, sans-serif; fill: #fff59d; }
+      .label { font: 700 19px Arial, sans-serif; fill: #f8fafc; }
+      .small { font: 500 16px Arial, sans-serif; fill: #dbe4ee; }
+      .tiny { font: 600 14px Arial, sans-serif; fill: #dbe4ee; }
+      .green { fill: #6ee7a8; }
+      .pink { fill: #ff9fba; }
+      .yellow { fill: #fff59d; }
+      .blue { fill: #a9b4ff; }
+      .arrowGreen { stroke: #6ee7a8; stroke-width: 3; fill: none; marker-end: url(#arrowGreen); }
+      .arrowPink { stroke: #ff9fba; stroke-width: 3; fill: none; marker-end: url(#arrowPink); }
+      .thinGray { stroke: #64748b; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1280" height="880"/>
+
+  <text class="title" x="60" y="58">Load Balancer Design So Far</text>
+  <text class="subtitle" x="60" y="88">Route every request from local config; push config changes to LB servers immediately.</text>
+
+  <rect class="lane" x="44" y="118" width="1192" height="345" rx="14"/>
+  <text class="section" x="70" y="152">Data path: user requests</text>
+  <text class="small" x="70" y="180">This path is hot, so the LB must not query the config database for every request.</text>
+
+  <g transform="translate(76 225)">
+    <circle cx="24" cy="18" r="14" fill="none" stroke="#f8fafc" stroke-width="3"/>
+    <path d="M24 32 L24 76 M24 47 L4 61 M24 47 L44 61 M24 76 L8 106 M24 76 L42 106" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <text class="label" x="-6" y="138">Client</text>
+  </g>
+
+  <path class="arrowGreen" d="M165 290 H335"/>
+  <text class="tiny green" x="205" y="273">request</text>
+
+  <rect class="lb" x="340" y="198" width="290" height="205"/>
+  <text class="label blue" x="367" y="245">LB server: LB1</text>
+  <text class="small" x="367" y="277">runs routing code</text>
+  <text class="small" x="367" y="307">uses local config</text>
+  <text class="small" x="367" y="337">algorithm: RR / WRR / LC</text>
+  <text class="small yellow" x="367" y="365">local memory</text>
+  <text class="small yellow" x="367" y="389">backends + weights</text>
+
+  <path class="arrowGreen" d="M610 290 H765"/>
+  <text class="tiny green" x="635" y="273">selected backend</text>
+
+  <rect class="backend" x="790" y="180" width="340" height="60"/>
+  <text class="label green" x="820" y="216">20.0.0.1:8080</text>
+  <text class="tiny" x="1012" y="216">weight 1</text>
+
+  <rect class="backend" x="790" y="270" width="340" height="60"/>
+  <text class="label green" x="820" y="306">20.0.0.2:8080</text>
+  <text class="tiny" x="1012" y="306">weight 2</text>
+
+  <rect class="backend" x="790" y="360" width="340" height="60"/>
+  <text class="label green" x="820" y="396">20.0.0.3:8080</text>
+  <text class="tiny" x="1012" y="396">weight 1</text>
+
+  <path class="arrowGreen" d="M765 290 C780 212, 780 212, 790 212"/>
+  <path class="arrowGreen" d="M765 290 H790"/>
+  <path class="arrowGreen" d="M765 290 C780 392, 780 392, 790 392"/>
+  <text class="tiny" x="880" y="154">Backend servers</text>
+
+  <rect class="lane" x="44" y="500" width="1192" height="330" rx="14"/>
+  <text class="section" x="70" y="534">Control path: config changes</text>
+  <text class="small" x="70" y="562">This path updates the LB's local memory when backend servers or algorithm settings change.</text>
+
+  <rect class="box" x="80" y="612" width="190" height="72"/>
+  <text class="label" x="110" y="644">Admin console</text>
+  <text class="small" x="110" y="668">or deploy system</text>
+
+  <path class="arrowPink" d="M270 648 H360"/>
+  <text class="tiny pink" x="286" y="627">change</text>
+
+  <rect class="config" x="365" y="598" width="210" height="100"/>
+  <text class="label yellow" x="397" y="632">Config service</text>
+  <text class="small" x="397" y="662">validates changes</text>
+  <text class="small" x="397" y="686">publishes version</text>
+
+  <path class="arrowPink" d="M575 648 H675"/>
+  <text class="tiny pink" x="596" y="631">write</text>
+
+  <path class="config" d="M680 616 C680 594, 885 594, 885 616 V680 C885 702, 680 702, 680 680 Z"/>
+  <ellipse cx="782.5" cy="616" rx="102.5" ry="22" fill="#221f16" stroke="#fff59d" stroke-width="3"/>
+  <text class="label yellow" x="735" y="643">Config DB</text>
+  <text class="small" x="720" y="668">LB1 backends</text>
+  <text class="small" x="720" y="690">algo + weights</text>
+
+  <path class="arrowPink" d="M575 692 C620 758, 880 758, 930 674"/>
+  <text class="tiny pink" x="692" y="764">publish lb_config_updated(LB1, full config)</text>
+
+  <path d="M930 616 H1160" stroke="#ff9fba" stroke-width="3" fill="none"/>
+  <path d="M930 680 H1160" stroke="#ff9fba" stroke-width="3" fill="none"/>
+  <ellipse cx="930" cy="648" rx="22" ry="32" fill="#231923" stroke="#ff9fba" stroke-width="3"/>
+  <ellipse cx="1160" cy="648" rx="22" ry="32" fill="#231923" stroke="#ff9fba" stroke-width="3"/>
+  <text class="label pink" x="974" y="639">Pub/Sub</text>
+  <text class="small" x="970" y="664">lb-config-changes</text>
+
+  <path class="arrowPink" d="M1045 616 C1010 505, 700 478, 545 405"/>
+  <text class="tiny pink" x="790" y="486">push update immediately</text>
+
+  <rect class="muted" x="78" y="784" width="1080" height="34"/>
+  <text class="tiny green" x="100" y="806">green = request routing</text>
+  <text class="tiny yellow" x="310" y="806">yellow = config source</text>
+  <text class="tiny pink" x="530" y="806">pink = Pub/Sub config update</text>
+  <text class="tiny" x="790" y="806">LB servers replace local memory after receiving the event</text>
+</svg>
