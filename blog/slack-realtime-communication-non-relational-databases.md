@@ -759,6 +759,14 @@ The backend checks who belongs to `G1`.
 
 Now look at the edge server. `ES1` knows the sockets connected to `ES1`. It can deliver to local users such as `B`, `C`, and `D`. But `ES1` does not know that `E` is connected to `ES2`.
 
+Inside one edge server, delivery is simple. The edge keeps a local connection pool:
+
+```text
+user_id -> socket
+```
+
+If `A` sends a DM to `B` and both users are connected to `ES1`, `ES1` can find `B` locally and send the event after the persistence path accepts it. The hard case begins when the receiver is connected to another edge server.
+
 One naive answer is to make every edge server talk to every other edge server.
 
 ```text
@@ -802,6 +810,41 @@ The history path is still:
 message DB -> recent messages / scrollback
 ```
 
+## Missed Realtime Delivery
+
+**Question: what if a message is not pushed in realtime?**
+
+Treat this as a transient delivery problem, not a storage problem.
+
+If the product chose path 1 or path 2 above, the message is either already in the messages DB or accepted into Kafka and on its way to the messages DB. The realtime Pub/Sub layer is only a live notification path.
+
+So when the socket reconnects, the client should catch up through the history path:
+
+```text
+client reconnects
+client sends last checkpoint for channel C
+API reads messages after checkpoint from the messages DB
+edge server resumes Pub/Sub subscriptions for active channels
+```
+
+That is why `membership.checkpoint` matters. It lets the product repair small realtime misses without turning the edge server into a database server.
+
+If the product needs stronger live replay, add a second durable delivery buffer and replay missed events when the socket comes back. Keep that as an extra guarantee, not the first design.
+
+## Final Architecture
+
+**Question: what should the final mental model be?**
+
+Use REST/API servers for non-realtime work: channel scroll, DM scroll, muted channels, fetching latest history, and other reads that can go to the messages DB.
+
+Use edge servers for realtime work: one WebSocket per user, local socket lookup, and Pub/Sub fanout. The edge server knows the users connected to itself. It should not own durable storage.
+
+Use Kafka for the durable write handoff. Workers consume Kafka events and persist messages into the partitioned messages DB.
+
+Use realtime Pub/Sub for live cross-edge fanout. If `A` is on `ES1` and `E` is on `ES2`, Pub/Sub bridges the gap.
+
+![Overall Slack realtime communication architecture](../assets/slack-realtime-communication/slack-overall-architecture.svg)
+
 The memory hook is:
 
 ```text
@@ -813,4 +856,216 @@ Pub/Sub fans out live events across edge servers.
 Messages DB answers history.
 ```
 
-Reference for Pub/Sub semantics: [Redis Pub/Sub docs](https://redis.io/docs/latest/develop/pubsub/).
+## Common Questions
+
+**How do we ensure message ordering?**
+
+Do not trust client time alone. Assign ordering on the server side.
+
+For a channel, store messages with a stable order key:
+
+```text
+channel_id
+server_created_at
+message_id
+```
+
+When the UI renders a channel, keep the local array sorted by `(server_created_at, message_id)`.
+
+If the write path uses Kafka and ordering matters per channel, use `channel_id` as the Kafka key so messages for the same channel go to the same Kafka partition. Kafka ordering is per partition, not global across the whole cluster.
+
+**Does the load balancer guarantee strong persistence?**
+
+No. The load balancer only routes traffic.
+
+Strong persistence comes from the API waiting for the messages DB write to commit before it acks the sender:
+
+```text
+user -> load balancer -> API -> DB commit -> ack
+```
+
+If the product acks after Kafka accepts the event, persistence is eventual:
+
+```text
+user -> edge -> Kafka ack -> later worker writes DB
+```
+
+**What is REST used for, and what is WebSocket used for?**
+
+REST is for normal request-response work:
+
+```text
+fetch profile
+load channel history
+scroll older messages
+mark channel muted
+upload metadata
+analytics/beacon calls
+```
+
+WebSocket is for server-to-client realtime communication:
+
+```text
+new message
+typing indicator
+presence update
+notification event
+```
+
+Images, videos, and large files should not flow through the message DB. Upload the binary object to object storage such as S3, then store and send the object link in the message.
+
+**Why not open one WebSocket per channel?**
+
+Because every WebSocket is a long-lived TCP connection. Browsers and networks have practical connection limits, and a page also needs connections for normal API calls, images, analytics, and assets.
+
+So keep one WebSocket per user and multiplex all realtime events over it:
+
+```text
+one user -> one socket -> many channels, DMs, notifications
+```
+
+Do not depend on the exact browser limit. The design principle is simpler: do not waste persistent connections.
+
+**Does an edge server need a load balancer?**
+
+Yes. Users still need to reach an edge server.
+
+```text
+client -> load balancer -> edge server
+```
+
+After the WebSocket is established, that TCP connection stays attached to the chosen edge server. If it disconnects, the client can reconnect through the load balancer, land on another edge server, and resubscribe to its active channels.
+
+**What does the edge server store in memory?**
+
+It stores local socket state, not durable messages.
+
+```text
+user_id -> socket
+channel_id -> local users connected on this edge
+```
+
+If 1 million connected users each belong to 50 active channels, and every membership id were stored as a 4-byte integer, the raw integer storage is:
+
+```text
+1,000,000 * 50 * 4 bytes = 200 MB
+```
+
+Real memory will be higher because maps, sets, strings, and runtime objects add overhead. Still, the important idea is that this is edge-local, in-memory routing state. It can be rebuilt when users reconnect.
+
+**How does NoSQL sharding happen here?**
+
+Pick the partition key from the main access pattern.
+
+For messages, the access pattern is:
+
+```text
+read messages for channel C
+append message to channel C
+scroll older messages for channel C
+```
+
+So use:
+
+```text
+partition key = channel_id
+sort key      = server_created_at or message_id
+```
+
+The database hashes the partition key and routes that partition to an owning node or shard. This keeps all messages for one channel together and makes channel scroll a single-shard query.
+
+**When is a DM channel created?**
+
+Usually lazily, when `A` first opens or sends a DM to `B`.
+
+```text
+A clicks B
+API creates channel(type = dm)
+API inserts membership rows for A and B
+API returns channel_id
+edge/client subscribes to that channel_id
+messages use the same channel message path
+```
+
+After that, a DM is just a channel with two members.
+
+**What if A creates a new group and B is connected to another edge server?**
+
+Group creation is metadata, so it goes through the API and database first.
+
+```text
+API creates channel G1
+API inserts memberships
+clients learn G1 exists
+edge servers subscribe when local users need G1
+```
+
+If `B` is on `ES2`, then `ES2` subscribes to topic `G1` when `B` opens the group, reconnects, or receives membership sync. If `B` misses the live event, the history path repairs it through the messages DB.
+
+**What happens if Redis Pub/Sub is down?**
+
+Live fanout is degraded. Durable history is not lost if the message was committed to the DB or accepted by Kafka.
+
+The client can recover by reconnecting or periodically asking the history API:
+
+```text
+give me messages after checkpoint X
+```
+
+Then the UI catches up from the messages DB. This is why Pub/Sub should not be the only place a durable message exists.
+
+**Who connects to Redis Pub/Sub?**
+
+Edge servers connect to Redis over backend TCP connections. Browsers do not connect to Redis.
+
+```text
+browser -> WebSocket -> edge server -> Redis Pub/Sub
+```
+
+The edge server owns the socket to the browser and the backend connection to Redis. That keeps Redis private and keeps the browser protocol simple.
+
+**Why Redis Pub/Sub for live fanout and Kafka for persistence?**
+
+They solve different problems.
+
+Redis Pub/Sub is push-based and memory-first. It is useful for quickly pushing a live event to subscribed edge servers.
+
+Kafka is disk-backed and pull-based for consumers. It is useful when the system needs a durable append log, replay, high write throughput, and worker-based persistence.
+
+```text
+Redis Pub/Sub -> live delivery
+Kafka         -> durable handoff
+Messages DB   -> source of truth for history
+```
+
+**Does Kafka ack after DB persistence?**
+
+No. Kafka does not know what the consumer later does with the event.
+
+Kafka acks when the producer's record has been accepted according to the producer/topic durability settings. The message worker may still fail later while writing to the DB. That is why the worker needs retries, idempotent writes, and offset commits only after it has handled the event.
+
+**Why not HTTP/2 or gRPC instead of WebSocket?**
+
+HTTP/2 is excellent for multiplexing request-response traffic. Native gRPC can support streaming, but browser gRPC-Web support is more limited and often needs a proxy.
+
+For browser chat, WebSocket is the simpler mental model:
+
+```text
+one long-lived browser connection
+client can send events
+server can push events
+```
+
+Use REST/HTTP for normal APIs. Use WebSocket for realtime push.
+
+References used while shaping this explanation:
+
+- Slack Engineering's [Real Time Messaging](https://slack.engineering/real-time-messaging/) write-up separates WebSocket gateways, channel routing, Webapp/API calls, and realtime subscriptions.
+- Slack's [Conversations API overview](https://docs.slack.dev/apis/web-api/using-the-conversations-api/) uses one conversation model for public channels, private channels, DMs, and multi-person DMs.
+- Slack's [`conversations.history`](https://docs.slack.dev/reference/methods/conversations.history/) API is the history path: fetch messages from a conversation with pagination.
+- Redis [Pub/Sub docs](https://redis.io/docs/latest/develop/pubsub/) describe Pub/Sub as live fanout with at-most-once delivery, which is why durable history remains separate.
+- Apache Cassandra's [Cassandra Basics](https://cassandra.apache.org/_/cassandra-basics.html) explains that a partition key is hashed to distribute data across nodes and keep partition reads efficient.
+- Apache Kafka's [producer `acks` docs](https://kafka.apache.org/42/configuration/producer-configs/#acks) explain that producer acknowledgements are broker-side acknowledgements, not proof that a downstream consumer has written to an external database.
+- MDN's [WebSocket API docs](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/index.html) describe WebSocket as a two-way browser-server communication session.
+- gRPC's [gRPC-Web browser write-up](https://grpc.io/blog/state-of-grpc-web/) explains why browser gRPC-Web has limitations compared with native gRPC over HTTP/2.
+- Amazon S3's [object docs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingObjects.html) describe S3 as object storage, which is the right shape for images, videos, and files.

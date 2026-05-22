@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1080" viewBox="0 0 1280 1080" role="img" aria-labelledby="title desc">
+  <!-- SVG QA: after editing, render to PNG and check all four edges, text alignment, box padding, arrow labels, arrowheads, symmetry, and clipping. Do not rely on XML validity alone. -->
+  <title id="title">Slack-style realtime communication overall architecture</title>
+  <desc id="desc">Overall architecture with users connected over WebSocket to edge servers, realtime Pub/Sub for fanout, Kafka for durable message ingestion, workers for persistence, REST API servers for history, and a partitioned messages database.</desc>
+  <defs>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8fd3ff"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7cf29a"/>
+    </marker>
+    <marker id="arrowYellow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff59d"/>
+    </marker>
+    <marker id="arrowPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff9db8"/>
+    </marker>
+    <style>
+      .bg { fill: #101217; }
+      .grid { stroke: #2a2f37; stroke-width: 1; opacity: .75; }
+      .title { fill: #fff59d; font: 700 38px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .subtitle { fill: #d7dae0; font: 400 20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .box { fill: #171b22; stroke: #e8ecf3; stroke-width: 2.5; rx: 14; }
+      .edge { fill: #211a22; stroke: #ffb4c2; stroke-width: 3; rx: 14; }
+      .api { fill: #171b22; stroke: #fff59d; stroke-width: 2.5; rx: 14; }
+      .kafka { fill: #1a1722; stroke: #fff59d; stroke-width: 3; rx: 14; }
+      .worker { fill: #1b2420; stroke: #7cf29a; stroke-width: 2.8; rx: 12; }
+      .pubsub { fill: #17231c; stroke: #7cf29a; stroke-width: 3; rx: 18; }
+      .db { fill: #18191c; stroke: #ffd166; stroke-width: 3; rx: 18; }
+      .label { fill: #f5f7fb; font: 700 22px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .small { fill: #d7dae0; font: 500 17px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .tiny { fill: #aeb5c2; font: 500 14px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .note { fill: #fff59d; font: 700 18px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .pink { fill: #ff9db8; }
+      .green { fill: #7cf29a; }
+      .blue { fill: #8fd3ff; }
+      .yellow { fill: #fff59d; }
+      .center { text-anchor: middle; }
+      .right { text-anchor: end; }
+      .ws { stroke: #8fd3ff; stroke-width: 3; fill: none; marker-end: url(#arrowBlue); }
+      .live { stroke: #7cf29a; stroke-width: 3; fill: none; marker-end: url(#arrowGreen); }
+      .durable { stroke: #fff59d; stroke-width: 3; fill: none; marker-end: url(#arrowYellow); }
+      .rest { stroke: #ff9db8; stroke-width: 3; fill: none; marker-end: url(#arrowPink); }
+      .thin { stroke-width: 2.2; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="1080"/>
+  <g>
+    <line class="grid" x1="0" y1="118" x2="1280" y2="118"/>
+    <line class="grid" x1="0" y1="268" x2="1280" y2="268"/>
+    <line class="grid" x1="0" y1="418" x2="1280" y2="418"/>
+    <line class="grid" x1="0" y1="568" x2="1280" y2="568"/>
+    <line class="grid" x1="0" y1="718" x2="1280" y2="718"/>
+    <line class="grid" x1="0" y1="868" x2="1280" y2="868"/>
+  </g>
+
+  <text class="title" x="56" y="62">Overall architecture</text>
+  <text class="subtitle" x="56" y="100">Realtime delivery and persisted history are separate paths that meet at the client.</text>
+
+  <text class="small blue" x="54" y="183">@ A</text>
+  <text class="small blue" x="54" y="254">@ B</text>
+  <text class="small blue" x="54" y="325">@ C</text>
+  <rect class="edge" x="245" y="176" width="205" height="140"/>
+  <text class="label center" x="348" y="227">Edge servers</text>
+  <text class="tiny center" x="348" y="256">one WebSocket per user</text>
+  <text class="tiny center" x="348" y="282">local socket pool</text>
+  <path class="ws" d="M105 178 L245 210"/>
+  <path class="ws" d="M105 248 L245 248"/>
+  <path class="ws" d="M105 320 L245 286"/>
+  <text class="tiny blue" x="135" y="165">ws</text>
+  <text class="tiny blue" x="135" y="235">ws</text>
+  <text class="tiny blue" x="135" y="335">ws</text>
+  <text class="tiny center" x="348" y="158">membership loaded at connect</text>
+
+  <rect class="pubsub" x="615" y="222" width="300" height="82"/>
+  <text class="label center" x="765" y="257">Redis Pub/Sub</text>
+  <text class="tiny center" x="765" y="282">clustered realtime fanout</text>
+  <path class="live" d="M450 230 L615 252"/>
+  <text class="tiny green" x="503" y="220">publish / subscribe topics</text>
+
+  <rect class="edge" x="965" y="168" width="200" height="112"/>
+  <text class="label center" x="1065" y="212">Edge servers</text>
+  <text class="tiny center" x="1065" y="240">deliver to D, E...</text>
+  <text class="small blue" x="1196" y="188">@ D</text>
+  <text class="small blue" x="1196" y="248">@ E</text>
+  <path class="live" d="M915 262 L965 230"/>
+  <path class="ws thin" d="M1165 204 L1190 190"/>
+  <path class="ws thin" d="M1165 242 L1190 250"/>
+
+  <rect class="kafka" x="480" y="430" width="210" height="96"/>
+  <text class="label center" x="585" y="470">Kafka</text>
+  <text class="tiny center" x="585" y="496">durable message event log</text>
+  <path class="durable" d="M348 316 L348 382 C348 428 427 460 480 468"/>
+  <text class="tiny yellow" x="276" y="378">accepted message events</text>
+
+  <rect class="worker" x="380" y="616" width="142" height="58"/>
+  <text class="tiny center" x="451" y="651">worker</text>
+  <rect class="worker" x="550" y="616" width="142" height="58"/>
+  <text class="tiny center" x="621" y="651">worker</text>
+  <rect class="worker" x="720" y="616" width="142" height="58"/>
+  <text class="tiny center" x="791" y="651">worker</text>
+  <path class="durable" d="M585 526 L585 616"/>
+  <path class="durable thin" d="M585 584 L451 616"/>
+  <path class="durable thin" d="M585 584 L791 616"/>
+  <text class="tiny yellow" x="724" y="586">messaging service workers</text>
+
+  <rect class="db" x="430" y="760" width="420" height="132"/>
+  <text class="label center" x="640" y="805">Messages DB</text>
+  <text class="tiny center" x="640" y="832">partitioned by channel_id</text>
+  <text class="tiny center" x="640" y="858">durable history and scrollback</text>
+  <path class="durable" d="M451 674 L510 760"/>
+  <path class="durable" d="M621 674 L640 760"/>
+  <path class="durable" d="M791 674 L730 760"/>
+
+  <rect class="box" x="42" y="450" width="150" height="66"/>
+  <text class="tiny center" x="117" y="490">load balancer</text>
+  <rect class="api" x="42" y="600" width="130" height="56"/>
+  <rect class="api" x="215" y="600" width="130" height="56"/>
+  <rect class="api" x="128" y="710" width="130" height="56"/>
+  <text class="tiny center" x="107" y="634">API</text>
+  <text class="tiny center" x="280" y="634">API</text>
+  <text class="tiny center" x="193" y="744">API</text>
+  <path class="rest" d="M105 325 L117 450"/>
+  <path class="rest thin" d="M117 516 L107 600"/>
+  <path class="rest thin" d="M117 516 L280 600"/>
+  <path class="rest thin" d="M117 516 L193 710"/>
+  <path class="rest" d="M345 628 C405 676 405 785 430 825"/>
+  <text class="tiny pink" x="185" y="566">REST APIs for history</text>
+
+  <rect class="box" x="930" y="485" width="255" height="138"/>
+  <text class="label center" x="1058" y="526">API servers</text>
+  <text class="tiny" x="970" y="555">non-realtime APIs</text>
+  <text class="tiny" x="970" y="582">channel scroll</text>
+  <text class="tiny" x="970" y="609">muted channels</text>
+
+  <rect class="box" x="58" y="930" width="1100" height="54"/>
+  <text class="note" x="84" y="963">If a live push is missed, the client reconnects and reads history from the messages DB using its checkpoint.</text>
+  <text class="tiny" x="84" y="1024">Legend: blue = WebSocket, green = live fanout, yellow = durable persistence, pink = REST/history.</text>
+</svg>
