@@ -880,7 +880,41 @@ supporting path: DB, Pub/Sub, health checks, metrics, DNS updates
 
 That separation is what keeps the load balancer fast. Requests do not wait for the config DB, Prometheus, or the orchestrator.
 
-For a production-grade software load balancer design, also read Google's [Maglev paper](https://research.google/pubs/pub44824/). It shows how a large software load balancer can run on commodity servers while scaling capacity by adding or removing machines.
+## Paper Note: Maglev
+
+**Question: what does Google's Maglev paper add to this design?**
+
+Maglev is a production version of the same idea at network-load-balancer scale. It is Google's software network load balancer, built as a distributed system running on commodity Linux servers instead of specialized hardware load-balancer boxes.
+
+The request path in the paper looks like this:
+
+```text
+client -> DNS -> VIP -> router -> Maglev machine -> service endpoint
+```
+
+DNS sends the user to a nearby frontend location and returns a virtual IP, or VIP. Routers then use ECMP to spread packets for that VIP across many Maglev machines. Each Maglev machine matches the packet to a service and forwards it to a healthy service endpoint.
+
+That maps directly to the design in this post:
+
+| This post | Maglev paper |
+| --- | --- |
+| **DNS balances across LB servers** | DNS chooses a frontend location and returns a VIP. |
+| **LB servers route to backend servers** | Maglev machines route packets to service endpoints. |
+| **Health checks keep bad targets out** | Maglev forwards only to healthy backends and can withdraw VIPs when a Maglev machine is unhealthy. |
+| **Add LB servers to scale capacity** | Add Maglev machines; routers spread packets across them with ECMP. |
+
+The interesting difference is that Maglev works below the application request level. It is not choosing an HTTP handler after parsing a request. It is forwarding packets. That is why the paper spends so much time on fast packet processing, connection tracking, and consistent hashing.
+
+Connection tracking keeps packets from the same connection going to the same backend when possible. Maglev hashing gives every Maglev machine a mostly consistent way to choose a backend, so backend or load-balancer changes disrupt as few connections as possible.
+
+The design lesson is:
+
+```text
+the same architecture still applies
+but packet-scale load balancing needs stricter performance and connection-stability machinery
+```
+
+For the production details, read Google's [Maglev paper](https://research.google/pubs/maglev-a-fast-and-reliable-software-network-load-balancer/).
 
 The final memory hook:
 
