@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1180" viewBox="0 0 1280 1180" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1580" viewBox="0 0 1280 1580" role="img" aria-labelledby="title desc">
   <title id="title">Instagram photo upload, post, and read flow</title>
   <desc id="desc">A three-panel system flow: the browser prepares an upload through the image service and uploads bytes directly to S3, the posts service owns captions and post metadata, the CDN serves derived image URLs, and Kafka carries post-created events to downstream services.</desc>
   <style>
@@ -14,7 +14,7 @@
     <marker id="arrowMuted" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#bdbdbd"/></marker>
   </defs>
 
-  <rect class="bg" width="1280" height="1180"/>
+  <rect class="bg" width="1280" height="1580"/>
   <g class="rule">
     <line x1="0" y1="90" x2="1280" y2="90"/>
     <line x1="0" y1="180" x2="1280" y2="180"/>
@@ -28,6 +28,11 @@
     <line x1="0" y1="900" x2="1280" y2="900"/>
     <line x1="0" y1="990" x2="1280" y2="990"/>
     <line x1="0" y1="1080" x2="1280" y2="1080"/>
+    <line x1="0" y1="1170" x2="1280" y2="1170"/>
+    <line x1="0" y1="1260" x2="1280" y2="1260"/>
+    <line x1="0" y1="1350" x2="1280" y2="1350"/>
+    <line x1="0" y1="1440" x2="1280" y2="1440"/>
+    <line x1="0" y1="1530" x2="1280" y2="1530"/>
   </g>
 
   <text class="title" x="330" y="58">Overall Photo Flow: Upload, Post, Read</text>
@@ -157,4 +162,41 @@
   <text class="small pink" x="662" y="1106">Posts Service owns caption, visibility, and post rows.</text>
   <text class="small blue" x="116" y="1134">S3 stores original bytes. CDN serves derived read URLs.</text>
   <text class="small orange" x="662" y="1134">Kafka is async work, keyed by the entity whose order matters.</text>
+
+  <rect class="legend" x="86" y="1172" width="1108" height="342"/>
+  <text class="label" x="116" y="1206">Number Legend</text>
+
+  <text class="small yellow" x="116" y="1240">Steps 1-7</text>
+  <line x1="116" y1="1250" x2="560" y2="1250" stroke="#5f5f5f" stroke-width="1.5"/>
+  <circle class="stepYellow" cx="128" cy="1280" r="11"/><text class="stepText" x="125" y="1285">1</text>
+  <text class="small" x="152" y="1286">Prepare upload request.</text>
+  <circle class="stepYellow" cx="128" cy="1316" r="11"/><text class="stepText" x="125" y="1321">2</text>
+  <text class="small" x="152" y="1322">Create pending image row.</text>
+  <circle class="stepYellow" cx="128" cy="1352" r="11"/><text class="stepText" x="125" y="1357">3</text>
+  <text class="small" x="152" y="1358">Return image_id + signed S3 upload URL.</text>
+  <circle class="stepBlue" cx="128" cy="1388" r="11"/><text class="stepText" x="125" y="1393">4</text>
+  <text class="small" x="152" y="1394">Browser uploads image bytes directly to S3.</text>
+  <circle class="stepPink" cx="128" cy="1424" r="11"/><text class="stepText" x="125" y="1429">5</text>
+  <text class="small" x="152" y="1430">Send caption, visibility, and image_id.</text>
+  <circle class="stepPink" cx="128" cy="1460" r="11"/><text class="stepText" x="125" y="1465">6</text>
+  <text class="small" x="152" y="1466">Validate image ownership/status.</text>
+  <circle class="stepPink" cx="128" cy="1496" r="11"/><text class="stepText" x="125" y="1501">7</text>
+  <text class="small" x="152" y="1502">Insert post metadata row.</text>
+
+  <text class="small green" x="650" y="1240">Steps 8-14</text>
+  <line x1="650" y1="1250" x2="1120" y2="1250" stroke="#5f5f5f" stroke-width="1.5"/>
+  <circle class="stepPink" cx="662" cy="1280" r="11"/><text class="stepText" x="659" y="1285">8</text>
+  <text class="small" x="690" y="1286">User B requests User A's posts.</text>
+  <circle class="stepPink" cx="662" cy="1316" r="11"/><text class="stepText" x="659" y="1321">9</text>
+  <text class="small" x="690" y="1322">Posts Service reads post rows.</text>
+  <circle class="stepPink" cx="662" cy="1352" r="11"/><text class="stepText" x="654" y="1357">10</text>
+  <text class="small" x="694" y="1358">Return caption + derived image URL.</text>
+  <circle class="stepGreen" cx="662" cy="1388" r="11"/><text class="stepText" x="654" y="1393">11</text>
+  <text class="small" x="694" y="1394">Browser loads image from CDN.</text>
+  <circle class="stepOrange" cx="662" cy="1424" r="11"/><text class="stepText" x="654" y="1429">12</text>
+  <text class="small" x="694" y="1430">CDN fetches S3 on cache miss.</text>
+  <circle class="stepOrange" cx="662" cy="1460" r="11"/><text class="stepText" x="654" y="1465">13</text>
+  <text class="small" x="694" y="1466">Outbox/CDC publishes post_created.</text>
+  <circle class="stepOrange" cx="662" cy="1496" r="11"/><text class="stepText" x="654" y="1501">14</text>
+  <text class="small" x="694" y="1502">Other services consume the event.</text>
 </svg>
