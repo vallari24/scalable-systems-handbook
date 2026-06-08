@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1180" viewBox="0 0 1280 1180" role="img" aria-labelledby="title desc">
+  <title id="title">Instagram photo upload, post, and read flow</title>
+  <desc id="desc">A three-panel system flow: the browser prepares an upload through the image service and uploads bytes directly to S3, the posts service owns captions and post metadata, the CDN serves derived image URLs, and Kafka carries post-created events to downstream services.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#303030;stroke-width:2}.panel{fill:#1b1b1b;stroke:#4a4a4a;stroke-width:2;rx:10}.title{fill:#ffff99;font:34px system-ui,sans-serif;font-weight:800}.sub{fill:#d8d8d8;font:18px system-ui,sans-serif}.section{font:24px system-ui,sans-serif;font-weight:850}.label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:800}.small{fill:#d8d8d8;font:16px system-ui,sans-serif}.tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}.code{fill:#f8f8f8;font:14px ui-monospace,SFMono-Regular,Menlo,monospace}.stepText{fill:#171717;font:14px system-ui,sans-serif;font-weight:900}.user{fill:#242424;stroke:#f8f8f8;stroke-width:2.4;rx:8}.image{fill:#26231d;stroke:#ffff99;stroke-width:2.4;rx:8}.post{fill:#281f2d;stroke:#ff8bd2;stroke-width:2.4;rx:8}.db{fill:#222222;stroke:#d8d8d8;stroke-width:2.4;rx:8}.s3{fill:#20242b;stroke:#a5f3fc;stroke-width:2.4;rx:8}.cdn{fill:#1d2738;stroke:#93c5fd;stroke-width:2.4;rx:8}.kafka{fill:#2a2418;stroke:#ffd37a;stroke-width:2.4;rx:8}.svc{fill:#202820;stroke:#8aff8a;stroke-width:2.4;rx:8}.legend{fill:#202020;stroke:#5f5f5f;stroke-width:2.2;rx:8}.yellow{fill:#ffff99}.pink{fill:#ff8bd2}.blue{fill:#93c5fd}.cyan{fill:#a5f3fc}.green{fill:#8aff8a}.orange{fill:#ffd37a}.muted{fill:#9c9c9c}.stepYellow{fill:#ffff99}.stepPink{fill:#ff8bd2}.stepBlue{fill:#93c5fd}.stepCyan{fill:#a5f3fc}.stepGreen{fill:#8aff8a}.stepOrange{fill:#ffd37a}.arrowYellow{stroke:#ffff99;stroke-width:2.4;fill:none;marker-end:url(#arrowYellow)}.arrowPink{stroke:#ff8bd2;stroke-width:2.4;fill:none;marker-end:url(#arrowPink)}.arrowBlue{stroke:#93c5fd;stroke-width:2.4;fill:none;marker-end:url(#arrowBlue)}.arrowCyan{stroke:#a5f3fc;stroke-width:2.4;fill:none;marker-end:url(#arrowCyan)}.arrowGreen{stroke:#8aff8a;stroke-width:2.4;fill:none;marker-end:url(#arrowGreen)}.arrowOrange{stroke:#ffd37a;stroke-width:2.4;fill:none;marker-end:url(#arrowOrange)}.arrowMuted{stroke:#bdbdbd;stroke-width:2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrowMuted)}
+  </style>
+  <defs>
+    <marker id="arrowYellow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ffff99"/></marker>
+    <marker id="arrowPink" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ff8bd2"/></marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#93c5fd"/></marker>
+    <marker id="arrowCyan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#a5f3fc"/></marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#8aff8a"/></marker>
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ffd37a"/></marker>
+    <marker id="arrowMuted" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#bdbdbd"/></marker>
+  </defs>
+
+  <rect class="bg" width="1280" height="1180"/>
+  <g class="rule">
+    <line x1="0" y1="90" x2="1280" y2="90"/>
+    <line x1="0" y1="180" x2="1280" y2="180"/>
+    <line x1="0" y1="270" x2="1280" y2="270"/>
+    <line x1="0" y1="360" x2="1280" y2="360"/>
+    <line x1="0" y1="450" x2="1280" y2="450"/>
+    <line x1="0" y1="540" x2="1280" y2="540"/>
+    <line x1="0" y1="630" x2="1280" y2="630"/>
+    <line x1="0" y1="720" x2="1280" y2="720"/>
+    <line x1="0" y1="810" x2="1280" y2="810"/>
+    <line x1="0" y1="900" x2="1280" y2="900"/>
+    <line x1="0" y1="990" x2="1280" y2="990"/>
+    <line x1="0" y1="1080" x2="1280" y2="1080"/>
+  </g>
+
+  <text class="title" x="330" y="58">Overall Photo Flow: Upload, Post, Read</text>
+  <text class="sub" x="222" y="105">Image Service owns image identity and upload auth. Posts Service owns captions and post metadata.</text>
+
+  <rect class="legend" x="86" y="124" width="1108" height="42"/>
+  <circle class="stepYellow" cx="124" cy="145" r="10"/><text class="small" x="144" y="151">image identity</text>
+  <circle class="stepBlue" cx="284" cy="145" r="10"/><text class="small" x="304" y="151">S3 upload bytes</text>
+  <circle class="stepPink" cx="480" cy="145" r="10"/><text class="small" x="500" y="151">post metadata</text>
+  <circle class="stepGreen" cx="680" cy="145" r="10"/><text class="small" x="700" y="151">CDN reads</text>
+  <circle class="stepOrange" cx="830" cy="145" r="10"/><text class="small" x="850" y="151">async events</text>
+
+  <rect class="panel" x="60" y="190" width="1160" height="260"/>
+  <text class="section yellow" x="92" y="232">1. Upload Image Bytes</text>
+  <text class="small" x="92" y="260">The app authorizes the upload, but the browser sends large bytes directly to S3.</text>
+
+  <rect class="user" x="100" y="310" width="130" height="74"/>
+  <text class="label" x="136" y="340">User A</text>
+  <text class="tiny" x="132" y="364">uploader</text>
+
+  <rect class="image" x="338" y="300" width="220" height="94"/>
+  <text class="label yellow" x="382" y="334">Image Service</text>
+  <text class="tiny" x="374" y="360">creates image_id</text>
+  <text class="tiny" x="374" y="380">returns signed upload URL</text>
+
+  <rect class="db" x="684" y="300" width="190" height="94"/>
+  <text class="label" x="726" y="334">Metadata DB</text>
+  <text class="tiny" x="722" y="360">image row:</text>
+  <text class="tiny" x="722" y="380">waiting_for_upload</text>
+
+  <rect class="s3" x="1010" y="300" width="150" height="94"/>
+  <text class="label cyan" x="1062" y="334">S3</text>
+  <text class="tiny" x="1038" y="360">original image</text>
+  <text class="tiny" x="1044" y="380">bytes</text>
+
+  <path class="arrowYellow" d="M230 332 L338 332"/>
+  <circle class="stepYellow" cx="280" cy="314" r="14"/><text class="stepText" x="276" y="319">1</text>
+
+  <path class="arrowYellow" d="M558 332 L684 332"/>
+  <circle class="stepYellow" cx="620" cy="314" r="14"/><text class="stepText" x="616" y="319">2</text>
+
+  <path class="arrowYellow" d="M338 372 L230 372"/>
+  <circle class="stepYellow" cx="280" cy="394" r="14"/><text class="stepText" x="276" y="399">3</text>
+
+  <path class="arrowBlue" d="M165 384 L165 424 L1084 424 L1084 394"/>
+  <circle class="stepBlue" cx="628" cy="406" r="14"/><text class="stepText" x="624" y="411">4</text>
+
+  <rect class="panel" x="60" y="475" width="1160" height="330"/>
+  <text class="section pink" x="92" y="517">2. Create And Read The Post</text>
+  <text class="small" x="92" y="545">Posts Service owns caption, author, visibility, and image_id. It derives image URLs when reading.</text>
+
+  <rect class="user" x="100" y="580" width="130" height="74"/>
+  <text class="label" x="136" y="610">User A</text>
+  <text class="tiny" x="132" y="634">creates post</text>
+
+  <rect class="post" x="338" y="566" width="220" height="108"/>
+  <text class="label pink" x="382" y="600">Posts Service</text>
+  <text class="tiny" x="370" y="626">caption, author_user_id</text>
+  <text class="tiny" x="370" y="646">visibility, image_id</text>
+
+  <rect class="db" x="684" y="580" width="190" height="94"/>
+  <text class="label" x="726" y="614">Metadata DB</text>
+  <text class="tiny" x="718" y="640">post rows + image rows</text>
+
+  <rect class="user" x="100" y="706" width="130" height="74"/>
+  <text class="label" x="136" y="736">User B</text>
+  <text class="tiny" x="136" y="760">viewer</text>
+
+  <rect class="cdn" x="1010" y="600" width="150" height="94"/>
+  <text class="label blue" x="1060" y="634">CDN</text>
+  <text class="tiny" x="1038" y="660">cache, sign,</text>
+  <text class="tiny" x="1042" y="680">transform</text>
+
+  <rect class="s3" x="1010" y="710" width="150" height="74"/>
+  <text class="label cyan" x="1062" y="740">S3</text>
+  <text class="tiny" x="1030" y="764">origin on miss</text>
+
+  <path class="arrowPink" d="M230 616 L338 616"/>
+  <circle class="stepPink" cx="280" cy="598" r="14"/><text class="stepText" x="276" y="603">5</text>
+
+  <path class="arrowMuted" d="M448 566 L448 394"/>
+  <circle class="stepPink" cx="472" cy="486" r="14"/><text class="stepText" x="468" y="491">6</text>
+
+  <path class="arrowPink" d="M558 620 L684 620"/>
+  <circle class="stepPink" cx="620" cy="602" r="14"/><text class="stepText" x="616" y="607">7</text>
+
+  <path class="arrowPink" d="M230 742 L338 742"/>
+  <circle class="stepPink" cx="280" cy="724" r="14"/><text class="stepText" x="276" y="729">8</text>
+
+  <path class="arrowPink" d="M558 650 C630 720 630 742 558 742"/>
+  <circle class="stepPink" cx="628" cy="704" r="14"/><text class="stepText" x="624" y="709">9</text>
+
+  <path class="arrowPink" d="M338 770 L230 770"/>
+  <circle class="stepPink" cx="280" cy="790" r="14"/><text class="stepText" x="272" y="795">10</text>
+
+  <path class="arrowGreen" d="M230 770 L940 770 L940 650 L1010 650"/>
+  <circle class="stepGreen" cx="628" cy="752" r="14"/><text class="stepText" x="620" y="757">11</text>
+
+  <path class="arrowOrange" d="M1084 694 L1084 710"/>
+  <circle class="stepOrange" cx="1112" cy="704" r="14"/><text class="stepText" x="1104" y="709">12</text>
+
+  <rect class="panel" x="60" y="830" width="1160" height="190"/>
+  <text class="section orange" x="92" y="872">3. Async Events</text>
+  <text class="small" x="92" y="900">After the post row is durable, an outbox/CDC path publishes events without blocking post creation.</text>
+
+  <rect class="db" x="250" y="928" width="190" height="66"/>
+  <text class="label" x="292" y="966">Metadata DB</text>
+
+  <rect class="kafka" x="540" y="916" width="260" height="90"/>
+  <text class="label orange" x="640" y="950">Kafka</text>
+  <text class="tiny" x="588" y="976">topic: post_created</text>
+  <text class="tiny" x="592" y="994">key: author_user_id</text>
+
+  <rect class="svc" x="900" y="928" width="250" height="66"/>
+  <text class="label green" x="944" y="960">Other Services</text>
+  <text class="tiny" x="922" y="982">search, notifications, analytics</text>
+
+  <path class="arrowOrange" d="M440 960 L540 960"/>
+  <circle class="stepOrange" cx="492" cy="942" r="14"/><text class="stepText" x="484" y="947">13</text>
+
+  <path class="arrowOrange" d="M800 960 L900 960"/>
+  <circle class="stepOrange" cx="852" cy="942" r="14"/><text class="stepText" x="844" y="947">14</text>
+
+  <rect class="legend" x="86" y="1040" width="1108" height="104"/>
+  <text class="label" x="116" y="1074">Core Rules</text>
+  <text class="small yellow" x="116" y="1106">Image Service owns image_id and upload permissions.</text>
+  <text class="small pink" x="662" y="1106">Posts Service owns caption, visibility, and post rows.</text>
+  <text class="small blue" x="116" y="1134">S3 stores original bytes. CDN serves derived read URLs.</text>
+  <text class="small orange" x="662" y="1134">Kafka is async work, keyed by the entity whose order matters.</text>
+</svg>
