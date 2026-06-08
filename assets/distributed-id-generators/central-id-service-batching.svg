@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="860" viewBox="0 0 1200 860" role="img" aria-labelledby="title desc">
+  <title id="title">Central ID service with batch allocation</title>
+  <desc id="desc">A central ID service stores one durable counter per service. Orders and payments servers request batches, receive non-overlapping ranges, and serve IDs locally from memory. A crashed payment server skips its old range and asks for a new one.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#303030;stroke-width:2}.title{fill:#f8f8f8;font:32px system-ui,sans-serif;font-weight:750}.sub{fill:#d4d4d4;font:18px system-ui,sans-serif}.label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:750}.small{fill:#d7d7d7;font:16px system-ui,sans-serif}.tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}.code{fill:#f8f8f8;font:16px ui-monospace,SFMono-Regular,Menlo,monospace}.codeBig{fill:#f8f8f8;font:18px ui-monospace,SFMono-Regular,Menlo,monospace}.box{fill:#202020;stroke:#f8f8f8;stroke-width:2;rx:8}.service{fill:#202020;stroke:#a5f3fc;stroke-width:2;rx:8}.db{fill:#281f2d;stroke:#ff8bd2;stroke-width:2;rx:8}.orders{fill:#2b2020;stroke:#ff8a8a;stroke-width:2;rx:8}.payments{fill:#282814;stroke:#ffff99;stroke-width:2;rx:8}.server{fill:#262626;stroke:#f8f8f8;stroke-width:2;rx:7}.range{fill:#162538;stroke:#72b7ff;stroke-width:2;rx:7}.crash{fill:#331b1b;stroke:#ff8a8a;stroke-width:2;rx:7}.safe{fill:#163021;stroke:#8aff8a;stroke-width:2;rx:7}.cyan{fill:#a5f3fc}.pink{fill:#ff8bd2}.red{fill:#ff8a8a}.yellow{fill:#ffff99}.blue{fill:#72b7ff}.green{fill:#8aff8a}.muted{fill:#a8a8a8}.arrow{stroke:#f8f8f8;stroke-width:1.8;fill:none;marker-end:url(#arrow)}.arrowBlue{stroke:#72b7ff;stroke-width:1.8;fill:none;marker-end:url(#arrowBlue)}.arrowYellow{stroke:#ffff99;stroke-width:1.8;fill:none;marker-end:url(#arrowYellow)}.arrowRed{stroke:#ff8a8a;stroke-width:1.8;fill:none;marker-end:url(#arrowRed)}.arrowGreen{stroke:#8aff8a;stroke-width:1.8;fill:none;marker-end:url(#arrowGreen)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#f8f8f8"/></marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#72b7ff"/></marker>
+    <marker id="arrowYellow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ffff99"/></marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ff8a8a"/></marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="860"/>
+  <g class="rule">
+    <line x1="0" y1="96" x2="1200" y2="96"/>
+    <line x1="0" y1="198" x2="1200" y2="198"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="402" x2="1200" y2="402"/>
+    <line x1="0" y1="504" x2="1200" y2="504"/>
+    <line x1="0" y1="606" x2="1200" y2="606"/>
+    <line x1="0" y1="708" x2="1200" y2="708"/>
+    <line x1="0" y1="810" x2="1200" y2="810"/>
+  </g>
+
+  <text class="title" x="46" y="58">Central ID service with batching</text>
+  <text class="sub" x="46" y="122">The database owns durable counters; app servers reserve ranges and spend them locally.</text>
+
+  <rect class="box" x="46" y="160" width="300" height="176"/>
+  <text class="label" x="76" y="202">Counter table</text>
+  <line x1="76" y1="224" x2="316" y2="224" stroke="#f8f8f8" stroke-width="1.8"/>
+  <text class="small" x="78" y="258">service</text>
+  <text class="small" x="214" y="258">counter</text>
+  <text class="codeBig red" x="78" y="294">orders</text>
+  <text class="codeBig" x="220" y="294">1000</text>
+  <text class="codeBig yellow" x="78" y="324">payments</text>
+  <text class="codeBig" x="220" y="324">4000</text>
+
+  <rect class="service" x="472" y="142" width="560" height="228"/>
+  <text class="label cyan" x="502" y="184">ID generation service</text>
+  <text class="small" x="502" y="214">API: get_id_batch(service, batch_size)</text>
+  <rect class="db" x="532" y="250" width="180" height="70"/>
+  <text class="label pink" x="578" y="292">DB</text>
+  <path class="arrow" d="M712 285 L774 285"/>
+  <rect class="box" x="774" y="238" width="206" height="94"/>
+  <text class="small" x="806" y="272">exclusive lock</text>
+  <text class="code" x="806" y="302">counter += batch</text>
+  <text class="tiny" x="502" y="350">Atomic update: lock one service row, advance counter, return the old range.</text>
+
+  <path class="arrowBlue" d="M318 294 C370 270 410 254 472 254"/>
+  <text class="tiny blue" x="350" y="246">durable row per service</text>
+
+  <rect class="orders" x="86" y="478" width="430" height="268"/>
+  <text class="label red" x="242" y="520">orders fleet</text>
+  <rect class="server" x="126" y="552" width="156" height="54"/>
+  <text class="small" x="158" y="586">server 1</text>
+  <rect class="range" x="302" y="552" width="174" height="54"/>
+  <text class="code blue" x="332" y="586">[0, 500)</text>
+  <rect class="server" x="126" y="626" width="156" height="54"/>
+  <text class="small" x="158" y="660">server 2</text>
+  <rect class="range" x="302" y="626" width="174" height="54"/>
+  <text class="code blue" x="320" y="660">[500, 1000)</text>
+  <text class="tiny" x="126" y="720">Each server serves IDs from its local reserved range.</text>
+
+  <rect class="payments" x="680" y="478" width="430" height="268"/>
+  <text class="label yellow" x="820" y="520">payments fleet</text>
+  <rect class="server" x="720" y="552" width="156" height="54"/>
+  <text class="small" x="752" y="586">server 1</text>
+  <rect class="range" x="896" y="552" width="174" height="54"/>
+  <text class="code blue" x="922" y="586">[0, 2000)</text>
+  <rect class="server" x="720" y="626" width="156" height="54"/>
+  <text class="small" x="752" y="660">server 2</text>
+  <rect class="range" x="896" y="626" width="174" height="54"/>
+  <text class="code blue" x="910" y="660">[2000, 4000)</text>
+  <text class="tiny" x="720" y="716">Payments uses larger batches</text>
+  <text class="tiny" x="720" y="736">because its ID volume is higher.</text>
+
+  <path class="arrowRed" d="M222 478 C244 424 330 404 472 326"/>
+  <text class="code red" x="202" y="436">orders: get_id_batch(500)</text>
+  <text class="code red" x="234" y="462">return [0, 500), [500, 1000)</text>
+
+  <path class="arrowYellow" d="M980 334 C1050 388 1040 438 930 478"/>
+  <text class="code yellow" x="728" y="424">payments: get_id_batch(2000)</text>
+  <text class="code yellow" x="752" y="450">return [0, 2000), [2000, 4000)</text>
+
+  <rect class="crash" x="706" y="780" width="138" height="44"/>
+  <text class="code red" x="746" y="808">crash</text>
+  <path class="arrowRed" d="M798 606 L798 780"/>
+  <rect class="safe" x="874" y="780" width="188" height="44"/>
+  <text class="code green" x="900" y="808">next [4000, 6000)</text>
+  <path class="arrowGreen" d="M844 802 L874 802"/>
+  <text class="tiny" x="682" y="842">Crash rule: do not reuse old reserved ranges. Gaps are safer than duplicates.</text>
+</svg>

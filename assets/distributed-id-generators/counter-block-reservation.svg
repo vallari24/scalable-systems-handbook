@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="850" viewBox="0 0 1180 850" role="img" aria-labelledby="title desc">
+  <title id="title">Counter durability and block reservation for distributed ID generation</title>
+  <desc id="desc">A comparison of saving every counter to disk versus reserving a block of one thousand counter values. The diagram shows memory increments, disk flushes, a crash, skipped IDs, and the next safe restart value.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#303030;stroke-width:2}.title{fill:#f8f8f8;font:32px system-ui,sans-serif;font-weight:750}.sub{fill:#cfcfcf;font:18px system-ui,sans-serif}.label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:700}.small{fill:#d6d6d6;font:16px system-ui,sans-serif}.tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}.code{fill:#f8f8f8;font:17px ui-monospace,SFMono-Regular,Menlo,monospace}.box{fill:#202020;stroke:#f8f8f8;stroke-width:2;rx:8}.memory{fill:#182638;stroke:#72b7ff;stroke-width:2;rx:8}.disk{fill:#302716;stroke:#ffd166;stroke-width:2;rx:8}.safe{fill:#163021;stroke:#8aff8a;stroke-width:2;rx:8}.risk{fill:#331b1b;stroke:#ff8a8a;stroke-width:2;rx:8}.skip{fill:#262626;stroke:#888;stroke-width:2;rx:8}.blue{fill:#72b7ff}.yellow{fill:#ffd166}.green{fill:#8aff8a}.red{fill:#ff8a8a}.muted{fill:#a8a8a8}.arrow{stroke:#f8f8f8;stroke-width:1.8;fill:none;marker-end:url(#arrow)}.arrowBlue{stroke:#72b7ff;stroke-width:1.8;fill:none;marker-end:url(#arrowBlue)}.arrowYellow{stroke:#ffd166;stroke-width:1.8;fill:none;marker-end:url(#arrowYellow)}.arrowGreen{stroke:#8aff8a;stroke-width:1.8;fill:none;marker-end:url(#arrowGreen)}.arrowRed{stroke:#ff8a8a;stroke-width:1.8;fill:none;marker-end:url(#arrowRed)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#f8f8f8"/></marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#72b7ff"/></marker>
+    <marker id="arrowYellow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ffd166"/></marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#8aff8a"/></marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ff8a8a"/></marker>
+  </defs>
+
+  <rect class="bg" width="1180" height="850"/>
+  <g class="rule">
+    <line x1="0" y1="96" x2="1180" y2="96"/>
+    <line x1="0" y1="198" x2="1180" y2="198"/>
+    <line x1="0" y1="300" x2="1180" y2="300"/>
+    <line x1="0" y1="402" x2="1180" y2="402"/>
+    <line x1="0" y1="504" x2="1180" y2="504"/>
+    <line x1="0" y1="606" x2="1180" y2="606"/>
+    <line x1="0" y1="708" x2="1180" y2="708"/>
+    <line x1="0" y1="810" x2="1180" y2="810"/>
+  </g>
+
+  <text class="title" x="52" y="58">Counter durability: save every ID vs reserve blocks</text>
+  <text class="sub" x="52" y="122">Color key: memory is blue, disk flush is yellow, crash risk is red, restart safety is green.</text>
+
+  <rect class="box" x="52" y="154" width="506" height="218"/>
+  <text class="label" x="82" y="194">Save every counter</text>
+  <text class="small" x="82" y="224">Safe, but every get_id call waits for disk I/O.</text>
+
+  <rect class="memory" x="82" y="258" width="120" height="54"/>
+  <text class="code blue" x="109" y="292">m1-001</text>
+  <path class="arrowYellow" d="M202 285 L268 285"/>
+  <rect class="disk" x="268" y="258" width="112" height="54"/>
+  <text class="code yellow" x="294" y="292">disk</text>
+  <path class="arrow" d="M380 285 L438 285"/>
+  <text class="small" x="454" y="278">return</text>
+  <text class="code" x="454" y="304">m1-001</text>
+
+  <text class="tiny" x="82" y="342">m1-002, m1-003, and every later ID repeat the disk write.</text>
+
+  <rect class="box" x="622" y="154" width="506" height="218"/>
+  <text class="label" x="652" y="194">Reserve a block of 1000</text>
+  <text class="small" x="652" y="224">Persist the next boundary, then serve most IDs from memory.</text>
+
+  <rect class="disk" x="652" y="258" width="188" height="54"/>
+  <text class="code yellow" x="672" y="292">save until 1000</text>
+  <path class="arrowBlue" d="M840 285 L888 285"/>
+  <rect class="memory" x="888" y="236" width="194" height="102"/>
+  <text class="code blue" x="928" y="262">m1-001</text>
+  <text class="code blue" x="928" y="286">m1-002</text>
+  <text class="code blue" x="944" y="310">...</text>
+  <text class="code blue" x="920" y="334">m1-1000</text>
+  <text class="tiny" x="652" y="354">one disk write reserves up to m1-1000</text>
+
+  <text class="label" x="52" y="432">Block reservation with BLOCK_SIZE = 1000</text>
+  <text class="small" x="52" y="462">The generator writes the future boundary before handing out IDs from that range.</text>
+
+  <rect class="disk" x="74" y="506" width="226" height="58"/>
+  <text class="code yellow" x="98" y="540">reserved_until = 1000</text>
+  <path class="arrowBlue" d="M300 535 L358 535"/>
+  <rect class="memory" x="358" y="486" width="226" height="112"/>
+  <text class="code blue" x="410" y="520">m1-001</text>
+  <text class="code blue" x="410" y="546">m1-002</text>
+  <text class="code blue" x="426" y="572">...</text>
+  <text class="code blue" x="402" y="586">m1-1000</text>
+
+  <path class="arrowYellow" d="M584 535 L642 535"/>
+  <rect class="disk" x="642" y="506" width="226" height="58"/>
+  <text class="code yellow" x="666" y="540">reserved_until = 2000</text>
+  <path class="arrowBlue" d="M868 535 L926 535"/>
+  <rect class="memory" x="926" y="486" width="202" height="112"/>
+  <text class="code blue" x="970" y="520">m1-1001</text>
+  <text class="code blue" x="970" y="546">m1-1002</text>
+  <text class="code blue" x="986" y="572">...</text>
+  <text class="code blue" x="970" y="586">m1-2000</text>
+
+  <text class="label" x="52" y="672">Crash recovery: skip uncertain IDs</text>
+  <text class="small" x="52" y="702">If disk says reserved_until = 1000 and the process crashes after m1-003, restart at m1-1001.</text>
+
+  <rect class="memory" x="74" y="738" width="100" height="44"/>
+  <text class="code blue" x="92" y="767">m1-001</text>
+  <rect class="memory" x="196" y="738" width="100" height="44"/>
+  <text class="code blue" x="214" y="767">m1-002</text>
+  <rect class="memory" x="318" y="738" width="100" height="44"/>
+  <text class="code blue" x="336" y="767">m1-003</text>
+  <path class="arrowRed" d="M418 760 L462 760"/>
+  <rect class="risk" x="462" y="738" width="96" height="44"/>
+  <text class="code red" x="484" y="767">crash</text>
+  <rect class="skip" x="606" y="738" width="174" height="44"/>
+  <text class="code muted" x="628" y="767">m1-004..1000</text>
+  <text class="tiny" x="638" y="724">skip uncertain range</text>
+  <path class="arrowGreen" d="M780 760 L834 760"/>
+  <rect class="safe" x="834" y="738" width="164" height="44"/>
+  <text class="code green" x="858" y="767">next m1-1001</text>
+  <text class="tiny" x="52" y="820">Rule: gaps are OK; duplicates are not.</text>
+</svg>

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Instagram DB-side Snowflake IDs</title>
+  <desc id="desc">Instagram generates a Snowflake-style 64-bit ID inside the database during insert. The ID layout uses timestamp bits, logical shard bits, and per-shard sequence bits. Many logical shards can live on fewer physical database servers.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#303030;stroke-width:2}.title{fill:#f8f8f8;font:32px system-ui,sans-serif;font-weight:750}.sub{fill:#d4d4d4;font:18px system-ui,sans-serif}.label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:750}.small{fill:#d7d7d7;font:16px system-ui,sans-serif}.tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}.code{fill:#f8f8f8;font:16px ui-monospace,SFMono-Regular,Menlo,monospace}.box{fill:#202020;stroke:#f8f8f8;stroke-width:2;rx:8}.api{fill:#202020;stroke:#a5f3fc;stroke-width:2;rx:8}.db{fill:#261f2d;stroke:#ff8bd2;stroke-width:2;rx:8}.schema{fill:#1d2630;stroke:#72b7ff;stroke-width:2;rx:8}.time{fill:#20261d;stroke:#ffff99;stroke-width:2}.shard{fill:#1f2733;stroke:#a5cfff;stroke-width:2}.seq{fill:#2b202b;stroke:#ff8bd2;stroke-width:2}.yellow{fill:#ffff99}.cyan{fill:#a5f3fc}.pink{fill:#ff8bd2}.blue{fill:#72b7ff}.green{fill:#8aff8a}.muted{fill:#a8a8a8}.arrow{stroke:#f8f8f8;stroke-width:1.8;fill:none;marker-end:url(#arrow)}.arrowBlue{stroke:#72b7ff;stroke-width:1.8;fill:none;marker-end:url(#arrowBlue)}.arrowPink{stroke:#ff8bd2;stroke-width:1.8;fill:none;marker-end:url(#arrowPink)}.arrowGreen{stroke:#8aff8a;stroke-width:1.8;fill:none;marker-end:url(#arrowGreen)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#f8f8f8"/></marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#72b7ff"/></marker>
+    <marker id="arrowPink" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ff8bd2"/></marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="900"/>
+  <g class="rule">
+    <line x1="0" y1="96" x2="1200" y2="96"/>
+    <line x1="0" y1="198" x2="1200" y2="198"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="402" x2="1200" y2="402"/>
+    <line x1="0" y1="504" x2="1200" y2="504"/>
+    <line x1="0" y1="606" x2="1200" y2="606"/>
+    <line x1="0" y1="708" x2="1200" y2="708"/>
+    <line x1="0" y1="810" x2="1200" y2="810"/>
+  </g>
+
+  <text class="title" x="46" y="58">Instagram: Snowflake inside Postgres</text>
+  <text class="sub" x="46" y="122">The DB shard generates the ID during insert, using time, logical shard ID, and a local sequence.</text>
+
+  <text class="label" x="70" y="182">64-bit ID layout</text>
+  <rect class="time" x="70" y="210" width="470" height="66"/>
+  <rect class="shard" x="540" y="210" width="260" height="66"/>
+  <rect class="seq" x="800" y="210" width="200" height="66"/>
+  <text class="label yellow" x="270" y="250">41</text>
+  <text class="label blue" x="656" y="250">13</text>
+  <text class="label pink" x="884" y="250">10</text>
+  <text class="small" x="214" y="308">epoch ms since 2011</text>
+  <text class="small" x="608" y="308">logical shard ID</text>
+  <text class="small" x="814" y="308">per-shard sequence</text>
+
+  <rect class="api" x="70" y="378" width="250" height="92"/>
+  <text class="label cyan" x="124" y="416">API server</text>
+  <text class="small" x="108" y="444">INSERT photo row</text>
+
+  <path class="arrowPink" d="M320 424 L456 424"/>
+
+  <rect class="db" x="456" y="356" width="360" height="136"/>
+  <text class="label pink" x="516" y="394">physical Postgres server</text>
+  <rect class="schema" x="492" y="420" width="88" height="44"/>
+  <text class="code blue" x="510" y="448">insta5</text>
+  <rect class="schema" x="602" y="420" width="88" height="44"/>
+  <text class="code blue" x="614" y="448">insta6</text>
+  <rect class="schema" x="712" y="420" width="70" height="44"/>
+  <text class="code blue" x="728" y="448">...</text>
+  <text class="tiny" x="502" y="480">many logical shards live on one physical server</text>
+
+  <path class="arrowBlue" d="M636 492 L636 548"/>
+  <rect class="box" x="438" y="548" width="396" height="126"/>
+  <text class="label" x="482" y="586">table default</text>
+  <text class="code" x="482" y="620">id BIGINT DEFAULT insta5.next_id()</text>
+  <text class="code" x="482" y="648">photos row gets ID at INSERT</text>
+
+  <rect class="box" x="70" y="730" width="420" height="112"/>
+  <text class="label" x="104" y="768">next_id() builds</text>
+  <text class="code" x="104" y="802">(now_ms - epoch) &lt;&lt; 23</text>
+  <text class="code" x="104" y="822">| (shard_id &lt;&lt; 10) | seq</text>
+
+  <path class="arrowGreen" d="M490 782 L612 782"/>
+  <rect class="box" x="612" y="730" width="434" height="100"/>
+  <text class="label green" x="646" y="768">why this scales</text>
+  <text class="small" x="646" y="798">API servers are not the ID-capacity limit.</text>
+  <text class="small" x="646" y="822">8192 logical shards can generate IDs independently.</text>
+</svg>

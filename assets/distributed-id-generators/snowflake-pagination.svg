@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Snowflake ID layout and cursor pagination</title>
+  <desc id="desc">A Snowflake-style ID packs timestamp, machine ID, and sequence into a 64-bit integer. The diagram compares offset pagination, which skips deeper into the index, with cursor pagination, which starts from the last seen ID.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#303030;stroke-width:2}.title{fill:#f8f8f8;font:32px system-ui,sans-serif;font-weight:750}.sub{fill:#d4d4d4;font:18px system-ui,sans-serif}.label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:750}.small{fill:#d7d7d7;font:16px system-ui,sans-serif}.tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}.code{fill:#f8f8f8;font:16px ui-monospace,SFMono-Regular,Menlo,monospace}.box{fill:#202020;stroke:#f8f8f8;stroke-width:2;rx:8}.time{fill:#20261d;stroke:#ffff99;stroke-width:2}.machine{fill:#1f2733;stroke:#a5cfff;stroke-width:2}.seq{fill:#2b202b;stroke:#ff8bd2;stroke-width:2}.bad{fill:#331b1b;stroke:#ff8a8a;stroke-width:2;rx:8}.good{fill:#163021;stroke:#8aff8a;stroke-width:2;rx:8}.idx{fill:#1d2630;stroke:#72b7ff;stroke-width:2;rx:8}.yellow{fill:#ffff99}.blue{fill:#72b7ff}.pink{fill:#ff8bd2}.green{fill:#8aff8a}.red{fill:#ff8a8a}.muted{fill:#a8a8a8}.arrow{stroke:#f8f8f8;stroke-width:1.8;fill:none;marker-end:url(#arrow)}.arrowBlue{stroke:#72b7ff;stroke-width:1.8;fill:none;marker-end:url(#arrowBlue)}.arrowGreen{stroke:#8aff8a;stroke-width:1.8;fill:none;marker-end:url(#arrowGreen)}.arrowRed{stroke:#ff8a8a;stroke-width:1.8;fill:none;marker-end:url(#arrowRed)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#f8f8f8"/></marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#72b7ff"/></marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#8aff8a"/></marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ff8a8a"/></marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="820"/>
+  <g class="rule">
+    <line x1="0" y1="96" x2="1200" y2="96"/>
+    <line x1="0" y1="198" x2="1200" y2="198"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="402" x2="1200" y2="402"/>
+    <line x1="0" y1="504" x2="1200" y2="504"/>
+    <line x1="0" y1="606" x2="1200" y2="606"/>
+    <line x1="0" y1="708" x2="1200" y2="708"/>
+  </g>
+
+  <text class="title" x="46" y="58">Snowflake: compact ID, useful cursor</text>
+  <text class="sub" x="46" y="122">Time lives on the left, so IDs are compact integers that roughly move forward.</text>
+
+  <text class="label" x="70" y="188">64-bit layout</text>
+  <rect class="time" x="70" y="220" width="470" height="72"/>
+  <rect class="machine" x="540" y="220" width="210" height="72"/>
+  <rect class="seq" x="750" y="220" width="250" height="72"/>
+  <text class="label yellow" x="270" y="264">41</text>
+  <text class="label blue" x="624" y="264">10</text>
+  <text class="label pink" x="856" y="264">12</text>
+  <text class="small" x="236" y="326">epoch milliseconds</text>
+  <text class="small" x="592" y="326">machine ID</text>
+  <text class="small" x="814" y="326">counter</text>
+
+  <rect class="box" x="70" y="382" width="430" height="128"/>
+  <text class="label" x="104" y="422">tweet write path</text>
+  <text class="code" x="104" y="458">API server -> generate_id()</text>
+  <text class="code" x="104" y="486">insert tweet with _id</text>
+  <path class="arrowBlue" d="M500 446 L590 446"/>
+  <rect class="idx" x="590" y="382" width="260" height="128"/>
+  <text class="label blue" x="668" y="422">tweet DB</text>
+  <text class="small" x="630" y="456">indexed by compact</text>
+  <text class="small" x="658" y="482">time-first ID</text>
+
+  <text class="label" x="70" y="586">Pagination</text>
+  <rect class="bad" x="70" y="620" width="450" height="120"/>
+  <text class="label red" x="104" y="658">offset pagination</text>
+  <text class="code" x="104" y="690">skip(990).limit(10)</text>
+  <text class="small" x="104" y="720">walk 990 entries, then return 10</text>
+
+  <rect class="good" x="650" y="620" width="450" height="120"/>
+  <text class="label green" x="684" y="658">cursor pagination</text>
+  <text class="code" x="684" y="690">_id &lt; last_id limit 10</text>
+  <text class="small" x="684" y="720">jump near cursor, then read 10</text>
+  <path class="arrowGreen" d="M520 680 L650 680"/>
+</svg>
