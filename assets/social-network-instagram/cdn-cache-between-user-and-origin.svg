@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="940" viewBox="0 0 1200 940" role="img" aria-labelledby="title desc">
+  <title id="title">CDN cache between user and origin</title>
+  <desc id="desc">A CDN domain points users to a nearby CDN edge. The first request misses and fetches from origin. The next request hits the CDN cache and skips the origin.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#303030;stroke-width:2}.title{fill:#ffff99;font:34px system-ui,sans-serif;font-weight:750}.sub{fill:#d8d8d8;font:18px system-ui,sans-serif}.section{font:26px system-ui,sans-serif;font-weight:800}.label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:750}.small{fill:#d8d8d8;font:16px system-ui,sans-serif}.tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}.code{fill:#f8f8f8;font:16px ui-monospace,SFMono-Regular,Menlo,monospace}.stepText{fill:#171717;font:15px system-ui,sans-serif;font-weight:850}.box{fill:#242424;stroke:#f8f8f8;stroke-width:2.4;rx:8}.dns{fill:#20242b;stroke:#a5f3fc;stroke-width:2.4;rx:8}.cdn{fill:#1d2738;stroke:#93c5fd;stroke-width:2.4;rx:8}.cache{fill:#202820;stroke:#8aff8a;stroke-width:2.4;rx:8}.origin{fill:#2b2020;stroke:#ff8a8a;stroke-width:2.4;rx:8}.config{fill:#26231d;stroke:#ffff99;stroke-width:2.4;rx:8}.mutedBox{fill:#202020;stroke:#5f5f5f;stroke-width:2.4;rx:8}.stepBlue{fill:#93c5fd}.stepRed{fill:#ff8a8a}.stepYellow{fill:#ffff99}.stepGreen{fill:#8aff8a}.yellow{fill:#ffff99}.blue{fill:#93c5fd}.green{fill:#8aff8a}.red{fill:#ff8a8a}.cyan{fill:#a5f3fc}.muted{fill:#9c9c9c}.arrow{stroke:#f8f8f8;stroke-width:2.2;fill:none;marker-end:url(#arrow)}.arrowBlue{stroke:#93c5fd;stroke-width:2.2;fill:none;marker-end:url(#arrowBlue)}.arrowGreen{stroke:#8aff8a;stroke-width:2.2;fill:none;marker-end:url(#arrowGreen)}.arrowRed{stroke:#ff8a8a;stroke-width:2.2;fill:none;marker-end:url(#arrowRed)}.arrowYellow{stroke:#ffff99;stroke-width:2.2;fill:none;marker-end:url(#arrowYellow)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#f8f8f8"/></marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#93c5fd"/></marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#8aff8a"/></marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ff8a8a"/></marker>
+    <marker id="arrowYellow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ffff99"/></marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="940"/>
+  <g class="rule">
+    <line x1="0" y1="92" x2="1200" y2="92"/>
+    <line x1="0" y1="184" x2="1200" y2="184"/>
+    <line x1="0" y1="276" x2="1200" y2="276"/>
+    <line x1="0" y1="368" x2="1200" y2="368"/>
+    <line x1="0" y1="460" x2="1200" y2="460"/>
+    <line x1="0" y1="552" x2="1200" y2="552"/>
+    <line x1="0" y1="644" x2="1200" y2="644"/>
+    <line x1="0" y1="736" x2="1200" y2="736"/>
+    <line x1="0" y1="828" x2="1200" y2="828"/>
+  </g>
+
+  <text class="title" x="314" y="62">CDN: Cache Between User And Origin</text>
+  <text class="sub" x="234" y="122">The browser calls the CDN domain. The CDN decides whether it needs the origin.</text>
+
+  <rect class="config" x="80" y="150" width="1040" height="92"/>
+  <text class="label yellow" x="112" y="188">Configured once</text>
+  <text class="small" x="112" y="220">CDN domain</text>
+  <text class="code" x="236" y="220">cdn.picshare.example</text>
+  <text class="small" x="548" y="220">origin domain</text>
+  <text class="code red" x="696" y="220">media.picshare.example</text>
+
+  <text class="section red" x="80" y="296">First request: cache miss</text>
+
+  <rect class="box" x="80" y="336" width="150" height="72"/>
+  <text class="label" x="122" y="366">User</text>
+  <text class="tiny" x="114" y="388">India</text>
+
+  <rect class="dns" x="290" y="336" width="150" height="72"/>
+  <text class="label cyan" x="328" y="366">DNS</text>
+  <text class="tiny" x="310" y="388">edge IP</text>
+
+  <rect class="cdn" x="500" y="326" width="190" height="92"/>
+  <text class="label blue" x="548" y="360">CDN edge</text>
+  <text class="label red" x="562" y="392">MISS</text>
+
+  <rect class="origin" x="900" y="336" width="220" height="72"/>
+  <text class="label red" x="960" y="366">Origin</text>
+  <text class="tiny" x="944" y="388">S3 / API / backend</text>
+
+  <rect class="cache" x="510" y="464" width="170" height="48"/>
+  <text class="small green" x="548" y="494">edge cache</text>
+
+  <path class="arrowBlue" d="M230 372 L290 372"/>
+  <circle class="stepBlue" cx="260" cy="354" r="15"/>
+  <text class="stepText" x="256" y="359">1</text>
+  <path class="arrowBlue" d="M440 372 L500 372"/>
+  <circle class="stepBlue" cx="470" cy="354" r="15"/>
+  <text class="stepText" x="466" y="359">2</text>
+  <path class="arrowRed" d="M690 362 L900 362"/>
+  <circle class="stepRed" cx="795" cy="344" r="15"/>
+  <text class="stepText" x="791" y="349">3</text>
+  <path class="arrowYellow" d="M900 396 L690 396"/>
+  <circle class="stepYellow" cx="795" cy="414" r="15"/>
+  <text class="stepText" x="791" y="419">4</text>
+  <path class="arrowGreen" d="M595 418 L595 464"/>
+  <circle class="stepGreen" cx="620" cy="442" r="15"/>
+  <text class="stepText" x="616" y="447">5</text>
+  <path class="arrowYellow" d="M500 406 L230 406"/>
+  <circle class="stepYellow" cx="365" cy="424" r="15"/>
+  <text class="stepText" x="361" y="429">6</text>
+
+  <text class="section green" x="80" y="616">Next request: cache hit</text>
+
+  <rect class="box" x="80" y="656" width="150" height="72"/>
+  <text class="label" x="104" y="686">Next user</text>
+  <text class="tiny" x="106" y="708">same region</text>
+
+  <rect class="dns" x="290" y="656" width="150" height="72"/>
+  <text class="label cyan" x="328" y="686">DNS</text>
+  <text class="tiny" x="310" y="708">edge IP</text>
+
+  <rect class="cdn" x="500" y="646" width="190" height="92"/>
+  <text class="label blue" x="548" y="680">CDN edge</text>
+  <text class="label green" x="572" y="712">HIT</text>
+
+  <rect class="mutedBox" x="900" y="656" width="220" height="72"/>
+  <text class="label muted" x="960" y="686">Origin</text>
+  <text class="tiny muted" x="956" y="708">skipped</text>
+
+  <path class="arrowBlue" d="M230 692 L290 692"/>
+  <circle class="stepBlue" cx="260" cy="674" r="15"/>
+  <text class="stepText" x="256" y="679">1</text>
+  <path class="arrowBlue" d="M440 692 L500 692"/>
+  <circle class="stepBlue" cx="470" cy="674" r="15"/>
+  <text class="stepText" x="466" y="679">2</text>
+  <path class="arrowGreen" d="M500 728 L230 728"/>
+  <circle class="stepGreen" cx="365" cy="746" r="15"/>
+  <text class="stepText" x="361" y="751">3</text>
+
+  <rect class="box" x="760" y="646" width="112" height="92"/>
+  <text class="small green" x="786" y="682">No</text>
+  <text class="small green" x="786" y="706">backend</text>
+  <text class="small green" x="786" y="730">request</text>
+
+  <rect class="box" x="80" y="758" width="500" height="138"/>
+  <text class="label red" x="112" y="792">Miss path</text>
+  <circle class="stepBlue" cx="122" cy="824" r="11"/><text class="stepText" x="119" y="829">1</text>
+  <text class="small" x="146" y="830">Resolve CDN domain</text>
+  <circle class="stepBlue" cx="122" cy="852" r="11"/><text class="stepText" x="119" y="857">2</text>
+  <text class="small" x="146" y="858">Request CDN edge</text>
+  <circle class="stepRed" cx="340" cy="824" r="11"/><text class="stepText" x="337" y="829">3</text>
+  <text class="small" x="364" y="830">Fetch origin</text>
+  <circle class="stepYellow" cx="340" cy="852" r="11"/><text class="stepText" x="337" y="857">4</text>
+  <text class="small" x="364" y="858">Origin response</text>
+  <circle class="stepGreen" cx="122" cy="880" r="11"/><text class="stepText" x="119" y="885">5</text>
+  <text class="small" x="146" y="886">Store copy</text>
+  <circle class="stepYellow" cx="340" cy="880" r="11"/><text class="stepText" x="337" y="885">6</text>
+  <text class="small" x="364" y="886">Return photo</text>
+
+  <rect class="box" x="620" y="758" width="500" height="138"/>
+  <text class="label green" x="652" y="792">Hit path</text>
+  <circle class="stepBlue" cx="662" cy="824" r="11"/><text class="stepText" x="659" y="829">1</text>
+  <text class="small" x="686" y="830">Resolve CDN domain</text>
+  <circle class="stepBlue" cx="662" cy="852" r="11"/><text class="stepText" x="659" y="857">2</text>
+  <text class="small" x="686" y="858">Request CDN edge</text>
+  <circle class="stepGreen" cx="662" cy="880" r="11"/><text class="stepText" x="659" y="885">3</text>
+  <text class="small" x="686" y="886">Return cached response</text>
+  <text class="small green" x="912" y="830">Origin is skipped.</text>
+
+  <text class="small" x="112" y="922">A CDN can cache images, videos, HTML, CSS, JavaScript, JSON, API responses, or raw bytes.</text>
+</svg>

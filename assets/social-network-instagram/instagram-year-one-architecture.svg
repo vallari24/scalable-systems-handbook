@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Instagram year one architecture</title>
+  <desc id="desc">A simplified view of Instagram's early architecture: clients enter through Nginx, the Django monolith handles requests, Celery workers handle background jobs, and shared storage/cache systems include PostgreSQL, Cassandra, Memcached, Redis, and RabbitMQ.</desc>
+  <style>
+    .bg{fill:#171717}.rule{stroke:#303030;stroke-width:2}.title{fill:#ffff99;font:34px system-ui,sans-serif;font-weight:750}.sub{fill:#d8d8d8;font:18px system-ui,sans-serif}.label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:750}.small{fill:#d8d8d8;font:16px system-ui,sans-serif}.tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}.box{fill:#242424;stroke:#f8f8f8;stroke-width:2.5;rx:8}.edge{fill:#1f2937;stroke:#93c5fd;stroke-width:2.5;rx:8}.app{fill:#26231d;stroke:#ffff99;stroke-width:2.5;rx:8}.worker{fill:#281f2d;stroke:#ff8bd2;stroke-width:2.5;rx:8}.cache{fill:#202820;stroke:#8aff8a;stroke-width:2.5;rx:8}.queue{fill:#2a2418;stroke:#ffd37a;stroke-width:2.5;rx:8}.store{fill:#222222;stroke:#d8d8d8;stroke-width:2.5;rx:8}.wideStore{fill:#20242b;stroke:#a5f3fc;stroke-width:2.5;rx:8}.yellow{fill:#ffff99}.blue{fill:#93c5fd}.pink{fill:#ff8bd2}.green{fill:#8aff8a}.orange{fill:#ffd37a}.cyan{fill:#a5f3fc}.muted{fill:#bdbdbd}.arrow{stroke:#f8f8f8;stroke-width:2;fill:none;marker-end:url(#arrow)}.arrowThin{stroke:#d8d8d8;stroke-width:1.6;fill:none;marker-end:url(#arrowMuted)}.arrowPink{stroke:#ff8bd2;stroke-width:2;fill:none;marker-end:url(#arrowPink)}.arrowGreen{stroke:#8aff8a;stroke-width:2;fill:none;marker-end:url(#arrowGreen)}.arrowOrange{stroke:#ffd37a;stroke-width:2;fill:none;marker-end:url(#arrowOrange)}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#f8f8f8"/></marker>
+    <marker id="arrowMuted" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#d8d8d8"/></marker>
+    <marker id="arrowPink" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ff8bd2"/></marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#8aff8a"/></marker>
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L7,3 z" fill="#ffd37a"/></marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="760"/>
+  <g class="rule">
+    <line x1="0" y1="80" x2="1200" y2="80"/>
+    <line x1="0" y1="160" x2="1200" y2="160"/>
+    <line x1="0" y1="240" x2="1200" y2="240"/>
+    <line x1="0" y1="320" x2="1200" y2="320"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="480" x2="1200" y2="480"/>
+    <line x1="0" y1="560" x2="1200" y2="560"/>
+    <line x1="0" y1="640" x2="1200" y2="640"/>
+    <line x1="0" y1="720" x2="1200" y2="720"/>
+  </g>
+
+  <text class="title" x="382" y="66">Instagram's Year 1 Architecture</text>
+  <text class="sub" x="250" y="112">One Django codebase, one async worker path, shared caches, queues, and storage systems.</text>
+
+  <rect class="edge" x="210" y="178" width="150" height="66"/>
+  <text class="label" x="255" y="219">Nginx</text>
+
+  <rect class="app" x="506" y="166" width="188" height="90"/>
+  <text class="label yellow" x="558" y="204">Django</text>
+  <text class="tiny" x="540" y="230">monolithic app</text>
+
+  <rect class="worker" x="840" y="178" width="160" height="66"/>
+  <text class="label pink" x="894" y="219">Celery</text>
+
+  <path class="arrow" d="M360 211 L506 211"/>
+  <text class="tiny" x="404" y="196">HTTP requests</text>
+  <path class="arrowPink" d="M694 211 L840 211"/>
+  <text class="tiny pink" x="724" y="196">async tasks</text>
+
+  <rect class="wideStore" x="96" y="404" width="170" height="70"/>
+  <text class="label cyan" x="130" y="434">Cassandra</text>
+  <text class="tiny" x="124" y="456">wide-row data</text>
+
+  <rect class="store" x="336" y="520" width="170" height="70"/>
+  <text class="label" x="374" y="550">PostgreSQL</text>
+  <text class="tiny" x="365" y="572">metadata, tags</text>
+
+  <rect class="cache" x="562" y="410" width="170" height="70"/>
+  <text class="label green" x="600" y="440">Memcached</text>
+  <text class="tiny" x="604" y="462">hot reads</text>
+
+  <rect class="cache" x="772" y="552" width="170" height="70"/>
+  <text class="label green" x="822" y="582">Redis</text>
+  <text class="tiny" x="806" y="604">feeds, sessions</text>
+
+  <rect class="queue" x="988" y="404" width="150" height="70"/>
+  <text class="label orange" x="1016" y="434">RabbitMQ</text>
+  <text class="tiny" x="1018" y="456">task queue</text>
+
+  <path class="arrowThin" d="M545 256 C460 306 320 350 220 404"/>
+  <text class="tiny" x="330" y="330">read/write data</text>
+  <path class="arrowThin" d="M585 256 C520 340 466 440 420 520"/>
+  <text class="tiny" x="470" y="398">metadata</text>
+  <path class="arrowGreen" d="M630 256 C640 310 646 356 648 410"/>
+  <text class="tiny green" x="658" y="334">cache lookup</text>
+  <path class="arrowGreen" d="M666 256 C746 340 816 452 856 552"/>
+  <text class="tiny green" x="792" y="446">feed/session state</text>
+  <path class="arrowOrange" d="M660 256 C770 326 894 370 988 420"/>
+  <text class="tiny orange" x="806" y="342">enqueue work</text>
+
+  <path class="arrowThin" d="M896 244 C820 314 744 362 686 410"/>
+  <text class="tiny" x="742" y="308">workers update caches</text>
+  <path class="arrowThin" d="M918 244 C802 360 620 456 494 520"/>
+  <text class="tiny" x="642" y="502">workers update metadata</text>
+  <path class="arrowOrange" d="M1000 211 C1080 238 1102 326 1070 404"/>
+  <text class="tiny orange" x="1044" y="308">consume jobs</text>
+
+  <rect class="box" x="104" y="650" width="992" height="62"/>
+  <text class="small" x="132" y="688">Why this mattered: the core product stayed in one app, while slow work, cache, queueing, and storage could scale independently.</text>
+</svg>
