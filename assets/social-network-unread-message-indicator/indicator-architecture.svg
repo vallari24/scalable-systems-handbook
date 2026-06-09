@@ -1,0 +1,214 @@
+<svg width="1360" height="1060" viewBox="0 0 1360 1060" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="aWhite" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="aGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="aPink" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="aBlue" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1360" height="1060" fill="#111317"/>
+
+  <text x="680" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Newly-Unread Indicator &#8212; The Whole System</text>
+  <text x="680" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">only offline messages count; redundant writes are filtered before they touch the store</text>
+
+  <!-- legend -->
+  <g font-family="sans-serif" font-size="14">
+    <rect x="470" y="92" width="20" height="13" fill="#8aff8a"/><text x="496" y="103" fill="#cbd5e1">read path</text>
+    <rect x="600" y="92" width="20" height="13" fill="#ff8bd2"/><text x="626" y="103" fill="#cbd5e1">write / mutation</text>
+    <rect x="770" y="92" width="20" height="13" fill="#93c5fd"/><text x="796" y="103" fill="#cbd5e1">async (Kafka)</text>
+    <rect x="930" y="92" width="20" height="13" fill="#ffff99"/><text x="956" y="103" fill="#cbd5e1">durable store</text>
+  </g>
+
+  <!-- ================= READ PATH ================= -->
+  <text x="70" y="150" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">READ PATH</text>
+
+  <!-- reader -->
+  <circle cx="85" cy="200" r="18" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="85" y1="218" x2="85" y2="258" stroke="#ffffff" stroke-width="3"/>
+  <line x1="63" y1="234" x2="107" y2="234" stroke="#ffffff" stroke-width="3"/>
+  <line x1="85" y1="258" x2="69" y2="284" stroke="#ffffff" stroke-width="3"/>
+  <line x1="85" y1="258" x2="101" y2="284" stroke="#ffffff" stroke-width="3"/>
+  <text x="85" y="306" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15">reader</text>
+
+  <!-- Status Check API (fleet) -->
+  <rect x="252" y="158" width="250" height="100" rx="9" fill="#111317" stroke="#8aff8a" stroke-width="3"/>
+  <rect x="240" y="170" width="250" height="100" rx="9" fill="#111317" stroke="#8aff8a" stroke-width="3"/>
+  <text x="365" y="212" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Status Check API</text>
+  <text x="365" y="238" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">load-balanced fleet</text>
+
+  <!-- reader -> API -->
+  <line x1="110" y1="210" x2="234" y2="210" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="172" y="180" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="12">get_status</text>
+  <text x="172" y="196" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="12">clean_status</text>
+  <circle cx="172" cy="210" r="12" fill="#8aff8a"/>
+  <text x="172" y="215" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">7</text>
+
+  <!-- API -> Main Redis (SCARD) -->
+  <line x1="492" y1="205" x2="1086" y2="288" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="770" y="232" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">SCARD &#8594; badge = set size</text>
+  <circle cx="640" cy="226" r="12" fill="#8aff8a"/>
+  <text x="640" y="231" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">8</text>
+
+  <!-- ================= WRITE PATH ORIGIN ================= -->
+  <text x="70" y="392" fill="#ff8bd2" font-family="sans-serif" font-size="18" font-weight="bold">WRITE PATH</text>
+
+  <!-- user A -->
+  <circle cx="88" cy="430" r="16" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="88" y1="446" x2="88" y2="480" stroke="#ffffff" stroke-width="3"/>
+  <line x1="68" y1="461" x2="108" y2="461" stroke="#ffffff" stroke-width="3"/>
+  <line x1="88" y1="480" x2="74" y2="502" stroke="#ffffff" stroke-width="3"/>
+  <line x1="88" y1="480" x2="102" y2="502" stroke="#ffffff" stroke-width="3"/>
+  <text x="50" y="436" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">A</text>
+
+  <!-- user B -->
+  <circle cx="88" cy="560" r="16" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="88" y1="576" x2="88" y2="610" stroke="#ffffff" stroke-width="3"/>
+  <line x1="68" y1="591" x2="108" y2="591" stroke="#ffffff" stroke-width="3"/>
+  <line x1="88" y1="610" x2="74" y2="632" stroke="#ffffff" stroke-width="3"/>
+  <line x1="88" y1="610" x2="102" y2="632" stroke="#ffffff" stroke-width="3"/>
+  <text x="50" y="566" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">B</text>
+
+  <!-- Messaging Service -->
+  <rect x="188" y="438" width="166" height="92" rx="9" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <rect x="176" y="450" width="166" height="92" rx="9" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <text x="259" y="490" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">Messaging Svc</text>
+  <text x="259" y="513" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">holds WebSockets</text>
+
+  <!-- WS arrows -->
+  <line x1="112" y1="455" x2="172" y2="478" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <text x="138" y="450" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="12">WS</text>
+  <circle cx="146" cy="467" r="11" fill="#ffffff"/>
+  <text x="146" y="472" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">1</text>
+  <line x1="112" y1="560" x2="172" y2="524" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <text x="138" y="560" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="12">WS</text>
+
+  <!-- chat DB -->
+  <g stroke="#ffff99" stroke-width="2.5" fill="none">
+    <ellipse cx="210" cy="612" rx="36" ry="11"/>
+    <line x1="174" y1="612" x2="174" y2="660"/>
+    <line x1="246" y1="612" x2="246" y2="660"/>
+    <path d="M174,660 A36,11 0 0 0 246,660"/>
+    <ellipse cx="296" cy="628" rx="36" ry="11"/>
+    <line x1="260" y1="628" x2="260" y2="676"/>
+    <line x1="332" y1="628" x2="332" y2="676"/>
+    <path d="M260,676 A36,11 0 0 0 332,676"/>
+  </g>
+  <text x="256" y="700" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">partitioned chat DB</text>
+  <line x1="252" y1="540" x2="232" y2="598" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#aPink)"/>
+  <text x="206" y="572" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">store msg</text>
+
+  <!-- Messaging Svc -> Kafka -->
+  <line x1="344" y1="486" x2="432" y2="486" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="382" y="458" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">recipient</text>
+  <text x="382" y="474" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">offline</text>
+  <circle cx="395" cy="486" r="12" fill="#ff8bd2"/>
+  <text x="395" y="491" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">2</text>
+
+  <!-- Kafka tube -->
+  <g stroke="#93c5fd" stroke-width="3" fill="none">
+    <ellipse cx="438" cy="486" rx="15" ry="40"/>
+    <line x1="438" y1="446" x2="662" y2="446"/>
+    <line x1="438" y1="526" x2="662" y2="526"/>
+    <ellipse cx="662" cy="486" rx="15" ry="40"/>
+  </g>
+  <text x="548" y="480" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Kafka</text>
+  <text x="548" y="503" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="12">ON_MSG_UNSENT</text>
+  <text x="548" y="556" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">partition = recipient id</text>
+
+  <!-- Kafka -> workers -->
+  <line x1="678" y1="470" x2="730" y2="430" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="678" y1="486" x2="730" y2="500" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="678" y1="502" x2="730" y2="570" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <circle cx="700" cy="486" r="12" fill="#93c5fd"/>
+  <text x="700" y="491" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">3</text>
+
+  <!-- workers -->
+  <text x="792" y="372" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">Status Update Workers</text>
+  <text x="792" y="390" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">batch per recipient partition</text>
+  <rect x="736" y="402" width="112" height="54" rx="7" fill="#1a1d22" stroke="#cbd5e1" stroke-width="2.5"/>
+  <rect x="736" y="472" width="112" height="54" rx="7" fill="#1a1d22" stroke="#cbd5e1" stroke-width="2.5"/>
+  <rect x="736" y="542" width="112" height="54" rx="7" fill="#1a1d22" stroke="#cbd5e1" stroke-width="2.5"/>
+
+  <!-- worker -> Main Redis (SADD) -->
+  <line x1="850" y1="424" x2="1086" y2="300" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="985" y="338" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13">new sender &#8594; SADD</text>
+  <circle cx="930" cy="384" r="12" fill="#ff8bd2"/>
+  <text x="930" y="389" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">5</text>
+
+  <!-- worker -> Auxiliary (check) -->
+  <line x1="850" y1="572" x2="982" y2="676" stroke="#ff8bd2" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#aPink)"/>
+  <text x="1000" y="626" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">already counted?</text>
+  <circle cx="916" cy="624" r="12" fill="#ff8bd2"/>
+  <text x="916" y="629" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">4</text>
+
+  <!-- worker -> Notification -->
+  <line x1="788" y1="596" x2="808" y2="646" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <circle cx="800" cy="622" r="12" fill="#93c5fd"/>
+  <text x="800" y="627" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">6</text>
+
+  <!-- Notification System -->
+  <rect x="716" y="650" width="190" height="56" rx="9" fill="#111317" stroke="#93c5fd" stroke-width="3"/>
+  <text x="811" y="684" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Notification System</text>
+
+  <!-- Auxiliary Redis -->
+  <g stroke="#ff8bd2" stroke-width="3" fill="none">
+    <ellipse cx="1034" cy="688" rx="54" ry="15"/>
+    <line x1="980" y1="688" x2="980" y2="752"/>
+    <line x1="1088" y1="688" x2="1088" y2="752"/>
+    <path d="M980,752 A54,15 0 0 0 1088,752"/>
+  </g>
+  <text x="1100" y="660" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Auxiliary Redis</text>
+  <text x="1034" y="722" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="12">B-A : seen</text>
+  <text x="1034" y="740" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="12">B-C : seen</text>
+
+  <!-- Main Redis Cluster -->
+  <line x1="1110" y1="325" x2="1240" y2="350" stroke="#5b6470" stroke-width="1.5"/>
+  <line x1="1110" y1="325" x2="1150" y2="440" stroke="#5b6470" stroke-width="1.5"/>
+  <line x1="1240" y1="350" x2="1150" y2="440" stroke="#5b6470" stroke-width="1.5"/>
+  <g stroke="#ffff99" stroke-width="3" fill="#111317">
+    <ellipse cx="1110" cy="292" rx="46" ry="14"/>
+    <line x1="1064" y1="292" x2="1064" y2="358"/>
+    <line x1="1156" y1="292" x2="1156" y2="358"/>
+    <path d="M1064,358 A46,14 0 0 0 1156,358"/>
+  </g>
+  <g stroke="#ffff99" stroke-width="3" fill="#111317">
+    <ellipse cx="1244" cy="320" rx="46" ry="14"/>
+    <line x1="1198" y1="320" x2="1198" y2="386"/>
+    <line x1="1290" y1="320" x2="1290" y2="386"/>
+    <path d="M1198,386 A46,14 0 0 0 1290,386"/>
+  </g>
+  <g stroke="#ffff99" stroke-width="3" fill="#111317">
+    <ellipse cx="1152" cy="410" rx="46" ry="14"/>
+    <line x1="1106" y1="410" x2="1106" y2="476"/>
+    <line x1="1198" y1="410" x2="1198" y2="476"/>
+    <path d="M1106,476 A46,14 0 0 0 1198,476"/>
+  </g>
+  <text x="1180" y="512" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Main Redis Cluster</text>
+  <text x="1180" y="534" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">per-user sender SETs &#183; B:{A,C}</text>
+  <text x="1180" y="554" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">sharded for capacity &#183; NO replicas</text>
+
+  <!-- ================= DESIGN NOTES ================= -->
+  <line x1="60" y1="800" x2="1300" y2="800" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="70" y="834" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">Design decisions &amp; tradeoffs</text>
+
+  <circle cx="80" cy="866" r="5" fill="#ff8bd2"/>
+  <text x="96" y="871" fill="#cbd5e1" font-family="sans-serif" font-size="15">Only UNDELIVERED (offline) messages emit <tspan font-family="monospace" fill="#93c5fd">ON_MSG_UNSENT</tspan> &#8212; sending every message to Kafka would be a firehose.</text>
+
+  <circle cx="80" cy="902" r="5" fill="#ff8bd2"/>
+  <text x="96" y="907" fill="#cbd5e1" font-family="sans-serif" font-size="15">Auxiliary store filters redundant writes: A's 100 offline messages collapse to ONE write to the main set.</text>
+  <text x="96" y="930" fill="#9aa6b2" font-family="sans-serif" font-size="14">Trade a cheap existence check (+slight latency) to protect the brittle main store from a write storm.</text>
+
+  <circle cx="80" cy="962" r="5" fill="#ffff99"/>
+  <text x="96" y="967" fill="#cbd5e1" font-family="sans-serif" font-size="15">Main Redis is sharded for capacity, NOT replicated &#8212; replication adds write load to the very component we are protecting.</text>
+
+  <circle cx="80" cy="998" r="5" fill="#93c5fd"/>
+  <text x="96" y="1003" fill="#cbd5e1" font-family="sans-serif" font-size="15">On <tspan font-family="monospace" fill="#8aff8a">clean_status</tspan> (user reads a sender): remove (recipient, sender) from BOTH the main set and the auxiliary store.</text>
+</svg>

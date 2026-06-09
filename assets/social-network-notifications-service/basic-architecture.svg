@@ -1,0 +1,66 @@
+<svg width="1300" height="560" viewBox="0 0 1300 560" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="aWhite" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="aBlue" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1300" height="560" fill="#111317"/>
+
+  <text x="650" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Basic Architecture</text>
+  <text x="650" y="82" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">product events flow onto a bus; the notification service fans them out to users</text>
+
+  <!-- event labels -->
+  <text x="60" y="232" fill="#93c5fd" font-family="monospace" font-size="17" font-weight="bold">POST_PUBLISH</text>
+  <line x1="60" y1="248" x2="430" y2="248" stroke="#93c5fd" stroke-width="3" marker-end="url(#aBlue)"/>
+  <text x="60" y="330" fill="#93c5fd" font-family="monospace" font-size="17" font-weight="bold">POST_LIKE</text>
+  <line x1="60" y1="346" x2="430" y2="346" stroke="#93c5fd" stroke-width="3" marker-end="url(#aBlue)"/>
+  <text x="120" y="402" fill="#9aa6b2" font-family="monospace" font-size="17">. . .</text>
+  <line x1="120" y1="416" x2="430" y2="416" stroke="#93c5fd" stroke-width="3" marker-end="url(#aBlue)"/>
+
+  <!-- Bus (hatched vertical rect) -->
+  <rect x="442" y="180" width="70" height="270" rx="6" fill="none" stroke="#ffff99" stroke-width="3"/>
+  <g stroke="#ffff99" stroke-width="2">
+    <line x1="445" y1="210" x2="509" y2="196"/>
+    <line x1="445" y1="240" x2="509" y2="226"/>
+    <line x1="445" y1="270" x2="509" y2="256"/>
+    <line x1="445" y1="300" x2="509" y2="286"/>
+    <line x1="445" y1="330" x2="509" y2="316"/>
+    <line x1="445" y1="360" x2="509" y2="346"/>
+    <line x1="445" y1="390" x2="509" y2="376"/>
+    <line x1="445" y1="420" x2="509" y2="406"/>
+  </g>
+  <text x="477" y="478" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Event Bus</text>
+
+  <!-- Bus -> Notification Service -->
+  <line x1="512" y1="315" x2="690" y2="315" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+
+  <!-- Notification Service -->
+  <rect x="700" y="262" width="210" height="106" rx="9" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <text x="805" y="308" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Notification</text>
+  <text x="805" y="336" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Service</text>
+
+  <!-- fan out to users -->
+  <line x1="912" y1="300" x2="1120" y2="190" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <line x1="912" y1="315" x2="1120" y2="315" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <line x1="912" y1="330" x2="1120" y2="440" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+
+  <!-- users -->
+  <g stroke="#ffffff" stroke-width="3" fill="none">
+    <circle cx="1170" cy="170" r="16"/>
+    <line x1="1170" y1="186" x2="1170" y2="216"/><line x1="1152" y1="200" x2="1188" y2="200"/>
+    <line x1="1170" y1="216" x2="1156" y2="238"/><line x1="1170" y1="216" x2="1184" y2="238"/>
+
+    <circle cx="1170" cy="300" r="16"/>
+    <line x1="1170" y1="316" x2="1170" y2="346"/><line x1="1152" y1="330" x2="1188" y2="330"/>
+    <line x1="1170" y1="346" x2="1156" y2="368"/><line x1="1170" y1="346" x2="1184" y2="368"/>
+
+    <circle cx="1170" cy="430" r="16"/>
+    <line x1="1170" y1="446" x2="1170" y2="476"/><line x1="1152" y1="460" x2="1188" y2="460"/>
+    <line x1="1170" y1="476" x2="1156" y2="498"/><line x1="1170" y1="476" x2="1184" y2="498"/>
+  </g>
+  <text x="1170" y="528" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">followers / target</text>
+</svg>

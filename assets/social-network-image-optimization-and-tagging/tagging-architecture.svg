@@ -1,0 +1,134 @@
+<svg width="1320" height="960" viewBox="0 0 1320 960" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="aWhite" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="aGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="aPink" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="aBlue" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1320" height="960" fill="#111317"/>
+
+  <text x="660" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="32" font-weight="bold">Tagging Service: One Write, Many Consumers</text>
+  <text x="660" y="82" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="18">a tiny tag row is written once; an event fans it out to every system that cares</text>
+
+  <!-- Client -->
+  <circle cx="78" cy="395" r="20" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="78" y1="415" x2="78" y2="459" stroke="#ffffff" stroke-width="3"/>
+  <line x1="54" y1="433" x2="102" y2="433" stroke="#ffffff" stroke-width="3"/>
+  <line x1="78" y1="459" x2="60" y2="487" stroke="#ffffff" stroke-width="3"/>
+  <line x1="78" y1="459" x2="96" y2="487" stroke="#ffffff" stroke-width="3"/>
+  <text x="78" y="517" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17">client</text>
+  <text x="78" y="537" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">(tagger)</text>
+
+  <!-- Tag Service -->
+  <rect x="190" y="345" width="210" height="130" rx="10" fill="none" stroke="#ff8bd2" stroke-width="3"/>
+  <text x="295" y="392" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="22" font-weight="bold">Tag Service</text>
+  <line x1="210" y1="410" x2="380" y2="410" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="295" y="436" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15">RBAC: may you</text>
+  <text x="295" y="456" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15">tag this person?</text>
+
+  <!-- Typeahead Search (sync helper) -->
+  <rect x="500" y="92" width="225" height="92" rx="10" fill="none" stroke="#8aff8a" stroke-width="3"/>
+  <text x="612" y="130" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Typeahead Search</text>
+  <text x="612" y="156" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">lightweight, rewritten</text>
+  <text x="612" y="174" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">for huge query volume</text>
+
+  <!-- Face Detection (sync helper) -->
+  <rect x="500" y="232" width="225" height="92" rx="10" fill="none" stroke="#8aff8a" stroke-width="3"/>
+  <text x="612" y="270" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Face Detection</text>
+  <text x="612" y="296" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">ML model trained on</text>
+  <text x="612" y="314" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">already-tagged photos</text>
+
+  <!-- MySQL cylinder -->
+  <g stroke="#ffff99" stroke-width="3" fill="none">
+    <ellipse cx="612" cy="400" rx="68" ry="18"/>
+    <line x1="544" y1="400" x2="544" y2="478"/>
+    <line x1="680" y1="400" x2="680" y2="478"/>
+    <path d="M544,478 A68,18 0 0 0 680,478"/>
+  </g>
+  <text x="612" y="438" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">MySQL</text>
+  <text x="612" y="512" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">post_tags(post_id, user_id, location)</text>
+  <text x="612" y="532" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">location stored normalized: (320/720, 120/720)</text>
+
+  <!-- Kafka tube -->
+  <g stroke="#93c5fd" stroke-width="3" fill="none">
+    <ellipse cx="430" cy="660" rx="16" ry="46"/>
+    <line x1="430" y1="614" x2="745" y2="614"/>
+    <line x1="430" y1="706" x2="745" y2="706"/>
+    <path d="M745,614 A16,46 0 0 1 745,706"/>
+  </g>
+  <text x="588" y="654" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">Kafka</text>
+  <text x="588" y="678" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="14">PHOTO_TAG event</text>
+
+  <!-- Consumers (async plane) -->
+  <rect x="900" y="450" width="350" height="66" rx="10" fill="none" stroke="#93c5fd" stroke-width="3"/>
+  <text x="924" y="479" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Notification</text>
+  <text x="924" y="501" fill="#9aa6b2" font-family="sans-serif" font-size="13">"X tagged you" &#183; push / email / SMS</text>
+
+  <rect x="900" y="556" width="350" height="66" rx="10" fill="none" stroke="#93c5fd" stroke-width="3"/>
+  <text x="924" y="585" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Search Index (Elasticsearch)</text>
+  <text x="924" y="607" fill="#9aa6b2" font-family="sans-serif" font-size="13">find photos by tagged person / place</text>
+
+  <rect x="900" y="662" width="350" height="66" rx="10" fill="none" stroke="#93c5fd" stroke-width="3"/>
+  <text x="924" y="691" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Feed / Fan-out</text>
+  <text x="924" y="713" fill="#9aa6b2" font-family="sans-serif" font-size="13">new feed-item type for friends</text>
+
+  <rect x="900" y="768" width="350" height="66" rx="10" fill="none" stroke="#93c5fd" stroke-width="3"/>
+  <text x="924" y="797" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Profile / Analytics</text>
+  <text x="924" y="819" fill="#9aa6b2" font-family="sans-serif" font-size="13">"photos of you" &#183; signals</text>
+
+  <!-- 1: Client -> Tag Service -->
+  <line x1="106" y1="420" x2="184" y2="420" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <circle cx="145" cy="420" r="12" fill="#ffffff"/>
+  <text x="145" y="425" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">1</text>
+
+  <!-- 2: Tag Service -> Typeahead (read) -->
+  <line x1="402" y1="360" x2="497" y2="160" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="486" y="226" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">type a name &#8594; who</text>
+  <circle cx="432" cy="296" r="12" fill="#8aff8a"/>
+  <text x="432" y="301" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">2</text>
+
+  <!-- 3: Tag Service -> Face Detection (read) -->
+  <line x1="402" y1="372" x2="497" y2="290" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="452" y="346" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">suggest boxes</text>
+  <circle cx="468" cy="332" r="12" fill="#8aff8a"/>
+  <text x="468" y="337" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">3</text>
+
+  <!-- 4: Tag Service -> MySQL (write) -->
+  <line x1="402" y1="420" x2="540" y2="410" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="470" y="400" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14">write tag row</text>
+  <circle cx="468" cy="416" r="12" fill="#ff8bd2"/>
+  <text x="468" y="421" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">4</text>
+
+  <!-- 5: Tag Service -> Kafka (publish) -->
+  <line x1="295" y1="477" x2="412" y2="616" stroke="#93c5fd" stroke-width="3" marker-end="url(#aBlue)"/>
+  <text x="300" y="560" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14">publish</text>
+  <circle cx="338" cy="528" r="12" fill="#93c5fd"/>
+  <text x="338" y="533" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">5</text>
+
+  <!-- 6: Kafka -> consumers (fan-out) -->
+  <line x1="746" y1="640" x2="896" y2="485" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="746" y1="644" x2="896" y2="589" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="746" y1="666" x2="896" y2="695" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="746" y1="680" x2="896" y2="801" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <circle cx="820" cy="640" r="12" fill="#93c5fd"/>
+  <text x="820" y="645" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">6</text>
+
+  <!-- legend -->
+  <g font-family="sans-serif" font-size="15">
+    <rect x="190" y="860" width="22" height="14" fill="#8aff8a"/>
+    <text x="220" y="872" fill="#cbd5e1">read path (compose the tag: who + where)</text>
+    <rect x="600" y="860" width="22" height="14" fill="#ff8bd2"/>
+    <text x="630" y="872" fill="#cbd5e1">write path (the tag row)</text>
+    <rect x="860" y="860" width="22" height="14" fill="#93c5fd"/>
+    <text x="890" y="872" fill="#cbd5e1">async plane (event &#8594; many consumers)</text>
+  </g>
+</svg>

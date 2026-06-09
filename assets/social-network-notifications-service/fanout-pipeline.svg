@@ -1,0 +1,187 @@
+<svg width="1660" height="1040" viewBox="0 0 1660 1040" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="aWhite" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="aBlue" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="aGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="aPink" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="aRed" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1660" height="1040" fill="#111317"/>
+
+  <text x="830" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Notification Fan-out Pipeline</text>
+  <text x="830" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a quick listener delegates; the fan-out decider reads state and enriches; dumb publishers do the network I/O</text>
+
+  <!-- legend -->
+  <g font-family="sans-serif" font-size="14">
+    <rect x="360" y="92" width="20" height="13" fill="#93c5fd"/><text x="386" y="103" fill="#cbd5e1">event / queue (async)</text>
+    <rect x="560" y="92" width="20" height="13" fill="#ffff99"/><text x="586" y="103" fill="#cbd5e1">store</text>
+    <rect x="660" y="92" width="20" height="13" fill="#8aff8a"/><text x="686" y="103" fill="#cbd5e1">read</text>
+    <rect x="740" y="92" width="20" height="13" fill="#ff8bd2"/><text x="766" y="103" fill="#cbd5e1">write</text>
+    <rect x="830" y="92" width="20" height="13" fill="#ff8a8a"/><text x="856" y="103" fill="#cbd5e1">network call (heavy I/O)</text>
+  </g>
+
+  <!-- ============ EVENT BUS ============ -->
+  <text x="18" y="345" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">POST_PUBLISH</text>
+  <line x1="120" y1="362" x2="172" y2="362" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <text x="18" y="425" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">POST_LIKE</text>
+  <line x1="120" y1="442" x2="172" y2="442" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <text x="18" y="505" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">MENTION</text>
+  <line x1="120" y1="522" x2="172" y2="522" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <text x="18" y="585" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">COMMENT</text>
+  <line x1="120" y1="602" x2="172" y2="602" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+
+  <rect x="176" y="300" width="56" height="420" rx="6" fill="none" stroke="#93c5fd" stroke-width="3"/>
+  <g stroke="#93c5fd" stroke-width="2">
+    <line x1="179" y1="330" x2="229" y2="318"/>
+    <line x1="179" y1="365" x2="229" y2="353"/>
+    <line x1="179" y1="400" x2="229" y2="388"/>
+    <line x1="179" y1="435" x2="229" y2="423"/>
+    <line x1="179" y1="470" x2="229" y2="458"/>
+    <line x1="179" y1="505" x2="229" y2="493"/>
+    <line x1="179" y1="540" x2="229" y2="528"/>
+    <line x1="179" y1="575" x2="229" y2="563"/>
+    <line x1="179" y1="610" x2="229" y2="598"/>
+    <line x1="179" y1="645" x2="229" y2="633"/>
+    <line x1="179" y1="680" x2="229" y2="668"/>
+  </g>
+  <text x="204" y="748" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">Event Bus</text>
+  <circle cx="150" cy="362" r="11" fill="#93c5fd"/>
+  <text x="150" y="367" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">1</text>
+
+  <!-- ============ LISTENER ============ -->
+  <line x1="232" y1="500" x2="296" y2="500" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <text x="264" y="488" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">consume</text>
+  <circle cx="264" cy="500" r="11" fill="#ffffff"/>
+  <text x="264" y="505" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">2</text>
+
+  <rect x="300" y="452" width="150" height="96" rx="9" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <text x="375" y="492" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Listener</text>
+  <text x="375" y="516" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">stays quick</text>
+
+  <!-- ============ DELEGATE QUEUE ============ -->
+  <line x1="450" y1="500" x2="486" y2="500" stroke="#93c5fd" stroke-width="3" marker-end="url(#aBlue)"/>
+  <g stroke="#93c5fd" stroke-width="3" fill="none">
+    <ellipse cx="500" cy="500" rx="12" ry="32"/>
+    <line x1="500" y1="468" x2="588" y2="468"/>
+    <line x1="500" y1="532" x2="588" y2="532"/>
+    <ellipse cx="588" cy="500" rx="12" ry="32"/>
+  </g>
+  <text x="544" y="455" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14">delegate</text>
+  <line x1="600" y1="500" x2="636" y2="500" stroke="#93c5fd" stroke-width="3" marker-end="url(#aBlue)"/>
+  <circle cx="544" cy="500" r="11" fill="#93c5fd"/>
+  <text x="544" y="505" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">3</text>
+
+  <!-- ============ FAN-OUT WORKERS (decider) ============ -->
+  <rect x="640" y="430" width="200" height="160" rx="10" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <text x="740" y="420" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">Fan-out Workers</text>
+  <rect x="664" y="450" width="152" height="32" rx="5" fill="#1a1d22" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="664" y="492" width="152" height="32" rx="5" fill="#1a1d22" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="664" y="534" width="152" height="32" rx="5" fill="#1a1d22" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="740" y="612" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">the decider: deserve? require? enrich</text>
+
+  <!-- DBs the decider reads -->
+  <g stroke="#ffff99" stroke-width="2.5" fill="#111317">
+    <ellipse cx="520" cy="190" rx="44" ry="13"/><line x1="476" y1="190" x2="476" y2="248"/><line x1="564" y1="190" x2="564" y2="248"/><path d="M476,248 A44,13 0 0 0 564,248"/>
+    <ellipse cx="672" cy="170" rx="44" ry="13"/><line x1="628" y1="170" x2="628" y2="228"/><line x1="716" y1="170" x2="716" y2="228"/><path d="M628,228 A44,13 0 0 0 716,228"/>
+    <ellipse cx="824" cy="170" rx="44" ry="13"/><line x1="780" y1="170" x2="780" y2="228"/><line x1="868" y1="170" x2="868" y2="228"/><path d="M780,228 A44,13 0 0 0 868,228"/>
+    <ellipse cx="980" cy="190" rx="44" ry="13"/><line x1="936" y1="190" x2="936" y2="248"/><line x1="1024" y1="190" x2="1024" y2="248"/><path d="M936,248 A44,13 0 0 0 1024,248"/>
+  </g>
+  <text x="520" y="285" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14">User DB</text>
+  <text x="672" y="265" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14">Affinity</text>
+  <text x="824" y="265" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14">Preferences</text>
+  <text x="980" y="285" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14">Limits (max/day)</text>
+
+  <!-- decider read lines -->
+  <line x1="540" y1="258" x2="690" y2="428" stroke="#8aff8a" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#aGreen)"/>
+  <line x1="678" y1="238" x2="722" y2="428" stroke="#8aff8a" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#aGreen)"/>
+  <line x1="818" y1="238" x2="762" y2="428" stroke="#8aff8a" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#aGreen)"/>
+  <line x1="962" y1="258" x2="800" y2="428" stroke="#8aff8a" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#aGreen)"/>
+  <circle cx="740" cy="330" r="11" fill="#8aff8a"/>
+  <text x="740" y="335" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">4</text>
+  <text x="900" y="345" fill="#8aff8a" font-family="sans-serif" font-size="13">read state to decide</text>
+
+  <!-- in-app batch write -->
+  <line x1="710" y1="592" x2="710" y2="734" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="772" y="668" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13">batch write</text>
+  <g stroke="#ffff99" stroke-width="2.5" fill="#111317">
+    <ellipse cx="710" cy="752" rx="52" ry="14"/><line x1="658" y1="752" x2="658" y2="826"/><line x1="762" y1="752" x2="762" y2="826"/><path d="M658,826 A52,14 0 0 0 762,826"/>
+  </g>
+  <text x="710" y="792" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">updates</text>
+  <text x="710" y="858" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">in-app · NoSQL · denormalized</text>
+
+  <!-- ============ PRIORITY QUEUES ============ -->
+  <text x="970" y="412" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">priority queues (SQS)</text>
+  <g stroke="#93c5fd" stroke-width="3" fill="none">
+    <ellipse cx="900" cy="450" rx="11" ry="20"/><line x1="900" y1="430" x2="1050" y2="430"/><line x1="900" y1="470" x2="1050" y2="470"/><ellipse cx="1050" cy="450" rx="11" ry="20"/>
+    <ellipse cx="900" cy="510" rx="11" ry="20"/><line x1="900" y1="490" x2="1050" y2="490"/><line x1="900" y1="530" x2="1050" y2="530"/><ellipse cx="1050" cy="510" rx="11" ry="20"/>
+    <ellipse cx="900" cy="570" rx="11" ry="20"/><line x1="900" y1="550" x2="1050" y2="550"/><line x1="900" y1="590" x2="1050" y2="590"/><ellipse cx="1050" cy="570" rx="11" ry="20"/>
+    <ellipse cx="900" cy="630" rx="11" ry="20"/><line x1="900" y1="610" x2="1050" y2="610"/><line x1="900" y1="650" x2="1050" y2="650"/><ellipse cx="1050" cy="630" rx="11" ry="20"/>
+  </g>
+  <text x="878" y="455" text-anchor="end" fill="#cbd5e1" font-family="monospace" font-size="14">P0</text>
+  <text x="878" y="515" text-anchor="end" fill="#cbd5e1" font-family="monospace" font-size="14">P1</text>
+  <text x="878" y="575" text-anchor="end" fill="#cbd5e1" font-family="monospace" font-size="14">P2</text>
+  <text x="878" y="635" text-anchor="end" fill="#cbd5e1" font-family="monospace" font-size="14">P3</text>
+
+  <!-- fanout -> priority queues -->
+  <line x1="842" y1="470" x2="886" y2="450" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="842" y1="500" x2="886" y2="510" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="842" y1="520" x2="886" y2="570" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="842" y1="540" x2="886" y2="628" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <circle cx="864" cy="498" r="11" fill="#93c5fd"/>
+  <text x="864" y="503" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">5</text>
+  <text x="870" y="690" fill="#93c5fd" font-family="sans-serif" font-size="13">enriched task</text>
+
+  <!-- ============ PUBLISHERS ============ -->
+  <rect x="1132" y="452" width="160" height="98" rx="9" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <rect x="1120" y="466" width="160" height="98" rx="9" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <text x="1200" y="508" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Publishers</text>
+  <text x="1200" y="532" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">dumb &#183; no DB</text>
+  <text x="1200" y="600" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">task carries email/phone/ARN/body</text>
+
+  <!-- queues -> publishers -->
+  <line x1="1062" y1="450" x2="1116" y2="490" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="1062" y1="510" x2="1116" y2="510" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <line x1="1062" y1="630" x2="1116" y2="540" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <circle cx="1090" cy="500" r="11" fill="#93c5fd"/>
+  <text x="1090" y="505" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">6</text>
+
+  <!-- ============ CHANNELS ============ -->
+  <rect x="1400" y="392" width="248" height="64" rx="9" fill="#111317" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="1524" y="420" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">Push</text>
+  <text x="1524" y="442" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">GCM / SNS / APNs / OneSignal</text>
+
+  <rect x="1400" y="488" width="248" height="56" rx="9" fill="#111317" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="1524" y="514" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">SMS</text>
+  <text x="1524" y="534" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">gateway (Twilio / SNS)</text>
+
+  <rect x="1400" y="576" width="248" height="56" rx="9" fill="#111317" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="1524" y="602" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">Email</text>
+  <text x="1524" y="622" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">provider (SES)</text>
+
+  <!-- publishers -> channels (network calls) -->
+  <line x1="1282" y1="500" x2="1396" y2="424" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#aRed)"/>
+  <line x1="1282" y1="512" x2="1396" y2="514" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#aRed)"/>
+  <line x1="1282" y1="524" x2="1396" y2="602" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#aRed)"/>
+  <text x="1340" y="690" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">heavy network I/O</text>
+
+  <!-- ============ BOTTOM SUMMARY ============ -->
+  <line x1="60" y1="900" x2="1600" y2="900" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="60" y="936" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">The shape</text>
+  <circle cx="70" cy="968" r="5" fill="#93c5fd"/>
+  <text x="86" y="973" fill="#cbd5e1" font-family="sans-serif" font-size="15">Listener stays QUICK by delegating; fan-out is a separately-scaled tier (one celebrity post = millions of notifications).</text>
+  <circle cx="70" cy="1000" r="5" fill="#8aff8a"/>
+  <text x="86" y="1005" fill="#cbd5e1" font-family="sans-serif" font-size="15">The decider reads User/Affinity/Preferences/limits to answer "does this user need this?", then ENRICHES the task fully.</text>
+  <circle cx="70" cy="1032" r="5" fill="#ff8a8a"/>
+  <text x="86" y="1037" fill="#cbd5e1" font-family="sans-serif" font-size="15">Priority queues order urgency; publishers are DUMB (no DB) and just do network I/O with everything the task already carries.</text>
+</svg>
