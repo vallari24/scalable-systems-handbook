@@ -1,0 +1,80 @@
+<svg width="1280" height="600" viewBox="0 0 1280 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="600" fill="#111317"/>
+
+  <text x="640" y="54" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="34" font-weight="bold">The Read Path</text>
+  <text x="640" y="90" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="19">a hash URL resolves to the active photo's bytes, served from the edge</text>
+
+  <!-- viewer -->
+  <circle cx="95" cy="300" r="20" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="320" x2="95" y2="364" stroke="#ffffff" stroke-width="3"/>
+  <line x1="71" y1="338" x2="119" y2="338" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="364" x2="77" y2="392" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="364" x2="113" y2="392" stroke="#ffffff" stroke-width="3"/>
+  <text x="95" y="420" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18">viewer</text>
+
+  <!-- CDN -->
+  <rect x="225" y="290" width="160" height="96" rx="10" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="305" y="332" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="23" font-weight="bold">CDN</text>
+  <text x="305" y="358" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">edge cache</text>
+
+  <!-- API -->
+  <rect x="560" y="290" width="200" height="96" rx="10" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="660" y="332" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="23" font-weight="bold">API server</text>
+  <text x="660" y="358" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">proxy / origin</text>
+
+  <!-- MySQL cylinder -->
+  <g stroke="#ffff99" stroke-width="3" fill="none">
+    <ellipse cx="1085" cy="165" rx="62" ry="18"/>
+    <line x1="1023" y1="165" x2="1023" y2="248"/>
+    <line x1="1147" y1="165" x2="1147" y2="248"/>
+    <path d="M1023,248 A62,18 0 0 0 1147,248"/>
+  </g>
+  <text x="1085" y="212" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">MySQL</text>
+
+  <!-- S3 cylinder -->
+  <g stroke="#ffffff" stroke-width="3" fill="none">
+    <ellipse cx="1085" cy="392" rx="62" ry="18"/>
+    <line x1="1023" y1="392" x2="1023" y2="475"/>
+    <line x1="1147" y1="392" x2="1147" y2="475"/>
+    <path d="M1023,475 A62,18 0 0 0 1147,475"/>
+  </g>
+  <text x="1085" y="440" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">S3</text>
+
+  <!-- 1: viewer -> CDN -->
+  <line x1="122" y1="338" x2="218" y2="338" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrowGreen)"/>
+  <text x="172" y="250" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="15">GET gravatar.com/{hash}</text>
+  <circle cx="170" cy="338" r="13" fill="#8aff8a"/>
+  <text x="170" y="343" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">1</text>
+
+  <!-- 2: CDN -> API -->
+  <line x1="387" y1="338" x2="553" y2="338" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrowGreen)"/>
+  <text x="470" y="250" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="15">miss -&gt; /photos/{hash}</text>
+  <circle cx="470" cy="338" r="13" fill="#8aff8a"/>
+  <text x="470" y="343" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">2</text>
+
+  <!-- 3: API -> MySQL -->
+  <line x1="762" y1="312" x2="1018" y2="212" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrowGreen)"/>
+  <text x="905" y="286" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16">lookup s3_key</text>
+  <text x="905" y="306" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">hash + is_active</text>
+  <circle cx="790" cy="301" r="13" fill="#8aff8a"/>
+  <text x="790" y="306" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">3</text>
+
+  <!-- 4: API -> S3 -->
+  <line x1="762" y1="364" x2="1018" y2="420" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrowGreen)"/>
+  <text x="892" y="420" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16">read bytes</text>
+  <circle cx="848" cy="376" r="13" fill="#8aff8a"/>
+  <text x="848" y="381" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">4</text>
+
+  <!-- 5: served back to viewer (cached) -->
+  <path d="M232,372 C190,400 150,430 112,438" fill="none" stroke="#8aff8a" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#arrowGreen)"/>
+  <text x="220" y="478" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15">image bytes (cached at edge)</text>
+
+  <!-- legend -->
+  <text x="640" y="556" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">first request fills the edge cache; later requests are CDN hits and never touch the API</text>
+</svg>

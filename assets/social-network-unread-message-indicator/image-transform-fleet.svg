@@ -1,0 +1,61 @@
+<svg width="1260" height="600" viewBox="0 0 1260 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="aWhite" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="aGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1260" height="600" fill="#111317"/>
+
+  <text x="630" y="52" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="32" font-weight="bold">Self-Hosted Image Transformation</text>
+  <text x="630" y="88" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="18">transform on the fly: a load balancer fans requests across a fleet of CPU-heavy servers</text>
+
+  <!-- user -->
+  <circle cx="90" cy="300" r="20" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="90" y1="320" x2="90" y2="364" stroke="#ffffff" stroke-width="3"/>
+  <line x1="66" y1="338" x2="114" y2="338" stroke="#ffffff" stroke-width="3"/>
+  <line x1="90" y1="364" x2="72" y2="392" stroke="#ffffff" stroke-width="3"/>
+  <line x1="90" y1="364" x2="108" y2="392" stroke="#ffffff" stroke-width="3"/>
+  <text x="90" y="422" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18">user</text>
+
+  <!-- Load Balancer -->
+  <rect x="230" y="300" width="160" height="100" rx="10" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="310" y="344" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Load</text>
+  <text x="310" y="372" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Balancer</text>
+
+  <!-- Fleet of ImageMagick servers (stacked rectangles) -->
+  <rect x="560" y="278" width="210" height="118" rx="10" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <rect x="548" y="296" width="210" height="118" rx="10" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <rect x="536" y="314" width="210" height="118" rx="10" fill="#111317" stroke="#ffffff" stroke-width="3"/>
+  <text x="641" y="362" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">ImageMagick</text>
+  <text x="641" y="388" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">API servers</text>
+  <text x="641" y="466" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16">large CPU · many machines</text>
+
+  <!-- S3 origin cylinder -->
+  <g stroke="#ffffff" stroke-width="3" fill="none">
+    <ellipse cx="1110" cy="300" rx="62" ry="18"/>
+    <line x1="1048" y1="300" x2="1048" y2="385"/>
+    <line x1="1172" y1="300" x2="1172" y2="385"/>
+    <path d="M1048,385 A62,18 0 0 0 1172,385"/>
+  </g>
+  <text x="1110" y="348" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">S3</text>
+  <text x="1110" y="430" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16">origin (originals)</text>
+
+  <!-- user -> LB -->
+  <line x1="118" y1="350" x2="223" y2="350" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <text x="170" y="318" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="14">?w=240</text>
+
+  <!-- LB -> fleet -->
+  <line x1="392" y1="350" x2="528" y2="350" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <text x="460" y="318" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15">balance</text>
+
+  <!-- fleet -> origin (read original) -->
+  <line x1="772" y1="338" x2="1044" y2="320" stroke="#ffffff" stroke-width="3" marker-end="url(#aWhite)"/>
+  <text x="908" y="300" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15">read original</text>
+
+  <!-- transform callout -->
+  <text x="641" y="520" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16">transform on the fly (CPU-intensive, cannot be async)</text>
+</svg>

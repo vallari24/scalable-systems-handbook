@@ -1,0 +1,161 @@
+<svg width="1500" height="980" viewBox="0 0 1500 980" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="aGreen" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="aPink" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="aOrange" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffb454"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1500" height="980" fill="#111317"/>
+
+  <text x="750" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="32" font-weight="bold">Gravatar: The Whole Picture</text>
+
+  <!-- ===================== COMPONENTS ===================== -->
+
+  <!-- viewer -->
+  <circle cx="95" cy="150" r="20" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="170" x2="95" y2="214" stroke="#ffffff" stroke-width="3"/>
+  <line x1="71" y1="188" x2="119" y2="188" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="214" x2="77" y2="242" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="214" x2="113" y2="242" stroke="#ffffff" stroke-width="3"/>
+  <text x="95" y="272" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18">viewer</text>
+
+  <!-- owner -->
+  <circle cx="95" cy="600" r="20" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="620" x2="95" y2="664" stroke="#ffffff" stroke-width="3"/>
+  <line x1="71" y1="638" x2="119" y2="638" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="664" x2="77" y2="692" stroke="#ffffff" stroke-width="3"/>
+  <line x1="95" y1="664" x2="113" y2="692" stroke="#ffffff" stroke-width="3"/>
+  <text x="95" y="722" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18">owner</text>
+
+  <!-- CDN -->
+  <rect x="430" y="112" width="195" height="96" rx="10" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="527" y="154" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="23" font-weight="bold">CDN</text>
+  <text x="527" y="180" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">gravatar.com</text>
+
+  <!-- API -->
+  <rect x="690" y="410" width="195" height="100" rx="10" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="787" y="452" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="23" font-weight="bold">API server</text>
+  <text x="787" y="478" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">api.gravatar.com</text>
+
+  <!-- Photo Upload Service -->
+  <rect x="325" y="556" width="240" height="96" rx="10" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <text x="445" y="598" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Photo Upload</text>
+  <text x="445" y="624" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Service</text>
+
+  <!-- MySQL cylinder -->
+  <g stroke="#ffff99" stroke-width="3" fill="none">
+    <ellipse cx="1150" cy="415" rx="62" ry="18"/>
+    <line x1="1088" y1="415" x2="1088" y2="500"/>
+    <line x1="1212" y1="415" x2="1212" y2="500"/>
+    <path d="M1088,500 A62,18 0 0 0 1212,500"/>
+  </g>
+  <text x="1150" y="463" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">MySQL</text>
+
+  <!-- S3 cylinder -->
+  <g stroke="#ffffff" stroke-width="3" fill="none">
+    <ellipse cx="1330" cy="150" rx="62" ry="18"/>
+    <line x1="1268" y1="150" x2="1268" y2="235"/>
+    <line x1="1392" y1="150" x2="1392" y2="235"/>
+    <path d="M1268,235 A62,18 0 0 0 1392,235"/>
+  </g>
+  <text x="1330" y="198" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">S3</text>
+
+  <!-- Kafka tube -->
+  <g stroke="#ffb454" stroke-width="3" fill="none">
+    <line x1="650" y1="762" x2="960" y2="762"/>
+    <line x1="650" y1="806" x2="960" y2="806"/>
+    <path d="M650,762 A22,22 0 0 0 650,806"/>
+    <path d="M960,762 A22,22 0 0 0 960,806"/>
+  </g>
+  <text x="805" y="792" text-anchor="middle" fill="#ffb454" font-family="sans-serif" font-size="20" font-weight="bold">Kafka</text>
+
+  <!-- invalidation consumer -->
+  <rect x="1040" y="744" width="232" height="82" rx="10" fill="none" stroke="#ffb454" stroke-width="3"/>
+  <text x="1156" y="780" text-anchor="middle" fill="#ffb454" font-family="sans-serif" font-size="18" font-weight="bold">invalidation</text>
+  <text x="1156" y="804" text-anchor="middle" fill="#ffb454" font-family="sans-serif" font-size="18" font-weight="bold">consumer</text>
+
+  <!-- ===================== READ PATH (green) ===================== -->
+
+  <!-- 1 viewer -> CDN -->
+  <line x1="124" y1="186" x2="423" y2="172" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="300" y="118" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="15">GET gravatar.com/{hash}</text>
+  <circle cx="270" cy="180" r="13" fill="#8aff8a"/>
+  <text x="270" y="185" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">1</text>
+
+  <!-- 2 CDN -> API (miss) -->
+  <line x1="560" y1="210" x2="725" y2="406" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="598" y="282" text-anchor="end" fill="#8aff8a" font-family="monospace" font-size="15">miss -&gt; /photos/{hash}</text>
+  <circle cx="686" cy="360" r="13" fill="#8aff8a"/>
+  <text x="686" y="365" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">2</text>
+
+  <!-- 3 API -> MySQL (lookup) -->
+  <line x1="887" y1="438" x2="1082" y2="442" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="985" y="421" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15">lookup s3_key</text>
+  <circle cx="1030" cy="441" r="13" fill="#8aff8a"/>
+  <text x="1030" y="446" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">3</text>
+
+  <!-- 4 API -> S3 (read bytes) -->
+  <line x1="830" y1="412" x2="1262" y2="218" stroke="#8aff8a" stroke-width="3" marker-end="url(#aGreen)"/>
+  <text x="1010" y="266" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15">read bytes</text>
+  <circle cx="1120" cy="282" r="13" fill="#8aff8a"/>
+  <text x="1120" y="287" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">4</text>
+
+  <!-- ===================== WRITE PATH (pink) ===================== -->
+
+  <!-- 5 owner -> Photo Upload Service -->
+  <line x1="124" y1="632" x2="320" y2="610" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="222" y="572" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15">get pre-signed URL</text>
+  <circle cx="220" cy="622" r="13" fill="#ff8bd2"/>
+  <text x="220" y="627" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">5</text>
+
+  <!-- 6 owner -> S3 upload (perimeter: left + top) -->
+  <path d="M95,575 L40,575 L40,74 L1330,74 L1330,128" fill="none" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="250" y="64" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15">upload bytes (pre-signed)</text>
+  <circle cx="40" cy="360" r="13" fill="#ff8bd2"/>
+  <text x="40" y="365" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">6</text>
+
+  <!-- 7 owner -> API (add / mark active) -->
+  <path d="M138,612 L138,505 L672,505 L688,500" fill="none" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="410" y="492" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15">POST add photo / mark active</text>
+  <circle cx="138" cy="560" r="13" fill="#ff8bd2"/>
+  <text x="138" y="565" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">7</text>
+
+  <!-- 8 API -> MySQL (transaction write) -->
+  <line x1="887" y1="486" x2="1082" y2="480" stroke="#ff8bd2" stroke-width="3" marker-end="url(#aPink)"/>
+  <text x="985" y="520" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15">txn: flip is_active</text>
+  <circle cx="1030" cy="483" r="13" fill="#ff8bd2"/>
+  <text x="1030" y="488" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">8</text>
+
+  <!-- ===================== INVALIDATION PATH (orange) ===================== -->
+
+  <!-- 9 API -> Kafka (publish event) -->
+  <line x1="787" y1="512" x2="800" y2="758" stroke="#ffb454" stroke-width="3" marker-end="url(#aOrange)"/>
+  <text x="690" y="640" text-anchor="middle" fill="#ffb454" font-family="sans-serif" font-size="15">publish event</text>
+  <circle cx="793" cy="636" r="13" fill="#ffb454"/>
+  <text x="793" y="641" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">9</text>
+
+  <!-- consume (Kafka -> consumer) -->
+  <line x1="962" y1="784" x2="1036" y2="784" stroke="#ffb454" stroke-width="3" marker-end="url(#aOrange)"/>
+  <text x="999" y="744" text-anchor="middle" fill="#ffb454" font-family="sans-serif" font-size="13">consume</text>
+
+  <!-- 10 consumer -> CDN (invalidate path; perimeter: right + top) -->
+  <path d="M1272,784 L1440,784 L1440,96 L560,96 L545,110" fill="none" stroke="#ffb454" stroke-width="3" marker-end="url(#aOrange)"/>
+  <text x="1455" y="440" text-anchor="middle" fill="#ffb454" font-family="sans-serif" font-size="15" transform="rotate(90 1455 440)">CDN invalidate API: purge /{hash}</text>
+  <circle cx="1440" cy="620" r="13" fill="#ffb454"/>
+  <text x="1440" y="625" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="15" font-weight="bold">10</text>
+
+  <!-- ===================== LEGEND ===================== -->
+  <rect x="55" y="838" width="640" height="96" rx="8" fill="none" stroke="#3a414c" stroke-width="2"/>
+  <line x1="80" y1="868" x2="130" y2="868" stroke="#8aff8a" stroke-width="4" marker-end="url(#aGreen)"/>
+  <text x="142" y="873" fill="#cbd5e1" font-family="sans-serif" font-size="16">read path: serve the active avatar (1-4)</text>
+  <line x1="80" y1="900" x2="130" y2="900" stroke="#ff8bd2" stroke-width="4" marker-end="url(#aPink)"/>
+  <text x="142" y="905" fill="#cbd5e1" font-family="sans-serif" font-size="16">write path: upload + record + switch active (5-8)</text>
+  <line x1="430" y1="868" x2="480" y2="868" stroke="#ffb454" stroke-width="4" marker-end="url(#aOrange)"/>
+  <text x="492" y="873" fill="#cbd5e1" font-family="sans-serif" font-size="16">invalidation event (9-10)</text>
+</svg>
