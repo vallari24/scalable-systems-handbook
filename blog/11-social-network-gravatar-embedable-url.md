@@ -28,7 +28,7 @@ When the browser parses that tag, it does one thing with `src`: it fires an HTTP
 GET https://mysite.example/static/img/logo.jpg
 ```
 
-Whatever response comes back, the browser interprets as image bytes and tries to render it.
+Whatever response comes back, the browser interprets as <span style="color:#8aff8a"><strong>image bytes</strong></span> and tries to render it.
 
 ```text
 browser sees <img src="...">
@@ -86,7 +86,7 @@ read the file at the mapped path on disk
 send the file bytes as the response
 ```
 
-That is the whole job of a static file server: open the file, read the bytes, write them to the HTTP response.
+That is the whole job of a <span style="color:#8aff8a"><strong>static file server</strong></span>: open the file, read the bytes, write them to the HTTP response.
 
 The browser receives those bytes and renders them as the image.
 
@@ -100,7 +100,7 @@ No. Remember what the browser did: it sent a GET and waited for bytes. It does n
 
 ### Serving From Object Storage
 
-In the baseline, the file lived on the server's local disk. But the handler can read from anywhere. Point it at an object store like S3 instead:
+In the baseline, the file lived on the server's local disk. But the handler can read from anywhere. Point it at an <span style="color:#ffff99"><strong>object store like S3</strong></span> instead:
 
 ```python
 @app.route('/raw/<path>')
@@ -184,7 +184,7 @@ the URL is a contract for bytes, not a pointer to a file
 
 A generated image costs more than reading a file. We do not want to redraw it on every request.
 
-So we put a CDN in front, the same way the Instagram post did for photos. The browser makes a single request — to the CDN URL — and the CDN handles the rest.
+So we put a <span style="color:#93c5fd"><strong>CDN</strong></span> in front, the same way the Instagram post did for photos. The browser makes a single request — to the CDN URL — and the CDN handles the rest.
 
 But there is one important difference:
 
@@ -210,7 +210,7 @@ The same indirection that let us swap disk for S3 now lets us put generated imag
 
 **Question: what if your profile picture had one URL that worked everywhere?**
 
-That is the whole idea of Gravatar. It is your single embeddable URL for a profile picture. Any site that wants to show your avatar embeds that one URL, and it always renders your current picture.
+That is the whole idea of Gravatar. It is your <span style="color:#8aff8a"><strong>single embeddable URL</strong></span> for a profile picture. Any site that wants to show your avatar embeds that one URL, and it always renders your current picture.
 
 The URL is built from your email:
 
@@ -218,7 +218,7 @@ The URL is built from your email:
 https://gravatar.com/{hash(email)}
 ```
 
-Notice the email is not in the URL directly. It is hashed first. That matters for security and PII: the public URL should not leak a raw email address. The hash turns the email into an opaque token.
+Notice the email is not in the URL directly. It is hashed first. That matters for security and PII: the public URL should not leak a raw email address. The <span style="color:#ffff99"><strong>hash</strong></span> turns the email into an opaque token.
 
 ```text
 hash("vallari@gmail.com") = 0eafd172
@@ -268,7 +268,7 @@ The database never stores bytes. It stores the S3 path that points at the bytes.
 
 ### Two Tables
 
-A user has many photos, and exactly one of them is active. That is a one-to-many relationship, which is precisely what a relational database is built for. Two tables:
+A user has many photos, and exactly one of them is active. That is a one-to-many relationship, which is precisely what a <span style="color:#ffff99"><strong>relational database</strong></span> is built for. Two tables:
 
 ```text
 users
@@ -299,9 +299,9 @@ FROM photos JOIN users ON photos.user_id = users.id
 WHERE md5(users.email) = ?       -- ? is the hash from the URL
 ```
 
-This is one of the worst things you can do to a database.
+This is one of the <span style="color:#ff8a8a"><strong>worst things you can do to a database</strong></span>.
 
-`md5(users.email)` is a **function applied to a column**. An index on `email` stores the raw email, not its hash — so the database cannot use it. To find the matching row it has no choice but to:
+`md5(users.email)` is a <span style="color:#ff8a8a"><strong>function applied to a column</strong></span>. An index on `email` stores the raw email, not its hash — so the database cannot use it. To find the matching row it has no choice but to:
 
 ```text
 for every row in users:
@@ -309,7 +309,7 @@ for every row in users:
     compare it with the value from the URL
 ```
 
-That is a **full table scan** — every single row, on every single request. Index or no index, it does not matter: the moment you wrap the column in a function, the index is dead.
+That is a <span style="color:#ff8a8a"><strong>full table scan</strong></span> — every single row, on every single request. Index or no index, it does not matter: the moment you wrap the column in a function, the index is dead.
 
 Memory hook:
 
@@ -317,7 +317,7 @@ Memory hook:
 a function on a column kills the index -> full table scan
 ```
 
-The fix is to store the hash as its own column with a unique index on it:
+The fix is to store the hash as its own column with a <span style="color:#ffff99"><strong>unique index</strong></span> on it:
 
 ```text
 users.hash  ->  UNIQUE INDEX
@@ -362,7 +362,7 @@ read the file from S3
 return the image bytes
 ```
 
-The critical detail is the same one from the start of this post: the handler returns the **image bytes**, not a link to S3. The browser fired one GET and is waiting for bytes to render. If we returned an S3 URL as text, the browser would try to render that text and show a broken image. The API server is a proxy — it fetches the bytes and hands them back.
+The critical detail is the same one from the start of this post: the handler returns the <span style="color:#8aff8a"><strong>image bytes</strong></span>, not a link to S3. The browser fired one GET and is waiting for bytes to render. If we returned an S3 URL as text, the browser would try to render that text and show a broken image. The API server is a proxy — it fetches the bytes and hands them back.
 
 Memory hook:
 
@@ -389,7 +389,7 @@ later requests -> CDN hit  -> served from the edge
 
 **Question: how does a new photo get in?**
 
-In two steps — and the bytes never pass through our API server. We use a **pre-signed URL**, the same pattern as the Instagram post.
+In two steps — and the bytes never pass through our API server. We use a <span style="color:#ff8bd2"><strong>pre-signed URL</strong></span>, the same pattern as the Instagram post.
 
 ```text
 1. owner asks the Photo Upload Service for a new upload
@@ -435,7 +435,7 @@ UPDATE photos SET is_active = FALSE WHERE user_id = 729;     -- clear all
 UPDATE photos SET is_active = TRUE  WHERE id = '8ab';        -- set the new one
 ```
 
-If the process crashes between those two statements, you can end up with zero active photos (the URL returns nothing) or, with a sloppy query, two active photos (which one wins?). This is the classic case for a **transaction**: the two updates must be atomic — both happen, or neither does.
+If the process crashes between those two statements, you can end up with zero active photos (the URL returns nothing) or, with a sloppy query, two active photos (which one wins?). This is the classic case for a <span style="color:#ffff99"><strong>transaction</strong></span>: the two updates must be atomic — both happen, or neither does.
 
 ```sql
 BEGIN;
@@ -462,7 +462,7 @@ API   -> owner: success / error
 
 **Question: the read query joins `photos` to `users` on every single request. Can we avoid the join?**
 
-The join is cheap with the right indexes, but notice the read only ever needs one thing out of `photos`: the `s3_key` of the active row. So **denormalize** — store the active pointer directly on the user row:
+The join is cheap with the right indexes, but notice the read only ever needs one thing out of `photos`: the `s3_key` of the active row. So <span style="color:#ffff99"><strong>denormalize</strong></span> — store the active pointer directly on the user row:
 
 ```text
 users
@@ -518,7 +518,7 @@ We get the speed and scale of a CDN, and a dead-simple URL for the user. The sam
 
 The old photo — until the cache entry expires. The URL did not change, so the CDN happily keeps serving the stale bytes. That breaks the entire promise of "change it once, it updates everywhere."
 
-The CDN gives us an **invalidate API**: hand it a path, and it drops that path's cached copy from every edge. The next request for `/{hash}` is a miss, so the edge **refetches fresh from the origin** — our API server — and caches the new active photo. This is the **explicit invalidation** from the Instagram post:
+The CDN gives us an <span style="color:#93c5fd"><strong>invalidate API</strong></span>: hand it a path, and it drops that path's cached copy from every edge. The next request for `/{hash}` is a miss, so the edge <span style="color:#8aff8a"><strong>refetches fresh from the origin</strong></span> — our API server — and caches the new active photo. This is the <span style="color:#93c5fd"><strong>explicit invalidation</strong></span> from the Instagram post:
 
 ```text
 POST /cdn/invalidate
@@ -527,7 +527,7 @@ POST /cdn/invalidate
 
 The naive wiring is to have the API call that endpoint inline, right after the transaction. But that couples the write path to the CDN being up and fast: if the purge is slow or fails, the user's "set active" request is stuck waiting on it.
 
-So decouple it with a queue. When the active photo changes, the API **publishes an event to Kafka** and returns immediately. A separate **invalidation consumer** reads the event and fires the CDN's invalidate API:
+So decouple it with a queue. When the active photo changes, the API <span style="color:#93c5fd"><strong>publishes an event to Kafka</strong></span> and returns immediately. A separate <span style="color:#93c5fd"><strong>invalidation consumer</strong></span> reads the event and fires the CDN's invalidate API:
 
 ```text
 owner    -> API:   mark photo active
@@ -540,7 +540,7 @@ next read -> CDN miss -> refetch from API -> new photo cached
 
 The consumer can retry on failure without blocking the user, and the write path no longer depends on the CDN being reachable.
 
-Sequencing still matters: **commit the database change before publishing the event.** If you publish first and the commit then fails, the consumer purges a cache that immediately refills with the old active photo, and you are stale again.
+Sequencing still matters: <span style="color:#ffff99"><strong>commit the database change before publishing the event.</strong></span> If you publish first and the commit then fails, the consumer purges a cache that immediately refills with the old active photo, and you are stale again.
 
 Memory hook:
 
@@ -550,11 +550,11 @@ commit first, then publish; let the consumer do the purge
 
 What it costs:
 
-- purges are **not instant** — they propagate across edge locations, so there is a short window where some edges still serve the old photo
-- many CDNs **charge per invalidation** or rate-limit them, which adds up when millions of users change avatars
+- purges are <span style="color:#ff8a8a"><strong>not instant</strong></span> — they propagate across edge locations, so there is a short window where some edges still serve the old photo
+- many CDNs <span style="color:#ff8a8a"><strong>charge per invalidation</strong></span> or rate-limit them, which adds up when millions of users change avatars
 - you now run a queue and a consumer — more moving parts to operate
 
-The cheaper alternative is a short **TTL**: do not purge at all, and let each edge copy expire on its own. It is free and simple, but every change stays stale for up to the TTL. For avatars — rare changes, eventual correctness is fine — a short TTL alone is often enough; the Kafka-driven purge is the upgrade for when "updates everywhere" has to feel immediate.
+The cheaper alternative is a short <span style="color:#93c5fd"><strong>TTL</strong></span>: do not purge at all, and let each edge copy expire on its own. It is free and simple, but every change stays stale for up to the TTL. For avatars — rare changes, eventual correctness is fine — a short TTL alone is often enough; the Kafka-driven purge is the upgrade for when "updates everywhere" has to feel immediate.
 
 ### The Whole Picture
 
@@ -595,13 +595,13 @@ Nothing — if the `UPDATE` filters on `id` alone:
 UPDATE photos SET is_active = TRUE WHERE id = ?;   -- dangerous
 ```
 
-A malicious caller could send a photo id that belongs to another account and flip state they do not own. The fix is to always scope the write to the authenticated user:
+A malicious caller could send a photo id that belongs to another account and flip state they do not own. The fix is to always <span style="color:#ffff99"><strong>scope the write to the authenticated user</strong></span>:
 
 ```sql
 UPDATE photos SET is_active = TRUE WHERE id = ? AND user_id = ?;
 ```
 
-Now a photo id that does not belong to the caller matches **zero rows**, and the update is a harmless no-op. The same rule holds for every write in the system: the object id may come from the request, but the owner id must come from the authenticated session — never from the client.
+Now a photo id that does not belong to the caller matches <span style="color:#ff8bd2"><strong>zero rows</strong></span>, and the update is a harmless no-op. The same rule holds for every write in the system: the object id may come from the request, but the owner id must come from the authenticated session — never from the client.
 
 Memory hook:
 
