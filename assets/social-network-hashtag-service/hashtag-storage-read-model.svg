@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760" role="img" aria-labelledby="title desc">
+  <title id="title">Hashtag Storage Read Model</title>
+  <desc id="desc">Post and popularity events flow through Kafka into Hashtag Service, which maintains a precomputed read model so the hashtag API can return count and top photos in one response.</desc>
+  <defs>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="arrowPink" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="arrowYellow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#8aff8a"/>
+    </marker>
+    <style>
+      .bg{fill:#171717}
+      .rule{stroke:#303030;stroke-width:2}
+      .title{fill:#ffff99;font:34px system-ui,sans-serif;font-weight:850}
+      .sub{fill:#d8d8d8;font:18px system-ui,sans-serif}
+      .label{fill:#f8f8f8;font:20px system-ui,sans-serif;font-weight:800}
+      .small{fill:#d8d8d8;font:16px system-ui,sans-serif}
+      .tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}
+      .code{fill:#f8f8f8;font:15px ui-monospace,SFMono-Regular,Menlo,monospace}
+      .box{fill:#202020;stroke:#f8f8f8;stroke-width:3;rx:10}
+      .boxBlue{fill:#1d2738;stroke:#93c5fd;stroke-width:3;rx:10}
+      .boxPink{fill:#281f2d;stroke:#ff8bd2;stroke-width:3;rx:10}
+      .boxYellow{fill:#292817;stroke:#ffff99;stroke-width:3;rx:10}
+      .boxGreen{fill:#1d2b1d;stroke:#8aff8a;stroke-width:3;rx:10}
+      .store{fill:#222222;stroke:#cfcfcf;stroke-width:3}
+      .pipe{fill:#222222;stroke:#ffff99;stroke-width:4}
+      .blue{fill:#93c5fd}
+      .pink{fill:#ff8bd2}
+      .yellow{fill:#ffff99}
+      .green{fill:#8aff8a}
+      .arrowBlue{stroke:#93c5fd;stroke-width:3;fill:none;marker-end:url(#arrowBlue)}
+      .arrowPink{stroke:#ff8bd2;stroke-width:3;fill:none;marker-end:url(#arrowPink)}
+      .arrowYellow{stroke:#ffff99;stroke-width:3;fill:none;marker-end:url(#arrowYellow)}
+      .arrowGreen{stroke:#8aff8a;stroke-width:3;fill:none;marker-end:url(#arrowGreen)}
+    </style>
+  </defs>
+
+  <rect class="bg" width="1180" height="760"/>
+  <g opacity=".9">
+    <line class="rule" x1="0" y1="90" x2="1180" y2="90"/>
+    <line class="rule" x1="0" y1="180" x2="1180" y2="180"/>
+    <line class="rule" x1="0" y1="270" x2="1180" y2="270"/>
+    <line class="rule" x1="0" y1="360" x2="1180" y2="360"/>
+    <line class="rule" x1="0" y1="450" x2="1180" y2="450"/>
+    <line class="rule" x1="0" y1="540" x2="1180" y2="540"/>
+    <line class="rule" x1="0" y1="630" x2="1180" y2="630"/>
+    <line class="rule" x1="0" y1="720" x2="1180" y2="720"/>
+  </g>
+
+  <text class="title" x="60" y="58">Storage In Hashtag Service = Precomputed Read Model</text>
+  <text class="sub" x="60" y="92">The read path should return everything for one hashtag page in one fast response.</text>
+
+  <text class="label yellow" x="60" y="140">Inputs to the system</text>
+  <rect class="boxBlue" x="65" y="165" width="210" height="72"/>
+  <text class="label blue" x="92" y="205">Post Service</text>
+  <text class="tiny" x="92" y="226">post_published</text>
+
+  <rect class="boxPink" x="65" y="260" width="210" height="72"/>
+  <text class="label pink" x="92" y="300">Popularity Svc</text>
+  <text class="tiny" x="92" y="321">top photos evaluated</text>
+
+  <g transform="translate(385 218)">
+    <rect class="pipe" x="0" y="0" width="260" height="54" rx="27"/>
+    <line x1="36" y1="10" x2="224" y2="10" stroke="#ffff99" stroke-width="2"/>
+    <line x1="36" y1="27" x2="224" y2="27" stroke="#ffff99" stroke-width="2"/>
+    <line x1="36" y1="44" x2="224" y2="44" stroke="#ffff99" stroke-width="2"/>
+  </g>
+  <text class="label yellow" x="465" y="205">Kafka</text>
+  <text class="small" x="408" y="300">glue between services</text>
+
+  <path class="arrowBlue" d="M278 201 L382 236"/>
+  <path class="arrowPink" d="M278 296 L382 253"/>
+
+  <rect class="boxPink" x="760" y="205" width="260" height="86"/>
+  <text class="label pink" x="810" y="242">Hashtag Service</text>
+  <text class="tiny" x="810" y="266">builds read model</text>
+  <path class="arrowYellow" d="M650 245 L755 245"/>
+
+  <text class="label green" x="60" y="405">Key requirement: superfast response</text>
+  <text class="small" x="60" y="437">One request should return the full first page payload.</text>
+
+  <rect class="boxBlue" x="85" y="486" width="210" height="76"/>
+  <text class="label blue" x="126" y="526">Client</text>
+  <text class="tiny" x="117" y="547">GET /hashtag/sunset</text>
+
+  <rect class="boxBlue" x="390" y="486" width="245" height="76"/>
+  <text class="label blue" x="440" y="526">Hashtag API</text>
+  <text class="tiny" x="428" y="547">does minimum work</text>
+
+  <rect class="boxGreen" x="760" y="448" width="300" height="155"/>
+  <text class="label green" x="800" y="486">Read Model</text>
+  <text class="code" x="800" y="520">tag: "sunset"</text>
+  <text class="code" x="800" y="545">total_photos: 1.2M</text>
+  <text class="code" x="800" y="570">top_photos: [cards]</text>
+
+  <path class="arrowBlue" d="M300 524 L385 524"/>
+  <path class="arrowGreen" d="M640 524 L755 524"/>
+  <path class="arrowGreen" d="M910 296 L910 443"/>
+
+  <text class="small green" x="760" y="636">Precompute before the user asks.</text>
+  <text class="small" x="760" y="662">Cache hot tags; DB rebuilds cache.</text>
+
+  <rect class="box" x="65" y="650" width="575" height="68"/>
+  <text class="small yellow" x="92" y="678">Legend</text>
+  <text class="tiny blue" x="92" y="704">blue = read path</text>
+  <text class="tiny pink" x="230" y="704">pink = async processors</text>
+  <text class="tiny green" x="420" y="704">green = stored read model</text>
+</svg>
