@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="980" viewBox="0 0 1280 980" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1140" viewBox="0 0 1280 1140" role="img" aria-labelledby="title desc">
   <title id="title">Overall Hashtag Service Flow</title>
   <desc id="desc">End-to-end hashtag service architecture showing post events, hashtag extraction, repartitioning by hashtag, counter workers, popularity workers, read API, cache, and partitioned database.</desc>
   <defs>
@@ -27,6 +27,11 @@
       .small{fill:#d8d8d8;font:16px system-ui,sans-serif}
       .tiny{fill:#bdbdbd;font:14px system-ui,sans-serif}
       .code{fill:#f8f8f8;font:15px ui-monospace,SFMono-Regular,Menlo,monospace}
+      .badgeW{fill:#8aff8a;stroke:#171717;stroke-width:2;rx:9}
+      .badgeR{fill:#87eaff;stroke:#171717;stroke-width:2;rx:9}
+      .badgeText{fill:#171717;font:12px system-ui,sans-serif;font-weight:900;text-anchor:middle;dominant-baseline:middle}
+      .legendKey{fill:#171717;font:13px system-ui,sans-serif;font-weight:900;text-anchor:middle;dominant-baseline:middle}
+      .legendRow{fill:#d8d8d8;font:15px system-ui,sans-serif}
       .box{fill:#202020;stroke:#f8f8f8;stroke-width:3;rx:10}
       .boxYellow{fill:#292817;stroke:#ffff99;stroke-width:3;rx:10}
       .boxPink{fill:#281f2d;stroke:#ff8bd2;stroke-width:3;rx:10}
@@ -50,7 +55,7 @@
     </style>
   </defs>
 
-  <rect class="bg" width="1280" height="980"/>
+  <rect class="bg" width="1280" height="1140"/>
   <g opacity=".9">
     <line class="rule" x1="0" y1="90" x2="1280" y2="90"/>
     <line class="rule" x1="0" y1="180" x2="1280" y2="180"/>
@@ -62,6 +67,8 @@
     <line class="rule" x1="0" y1="720" x2="1280" y2="720"/>
     <line class="rule" x1="0" y1="810" x2="1280" y2="810"/>
     <line class="rule" x1="0" y1="900" x2="1280" y2="900"/>
+    <line class="rule" x1="0" y1="990" x2="1280" y2="990"/>
+    <line class="rule" x1="0" y1="1080" x2="1280" y2="1080"/>
   </g>
 
   <text class="title" x="50" y="56">Overall Hashtag Service Architecture</text>
@@ -83,11 +90,15 @@
   <text class="tiny" x="378" y="256">topic: post_published</text>
   <text class="tiny green" x="385" y="277">key = user_id</text>
   <path class="arrowYellow" d="M265 211 L340 211"/>
+  <rect class="badgeW" x="288" y="190" width="32" height="22"/>
+  <text class="badgeText" x="304" y="201">1</text>
 
   <rect class="boxPink" x="715" y="162" width="330" height="92"/>
   <text class="label pink" x="770" y="202">Hashtag Extraction</text>
   <text class="tiny" x="770" y="226">extract tags from caption</text>
   <path class="arrowYellow" d="M600 211 L710 211"/>
+  <rect class="badgeW" x="645" y="190" width="32" height="22"/>
+  <text class="badgeText" x="661" y="201">2</text>
 
   <text class="label pink" x="573" y="326">POST_HASHTAG</text>
   <text class="tiny cyan" x="565" y="349">repartitioned by hashtag</text>
@@ -99,16 +110,22 @@
   </g>
   <path class="arrowPink" d="M880 260 L880 310 L850 383"/>
   <text class="tiny pink" x="900" y="312">emit one event per tag</text>
+  <rect class="badgeW" x="862" y="300" width="32" height="22"/>
+  <text class="badgeText" x="878" y="311">3</text>
 
   <rect class="boxPurple" x="105" y="335" width="230" height="76"/>
   <text class="label purple" x="142" y="374">Popularity Svc</text>
   <text class="tiny" x="142" y="396">top photos per tag</text>
   <path class="arrowPurple" d="M340 373 L480 373"/>
+  <rect class="badgeW" x="375" y="352" width="32" height="22"/>
+  <text class="badgeText" x="391" y="363">6</text>
 
   <rect class="boxPurple" x="520" y="455" width="250" height="72"/>
   <text class="label purple" x="565" y="494">Counting Servers</text>
   <text class="tiny" x="565" y="515">batch per hashtag</text>
   <path class="arrowPurple" d="M500 410 L500 450 L540 450"/>
+  <rect class="badgeW" x="485" y="423" width="32" height="22"/>
+  <text class="badgeText" x="501" y="434">4</text>
 
   <g transform="translate(1035 360)">
     <ellipse class="db" cx="58" cy="18" rx="58" ry="18"/>
@@ -118,6 +135,8 @@
   <text class="label" x="1002" y="488">Partitioned DB</text>
   <path class="arrowYellow" d="M775 495 L1015 405"/>
   <text class="tiny yellow" x="810" y="465">batch counter deltas</text>
+  <rect class="badgeW" x="880" y="440" width="32" height="22"/>
+  <text class="badgeText" x="896" y="451">5</text>
 
   <rect class="lane" x="40" y="535" width="1200" height="235"/>
   <text class="label cyan" x="60" y="565">Read path: one request returns a precomputed page</text>
@@ -135,8 +154,14 @@
   <text class="tiny" x="635" y="671">does minimum work</text>
 
   <path class="arrowCyan" d="M220 651 L325 651"/>
+  <rect class="badgeR" x="263" y="630" width="32" height="22"/>
+  <text class="badgeText" x="279" y="641">1</text>
   <path class="arrowCyan" d="M485 651 L595 651"/>
+  <rect class="badgeR" x="528" y="630" width="32" height="22"/>
+  <text class="badgeText" x="544" y="641">2</text>
   <path class="arrowCyan" d="M835 651 L1025 482"/>
+  <rect class="badgeR" x="895" y="565" width="32" height="22"/>
+  <text class="badgeText" x="911" y="576">4</text>
 
   <g transform="translate(970 610)">
     <ellipse class="cache" cx="52" cy="16" rx="52" ry="16"/>
@@ -145,20 +170,57 @@
   </g>
   <text class="label purple" x="965" y="732">Cache</text>
   <path class="arrowPurple" d="M835 675 L965 655"/>
+  <rect class="badgeR" x="890" y="652" width="32" height="22"/>
+  <text class="badgeText" x="906" y="663">3</text>
   <path class="arrowPurple" d="M1022 610 L1022 505"/>
+  <rect class="badgeR" x="690" y="700" width="32" height="22"/>
+  <text class="badgeText" x="706" y="711">5</text>
 
-  <rect class="lane" x="40" y="800" width="1200" height="135"/>
-  <text class="label yellow" x="65" y="835">Key Takeaways</text>
-  <text class="small" x="105" y="870">1. Kafka is the glue between services, not the final database.</text>
-  <text class="small" x="105" y="900">2. Hashtag extraction is an adapter: post events become per-hashtag events.</text>
-  <text class="small" x="680" y="870">3. Counting is batched and partitioned by hashtag.</text>
-  <text class="small" x="680" y="900">4. Reads are optimized separately with cache + precomputed read model.</text>
+  <rect class="lane" x="40" y="800" width="1200" height="280"/>
+  <text class="label yellow" x="65" y="835">Flow Legend</text>
 
-  <rect class="box" x="70" y="940" width="1080" height="28"/>
-  <text class="tiny yellow" x="95" y="959">Legend:</text>
-  <text class="tiny green" x="155" y="959">green = write path</text>
-  <text class="tiny cyan" x="305" y="959">cyan = read path</text>
-  <text class="tiny purple" x="455" y="959">purple = workers/cache</text>
-  <text class="tiny pink" x="650" y="959">pink = hashtag extraction/repartitioning</text>
-  <text class="tiny yellow" x="925" y="959">yellow = Kafka / events</text>
+  <text class="small green" x="85" y="870">Write flow</text>
+  <rect class="badgeW" x="85" y="892" width="32" height="22"/>
+  <text class="legendKey" x="101" y="903">1</text>
+  <text class="legendRow" x="130" y="908">Post Service publishes a post event to Kafka.</text>
+  <rect class="badgeW" x="85" y="922" width="32" height="22"/>
+  <text class="legendKey" x="101" y="933">2</text>
+  <text class="legendRow" x="130" y="938">Hashtag Extraction consumes the post event.</text>
+  <rect class="badgeW" x="85" y="952" width="32" height="22"/>
+  <text class="legendKey" x="101" y="963">3</text>
+  <text class="legendRow" x="130" y="968">It extracts tags and emits one event per hashtag.</text>
+  <rect class="badgeW" x="85" y="982" width="32" height="22"/>
+  <text class="legendKey" x="101" y="993">4</text>
+  <text class="legendRow" x="130" y="998">POST_HASHTAG repartitions work by hashtag.</text>
+  <rect class="badgeW" x="85" y="1012" width="32" height="22"/>
+  <text class="legendKey" x="101" y="1023">5</text>
+  <text class="legendRow" x="130" y="1028">Counting Servers batch counter deltas into DB.</text>
+  <rect class="badgeW" x="85" y="1042" width="32" height="22"/>
+  <text class="legendKey" x="101" y="1053">6</text>
+  <text class="legendRow" x="130" y="1058">Popularity Svc can publish top-photo updates too.</text>
+
+  <text class="small cyan" x="660" y="870">Read flow</text>
+  <rect class="badgeR" x="660" y="892" width="32" height="22"/>
+  <text class="legendKey" x="676" y="903">1</text>
+  <text class="legendRow" x="705" y="908">Client requests GET /hashtag/&lt;tag&gt;.</text>
+  <rect class="badgeR" x="660" y="922" width="32" height="22"/>
+  <text class="legendKey" x="676" y="933">2</text>
+  <text class="legendRow" x="705" y="938">CDN forwards a miss to Hashtag API.</text>
+  <rect class="badgeR" x="660" y="952" width="32" height="22"/>
+  <text class="legendKey" x="676" y="963">3</text>
+  <text class="legendRow" x="705" y="968">Hashtag API reads the hot page from cache.</text>
+  <rect class="badgeR" x="660" y="982" width="32" height="22"/>
+  <text class="legendKey" x="676" y="993">4</text>
+  <text class="legendRow" x="705" y="998">If cache misses, API reads the partitioned DB.</text>
+  <rect class="badgeR" x="660" y="1012" width="32" height="22"/>
+  <text class="legendKey" x="676" y="1023">5</text>
+  <text class="legendRow" x="705" y="1028">API returns one precomputed page to the client.</text>
+
+  <rect class="box" x="70" y="1095" width="1080" height="28"/>
+  <text class="tiny yellow" x="95" y="1114">Color key:</text>
+  <text class="tiny green" x="175" y="1114">green = write markers</text>
+  <text class="tiny cyan" x="340" y="1114">cyan = read markers</text>
+  <text class="tiny purple" x="500" y="1114">purple = workers/cache</text>
+  <text class="tiny pink" x="695" y="1114">pink = hashtag extraction/repartitioning</text>
+  <text class="tiny yellow" x="970" y="1114">yellow = Kafka / events</text>
 </svg>
