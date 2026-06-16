@@ -119,6 +119,33 @@ The one trade you accept is volatility: because the MEMORY engine holds the tabl
 
 ---
 
+## Section 6 — Writing Your Own Storage Engine (a Quick Tour of the API)
+
+**Question: we keep saying the storage engine is "just an API anyone can implement." If you actually sat down to write one, what does that API look like?**
+
+You'd implement one C++ class. MySQL ships a worked template — `ha_example` in the source tree — and the canonical walkthrough is Chapter 7, *The Storage Engine Interface*, of *Understanding MySQL Internals*. At a high level there are two pieces:
+
+1. A <span style="color:#93c5fd"><strong>plugin declaration</strong></span> that fills in a `handlerton` struct — the engine's entry point. Its main job is a `create()` factory that hands back an instance of your handler.
+2. A subclass of the <span style="color:#ffff99"><strong>`handler`</strong></span> class, where you implement the methods MySQL calls to actually move rows and pages. The optimizer and executor above never know how you store anything — they only call these methods.
+
+The core handler methods are a small, readable surface:
+
+| Method | What MySQL calls it for |
+| --- | --- |
+| `create()` | build a new table's on-disk (or in-memory) structures |
+| `open()` / `close()` | attach to / release a table before and after use |
+| `write_row()` | <span style="color:#ff8bd2"><strong>insert</strong></span> one row |
+| `update_row()` / `delete_row()` | <span style="color:#ff8bd2"><strong>modify or remove</strong></span> one row |
+| `rnd_init()` + `rnd_next()` | start a full-table <span style="color:#8aff8a"><strong>scan</strong></span> and read the next row, one at a time |
+| `index_read()` / `index_next()` | <span style="color:#8aff8a"><strong>look up</strong></span> rows by key — only if your engine has indexes |
+| `info()` | report stats (row counts, cardinality) back to the <span style="color:#93c5fd"><strong>optimizer</strong></span> |
+
+That last one closes the loop with Section 3: the `info()` numbers your engine returns are exactly the cardinality the optimizer uses to choose a join order. Implement that handful of methods, compile to a `.so`, and MySQL will run real SQL against whatever you store underneath — a B+ tree, a hashmap, a CSV file, a remote service. The MEMORY and CSV engines are just two points in that space; the API is the same for all of them.
+
+> **Memory hook:** *a storage engine is one `handler` subclass — `write_row`, `rnd_next`, `index_read`, `info` — so "MySQL on top of anything" is really just implementing that short list.*
+
+---
+
 ## Where this leaves us
 
 We started wanting a cache and asking why we'd hand-build a hashmap when MySQL already has every feature we wanted. The block was a single fact: MySQL writes to <span style="color:#ffff99"><strong>disk</strong></span>. Tuning the <span style="color:#8aff8a"><strong>buffer pool</strong></span> only cached reads, which told us the disk write itself was owned by a deeper layer.

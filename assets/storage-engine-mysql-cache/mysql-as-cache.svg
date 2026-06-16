@@ -31,7 +31,7 @@
     <path d="M834,212 A46,15 0 0 0 926,212" fill="none"/>
     <ellipse cx="880" cy="166" rx="46" ry="15" fill="none"/>
   </g>
-  <text x="880" y="238" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MySQL</text>
+  <text x="880" y="256" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MySQL</text>
 
   <g font-family="sans-serif" font-size="15" fill="#cbd5e1">
     <text x="644" y="280">&#8226; SQL: point lookups, ranges, JOINs</text>

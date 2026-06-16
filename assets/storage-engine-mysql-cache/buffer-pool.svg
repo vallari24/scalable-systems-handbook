@@ -55,10 +55,9 @@
   <text x="900" y="372" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">disk</text>
   <text x="900" y="392" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">the durable copy of every page</text>
 
-  <!-- write path still goes to disk (pink) -->
-  <line x1="626" y1="430" x2="900" y2="430" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#bp-p)"/>
-  <line x1="900" y1="430" x2="900" y2="346" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#bp-p)"/>
-  <text x="447" y="424" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">every write still flushes to disk &#8594;</text>
+  <!-- write path: flushes from MySQL out to disk (pink) -->
+  <line x1="626" y1="320" x2="836" y2="320" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#bp-p)"/>
+  <text x="731" y="308" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">every write flushes to disk &#8594;</text>
 
   <!-- read miss to disk -->
   <line x1="664" y1="285" x2="840" y2="262" stroke="#9aa6b2" stroke-width="1.8" stroke-dasharray="5 5" marker-end="url(#bp-w)"/>
