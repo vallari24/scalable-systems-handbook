@@ -1,0 +1,95 @@
+<svg width="1280" height="860" viewBox="0 0 1280 860" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ro-p" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="ro-b" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="ro-gr" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#9aa6b2"/>
+    </marker>
+    <marker id="ro-g" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="860" fill="#111317"/>
+
+  <text x="640" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Who Actually Triggers the Swap: The Rollout Sequence</text>
+  <text x="640" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a <tspan fill="#ff8bd2" font-weight="bold">throwaway merge worker</tspan> publishes the new version, then drives the fleet to reboot onto it &#8212; each server rebuilds its index on boot</text>
+
+  <!-- ===== LANE HEADERS ===== -->
+  <rect x="90" y="104" width="260" height="74" rx="10" fill="#241622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="220" y="138" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">Throwaway merge worker</text>
+  <text x="220" y="162" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">you manage your own infra</text>
+
+  <rect x="520" y="104" width="240" height="74" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="640" y="138" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">S3</text>
+  <text x="640" y="162" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">static store: meta.json + versions</text>
+
+  <rect x="930" y="104" width="260" height="74" rx="10" fill="#16191e" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="1060" y="138" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">API server fleet</text>
+  <text x="1060" y="162" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">stateless, index held in RAM</text>
+
+  <!-- ===== LIFELINES ===== -->
+  <line x1="220" y1="178" x2="220" y2="752" stroke="#5b6470" stroke-width="1.6" stroke-dasharray="5 6"/>
+  <line x1="640" y1="178" x2="640" y2="752" stroke="#5b6470" stroke-width="1.6" stroke-dasharray="5 6"/>
+  <line x1="1060" y1="178" x2="1060" y2="752" stroke="#5b6470" stroke-width="1.6" stroke-dasharray="5 6"/>
+
+  <!-- ===== STEP 1: upload 002/ ===== -->
+  <text x="430" y="222" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14.5" font-weight="bold">upload 002/index.dat + 002/data.dat</text>
+  <line x1="236" y1="240" x2="626" y2="240" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#ro-p)"/>
+  <circle cx="220" cy="240" r="14" fill="#241622" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="220" y="245" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">1</text>
+
+  <!-- ===== STEP 2: flip meta.json ===== -->
+  <text x="430" y="294" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">flip meta.json: 001 &#8594; 002 (one atomic write)</text>
+  <line x1="236" y1="312" x2="626" y2="312" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ro-b)"/>
+  <circle cx="220" cy="312" r="14" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="220" y="317" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">2</text>
+
+  <!-- ===== STEP 3: trigger reboot (worker -> API, long) ===== -->
+  <text x="640" y="372" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14.5" font-weight="bold">trigger a reboot of the fleet  &#8212;  &#8220;new version is live&#8221;</text>
+  <line x1="236" y1="390" x2="1046" y2="390" stroke="#9aa6b2" stroke-width="2.5" marker-end="url(#ro-gr)"/>
+  <circle cx="220" cy="390" r="14" fill="#1c1f25" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="220" y="395" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14" font-weight="bold">3</text>
+
+  <!-- worker done note -->
+  <text x="220" y="430" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5" font-style="italic">job done &#8212; worker</text>
+  <text x="220" y="448" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5" font-style="italic">is thrown away</text>
+
+  <!-- API activation bar (boot) -->
+  <rect x="1050" y="420" width="20" height="300" rx="4" fill="#16191e" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="1140" y="442" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">booting</text>
+
+  <!-- ===== STEP 4: API reads meta.json ===== -->
+  <text x="850" y="478" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">on boot: read meta.json (static file)</text>
+  <line x1="1044" y1="496" x2="654" y2="496" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ro-b)"/>
+  <circle cx="1060" cy="496" r="14" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1060" y="501" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">4</text>
+
+  <!-- ===== STEP 5: meta.json response ===== -->
+  <text x="850" y="550" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">&#8594; current version = 002/  (the new path)</text>
+  <line x1="654" y1="568" x2="1044" y2="568" stroke="#93c5fd" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#ro-b)"/>
+  <circle cx="640" cy="568" r="14" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="640" y="573" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">5</text>
+
+  <!-- ===== STEP 6: load index + rebuild cache ===== -->
+  <text x="850" y="622" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14.5" font-weight="bold">load 002/index.dat &#8594; rebuild in-memory cache</text>
+  <line x1="1044" y1="640" x2="654" y2="640" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ro-g)"/>
+  <circle cx="1060" cy="640" r="14" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="1060" y="645" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">6</text>
+
+  <!-- ===== STEP 7: serve from 002 (self) ===== -->
+  <path d="M1070,694 L1150,694 L1150,716 L1072,716" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ro-g)"/>
+  <circle cx="1060" cy="700" r="14" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="1060" y="705" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">7</text>
+  <text x="1156" y="700" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">serve</text>
+  <text x="1156" y="718" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">from 002/</text>
+
+  <!-- ===== BOTTOM NOTE ===== -->
+  <rect x="90" y="776" width="1100" height="66" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="112" y="806" fill="#8aff8a" font-family="sans-serif" font-size="15.5" font-weight="bold">Nothing is overwritten, and no server is patched live.</text>
+  <text x="112" y="830" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Old servers drain on 001/; rebooted ones come up on 002/ by re-reading meta.json &#8212; the index in RAM is always rebuilt from the version the pointer names.</text>
+</svg>
