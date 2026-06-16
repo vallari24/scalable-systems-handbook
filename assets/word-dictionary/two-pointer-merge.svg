@@ -1,0 +1,93 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="tp-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="tp-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="#111317"/>
+
+  <text x="640" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Merging Two Sorted Lists With Two Pointers</text>
+  <text x="640" y="82" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">read each list <tspan fill="#93c5fd" font-weight="bold">line by line</tspan> &#8212; neither is ever fully loaded; one linear pass builds the merged output</text>
+
+  <!-- ===== INPUT LIST A ===== -->
+  <text x="130" y="128" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">List A</text>
+  <text x="130" y="148" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">sorted</text>
+  <g font-family="monospace" font-size="18" font-weight="bold" fill="#cbd5e1">
+    <rect x="92" y="160" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="130" y="187" text-anchor="middle">1</text>
+    <rect x="92" y="206" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="130" y="233" text-anchor="middle">3</text>
+    <rect x="92" y="252" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="130" y="279" text-anchor="middle">5</text>
+    <rect x="92" y="298" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="130" y="325" text-anchor="middle">7</text>
+    <rect x="92" y="344" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="130" y="371" text-anchor="middle">9</text>
+  </g>
+  <text x="130" y="410" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="14" font-weight="bold">cursor i</text>
+
+  <!-- ===== INPUT LIST B ===== -->
+  <text x="250" y="128" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">List B</text>
+  <text x="250" y="148" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">sorted</text>
+  <g font-family="monospace" font-size="18" font-weight="bold" fill="#cbd5e1">
+    <rect x="212" y="160" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="250" y="187" text-anchor="middle">2</text>
+    <rect x="212" y="206" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="250" y="233" text-anchor="middle">4</text>
+    <rect x="212" y="252" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="250" y="279" text-anchor="middle">6</text>
+    <rect x="212" y="298" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="250" y="325" text-anchor="middle">8</text>
+    <rect x="212" y="344" width="76" height="40" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/><text x="250" y="371" text-anchor="middle">10</text>
+  </g>
+  <text x="250" y="410" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="14" font-weight="bold">cursor j</text>
+
+  <!-- ===== TRACE TABLE ===== -->
+  <rect x="356" y="120" width="470" height="496" rx="14" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="380" y="152" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">Compare cursors &#8594; emit the smaller &#8594; advance it</text>
+
+  <g font-family="monospace" font-size="16">
+    <text x="380" y="194" fill="#cbd5e1">1 vs 2  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">1</tspan></text>
+    <text x="700" y="194" fill="#9aa6b2" font-size="13.5">advance i</text>
+    <text x="380" y="232" fill="#cbd5e1">3 vs 2  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">2</tspan></text>
+    <text x="700" y="232" fill="#9aa6b2" font-size="13.5">advance j</text>
+    <text x="380" y="270" fill="#cbd5e1">3 vs 4  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">3</tspan></text>
+    <text x="700" y="270" fill="#9aa6b2" font-size="13.5">advance i</text>
+    <text x="380" y="308" fill="#cbd5e1">5 vs 4  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">4</tspan></text>
+    <text x="700" y="308" fill="#9aa6b2" font-size="13.5">advance j</text>
+    <text x="380" y="346" fill="#cbd5e1">5 vs 6  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">5</tspan></text>
+    <text x="700" y="346" fill="#9aa6b2" font-size="13.5">advance i</text>
+    <text x="380" y="384" fill="#cbd5e1">7 vs 6  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">6</tspan></text>
+    <text x="700" y="384" fill="#9aa6b2" font-size="13.5">advance j</text>
+    <text x="380" y="422" fill="#cbd5e1">7 vs 8  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">7</tspan></text>
+    <text x="700" y="422" fill="#9aa6b2" font-size="13.5">advance i</text>
+    <text x="380" y="460" fill="#cbd5e1">9 vs 8  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">8</tspan></text>
+    <text x="700" y="460" fill="#9aa6b2" font-size="13.5">advance j</text>
+    <text x="380" y="498" fill="#cbd5e1">9 vs 10 &#8594; emit <tspan fill="#8aff8a" font-weight="bold">9</tspan></text>
+    <text x="700" y="498" fill="#9aa6b2" font-size="13.5">advance i &#8212; A done</text>
+    <text x="380" y="536" fill="#cbd5e1">drain B  &#8594; emit <tspan fill="#8aff8a" font-weight="bold">10</tspan></text>
+    <text x="700" y="536" fill="#9aa6b2" font-size="13.5">tail of B</text>
+  </g>
+  <line x1="380" y1="556" x2="802" y2="556" stroke="#2b3340" stroke-width="1.5"/>
+  <text x="380" y="586" fill="#cbd5e1" font-family="sans-serif" font-size="14">when one list runs out, copy the rest of the other &#8212; it's already sorted.</text>
+
+  <!-- arrow to output -->
+  <line x1="826" y1="368" x2="876" y2="368" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#tp-g)"/>
+
+  <!-- ===== OUTPUT ===== -->
+  <text x="1010" y="128" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">Merged: one sorted list</text>
+  <rect x="896" y="148" width="228" height="468" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <g font-family="monospace" font-size="18" font-weight="bold" fill="#8aff8a">
+    <text x="1010" y="186" text-anchor="middle">1</text>
+    <text x="1010" y="228" text-anchor="middle">2</text>
+    <text x="1010" y="270" text-anchor="middle">3</text>
+    <text x="1010" y="312" text-anchor="middle">4</text>
+    <text x="1010" y="354" text-anchor="middle">5</text>
+    <text x="1010" y="396" text-anchor="middle">6</text>
+    <text x="1010" y="438" text-anchor="middle">7</text>
+    <text x="1010" y="480" text-anchor="middle">8</text>
+    <text x="1010" y="522" text-anchor="middle">9</text>
+    <text x="1010" y="564" text-anchor="middle">10</text>
+  </g>
+  <text x="1010" y="600" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">built top to bottom</text>
+
+  <!-- bottom note -->
+  <rect x="50" y="636" width="1180" height="64" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="74" y="664" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">O(n), constant memory, one streaming pass</text>
+  <text x="74" y="688" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">No list is ever fully in RAM &#8212; you hold only the two current lines. This is the exact mechanic we use to fold the changelog into the 1 TB dictionary.</text>
+</svg>

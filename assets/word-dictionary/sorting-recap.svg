@@ -1,0 +1,137 @@
+<svg width="1280" height="860" viewBox="0 0 1280 860" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="sr-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="sr-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="860" fill="#111317"/>
+
+  <text x="640" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Sorting, Refreshed: Three Algorithms, and When to Reach for Each</text>
+  <text x="640" y="82" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">our constraint rules most of them out: we <tspan fill="#ff8a8a" font-weight="bold">can't hold 1 TB in RAM</tspan> and <tspan fill="#ff8a8a" font-weight="bold">can't insert into the middle of a file</tspan></text>
+
+  <!-- ===================== INSERTION SORT ===================== -->
+  <rect x="50" y="112" width="376" height="540" rx="14" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="238" y="150" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Insertion sort</text>
+  <text x="238" y="174" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">take next item, slot it into the sorted part</text>
+
+  <!-- sorted prefix -->
+  <g font-family="monospace" font-size="18" font-weight="bold">
+    <rect x="84" y="200" width="46" height="46" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+    <text x="107" y="231" text-anchor="middle" fill="#8aff8a">1</text>
+    <rect x="134" y="200" width="46" height="46" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+    <text x="157" y="231" text-anchor="middle" fill="#8aff8a">3</text>
+    <rect x="184" y="200" width="46" height="46" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+    <text x="207" y="231" text-anchor="middle" fill="#8aff8a">5</text>
+    <rect x="234" y="200" width="46" height="46" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+    <text x="257" y="231" text-anchor="middle" fill="#8aff8a">7</text>
+    <!-- the key to insert -->
+    <rect x="320" y="200" width="46" height="46" rx="6" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+    <text x="343" y="231" text-anchor="middle" fill="#ffff99">4</text>
+  </g>
+  <text x="343" y="266" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12.5">key</text>
+
+  <!-- shift arrow -->
+  <path d="M300,224 C290,300 200,300 165,278" fill="none" stroke="#ff8a8a" stroke-width="2.2" marker-end="url(#sr-w)" stroke-dasharray="5 4"/>
+  <text x="238" y="320" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13.5" font-weight="bold">slot 4 between 3 and 5 &#8594;</text>
+  <text x="238" y="340" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">shift 5 and 7 one place right</text>
+
+  <line x1="84" y1="364" x2="392" y2="364" stroke="#2b3340" stroke-width="1.5"/>
+  <text x="74" y="392" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Good when</text>
+  <text x="74" y="414" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">data is small or already nearly</text>
+  <text x="74" y="434" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">sorted &#8212; O(n) on sorted input.</text>
+
+  <text x="74" y="470" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">Why not here</text>
+  <text x="74" y="492" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; O(n&#178;) in general.</text>
+  <text x="74" y="514" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; &#8220;Insert into the middle&#8221; means</text>
+  <text x="86" y="534" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">rewriting every byte after it &#8212;</text>
+  <text x="86" y="554" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">impossible on a 1 TB disk file.</text>
+  <text x="74" y="582" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; You can't insert in the middle</text>
+  <text x="86" y="602" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">of the dictionary in place.</text>
+
+  <!-- ===================== MERGE SORT ===================== -->
+  <rect x="452" y="112" width="376" height="540" rx="14" fill="#16191e" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="640" y="150" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Merge sort</text>
+  <text x="640" y="174" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">split in half, sort each, merge back</text>
+
+  <!-- top -->
+  <g font-family="monospace" font-size="15" font-weight="bold" fill="#cbd5e1">
+    <rect x="556" y="196" width="168" height="34" rx="6" fill="#1c1f25" stroke="#5b6470" stroke-width="2"/>
+    <text x="640" y="219" text-anchor="middle">3  1  4  2</text>
+  </g>
+  <line x1="600" y1="230" x2="556" y2="258" stroke="#9aa6b2" stroke-width="2" marker-end="url(#sr-w)"/>
+  <line x1="680" y1="230" x2="724" y2="258" stroke="#9aa6b2" stroke-width="2" marker-end="url(#sr-w)"/>
+  <!-- halves -->
+  <g font-family="monospace" font-size="15" font-weight="bold" fill="#cbd5e1">
+    <rect x="496" y="262" width="92" height="34" rx="6" fill="#1c1f25" stroke="#5b6470" stroke-width="2"/>
+    <text x="542" y="285" text-anchor="middle">3  1</text>
+    <rect x="692" y="262" width="92" height="34" rx="6" fill="#1c1f25" stroke="#5b6470" stroke-width="2"/>
+    <text x="738" y="285" text-anchor="middle">4  2</text>
+  </g>
+  <!-- merge back -->
+  <line x1="542" y1="296" x2="600" y2="330" stroke="#8aff8a" stroke-width="2" marker-end="url(#sr-g)"/>
+  <line x1="738" y1="296" x2="680" y2="330" stroke="#8aff8a" stroke-width="2" marker-end="url(#sr-g)"/>
+  <g font-family="monospace" font-size="15" font-weight="bold">
+    <rect x="556" y="334" width="168" height="34" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+    <text x="640" y="357" text-anchor="middle" fill="#8aff8a">1  2  3  4</text>
+  </g>
+  <text x="640" y="392" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">the merge step is the gold &#8595;</text>
+
+  <line x1="486" y1="408" x2="794" y2="408" stroke="#2b3340" stroke-width="1.5"/>
+  <text x="476" y="436" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Good when</text>
+  <text x="476" y="458" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">O(n log n), stable, and works</text>
+  <text x="476" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">on data too big for RAM (external</text>
+  <text x="476" y="498" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">sort) &#8212; you stream, never random-</text>
+  <text x="476" y="518" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">access.</text>
+
+  <text x="476" y="554" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">The key insight</text>
+  <text x="476" y="576" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">the naive version still buffers in</text>
+  <text x="476" y="596" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">memory &#8212; but its <tspan fill="#8aff8a" font-weight="bold">merge step</tspan> needs</text>
+  <text x="476" y="616" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">only two cursors. If inputs are</text>
+  <text x="476" y="636" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">already sorted, that step is all we need.</text>
+
+  <!-- ===================== QUICK SORT ===================== -->
+  <rect x="854" y="112" width="376" height="540" rx="14" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="1042" y="150" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Quick sort</text>
+  <text x="1042" y="174" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">pick a pivot, partition around it</text>
+
+  <g font-family="monospace" font-size="15" font-weight="bold" fill="#cbd5e1">
+    <rect x="958" y="196" width="168" height="34" rx="6" fill="#1c1f25" stroke="#5b6470" stroke-width="2"/>
+    <text x="1042" y="219" text-anchor="middle">1  4  <tspan fill="#ffff99">3</tspan>  2</text>
+  </g>
+  <text x="1042" y="250" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12.5">pivot = 3</text>
+  <line x1="1000" y1="258" x2="958" y2="286" stroke="#9aa6b2" stroke-width="2" marker-end="url(#sr-w)"/>
+  <line x1="1084" y1="258" x2="1126" y2="286" stroke="#9aa6b2" stroke-width="2" marker-end="url(#sr-w)"/>
+  <g font-family="monospace" font-size="15" font-weight="bold">
+    <rect x="906" y="290" width="92" height="34" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+    <text x="952" y="313" text-anchor="middle" fill="#8aff8a">1  2</text>
+    <text x="1042" y="313" text-anchor="middle" fill="#ffff99">3</text>
+    <rect x="1086" y="290" width="92" height="34" rx="6" fill="#1d1216" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="1132" y="313" text-anchor="middle" fill="#ff8a8a">4</text>
+  </g>
+  <text x="952" y="346" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">&#60; pivot</text>
+  <text x="1132" y="346" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12">&#62; pivot</text>
+  <text x="1042" y="380" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">recurse on each side, in place</text>
+
+  <line x1="888" y1="408" x2="1196" y2="408" stroke="#2b3340" stroke-width="1.5"/>
+  <text x="878" y="436" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Good when</text>
+  <text x="878" y="458" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">a general in-memory array &#8212; O(n log n)</text>
+  <text x="878" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">average, in-place, cache-friendly,</text>
+  <text x="878" y="498" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">the usual default sort.</text>
+
+  <text x="878" y="534" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">Why not here</text>
+  <text x="878" y="556" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; needs random access &amp; the whole</text>
+  <text x="890" y="576" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">array in memory &#8212; we have neither.</text>
+  <text x="878" y="600" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; O(n&#178;) worst case on bad pivots.</text>
+  <text x="878" y="624" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; pointless: our data is already sorted.</text>
+
+  <!-- ===================== PUNCHLINE ===================== -->
+  <rect x="50" y="676" width="1180" height="158" rx="14" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="76" y="714" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Our case sidesteps sorting entirely</text>
+  <text x="76" y="748" fill="#cbd5e1" font-family="sans-serif" font-size="16">Both inputs &#8212; the dictionary and the changelog &#8212; are <tspan fill="#8aff8a" font-weight="bold">already sorted</tspan>. So we never sort; we run only merge sort's <tspan fill="#8aff8a" font-weight="bold">merge step</tspan>:</text>
+  <text x="76" y="776" fill="#cbd5e1" font-family="sans-serif" font-size="16">walk both with <tspan fill="#93c5fd" font-weight="bold">two pointers</tspan>, line by line, emitting the smaller each time &#8212; <tspan fill="#8aff8a" font-weight="bold">O(n)</tspan>, one streaming pass, constant memory.</text>
+  <text x="76" y="810" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">This is exactly why databases are obsessed with keeping data sorted: sorted inputs turn expensive work into a single linear merge.</text>
+</svg>

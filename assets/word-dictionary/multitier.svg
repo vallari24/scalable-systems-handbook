@@ -1,0 +1,74 @@
+<svg width="1200" height="580" viewBox="0 0 1200 580" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="mt-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="mt-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="mt-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="580" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Where This Shows Up: Multi-Tiered Storage</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">keep hot, recent data in a database; age cold, historical data onto cheap object storage &#8212; without losing the ability to query it</text>
+
+  <!-- query -->
+  <circle cx="92" cy="262" r="13" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="275" x2="92" y2="300" stroke="#ffffff" stroke-width="2"/>
+  <line x1="74" y1="287" x2="110" y2="287" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="300" x2="81" y2="318" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="300" x2="103" y2="318" stroke="#ffffff" stroke-width="2"/>
+  <text x="92" y="346" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">query orders</text>
+
+  <line x1="118" y1="278" x2="196" y2="278" stroke="#ffffff" stroke-width="2.5" marker-end="url(#mt-w)"/>
+
+  <!-- router -->
+  <rect x="200" y="246" width="170" height="64" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="285" y="278" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">query router</text>
+  <text x="285" y="298" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">recent vs. historical</text>
+
+  <!-- MySQL hot tier -->
+  <g stroke="#8aff8a" stroke-width="2.5" fill="#0f2417">
+    <ellipse cx="640" cy="168" rx="62" ry="18"/>
+    <rect x="578" y="168" width="124" height="86" fill="#0f2417" stroke="none"/>
+    <path d="M578,168 L578,254" fill="none"/><path d="M702,168 L702,254" fill="none"/>
+    <path d="M578,254 A62,18 0 0 0 702,254" fill="none"/>
+    <ellipse cx="640" cy="168" rx="62" ry="18" fill="none"/>
+  </g>
+  <text x="640" y="216" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">MySQL</text>
+  <text x="640" y="288" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">latest orders &#183; hot</text>
+  <text x="640" y="310" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">fast, fully queryable</text>
+
+  <line x1="370" y1="262" x2="572" y2="210" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#mt-g)"/>
+  <text x="470" y="222" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">recent</text>
+
+  <!-- S3 cold tier -->
+  <rect x="540" y="356" width="320" height="150" rx="18" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="700" y="392" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">S3 &#183; historical orders &#183; cold</text>
+  <text x="700" y="422" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">cheap object storage, archived as files</text>
+  <rect x="566" y="440" width="268" height="44" rx="8" fill="#1d1d12" stroke="#93c5fd" stroke-width="2"/>
+  <text x="700" y="468" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Athena: run SQL directly over the files</text>
+
+  <line x1="370" y1="294" x2="536" y2="392" stroke="#ffff99" stroke-width="2.5" marker-end="url(#mt-y)"/>
+  <text x="452" y="360" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">historical / archived</text>
+
+  <!-- right note -->
+  <rect x="900" y="150" width="240" height="356" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="924" y="186" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">Same idea</text>
+  <text x="924" y="220" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">The dictionary taught us</text>
+  <text x="924" y="242" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">to put bulk data as</text>
+  <text x="924" y="264" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">files on S3 and keep</text>
+  <text x="924" y="286" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">an index to query it.</text>
+  <text x="924" y="324" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Real systems do the</text>
+  <text x="924" y="346" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">same with cold data:</text>
+  <text x="924" y="368" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">move it to S3 to save</text>
+  <text x="924" y="390" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">cost &#8212; but keep it</text>
+  <text x="924" y="412" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">queryable via Athena,</text>
+  <text x="924" y="434" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">partitions, and a</text>
+  <text x="924" y="456" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">metastore.</text>
+  <text x="924" y="490" fill="#8aff8a" font-family="sans-serif" font-size="14.5" font-weight="bold">Cheap, still queryable.</text>
+</svg>

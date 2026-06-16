@@ -1,0 +1,85 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="rp-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="rp-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="rp-b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="700" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Read Path: Index in Memory, Data on S3</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">each API server loads the small <tspan fill="#8aff8a" font-weight="bold">index</tspan> into RAM on boot; a lookup is one memory hit plus one ranged read from <tspan fill="#ffff99" font-weight="bold">S3</tspan></text>
+
+  <!-- user -->
+  <circle cx="92" cy="252" r="13" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="265" x2="92" y2="292" stroke="#ffffff" stroke-width="2"/>
+  <line x1="74" y1="277" x2="110" y2="277" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="292" x2="81" y2="310" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="292" x2="103" y2="310" stroke="#ffffff" stroke-width="2"/>
+  <text x="92" y="332" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">user</text>
+  <text x="92" y="232" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">GET /meaning?w=able</text>
+
+  <line x1="116" y1="276" x2="166" y2="276" stroke="#ffffff" stroke-width="2.5" marker-end="url(#rp-w)"/>
+
+  <!-- LB -->
+  <rect x="170" y="248" width="96" height="56" rx="9" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="218" y="282" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">LB</text>
+  <line x1="266" y1="276" x2="346" y2="276" stroke="#ffffff" stroke-width="2.5" marker-end="url(#rp-w)"/>
+
+  <!-- API fleet -->
+  <rect x="378" y="214" width="218" height="96" rx="10" fill="#13161b" stroke="#5b6470" stroke-width="2"/>
+  <rect x="366" y="228" width="218" height="96" rx="10" fill="#13161b" stroke="#7c8694" stroke-width="2"/>
+  <rect x="354" y="242" width="218" height="96" rx="10" fill="#16191e" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="374" y="272" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">API server fleet</text>
+  <rect x="374" y="286" width="180" height="38" rx="7" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="464" y="311" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">index in RAM</text>
+
+  <!-- S3 cloud -->
+  <rect x="820" y="158" width="320" height="248" rx="20" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="980" y="192" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">S3 (durable store)</text>
+
+  <rect x="850" y="212" width="174" height="68" rx="9" fill="#1d1d12" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="937" y="242" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="16" font-weight="bold">index.dat</text>
+  <text x="937" y="264" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">~2.6 MB &#183; sorted</text>
+
+  <rect x="850" y="300" width="260" height="74" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="980" y="332" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="16" font-weight="bold">data.dat</text>
+  <text x="980" y="356" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">~1 TB &#183; byte-addressed meanings</text>
+
+  <!-- boot: load index into RAM (blue, control) -->
+  <line x1="850" y1="230" x2="576" y2="300" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#rp-b)"/>
+  <text x="712" y="250" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">on boot: load index.dat into memory</text>
+
+  <!-- lookup: ranged read of data.dat (green) -->
+  <line x1="572" y1="320" x2="846" y2="334" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#rp-g)"/>
+  <text x="710" y="356" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">lookup: ranged read at offset+length</text>
+
+  <!-- BOTTOM LEFT: steps -->
+  <rect x="60" y="426" width="560" height="234" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="84" y="462" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">A lookup, step by step</text>
+  <g font-family="sans-serif" font-size="15" fill="#cbd5e1">
+    <text x="84" y="498"><tspan fill="#8aff8a" font-weight="bold">1.</tspan> word comes in &#8594; find it in the in-memory index</text>
+    <text x="84" y="530"><tspan fill="#8aff8a" font-weight="bold">2.</tspan> the index returns its <tspan fill="#8aff8a" font-weight="bold">offset + length</tspan></text>
+    <text x="84" y="562"><tspan fill="#8aff8a" font-weight="bold">3.</tspan> one ranged read of data.dat on S3 at that offset</text>
+    <text x="84" y="594"><tspan fill="#8aff8a" font-weight="bold">4.</tspan> return the bytes as the meaning</text>
+  </g>
+  <text x="84" y="634" fill="#9aa6b2" font-family="sans-serif" font-size="14">Boot once, then serve forever from RAM + a single S3 read per request.</text>
+
+  <!-- BOTTOM RIGHT: sizing -->
+  <rect x="640" y="426" width="500" height="234" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="664" y="462" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Why the index fits in RAM</text>
+  <g font-family="monospace" font-size="15" fill="#cbd5e1">
+    <text x="664" y="498">words            = 171,476</text>
+    <text x="664" y="528">bytes per entry  = 4.7 + 3 + (2 &#215; 4) = 15.7</text>
+    <text x="664" y="558">index size       = 15.7 &#215; 171,476</text>
+    <text x="664" y="588">                 &#8776; 2.69 MB</text>
+  </g>
+  <text x="664" y="624" fill="#9aa6b2" font-family="sans-serif" font-size="13">avg word 4.7 &#183; separator+newline 3 &#183; two 4-byte numbers (offset, length)</text>
+  <text x="664" y="648" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">~2.6 MB &#8212; trivially fits in every server's memory.</text>
+</svg>

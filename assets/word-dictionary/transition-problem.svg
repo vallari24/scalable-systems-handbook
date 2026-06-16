@@ -1,0 +1,60 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="tp-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="tp-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="700" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">The Trap: Overwriting in Place Corrupts Live Lookups</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">servers already cached the <tspan fill="#8aff8a" font-weight="bold">old index</tspan>; overwrite data.dat at the same path and those offsets point into the new file &#8212; <tspan fill="#ff8a8a" font-weight="bold">garbage</tspan></text>
+
+  <!-- server with old index -->
+  <rect x="60" y="120" width="440" height="170" rx="12" fill="#16191e" stroke="#ffffff" stroke-width="2"/>
+  <text x="84" y="156" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">API server &#8212; index in RAM</text>
+  <rect x="84" y="176" width="392" height="50" rx="8" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="100" y="207" fill="#8aff8a" font-family="monospace" font-size="17" font-weight="bold">apple : offset 100 : length 1024</text>
+  <text x="84" y="256" fill="#9aa6b2" font-family="sans-serif" font-size="14">built from the OLD dictionary on boot &#8212; never re-read</text>
+  <text x="84" y="280" fill="#9aa6b2" font-family="sans-serif" font-size="14">so the server keeps trusting offset 100.</text>
+
+  <!-- data.dat OLD -->
+  <text x="600" y="150" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">data.dat (old)  &#8212;  offsets still match</text>
+  <rect x="600" y="164" width="340" height="150" rx="10" fill="#1d1d12" stroke="#8aff8a" stroke-width="2"/>
+  <line x1="624" y1="192" x2="916" y2="192" stroke="#ffffff" stroke-width="3"/>
+  <rect x="616" y="214" width="308" height="32" rx="5" fill="#15281b" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="632" y="236" fill="#8aff8a" font-family="monospace" font-size="15" font-weight="bold">apple, a fruit</text>
+  <line x1="624" y1="270" x2="916" y2="270" stroke="#ffffff" stroke-width="3"/>
+  <line x1="624" y1="294" x2="820" y2="294" stroke="#ffffff" stroke-width="3"/>
+  <text x="952" y="234" fill="#8aff8a" font-family="sans-serif" font-size="26" font-weight="bold">&#10003;</text>
+
+  <!-- data.dat NEW -->
+  <text x="600" y="392" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">data.dat (new)  &#8212;  overwrote old in place</text>
+  <rect x="600" y="406" width="340" height="150" rx="10" fill="#1d1216" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="624" y1="434" x2="916" y2="434" stroke="#ffffff" stroke-width="3"/>
+  <rect x="616" y="456" width="308" height="32" rx="5" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="632" y="478" fill="#ff8a8a" font-family="monospace" font-size="15" font-weight="bold">le, a fruit\nzo...  &#8592; garbage</text>
+  <line x1="624" y1="512" x2="916" y2="512" stroke="#ffffff" stroke-width="3"/>
+  <line x1="624" y1="536" x2="820" y2="536" stroke="#ffffff" stroke-width="3"/>
+  <text x="952" y="476" fill="#ff8a8a" font-family="sans-serif" font-size="26" font-weight="bold">&#10007;</text>
+
+  <!-- arrows from index -->
+  <line x1="480" y1="208" x2="608" y2="226" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#tp-g)"/>
+  <line x1="480" y1="215" x2="608" y2="466" stroke="#ff8a8a" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#tp-r)"/>
+  <text x="500" y="360" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">same offset 100 &#8594;</text>
+  <text x="500" y="380" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">wrong bytes</text>
+
+  <!-- right annotation -->
+  <text x="996" y="430" fill="#9aa6b2" font-family="sans-serif" font-size="13">the merge shifted</text>
+  <text x="996" y="450" fill="#9aa6b2" font-family="sans-serif" font-size="13">every offset, so</text>
+  <text x="996" y="470" fill="#9aa6b2" font-family="sans-serif" font-size="13">100 now lands</text>
+  <text x="996" y="490" fill="#9aa6b2" font-family="sans-serif" font-size="13">mid-entry.</text>
+
+  <!-- bottom banner -->
+  <rect x="60" y="590" width="1080" height="86" rx="12" fill="#1d1216" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="84" y="626" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">The user sees a random response during the swap.</text>
+  <text x="84" y="654" fill="#cbd5e1" font-family="sans-serif" font-size="15">The index and the data are coupled by offsets. The real question: <tspan fill="#ffff99" font-weight="bold">how do we publish a new version without breaking servers mid-flight?</tspan></text>
+</svg>

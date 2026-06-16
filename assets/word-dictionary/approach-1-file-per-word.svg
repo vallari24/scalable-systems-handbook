@@ -1,0 +1,62 @@
+<svg width="1200" height="660" viewBox="0 0 1200 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a1-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="a1-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="660" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Approach 1: One File Per Word on S3</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">since we can't use a database, treat <tspan fill="#ffff99" font-weight="bold">S3</tspan> as a raw, network-attached file system &#8212; one object per word, in a folder per letter</text>
+
+  <!-- LEFT: S3 folder tree -->
+  <rect x="60" y="110" width="470" height="380" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="84" y="148" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">Inside S3: a folder per letter</text>
+  <g font-family="monospace" font-size="16" fill="#cbd5e1">
+    <text x="84" y="190">s3://word-dictionary/</text>
+    <text x="116" y="222"><tspan fill="#8aff8a">a/</tspan> apple.txt</text>
+    <text x="116" y="250"><tspan fill="#8aff8a">a/</tspan> america.txt</text>
+    <text x="116" y="278"><tspan fill="#8aff8a">a/</tspan> automatic.txt</text>
+    <text x="124" y="306" fill="#9aa6b2">. . .</text>
+    <text x="116" y="334"><tspan fill="#8aff8a">z/</tspan> zoo.txt</text>
+  </g>
+  <text x="84" y="384" fill="#9aa6b2" font-family="sans-serif" font-size="14">each <tspan fill="#cbd5e1" font-weight="bold">word.txt</tspan> holds that word's full meaning</text>
+  <text x="84" y="412" fill="#9aa6b2" font-family="sans-serif" font-size="14">170,000 words &#8594; 170,000 separate objects</text>
+  <text x="84" y="456" fill="#cbd5e1" font-family="sans-serif" font-size="14">the first letter <tspan fill="#8aff8a" font-weight="bold">is</tspan> the folder &#8212; so the path is computable</text>
+
+  <!-- RIGHT: lookup -->
+  <rect x="560" y="110" width="580" height="220" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="584" y="148" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">Lookup: get_word(w)</text>
+  <g font-family="monospace" font-size="16" fill="#cbd5e1">
+    <text x="584" y="190">1. build path  &#8594;  s3://word-dictionary/<tspan fill="#8aff8a">a</tspan>/apple.txt</text>
+    <text x="584" y="226">2. read that one object from S3</text>
+    <text x="584" y="262">3. return its contents as the meaning</text>
+  </g>
+  <text x="584" y="304" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">no scan, no index &#8212; the word itself is the address</text>
+
+  <!-- request flow -->
+  <text x="584" y="372" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">request path</text>
+  <g font-family="sans-serif" font-size="15" font-weight="bold">
+    <rect x="584" y="392" width="60" height="44" rx="8" fill="#16191e" stroke="#ffffff" stroke-width="2"/>
+    <text x="614" y="419" text-anchor="middle" fill="#ffffff">user</text>
+    <line x1="644" y1="414" x2="690" y2="414" stroke="#ffffff" stroke-width="2.5" marker-end="url(#a1-w)"/>
+    <rect x="694" y="392" width="60" height="44" rx="8" fill="#16191e" stroke="#ffffff" stroke-width="2"/>
+    <text x="724" y="419" text-anchor="middle" fill="#ffffff">LB</text>
+    <line x1="754" y1="414" x2="800" y2="414" stroke="#ffffff" stroke-width="2.5" marker-end="url(#a1-w)"/>
+    <rect x="804" y="392" width="74" height="44" rx="8" fill="#16191e" stroke="#ffffff" stroke-width="2"/>
+    <text x="841" y="419" text-anchor="middle" fill="#ffffff">API</text>
+    <line x1="878" y1="414" x2="930" y2="414" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#a1-g)"/>
+    <rect x="934" y="388" width="120" height="52" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+    <text x="994" y="419" text-anchor="middle" fill="#ffff99">S3</text>
+  </g>
+
+  <!-- bottom: portability break -->
+  <rect x="60" y="510" width="1080" height="108" rx="12" fill="#1d1216" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="84" y="546" fill="#ff8a8a" font-family="sans-serif" font-size="19" font-weight="bold">But it breaks a major requirement: portability</text>
+  <text x="84" y="578" fill="#cbd5e1" font-family="sans-serif" font-size="15">"The dictionary" is now <tspan fill="#ff8a8a" font-weight="bold">170,000 scattered objects</tspan>, not one artifact. You can't hand a colleague a single file, copy it elsewhere,</text>
+  <text x="84" y="602" fill="#cbd5e1" font-family="sans-serif" font-size="15">or version it as a whole. Great for lookups, bad for moving the data around. We need the data to live in <tspan fill="#93c5fd" font-weight="bold">one portable file</tspan>.</text>
+</svg>

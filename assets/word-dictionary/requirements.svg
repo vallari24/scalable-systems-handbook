@@ -1,0 +1,41 @@
+<svg width="1200" height="660" viewBox="0 0 1200 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="660" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">A Word Dictionary, With No Database</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the brief &#8212; and the four dimensions any design has to get right</text>
+
+  <!-- LEFT: the brief -->
+  <rect x="60" y="106" width="600" height="456" rx="12" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="84" y="146" fill="#cbd5e1" font-family="sans-serif" font-size="21" font-weight="bold">The brief</text>
+
+  <g font-family="sans-serif" font-size="17" font-weight="bold">
+    <text x="84" y="196" fill="#ff8a8a">&#8226; No traditional database &#8212; get creative</text>
+    <text x="84" y="248" fill="#ffff99">&#8226; ~1 TB of data, 170,000 words</text>
+    <text x="84" y="300" fill="#8aff8a">&#8226; Every lookup is a single word</text>
+    <text x="84" y="352" fill="#ff8bd2">&#8226; Updated weekly, through a changelog</text>
+    <text x="84" y="404" fill="#93c5fd">&#8226; Must stay portable</text>
+    <text x="84" y="456" fill="#ffffff">&#8226; Scale storage + API servers</text>
+    <text x="84" y="508" fill="#9aa6b2">&#8226; Response time can be high (latency is relaxed)</text>
+  </g>
+
+  <!-- RIGHT: four dimensions -->
+  <text x="700" y="146" fill="#cbd5e1" font-family="sans-serif" font-size="21" font-weight="bold">Design for four things</text>
+
+  <rect x="700" y="170" width="440" height="88" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="724" y="206" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">Storage</text>
+  <text x="724" y="234" fill="#cbd5e1" font-family="sans-serif" font-size="14">where do 1 TB of bytes live without a DB?</text>
+
+  <rect x="700" y="272" width="440" height="88" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="724" y="308" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">Querying</text>
+  <text x="724" y="336" fill="#cbd5e1" font-family="sans-serif" font-size="14">how do we find one word fast?</text>
+
+  <rect x="700" y="374" width="440" height="88" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="724" y="410" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">Portability</text>
+  <text x="724" y="438" fill="#cbd5e1" font-family="sans-serif" font-size="14">can we hand someone the whole dictionary as one file?</text>
+
+  <rect x="700" y="476" width="440" height="88" rx="10" fill="#241019" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="724" y="512" fill="#ff8bd2" font-family="sans-serif" font-size="19" font-weight="bold">Seamless updates</text>
+  <text x="724" y="540" fill="#cbd5e1" font-family="sans-serif" font-size="14">apply the weekly changelog with zero bad reads</text>
+
+  <text x="600" y="616" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">No database means we own storage, lookup, updates, and portability ourselves &#8212; so let's design each one.</text>
+</svg>

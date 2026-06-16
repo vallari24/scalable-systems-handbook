@@ -1,0 +1,109 @@
+<svg width="1200" height="820" viewBox="0 0 1200 820" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ts-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="ts-p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="ts-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="820" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Three Ways to Swap In a New Dictionary Safely</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">from simplest to safest: periodic refresh, reactive pub/sub, and an atomic version flip via <tspan fill="#93c5fd" font-weight="bold">meta.json</tspan></text>
+
+  <!-- PANEL 1: periodic refresh -->
+  <rect x="60" y="100" width="1080" height="210" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="84" y="138" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">1 &#183; Periodic refresh &#8212; pull the index on a timer</text>
+
+  <line x1="110" y1="236" x2="780" y2="236" stroke="#ffffff" stroke-width="2.5"/>
+  <g stroke="#ffff99" stroke-width="2.5">
+    <line x1="110" y1="226" x2="110" y2="246"/>
+    <line x1="220" y1="226" x2="220" y2="246"/>
+    <line x1="330" y1="226" x2="330" y2="246"/>
+    <line x1="440" y1="226" x2="440" y2="246"/>
+    <line x1="660" y1="226" x2="660" y2="246"/>
+    <line x1="780" y1="226" x2="780" y2="246"/>
+  </g>
+  <text x="110" y="208" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">pull</text>
+  <text x="220" y="270" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">pull</text>
+  <text x="330" y="270" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">pull</text>
+  <text x="440" y="270" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">pull</text>
+
+  <line x1="550" y1="214" x2="550" y2="262" stroke="#ff8a8a" stroke-width="3"/>
+  <rect x="550" y="222" width="110" height="28" fill="#ff8a8a" fill-opacity="0.22"/>
+  <text x="605" y="208" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12" font-weight="bold">stale window</text>
+  <text x="550" y="292" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12">index.dat changes on S3</text>
+  <text x="660" y="270" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">reload</text>
+
+  <rect x="830" y="128" width="290" height="160" rx="10" fill="#1c1f25" stroke="#5b6470" stroke-width="1.8"/>
+  <text x="854" y="160" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">+ dead simple to build</text>
+  <text x="854" y="196" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">&#8211; stale reads between pulls</text>
+  <text x="854" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="14">shorten the window with a</text>
+  <text x="854" y="254" fill="#cbd5e1" font-family="sans-serif" font-size="14">graceful terminate + reload</text>
+  <text x="854" y="276" fill="#cbd5e1" font-family="sans-serif" font-size="14">on each refresh.</text>
+
+  <!-- PANEL 2: reactive pubsub -->
+  <rect x="60" y="330" width="1080" height="220" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="84" y="368" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">2 &#183; Reactive: pub/sub &#8212; push a reload the moment S3 changes</text>
+
+  <!-- S3 -->
+  <rect x="900" y="396" width="200" height="120" rx="16" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="1000" y="430" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">S3</text>
+  <rect x="924" y="446" width="152" height="26" rx="5" fill="#1d1d12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="1000" y="464" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="12">index.dat (new)</text>
+  <rect x="924" y="480" width="152" height="26" rx="5" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="1000" y="498" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="12">data.dat (new)</text>
+
+  <!-- redis bus -->
+  <rect x="150" y="430" width="560" height="30" rx="15" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="430" y="420" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Redis pub/sub</text>
+  <line x1="898" y1="445" x2="714" y2="445" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#ts-p)"/>
+  <text x="806" y="436" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12" font-weight="bold">change event</text>
+
+  <!-- API servers -->
+  <g font-family="sans-serif" font-size="15" font-weight="bold">
+    <rect x="170" y="492" width="150" height="48" rx="9" fill="#16191e" stroke="#ffffff" stroke-width="2"/>
+    <text x="245" y="522" text-anchor="middle" fill="#ffffff">API</text>
+    <rect x="400" y="492" width="150" height="48" rx="9" fill="#16191e" stroke="#ffffff" stroke-width="2"/>
+    <text x="475" y="522" text-anchor="middle" fill="#ffffff">API</text>
+    <rect x="630" y="492" width="150" height="48" rx="9" fill="#16191e" stroke="#ffffff" stroke-width="2"/>
+    <text x="705" y="522" text-anchor="middle" fill="#ffffff">API</text>
+  </g>
+  <line x1="245" y1="460" x2="245" y2="490" stroke="#ffff99" stroke-width="2.5" marker-end="url(#ts-y)"/>
+  <line x1="475" y1="460" x2="475" y2="490" stroke="#ffff99" stroke-width="2.5" marker-end="url(#ts-y)"/>
+  <line x1="705" y1="460" x2="705" y2="490" stroke="#ffff99" stroke-width="2.5" marker-end="url(#ts-y)"/>
+  <text x="360" y="482" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12" font-weight="bold">reload now</text>
+  <text x="900" y="540" fill="#9aa6b2" font-family="sans-serif" font-size="14">Low lag &#8212; but one more system to run.</text>
+
+  <!-- PANEL 3: parallel + meta.json -->
+  <rect x="60" y="570" width="1080" height="230" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="84" y="608" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">3 &#183; Parallel setup + meta.json &#8212; atomic version flip</text>
+  <rect x="690" y="588" width="92" height="30" rx="15" fill="#15281b" stroke="#8aff8a" stroke-width="2"/>
+  <text x="736" y="609" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">safest</text>
+
+  <rect x="84" y="628" width="430" height="66" rx="9" fill="#1c1f25" stroke="#5b6470" stroke-width="2"/>
+  <text x="104" y="656" fill="#9aa6b2" font-family="monospace" font-size="14">s3://word-dictionary/<tspan fill="#cbd5e1">001/</tspan>index.dat</text>
+  <text x="104" y="682" fill="#9aa6b2" font-family="monospace" font-size="14">s3://word-dictionary/<tspan fill="#cbd5e1">001/</tspan>data.dat  (old)</text>
+
+  <rect x="84" y="708" width="430" height="66" rx="9" fill="#15281b" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="104" y="736" fill="#8aff8a" font-family="monospace" font-size="14">s3://word-dictionary/<tspan font-weight="bold">002/</tspan>index.dat</text>
+  <text x="104" y="762" fill="#8aff8a" font-family="monospace" font-size="14">s3://word-dictionary/<tspan font-weight="bold">002/</tspan>data.dat  (new)</text>
+
+  <rect x="556" y="640" width="298" height="124" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="576" y="670" fill="#93c5fd" font-family="monospace" font-size="15" font-weight="bold">meta.json</text>
+  <text x="576" y="700" fill="#cbd5e1" font-family="monospace" font-size="14">{ "index": "<tspan fill="#8aff8a">002</tspan>/index.dat",</text>
+  <text x="576" y="724" fill="#cbd5e1" font-family="monospace" font-size="14">&#160; "data":&#160; "<tspan fill="#8aff8a">002</tspan>/data.dat" }</text>
+  <text x="576" y="752" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">flip 001 &#8594; 002 atomically</text>
+
+  <line x1="520" y1="700" x2="552" y2="700" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ts-g)"/>
+
+  <text x="884" y="668" fill="#cbd5e1" font-family="sans-serif" font-size="14">Old servers keep serving 001.</text>
+  <text x="884" y="694" fill="#cbd5e1" font-family="sans-serif" font-size="14">A new server reads meta.json</text>
+  <text x="884" y="720" fill="#cbd5e1" font-family="sans-serif" font-size="14">and serves 002.</text>
+  <text x="884" y="752" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">No file is ever overwritten.</text>
+</svg>
