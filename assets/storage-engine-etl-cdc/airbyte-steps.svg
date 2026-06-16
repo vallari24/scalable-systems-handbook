@@ -1,0 +1,89 @@
+<svg width="1200" height="580" viewBox="0 0 1200 580" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ab-b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="580" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Implementing CDC with Airbyte: the Shape, Not the Details</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">point it at a source, choose a sink, pick a sync mode, schedule it &#8212; Airbyte does the capture</text>
+
+  <!-- source -->
+  <g stroke="#ffff99" stroke-width="2.5" fill="#1d1d12">
+    <ellipse cx="150" cy="150" rx="48" ry="16"/>
+    <rect x="102" y="150" width="96" height="56" fill="#1d1d12" stroke="none"/>
+    <path d="M102,150 L102,206" fill="none"/><path d="M198,150 L198,206" fill="none"/>
+    <path d="M102,206 A48,16 0 0 0 198,206" fill="none"/>
+    <ellipse cx="150" cy="150" rx="48" ry="16" fill="none"/>
+  </g>
+  <text x="150" y="232" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">source DB</text>
+  <text x="150" y="251" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">MongoDB / MySQL</text>
+
+  <!-- airbyte -->
+  <rect x="470" y="138" width="260" height="86" rx="12" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="600" y="176" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="22" font-weight="bold">Airbyte</text>
+  <text x="600" y="202" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">source connector &#8594; destination connector</text>
+  <line x1="200" y1="178" x2="466" y2="178" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ab-b)"/>
+  <text x="333" y="166" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">read the log</text>
+
+  <!-- destination -->
+  <g stroke="#ffffff" stroke-width="2.5" fill="#15171c">
+    <ellipse cx="1050" cy="150" rx="48" ry="16"/>
+    <rect x="1002" y="150" width="96" height="56" fill="#15171c" stroke="none"/>
+    <path d="M1002,150 L1002,206" fill="none"/><path d="M1098,150 L1098,206" fill="none"/>
+    <path d="M1002,206 A48,16 0 0 0 1098,206" fill="none"/>
+    <ellipse cx="1050" cy="150" rx="48" ry="16" fill="none"/>
+  </g>
+  <text x="1050" y="232" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">destination</text>
+  <text x="1050" y="251" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">warehouse / ES / S3 / Kafka</text>
+  <line x1="734" y1="178" x2="998" y2="178" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ab-b)"/>
+  <text x="866" y="166" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">load + sync</text>
+
+  <!-- step cards -->
+  <g font-family="sans-serif">
+    <rect x="40" y="300" width="270" height="236" rx="10" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+    <circle cx="72" cy="334" r="17" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="72" y="340" text-anchor="middle" fill="#93c5fd" font-size="17" font-weight="bold">1</text>
+    <text x="102" y="340" fill="#cbd5e1" font-size="16" font-weight="bold">Connect the source</text>
+    <text x="60" y="376" fill="#cbd5e1" font-size="14">Point Airbyte at your DB and</text>
+    <text x="60" y="398" fill="#cbd5e1" font-size="14">grant read access to its</text>
+    <text x="60" y="420" fill="#cbd5e1" font-size="14">replication log.</text>
+    <text x="60" y="456" fill="#9aa6b2" font-size="13">It ships connectors for</text>
+    <text x="60" y="476" fill="#9aa6b2" font-size="13">MySQL, Postgres, MongoDB,</text>
+    <text x="60" y="496" fill="#9aa6b2" font-size="13">and many more.</text>
+
+    <rect x="326" y="300" width="270" height="236" rx="10" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+    <circle cx="358" cy="334" r="17" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="358" y="340" text-anchor="middle" fill="#93c5fd" font-size="17" font-weight="bold">2</text>
+    <text x="388" y="340" fill="#cbd5e1" font-size="16" font-weight="bold">Pick a destination</text>
+    <text x="346" y="376" fill="#cbd5e1" font-size="14">Choose the sink where the</text>
+    <text x="346" y="398" fill="#cbd5e1" font-size="14">data should land.</text>
+    <text x="346" y="434" fill="#9aa6b2" font-size="13">A warehouse for analytics,</text>
+    <text x="346" y="454" fill="#9aa6b2" font-size="13">ElasticSearch for search,</text>
+    <text x="346" y="474" fill="#9aa6b2" font-size="13">S3 for backup, Kafka for</text>
+    <text x="346" y="494" fill="#9aa6b2" font-size="13">downstream streams.</text>
+
+    <rect x="612" y="300" width="270" height="236" rx="10" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+    <circle cx="644" cy="334" r="17" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="644" y="340" text-anchor="middle" fill="#93c5fd" font-size="17" font-weight="bold">3</text>
+    <text x="674" y="340" fill="#cbd5e1" font-size="16" font-weight="bold">Choose a sync mode</text>
+    <text x="632" y="376" fill="#cbd5e1" font-size="14"><tspan fill="#ff8a8a" font-weight="bold">Full refresh</tspan>: re-copy all rows.</text>
+    <text x="632" y="404" fill="#cbd5e1" font-size="14"><tspan fill="#8aff8a" font-weight="bold">Incremental / CDC</tspan>: read only</text>
+    <text x="632" y="426" fill="#cbd5e1" font-size="14">new changes from the log.</text>
+    <text x="632" y="462" fill="#9aa6b2" font-size="13">CDC mode is the one that</text>
+    <text x="632" y="482" fill="#9aa6b2" font-size="13">tails inserts/updates/deletes.</text>
+
+    <rect x="898" y="300" width="262" height="236" rx="10" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+    <circle cx="930" cy="334" r="17" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="930" y="340" text-anchor="middle" fill="#93c5fd" font-size="17" font-weight="bold">4</text>
+    <text x="960" y="340" fill="#cbd5e1" font-size="16" font-weight="bold">Schedule it</text>
+    <text x="918" y="376" fill="#cbd5e1" font-size="14">Run continuously or on a</text>
+    <text x="918" y="398" fill="#cbd5e1" font-size="14">cadence.</text>
+    <text x="918" y="434" fill="#9aa6b2" font-size="13">Airbyte handles extraction,</text>
+    <text x="918" y="454" fill="#9aa6b2" font-size="13">remembers its position in the</text>
+    <text x="918" y="474" fill="#9aa6b2" font-size="13">log, and retries on failure.</text>
+    <text x="918" y="494" fill="#9aa6b2" font-size="13">No app code to maintain.</text>
+  </g>
+</svg>

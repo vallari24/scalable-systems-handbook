@@ -1,0 +1,55 @@
+<svg width="1140" height="540" viewBox="0 0 1140 540" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ap-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="ap-r" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1140" height="540" fill="#111317"/>
+
+  <text x="570" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Two Access Patterns, Two Policies</text>
+  <text x="570" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">how a key is read over time decides whether recency (LRU) or frequency (LFU) is right</text>
+
+  <!-- ============ LEFT: Google News (LRU) ============ -->
+  <rect x="50" y="110" width="510" height="380" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="305" y="150" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="21" font-weight="bold">Google News &#8594; LRU</text>
+
+  <!-- axes -->
+  <line x1="120" y1="200" x2="120" y2="420" stroke="#9aa6b2" stroke-width="2.5"/>
+  <line x1="120" y1="420" x2="510" y2="420" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="92" y="310" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13" transform="rotate(-90 92 310)">access rate</text>
+  <text x="315" y="448" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">time since published &#8594;</text>
+
+  <!-- sharp decay curve (white) -->
+  <path d="M132,212 C150,214 168,360 220,392 C300,418 410,420 500,420" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+  <!-- blue loop highlighting the recent spike -->
+  <ellipse cx="158" cy="300" rx="34" ry="96" fill="none" stroke="#93c5fd" stroke-width="3" transform="rotate(-8 158 300)"/>
+
+  <text x="150" y="190" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">read now</text>
+  <text x="400" y="400" fill="#9aa6b2" font-family="sans-serif" font-size="13">old = ignored</text>
+  <text x="76" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="15">recency is the signal &#8212; <tspan fill="#93c5fd" font-weight="bold">evict by age</tspan></text>
+
+  <!-- ============ RIGHT: Wikipedia (LFU) ============ -->
+  <rect x="590" y="110" width="510" height="380" rx="12" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="845" y="150" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="21" font-weight="bold">Wikipedia page &#8594; LFU</text>
+
+  <!-- axes -->
+  <line x1="660" y1="200" x2="660" y2="420" stroke="#9aa6b2" stroke-width="2.5"/>
+  <line x1="660" y1="420" x2="1050" y2="420" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="632" y="310" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13" transform="rotate(-90 632 310)">access rate</text>
+  <text x="855" y="448" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">time &#8594;</text>
+
+  <!-- peak then dip (white) -->
+  <path d="M672,400 L760,250 L850,360" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+  <!-- circle the dip -->
+  <circle cx="850" cy="360" r="22" fill="none" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="850" y="408" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">recent dip</text>
+  <!-- dashed rise again -->
+  <path d="M872,348 C920,318 950,278 985,240" fill="none" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#ap-w)"/>
+  <text x="980" y="222" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">popular again</text>
+
+  <text x="616" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="15">a dip isn't death &#8212; <tspan fill="#ff8a8a" font-weight="bold">don't evict by recency</tspan></text>
+</svg>

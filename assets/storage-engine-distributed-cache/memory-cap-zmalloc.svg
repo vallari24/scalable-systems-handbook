@@ -1,0 +1,58 @@
+<svg width="1200" height="640" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="mz-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="mz-r" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="mz-g" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="640" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Stay Under The Limit, Or The Process Dies</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">count every byte you allocate through one gate &#8212; reject the write before the OS kills you</text>
+
+  <!-- heap bar -->
+  <text x="120" y="135" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">heap memory</text>
+  <text x="1080" y="135" text-anchor="end" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">1 GB cap</text>
+  <rect x="120" y="150" width="960" height="58" rx="8" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <rect x="122" y="152" width="820" height="54" rx="7" fill="#3a2630"/>
+  <g font-family="monospace" font-size="12" fill="#ff8bd2">
+    <text x="150" y="184">obj</text><text x="230" y="184">obj</text><text x="310" y="184">obj</text><text x="400" y="184">obj</text><text x="500" y="184">obj</text><text x="600" y="184">obj</text><text x="720" y="184">obj</text><text x="840" y="184">obj</text>
+  </g>
+  <line x1="942" y1="142" x2="942" y2="216" stroke="#ff8a8a" stroke-width="3" stroke-dasharray="6 5"/>
+  <text x="952" y="234" fill="#ff8a8a" font-family="sans-serif" font-size="13">~0.85 GB used</text>
+  <text x="1006" y="200" fill="#9aa6b2" font-family="sans-serif" font-size="13">free</text>
+
+  <!-- what happens if you cross -->
+  <rect x="120" y="262" width="430" height="150" rx="12" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="146" y="296" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">Allocate past real RAM &#8594; crash</text>
+  <text x="146" y="328" fill="#cbd5e1" font-family="sans-serif" font-size="15">OOM error &#183; segfault &#183; process killed</text>
+  <text x="146" y="356" fill="#cbd5e1" font-family="sans-serif" font-size="15">The whole cache goes down &#8212; every key</text>
+  <text x="146" y="378" fill="#cbd5e1" font-family="sans-serif" font-size="15">lost. You can never let this happen.</text>
+  <text x="146" y="404" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">So: pick a soft cap below physical RAM.</text>
+
+  <!-- counting bytes -->
+  <rect x="580" y="262" width="500" height="150" rx="12" fill="#16191e" stroke="#3a3f47" stroke-width="2"/>
+  <text x="606" y="296" fill="#cbd5e1" font-family="sans-serif" font-size="18" font-weight="bold">Counting bytes: the input size lies</text>
+  <text x="606" y="328" fill="#cbd5e1" font-family="monospace" font-size="15">ADD pq 5</text>
+  <text x="720" y="328" fill="#9aa6b2" font-family="sans-serif" font-size="14">input looks like ~1 byte&#8230;</text>
+  <text x="606" y="358" fill="#cbd5e1" font-family="sans-serif" font-size="15">but a list node is <tspan fill="#ffff99" font-weight="bold">data + prev + next</tspan></text>
+  <text x="606" y="384" fill="#cbd5e1" font-family="monospace" font-size="15">4 + 4 + 4 = 12 bytes</text>
+  <text x="606" y="404" fill="#9aa6b2" font-family="sans-serif" font-size="13">each type has overhead &#8594; add a per-type heuristic</text>
+
+  <!-- zmalloc gate -->
+  <text x="600" y="470" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">The fix: one allocation gate &#8212; zmalloc</text>
+
+  <rect x="300" y="492" width="600" height="118" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="324" y="524" fill="#8aff8a" font-family="monospace" font-size="16" font-weight="bold">zmalloc(n):</text>
+  <text x="348" y="552" fill="#cbd5e1" font-family="monospace" font-size="15">if used + n &gt; cap:  <tspan fill="#ff8a8a">return null</tspan>   // reject early</text>
+  <text x="348" y="578" fill="#cbd5e1" font-family="monospace" font-size="15">used += n</text>
+  <text x="348" y="600" fill="#cbd5e1" font-family="monospace" font-size="15">return malloc(n)</text>
+
+  <text x="600" y="632" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">every allocation flows through this counter &#8212; no OS syscall per write, no drift</text>
+</svg>

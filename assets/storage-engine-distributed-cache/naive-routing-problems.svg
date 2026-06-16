@@ -1,0 +1,94 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="np-r" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="np-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="700" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Why Naive Routing Breaks When You Scale</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">both schemes route fine &#8212; until the set of nodes changes</text>
+
+  <!-- ===== LEFT: hash-based ===== -->
+  <rect x="40" y="98" width="555" height="572" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="62" y="130" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">Hash-based</text>
+  <text x="62" y="156" fill="#9aa6b2" font-family="sans-serif" font-size="14">node = <tspan font-family="monospace" fill="#cbd5e1">hash(key) % N</tspan> &#8212; cheap, even spread&#8230;</text>
+  <text x="62" y="178" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">&#8230; but N is baked into every key's location.</text>
+
+  <!-- before -->
+  <text x="120" y="214" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">N = 2  (% 2)</text>
+  <g font-family="monospace" font-size="14">
+    <text x="70" y="244" fill="#9aa6b2">key</text><text x="170" y="244" fill="#9aa6b2">node</text>
+    <text x="70" y="272" fill="#93c5fd">k1</text><text x="170" y="272" fill="#cbd5e1">cache 0</text>
+    <text x="70" y="298" fill="#93c5fd">k2</text><text x="170" y="298" fill="#cbd5e1">cache 0</text>
+    <text x="70" y="324" fill="#93c5fd">k3</text><text x="170" y="324" fill="#cbd5e1">cache 1</text>
+    <text x="70" y="350" fill="#93c5fd">k4</text><text x="170" y="350" fill="#cbd5e1">cache 1</text>
+    <text x="70" y="376" fill="#93c5fd">k5</text><text x="170" y="376" fill="#cbd5e1">cache 1</text>
+    <text x="70" y="402" fill="#93c5fd">k6</text><text x="170" y="402" fill="#cbd5e1">cache 0</text>
+  </g>
+
+  <line x1="285" y1="240" x2="285" y2="410" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="335" y="222" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">add cache 2</text>
+  <line x1="300" y1="320" x2="345" y2="320" stroke="#ffff99" stroke-width="2" marker-end="url(#np-y)"/>
+
+  <!-- after -->
+  <text x="450" y="214" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">N = 3  (% 3)</text>
+  <g font-family="monospace" font-size="14">
+    <text x="370" y="244" fill="#9aa6b2">key</text><text x="470" y="244" fill="#9aa6b2">node</text>
+    <text x="370" y="272" fill="#93c5fd">k1</text><text x="470" y="272" fill="#cbd5e1">cache 0</text>
+    <text x="370" y="298" fill="#93c5fd">k2</text><text x="470" y="298" fill="#ff8a8a">cache 2</text>
+    <text x="370" y="324" fill="#93c5fd">k3</text><text x="470" y="324" fill="#cbd5e1">cache 1</text>
+    <text x="370" y="350" fill="#93c5fd">k4</text><text x="470" y="350" fill="#cbd5e1">cache 1</text>
+    <text x="370" y="376" fill="#93c5fd">k5</text><text x="470" y="376" fill="#ff8a8a">cache 0</text>
+    <text x="370" y="402" fill="#93c5fd">k6</text><text x="470" y="402" fill="#ff8a8a">cache 2</text>
+  </g>
+  <text x="538" y="298" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">&#10033;</text>
+  <text x="538" y="376" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">&#10033;</text>
+  <text x="538" y="402" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">&#10033;</text>
+
+  <rect x="62" y="430" width="510" height="92" rx="10" fill="#2a1620" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="317" y="462" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">~50% of keys move on a single node change</text>
+  <text x="317" y="490" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">every cache miss after a resize &#8212; a stampede to the DB</text>
+  <text x="317" y="512" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">changing % N reshuffles almost everything (rehashing)</text>
+
+  <text x="62" y="558" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">When it's OK:</text>
+  <text x="62" y="584" fill="#cbd5e1" font-family="sans-serif" font-size="14">the node count is fixed &#8212; you rarely add or remove.</text>
+  <text x="62" y="616" fill="#9aa6b2" font-family="sans-serif" font-size="13">The fix for elastic clusters is consistent hashing (next).</text>
+
+  <!-- ===== RIGHT: range-based ===== -->
+  <rect x="615" y="98" width="545" height="572" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="637" y="130" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">Range-based</text>
+  <text x="637" y="156" fill="#9aa6b2" font-family="sans-serif" font-size="14">each node owns a key range &#8212; great for scans&#8230;</text>
+  <text x="637" y="178" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">&#8230; but real traffic isn't evenly spread across ranges.</text>
+
+  <g font-family="monospace" font-size="15">
+    <rect x="655" y="206" width="470" height="44" rx="7" fill="#2a1620" stroke="#ff8a8a" stroke-width="2.5"/>
+    <text x="675" y="234" fill="#ff8a8a">a &#8211; j</text><text x="1105" y="234" text-anchor="end" fill="#ff8a8a">DB1   &#128293; HOT</text>
+    <rect x="655" y="258" width="470" height="44" rx="7" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/>
+    <text x="675" y="286" fill="#cbd5e1">k &#8211; t</text><text x="1105" y="286" text-anchor="end" fill="#9aa6b2">DB2</text>
+    <rect x="655" y="310" width="470" height="44" rx="7" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/>
+    <text x="675" y="338" fill="#cbd5e1">u &#8211; z</text><text x="1105" y="338" text-anchor="end" fill="#9aa6b2">DB3</text>
+  </g>
+
+  <text x="887" y="392" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">a&#8211;j is overwhelmed &#8594; split the hot range</text>
+  <line x1="887" y1="360" x2="887" y2="400" stroke="#ffff99" stroke-width="2" marker-end="url(#np-y)"/>
+
+  <g font-family="monospace" font-size="15">
+    <rect x="655" y="410" width="225" height="44" rx="7" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+    <text x="675" y="438" fill="#8aff8a">a &#8211; f</text><text x="860" y="438" text-anchor="end" fill="#8aff8a">DB1</text>
+    <rect x="900" y="410" width="225" height="44" rx="7" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+    <text x="920" y="438" fill="#8aff8a">g &#8211; j</text><text x="1105" y="438" text-anchor="end" fill="#8aff8a">DB4 (new)</text>
+  </g>
+
+  <rect x="637" y="478" width="500" height="92" rx="10" fill="#2a1620" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="887" y="510" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">hotspots need manual re-splitting</text>
+  <text x="887" y="538" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">you must watch load and re-draw range boundaries by hand</text>
+  <text x="887" y="560" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">ownership keeps shifting as traffic shifts</text>
+
+  <text x="637" y="606" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">When it's OK:</text>
+  <text x="637" y="632" fill="#cbd5e1" font-family="sans-serif" font-size="14">range scans matter and load is fairly predictable.</text>
+</svg>

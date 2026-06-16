@@ -1,0 +1,80 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ch-o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#f4a06a"/>
+    </marker>
+    <marker id="ch-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Consistent Hashing: Determining Ownership</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">hash <tspan font-style="italic">both</tspan> keys and nodes onto one ring &#8212; a key belongs to the <tspan fill="#f4a06a" font-weight="bold">first node clockwise</tspan></text>
+
+  <!-- the ring -->
+  <circle cx="400" cy="400" r="240" fill="#15171c" stroke="#ffffff" stroke-width="2.5"/>
+
+  <!-- tick labels on ring -->
+  <text x="400" y="138" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="18" font-weight="bold">0</text>
+
+  <!-- cache nodes on ring -->
+  <!-- cache 1 @ 3 (upper right) -->
+  <rect x="600" y="282" width="44" height="26" rx="4" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="654" y="294" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">cache 1</text>
+  <text x="600" y="332" fill="#cbd5e1" font-family="monospace" font-size="15">3</text>
+  <!-- cache 3 @ 5 (lower right) -->
+  <rect x="600" y="468" width="44" height="26" rx="4" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="654" y="487" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">cache 3</text>
+  <text x="600" y="462" fill="#cbd5e1" font-family="monospace" font-size="15">5</text>
+  <!-- cache 4 @ 10 (lower left) -->
+  <rect x="208" y="546" width="44" height="26" rx="4" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="150" y="540" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">cache 4</text>
+  <text x="262" y="540" fill="#cbd5e1" font-family="monospace" font-size="15">10</text>
+  <!-- cache 2 @ 12 (left) -->
+  <rect x="138" y="377" width="44" height="26" rx="4" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="120" y="368" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">cache 2</text>
+  <text x="196" y="372" fill="#cbd5e1" font-family="monospace" font-size="15">12</text>
+
+  <!-- key k1 at position 0 -->
+  <rect x="384" y="146" width="32" height="24" rx="3" fill="#f4a06a" stroke="#f4a06a" stroke-width="1"/>
+  <text x="400" y="124" text-anchor="middle" fill="#f4a06a" font-family="sans-serif" font-size="16" font-weight="bold">key k1</text>
+
+  <!-- ownership arc: k1 (top) clockwise to cache 1 (3) -->
+  <path d="M 430,156 A 250,250 0 0 1 600,290" fill="none" stroke="#f4a06a" stroke-width="2.5" marker-end="url(#ch-o)"/>
+  <text x="556" y="206" text-anchor="middle" fill="#f4a06a" font-family="sans-serif" font-size="15" font-weight="bold">ownership</text>
+
+  <!-- center note -->
+  <text x="400" y="396" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">hash space</text>
+  <text x="400" y="416" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">0 &#8230; 2&#8310;&#8308;-1</text>
+  <text x="400" y="436" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">(shown mod 16)</text>
+
+  <!-- ===== RIGHT panel ===== -->
+  <text x="710" y="150" fill="#cbd5e1" font-family="sans-serif" font-size="16">Place each cache by hashing its <tspan fill="#ffff99" font-weight="bold">IP / id</tspan>:</text>
+  <text x="730" y="178" fill="#9aa6b2" font-family="monospace" font-size="14">hash(ip) % 16  &#8594;  a slot on the ring</text>
+  <text x="710" y="214" fill="#cbd5e1" font-family="sans-serif" font-size="16">Look up a key the same way:</text>
+  <text x="730" y="242" fill="#9aa6b2" font-family="monospace" font-size="14">hash(k1) = 0</text>
+  <text x="730" y="266" fill="#cbd5e1" font-family="sans-serif" font-size="15">&#8594; walk clockwise to the next node</text>
+  <text x="730" y="290" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">&#8594; cache 1 (at 3) owns k1</text>
+
+  <!-- in-memory array -->
+  <rect x="710" y="320" width="430" height="210" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="730" y="352" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">It is NOT a service &#8212; just an array</text>
+  <text x="730" y="378" fill="#9aa6b2" font-family="sans-serif" font-size="13">a sorted ring kept in the proxy's own memory</text>
+  <g font-family="monospace" font-size="14">
+    <rect x="730" y="396" width="92" height="40" rx="5" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/><text x="776" y="421" text-anchor="middle" fill="#cbd5e1">3&#8594;c1</text>
+    <rect x="826" y="396" width="92" height="40" rx="5" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/><text x="872" y="421" text-anchor="middle" fill="#cbd5e1">5&#8594;c3</text>
+    <rect x="922" y="396" width="100" height="40" rx="5" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/><text x="972" y="421" text-anchor="middle" fill="#cbd5e1">10&#8594;c4</text>
+    <rect x="1026" y="396" width="100" height="40" rx="5" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/><text x="1076" y="421" text-anchor="middle" fill="#cbd5e1">12&#8594;c2</text>
+  </g>
+  <text x="730" y="470" fill="#cbd5e1" font-family="sans-serif" font-size="14">lookup = binary-search for the first slot &#8805; hash(k)</text>
+  <text x="730" y="496" fill="#cbd5e1" font-family="sans-serif" font-size="14">past the end? <tspan fill="#f4a06a" font-weight="bold">wrap around</tspan> to the first node &#8212; it's a ring.</text>
+  <text x="730" y="518" fill="#9aa6b2" font-family="sans-serif" font-size="13">O(log N) per lookup, a few KB of memory total</text>
+
+  <rect x="710" y="548" width="430" height="120" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="730" y="580" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">The payoff</text>
+  <text x="730" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="14">adding/removing a node only re-maps the <tspan fill="#8aff8a" font-weight="bold">one arc</tspan></text>
+  <text x="730" y="630" fill="#cbd5e1" font-family="sans-serif" font-size="14">between it and its neighbor &#8212; not the whole keyspace.</text>
+  <text x="730" y="656" fill="#9aa6b2" font-family="sans-serif" font-size="13">contrast hash % N, where almost every key moved.</text>
+</svg>

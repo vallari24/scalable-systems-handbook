@@ -1,0 +1,99 @@
+<svg width="1200" height="660" viewBox="0 0 1200 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ep-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="ep-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="660" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Two Databases, Two Jobs: the ETL Problem</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">app data lives in MongoDB; the Insights team builds dashboards but only speaks <tspan fill="#8aff8a" font-weight="bold">SQL</tspan></text>
+
+  <!-- ===== LEFT: what we have ===== -->
+  <rect x="40" y="100" width="540" height="406" rx="12" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="62" y="134" fill="#cbd5e1" font-family="sans-serif" font-size="20" font-weight="bold">What we have today</text>
+
+  <!-- client -->
+  <circle cx="100" cy="210" r="14" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="100" y1="224" x2="100" y2="256" stroke="#ffffff" stroke-width="2"/>
+  <line x1="84" y1="238" x2="116" y2="238" stroke="#ffffff" stroke-width="2"/>
+  <line x1="100" y1="256" x2="88" y2="278" stroke="#ffffff" stroke-width="2"/>
+  <line x1="100" y1="256" x2="112" y2="278" stroke="#ffffff" stroke-width="2"/>
+  <text x="100" y="300" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13">client</text>
+
+  <!-- API -->
+  <rect x="190" y="218" width="120" height="56" rx="9" fill="#1c1f25" stroke="#ffffff" stroke-width="2"/>
+  <text x="250" y="252" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">API</text>
+  <line x1="120" y1="246" x2="186" y2="246" stroke="#ffffff" stroke-width="2" marker-end="url(#ep-w)"/>
+
+  <!-- MongoDB cylinder -->
+  <g stroke="#ffff99" stroke-width="2.5" fill="#1d1d12">
+    <ellipse cx="470" cy="222" rx="44" ry="15"/>
+    <rect x="426" y="222" width="88" height="54" fill="#1d1d12" stroke="none"/>
+    <path d="M426,222 L426,276" fill="none"/>
+    <path d="M514,222 L514,276" fill="none"/>
+    <path d="M426,276 A44,15 0 0 0 514,276" fill="none"/>
+    <ellipse cx="470" cy="222" rx="44" ry="15" fill="none"/>
+  </g>
+  <text x="470" y="302" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MongoDB</text>
+  <line x1="314" y1="246" x2="422" y2="246" stroke="#ffff99" stroke-width="2" marker-end="url(#ep-y)"/>
+
+  <text x="62" y="356" fill="#cbd5e1" font-family="sans-serif" font-size="15">A <tspan fill="#ffff99" font-weight="bold">transactional</tspan> store, tuned for the app:</text>
+  <text x="62" y="380" fill="#9aa6b2" font-family="sans-serif" font-size="14">fast document reads and writes, row/doc at a time.</text>
+  <text x="62" y="416" fill="#cbd5e1" font-family="sans-serif" font-size="15">Great for serving users. <tspan fill="#ff8a8a" font-weight="bold">Bad</tspan> for slicing millions</text>
+  <text x="62" y="440" fill="#cbd5e1" font-family="sans-serif" font-size="15">of rows into reports &#8212; and it isn't SQL.</text>
+  <text x="62" y="478" fill="#9aa6b2" font-family="sans-serif" font-size="13">No JOINs, no GROUP BY the analysts expect.</text>
+
+  <!-- ===== RIGHT: what the CEO wants ===== -->
+  <rect x="620" y="100" width="540" height="406" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="642" y="134" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">What the CEO now wants</text>
+
+  <!-- insights team: 3 people -->
+  <g stroke="#8aff8a" stroke-width="2" fill="none">
+    <circle cx="700" cy="210" r="13"/>
+    <line x1="700" y1="223" x2="700" y2="252"/>
+    <line x1="686" y1="235" x2="714" y2="235"/>
+    <line x1="700" y1="252" x2="690" y2="272"/><line x1="700" y1="252" x2="710" y2="272"/>
+    <circle cx="748" cy="210" r="13"/>
+    <line x1="748" y1="223" x2="748" y2="252"/>
+    <line x1="734" y1="235" x2="762" y2="235"/>
+    <line x1="748" y1="252" x2="738" y2="272"/><line x1="748" y1="252" x2="758" y2="272"/>
+    <circle cx="796" cy="210" r="13"/>
+    <line x1="796" y1="223" x2="796" y2="252"/>
+    <line x1="782" y1="235" x2="810" y2="235"/>
+    <line x1="796" y1="252" x2="786" y2="272"/><line x1="796" y1="252" x2="806" y2="272"/>
+  </g>
+  <text x="748" y="296" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Insights team</text>
+  <text x="748" y="316" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">reporting, stats, dashboards</text>
+
+  <!-- dashboard panel -->
+  <rect x="900" y="180" width="220" height="130" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="1010" y="208" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">dashboards</text>
+  <rect x="922" y="224" width="40" height="64" fill="#1d3326"/>
+  <rect x="972" y="248" width="40" height="40" fill="#1d3326"/>
+  <rect x="1022" y="236" width="40" height="52" fill="#1d3326"/>
+  <rect x="1072" y="258" width="30" height="30" fill="#1d3326"/>
+
+  <text x="642" y="362" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">But the team only knows SQL.</text>
+  <text x="642" y="392" fill="#cbd5e1" font-family="sans-serif" font-size="15">You cannot point a SQL dashboard at MongoDB.</text>
+  <text x="642" y="430" fill="#cbd5e1" font-family="sans-serif" font-size="15">You need a second, <tspan fill="#8aff8a" font-weight="bold">analytical</tspan> store the team</text>
+  <text x="642" y="454" fill="#cbd5e1" font-family="sans-serif" font-size="15">can query &#8212; fed from the app's database.</text>
+  <text x="642" y="490" fill="#9aa6b2" font-family="sans-serif" font-size="13">Two stores, each tuned for a different job.</text>
+
+  <!-- ===== BOTTOM: ETL strip ===== -->
+  <rect x="40" y="526" width="1120" height="110" rx="12" fill="#1a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="62" y="558" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">The job in between is ETL</text>
+  <g font-family="sans-serif" font-size="15" text-anchor="middle">
+    <rect x="360" y="566" width="150" height="48" rx="8" fill="#1d1216" stroke="#ff8bd2" stroke-width="1.8"/><text x="435" y="595" fill="#ff8bd2" font-weight="bold">Extract</text>
+    <rect x="540" y="566" width="170" height="48" rx="8" fill="#1d1216" stroke="#ff8bd2" stroke-width="1.8"/><text x="625" y="595" fill="#ff8bd2" font-weight="bold">Transform</text>
+    <rect x="740" y="566" width="150" height="48" rx="8" fill="#1d1216" stroke="#ff8bd2" stroke-width="1.8"/><text x="815" y="595" fill="#ff8bd2" font-weight="bold">Load</text>
+  </g>
+  <line x1="510" y1="590" x2="536" y2="590" stroke="#ff8bd2" stroke-width="2"/>
+  <line x1="710" y1="590" x2="736" y2="590" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="1025" y="585" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">pull from MongoDB,</text>
+  <text x="1025" y="606" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">reshape, load into SQL.</text>
+</svg>

@@ -1,0 +1,125 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ev-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="ev-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="ev-b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="ev-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="700" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">First Attempt: Emit Events to Kafka</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">on every action the API publishes an <tspan fill="#93c5fd" font-weight="bold">event</tspan>; workers reshape it into SQL the team can read</text>
+
+  <!-- ===== top row: app write path ===== -->
+  <circle cx="90" cy="150" r="14" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="90" y1="164" x2="90" y2="196" stroke="#ffffff" stroke-width="2"/>
+  <line x1="74" y1="178" x2="106" y2="178" stroke="#ffffff" stroke-width="2"/>
+  <line x1="90" y1="196" x2="78" y2="218" stroke="#ffffff" stroke-width="2"/>
+  <line x1="90" y1="196" x2="102" y2="218" stroke="#ffffff" stroke-width="2"/>
+  <text x="90" y="240" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13">client</text>
+
+  <rect x="190" y="122" width="120" height="56" rx="9" fill="#1c1f25" stroke="#ffffff" stroke-width="2"/>
+  <text x="250" y="156" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">API</text>
+  <line x1="110" y1="150" x2="186" y2="150" stroke="#ffffff" stroke-width="2" marker-end="url(#ev-w)"/>
+
+  <g stroke="#ffff99" stroke-width="2.5" fill="#1d1d12">
+    <ellipse cx="470" cy="128" rx="44" ry="15"/>
+    <rect x="426" y="128" width="88" height="50" fill="#1d1d12" stroke="none"/>
+    <path d="M426,128 L426,178" fill="none"/>
+    <path d="M514,128 L514,178" fill="none"/>
+    <path d="M426,178 A44,15 0 0 0 514,178" fill="none"/>
+    <ellipse cx="470" cy="128" rx="44" ry="15" fill="none"/>
+  </g>
+  <text x="470" y="204" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MongoDB</text>
+  <line x1="314" y1="150" x2="422" y2="150" stroke="#ffff99" stroke-width="2" marker-end="url(#ev-y)"/>
+  <text x="368" y="138" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">write</text>
+
+  <!-- ===== second path: events to analytics ===== -->
+  <!-- API branches down -->
+  <path d="M250,178 L250,300 L296,300" fill="none" stroke="#93c5fd" stroke-width="2" marker-end="url(#ev-b)"/>
+  <text x="262" y="250" fill="#93c5fd" font-family="sans-serif" font-size="12">publish event</text>
+
+  <!-- Kafka tube -->
+  <rect x="300" y="278" width="270" height="44" rx="22" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="320" y1="300" x2="552" y2="300" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4 5"/>
+  <text x="435" y="305" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Kafka &#8212; events</text>
+
+  <!-- workers -->
+  <g>
+    <rect x="668" y="284" width="92" height="34" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="1.6"/>
+    <rect x="660" y="276" width="92" height="34" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="706" y="298" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">workers</text>
+  </g>
+  <line x1="572" y1="300" x2="656" y2="294" stroke="#93c5fd" stroke-width="2" marker-end="url(#ev-b)"/>
+
+  <!-- MySQL cylinder -->
+  <g stroke="#ffff99" stroke-width="2.5" fill="#1d1d12">
+    <ellipse cx="920" cy="278" rx="46" ry="15"/>
+    <rect x="874" y="278" width="92" height="54" fill="#1d1d12" stroke="none"/>
+    <path d="M874,278 L874,332" fill="none"/>
+    <path d="M966,278 L966,332" fill="none"/>
+    <path d="M874,332 A46,15 0 0 0 966,332" fill="none"/>
+    <ellipse cx="920" cy="278" rx="46" ry="15" fill="none"/>
+  </g>
+  <text x="920" y="358" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MySQL</text>
+  <text x="920" y="378" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">analytical store</text>
+  <line x1="762" y1="296" x2="870" y2="300" stroke="#93c5fd" stroke-width="2" marker-end="url(#ev-y)"/>
+
+  <!-- insights team reads -->
+  <g stroke="#8aff8a" stroke-width="2" fill="none">
+    <circle cx="1086" cy="280" r="13"/>
+    <line x1="1086" y1="293" x2="1086" y2="320"/>
+    <line x1="1072" y1="304" x2="1100" y2="304"/>
+    <line x1="1086" y1="320" x2="1076" y2="340"/><line x1="1086" y1="320" x2="1096" y2="340"/>
+  </g>
+  <text x="1086" y="362" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">Insights</text>
+  <line x1="1066" y1="304" x2="978" y2="304" stroke="#8aff8a" stroke-width="2" marker-end="url(#ev-g)"/>
+  <text x="1024" y="294" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">SQL read</text>
+
+  <!-- ===== bottom: but is this the best way? ===== -->
+  <text x="600" y="430" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">But is this the best way? Four cracks:</text>
+
+  <g font-family="sans-serif">
+    <rect x="40" y="456" width="270" height="200" rx="10" fill="#1d1216" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="60" y="488" fill="#ff8a8a" font-size="16" font-weight="bold">1. Events carry app context</text>
+    <text x="60" y="516" fill="#cbd5e1" font-size="14">&#8220;user liked a post&#8221; emits a tiny</text>
+    <text x="60" y="538" fill="#cbd5e1" font-size="14">post_like {post_id, user_id}.</text>
+    <text x="60" y="566" fill="#cbd5e1" font-size="14">The DB row has 10 fields for the</text>
+    <text x="60" y="588" fill="#cbd5e1" font-size="14">same thing &#8212; the event is partial.</text>
+    <text x="60" y="624" fill="#9aa6b2" font-size="13">workers must call back to MongoDB</text>
+    <text x="60" y="644" fill="#9aa6b2" font-size="13">to fill the gaps &#8212; extra load.</text>
+
+    <rect x="326" y="456" width="270" height="200" rx="10" fill="#1d1216" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="346" y="488" fill="#ff8a8a" font-size="16" font-weight="bold">2. Not everything emits</text>
+    <text x="346" y="516" fill="#cbd5e1" font-size="14">A direct collection update, a</text>
+    <text x="346" y="538" fill="#cbd5e1" font-size="14">migration, a back-office fix &#8212;</text>
+    <text x="346" y="560" fill="#cbd5e1" font-size="14">changes the data with no event.</text>
+    <text x="346" y="596" fill="#9aa6b2" font-size="13">The analytics store silently</text>
+    <text x="346" y="616" fill="#9aa6b2" font-size="13">drifts out of sync with the truth.</text>
+
+    <rect x="612" y="456" width="270" height="200" rx="10" fill="#1d1216" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="632" y="488" fill="#ff8a8a" font-size="16" font-weight="bold">3. Humans forget</text>
+    <text x="632" y="516" fill="#cbd5e1" font-size="14">Every new API must <tspan font-weight="bold">also</tspan> write</text>
+    <text x="632" y="538" fill="#cbd5e1" font-size="14">the publish-to-Kafka code, by</text>
+    <text x="632" y="560" fill="#cbd5e1" font-size="14">hand, forever.</text>
+    <text x="632" y="596" fill="#9aa6b2" font-size="13">One engineer forgets one event,</text>
+    <text x="632" y="616" fill="#9aa6b2" font-size="13">and that change never lands.</text>
+
+    <rect x="898" y="456" width="262" height="200" rx="10" fill="#1d1216" stroke="#ff8a8a" stroke-width="2.5"/>
+    <text x="918" y="488" fill="#ff8a8a" font-size="16" font-weight="bold">4. Dual write = no atomicity</text>
+    <text x="918" y="516" fill="#cbd5e1" font-size="14">DB write and Kafka publish are</text>
+    <text x="918" y="538" fill="#cbd5e1" font-size="14">two systems, no shared txn.</text>
+    <text x="918" y="566" fill="#cbd5e1" font-size="14">Write the DB, crash before</text>
+    <text x="918" y="588" fill="#cbd5e1" font-size="14">publishing &#8594; event is lost.</text>
+    <text x="918" y="624" fill="#ff8a8a" font-size="13" font-weight="bold">The stores disagree. Inconsistent.</text>
+  </g>
+</svg>

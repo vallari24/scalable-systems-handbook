@@ -1,0 +1,68 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="760" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Which Key Do We Drop? Match The Access Pattern</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the right eviction policy depends on how your keys are actually read</text>
+
+  <!-- ===== Panel 1: LRU / Google News ===== -->
+  <rect x="50" y="110" width="540" height="290" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="76" y="146" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">LRU &#8212; recency wins</text>
+  <text x="76" y="172" fill="#9aa6b2" font-family="sans-serif" font-size="14">evict the key untouched for longest</text>
+  <!-- axes -->
+  <line x1="110" y1="330" x2="430" y2="330" stroke="#5b6470" stroke-width="2"/>
+  <line x1="110" y1="200" x2="110" y2="330" stroke="#5b6470" stroke-width="2"/>
+  <!-- decay curve: high at recent (left), low at old -->
+  <path d="M110,210 C150,215 175,300 240,318 C320,330 380,330 430,330" fill="none" stroke="#93c5fd" stroke-width="3"/>
+  <text x="118" y="352" fill="#9aa6b2" font-family="sans-serif" font-size="12">today</text>
+  <text x="392" y="352" fill="#9aa6b2" font-family="sans-serif" font-size="12">100 days old</text>
+  <text x="270" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">Google News</text>
+  <text x="76" y="386" fill="#cbd5e1" font-family="sans-serif" font-size="14">old news is dead news &#8594; safe to evict by age</text>
+
+  <!-- ===== Panel 2: LFU / Wikipedia ===== -->
+  <rect x="610" y="110" width="540" height="290" rx="12" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="636" y="146" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">LFU &#8212; frequency wins</text>
+  <text x="636" y="172" fill="#9aa6b2" font-family="sans-serif" font-size="14">evict the key used least often</text>
+  <line x1="670" y1="330" x2="990" y2="330" stroke="#5b6470" stroke-width="2"/>
+  <line x1="670" y1="200" x2="670" y2="330" stroke="#5b6470" stroke-width="2"/>
+  <!-- spiky popular points that recur -->
+  <circle cx="720" cy="250" r="9" fill="none" stroke="#ff8a8a" stroke-width="3"/>
+  <circle cx="820" cy="290" r="9" fill="none" stroke="#ff8a8a" stroke-width="3"/>
+  <circle cx="930" cy="225" r="9" fill="none" stroke="#ff8a8a" stroke-width="3"/>
+  <line x1="720" y1="259" x2="820" y2="281" stroke="#5b6470" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="820" y1="281" x2="930" y2="234" stroke="#5b6470" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="824" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">Wikipedia / stocks</text>
+  <text x="636" y="368" fill="#cbd5e1" font-family="sans-serif" font-size="14">popular in the past &#8594; popular again. A recent dip</text>
+  <text x="636" y="388" fill="#cbd5e1" font-family="sans-serif" font-size="14">is not a reason to evict.</text>
+
+  <!-- ===== Panel 3: LFU with decay ===== -->
+  <rect x="50" y="420" width="540" height="290" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="76" y="456" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">LFU + decay &#8212; aging frequency</text>
+  <text x="76" y="482" fill="#9aa6b2" font-family="sans-serif" font-size="14">old hits count less than fresh hits</text>
+  <text x="100" y="540" fill="#cbd5e1" font-family="monospace" font-size="18">1,000,000</text>
+  <text x="250" y="540" fill="#9aa6b2" font-family="sans-serif" font-size="16">&#8594;</text>
+  <text x="285" y="540" fill="#cbd5e1" font-family="monospace" font-size="18">500,000</text>
+  <text x="420" y="540" fill="#9aa6b2" font-family="sans-serif" font-size="16">&#8594;</text>
+  <text x="455" y="540" fill="#cbd5e1" font-family="monospace" font-size="18">250,000</text>
+  <text x="76" y="582" fill="#cbd5e1" font-family="sans-serif" font-size="14">halve the score every day &#8212; exponential decay.</text>
+  <text x="76" y="606" fill="#cbd5e1" font-family="sans-serif" font-size="14">A once-hot key fades unless it keeps earning hits.</text>
+  <text x="76" y="636" fill="#9aa6b2" font-family="sans-serif" font-size="13">the decay rate is a knob you tune to your traffic</text>
+
+  <!-- ===== Panel 4: Random ===== -->
+  <rect x="610" y="420" width="540" height="290" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="636" y="456" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Random &#8212; zero bookkeeping</text>
+  <text x="636" y="482" fill="#9aa6b2" font-family="sans-serif" font-size="14">evict any key at random</text>
+  <line x1="670" y1="600" x2="990" y2="600" stroke="#5b6470" stroke-width="2"/>
+  <line x1="670" y1="510" x2="670" y2="600" stroke="#5b6470" stroke-width="2"/>
+  <!-- flat uniform line -->
+  <path d="M675,548 L985,548" fill="none" stroke="#8aff8a" stroke-width="3"/>
+  <g stroke="#8aff8a" stroke-width="2">
+    <line x1="690" y1="600" x2="690" y2="588"/><line x1="720" y1="600" x2="720" y2="588"/><line x1="750" y1="600" x2="750" y2="588"/><line x1="780" y1="600" x2="780" y2="588"/><line x1="810" y1="600" x2="810" y2="588"/><line x1="840" y1="600" x2="840" y2="588"/><line x1="870" y1="600" x2="870" y2="588"/><line x1="900" y1="600" x2="900" y2="588"/><line x1="930" y1="600" x2="930" y2="588"/><line x1="960" y1="600" x2="960" y2="588"/>
+  </g>
+  <text x="830" y="532" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">uniform access</text>
+  <text x="636" y="648" fill="#cbd5e1" font-family="sans-serif" font-size="14">when all keys are equally likely, tracking recency</text>
+  <text x="636" y="668" fill="#cbd5e1" font-family="sans-serif" font-size="14">buys nothing &#8212; so pay nothing.</text>
+
+  <!-- footer memory line -->
+  <line x1="50" y1="724" x2="1150" y2="724" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="600" y="748" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">exact LRU needs a doubly linked list (memory cost)</tspan> &#8212; approximate LRU/LFU trades a little accuracy for a lot of saved memory.</text>
+</svg>

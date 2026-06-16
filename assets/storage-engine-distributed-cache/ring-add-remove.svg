@@ -1,0 +1,100 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ar-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="ar-o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#f4a06a"/>
+    </marker>
+    <marker id="ar-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Scaling the Ring: Minimal Data Transfer</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a node joins or leaves &#8212; only the <tspan fill="#8aff8a" font-weight="bold">one arc</tspan> beside it changes hands, never the whole keyspace</text>
+
+  <!-- ===== LEFT: adding ===== -->
+  <rect x="40" y="98" width="555" height="572" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="62" y="130" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Adding cache 5</text>
+
+  <circle cx="300" cy="370" r="160" fill="#15171c" stroke="#ffffff" stroke-width="2"/>
+  <!-- highlighted moving arc from 12 -> through 0 -> to 1 -->
+  <path d="M 140,370 A 160,160 0 0 1 361,231" fill="none" stroke="#8aff8a" stroke-width="6" opacity="0.55"/>
+
+  <!-- nodes -->
+  <text x="262" y="210" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">0</text>
+  <!-- cache 5 @ 1 (new) -->
+  <rect x="345" y="222" width="40" height="22" rx="3" fill="#1d1d12" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="408" y="222" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">cache 5</text>
+  <text x="408" y="240" fill="#9aa6b2" font-family="sans-serif" font-size="11">(new) @1</text>
+  <!-- cache 1 @ 3 -->
+  <rect x="438" y="312" width="40" height="22" rx="3" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="486" y="328" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">cache 1</text>
+  <!-- cache 3 @ 5 -->
+  <rect x="438" y="430" width="40" height="22" rx="3" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="486" y="446" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">cache 3</text>
+  <!-- cache 4 @ 10 -->
+  <rect x="158" y="478" width="40" height="22" rx="3" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="100" y="494" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">cache 4</text>
+  <!-- cache 2 @ 12 -->
+  <rect x="120" y="359" width="40" height="22" rx="3" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="78" y="350" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">cache 2</text>
+
+  <!-- key k1 -->
+  <rect x="286" y="218" width="28" height="20" rx="3" fill="#f4a06a"/>
+  <text x="300" y="200" text-anchor="middle" fill="#f4a06a" font-family="sans-serif" font-size="14" font-weight="bold">k1</text>
+  <path d="M 322,214 q 36,-2 44,18" fill="none" stroke="#f4a06a" stroke-width="2" marker-end="url(#ar-o)"/>
+  <text x="300" y="556" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">only keys in (12 &#8594; 1] move: cache 1 &#8594; cache 5</text>
+
+  <text x="62" y="600" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#8aff8a" font-weight="bold">Don't boot a blank node.</tspan> Build cache 5 from a</text>
+  <text x="62" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="14">snapshot of its neighbor (cache 1), add it to the ring,</text>
+  <text x="62" y="644" fill="#cbd5e1" font-family="sans-serif" font-size="14">then just update the proxy's array with its IP.</text>
+  <text x="62" y="664" fill="#9aa6b2" font-family="sans-serif" font-size="13">incoming reads hit warm data &#8212; no cold-miss stampede.</text>
+
+  <!-- ===== RIGHT: removing ===== -->
+  <rect x="615" y="98" width="545" height="572" rx="12" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="637" y="130" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">Removing a node</text>
+
+  <circle cx="820" cy="270" r="130" fill="#15171c" stroke="#ffffff" stroke-width="2"/>
+  <text x="820" y="148" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">0</text>
+  <!-- cache 1 @ 3 (being removed) -->
+  <rect x="920" y="222" width="38" height="20" rx="3" fill="#1d1d12" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="918" y1="220" x2="960" y2="244" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="966" y="230" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">cache 1</text>
+  <!-- cache 3 @ 5 -->
+  <rect x="920" y="318" width="38" height="20" rx="3" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="966" y="334" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">cache 3</text>
+  <!-- cache 4 @ 10 -->
+  <rect x="700" y="354" width="38" height="20" rx="3" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="648" y="370" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">cache 4</text>
+  <!-- cache 2 @ 12 -->
+  <rect x="672" y="260" width="38" height="20" rx="3" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="624" y="252" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">cache 2</text>
+  <!-- handoff arrow cache1 -> cache3 -->
+  <path d="M 952,246 q 34,40 0,74" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="1010" y="290" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">copy data</text>
+  <text x="1010" y="306" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">clockwise</text>
+
+  <!-- graceful -->
+  <text x="637" y="432" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">1. Graceful shutdown</text>
+  <text x="637" y="456" fill="#cbd5e1" font-family="sans-serif" font-size="14">copy cache 1's keys to the next node clockwise</text>
+  <text x="637" y="476" fill="#cbd5e1" font-family="sans-serif" font-size="14">(cache 3); once in sync, drop cache 1 from the ring.</text>
+
+  <!-- abrupt -->
+  <text x="637" y="512" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">2. Abrupt outage</text>
+  <text x="637" y="536" fill="#cbd5e1" font-family="sans-serif" font-size="14">a cache is <tspan fill="#ff8a8a" font-weight="bold">volatile</tspan> &#8212; losing it just means cold</text>
+  <text x="637" y="556" fill="#cbd5e1" font-family="sans-serif" font-size="14">misses that refill from the DB. Often acceptable.</text>
+
+  <!-- HA / reliability -->
+  <rect x="637" y="576" width="250" height="80" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="652" y="602" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">High availability</text>
+  <text x="652" y="626" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; replicas (state data)</text>
+  <text x="652" y="646" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; standby nodes</text>
+  <rect x="901" y="576" width="236" height="80" rx="9" fill="#10243a" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="916" y="602" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Reliability</text>
+  <text x="916" y="626" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; write-ahead logging</text>
+  <text x="916" y="646" fill="#9aa6b2" font-family="sans-serif" font-size="12">replay the log on restart</text>
+</svg>

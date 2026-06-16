@@ -1,0 +1,65 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="700" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Query Optimizer: Pick the Plan That Does the Least Work</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">joining 3 tables has 3! = 6 possible orders &#8212; and each touches a wildly different number of rows (here <tspan fill="#ffff99" font-weight="bold">&#215; = join</tspan>)</text>
+
+  <!-- LEFT: three tables, very different sizes -->
+  <text x="60" y="116" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="bold">Three tables, three sizes</text>
+
+  <rect x="60" y="134" width="250" height="72" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="84" y="166" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">B</text>
+  <text x="116" y="166" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="bold">5 rows</text>
+  <text x="84" y="190" fill="#8aff8a" font-family="sans-serif" font-size="13">tiny &#8212; the ideal driving table</text>
+
+  <rect x="60" y="218" width="250" height="72" rx="10" fill="#1c1f25" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="84" y="250" fill="#cbd5e1" font-family="sans-serif" font-size="20" font-weight="bold">A</text>
+  <text x="116" y="250" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="bold">1,000 rows</text>
+  <text x="84" y="274" fill="#9aa6b2" font-family="sans-serif" font-size="13">medium</text>
+
+  <rect x="60" y="302" width="250" height="72" rx="10" fill="#1d1216" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="84" y="334" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">C</text>
+  <text x="116" y="334" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="bold">1,000,000 rows</text>
+  <text x="84" y="358" fill="#ff8a8a" font-family="sans-serif" font-size="13">huge &#8212; the worst driving table</text>
+
+  <!-- MIDDLE: the 6 permutations -->
+  <rect x="346" y="134" width="268" height="240" rx="10" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="480" y="164" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">6 possible join orders</text>
+  <g font-family="monospace" font-size="17" fill="#cbd5e1">
+    <text x="372" y="202">A &#215; B &#215; C</text>
+    <text x="372" y="236">A &#215; C &#215; B</text>
+    <text x="372" y="270">B &#215; C &#215; A</text>
+    <text x="372" y="304">B &#215; A &#215; C</text>
+    <text x="372" y="338">C &#215; A &#215; B</text>
+    <text x="372" y="372">C &#215; B &#215; A</text>
+  </g>
+  <text x="498" y="270" fill="#9aa6b2" font-family="sans-serif" font-size="12">each order =</text>
+  <text x="498" y="288" fill="#9aa6b2" font-family="sans-serif" font-size="12">a different</text>
+  <text x="498" y="306" fill="#9aa6b2" font-family="sans-serif" font-size="12">number of</text>
+  <text x="498" y="324" fill="#9aa6b2" font-family="sans-serif" font-size="12">disk ops</text>
+
+  <!-- RIGHT: cheapest vs costly plan -->
+  <rect x="650" y="134" width="490" height="210" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="674" y="166" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Cheapest: drive with the smallest table</text>
+  <g font-family="monospace" font-size="15" fill="#cbd5e1">
+    <text x="674" y="200">1. scan B            (5 rows)   &#8592; driving table</text>
+    <text x="674" y="228">2. join A on key     (use index)</text>
+    <text x="674" y="256">3. join C on key     (use index)</text>
+  </g>
+  <text x="674" y="294" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">tiny intermediate results &#8594; few disk ops</text>
+  <text x="674" y="318" fill="#9aa6b2" font-family="sans-serif" font-size="13">this is roughly what an evaluation plan looks like.</text>
+
+  <rect x="650" y="360" width="490" height="150" rx="12" fill="#1d1216" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="674" y="392" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">Costly: drive with the biggest table</text>
+  <g font-family="monospace" font-size="15" fill="#cbd5e1">
+    <text x="674" y="426">1. scan C   (1,000,000 rows)  &#8592; driving table</text>
+    <text x="674" y="454">2. join A, then B ...</text>
+  </g>
+  <text x="674" y="490" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">millions of intermediate rows &#8594; lots of disk I/O</text>
+
+  <!-- bottom: how it decides + pluggable -->
+  <rect x="60" y="546" width="1080" height="124" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="84" y="580" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">How it decides &#8212; and how to override it</text>
+  <text x="84" y="610" fill="#cbd5e1" font-family="sans-serif" font-size="15">The optimizer is <tspan fill="#ffff99" font-weight="bold">cost-based</tspan>: it estimates each order's cost from <tspan fill="#ffff99" font-weight="bold">cardinality</tspan> (row counts) and index stats, then picks the cheapest plan.</text>
+  <text x="84" y="638" fill="#cbd5e1" font-family="sans-serif" font-size="15">You can <tspan fill="#93c5fd" font-weight="bold">turn it off</tspan> (force a join order), or pluck it out entirely and supply <tspan fill="#93c5fd" font-weight="bold">your own evaluation plan</tspan> &#8212; just like the parser, it's a swappable layer.</text>
+</svg>

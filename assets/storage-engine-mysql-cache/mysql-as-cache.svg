@@ -1,0 +1,52 @@
+<svg width="1200" height="660" viewBox="0 0 1200 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="660" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">MySQL as a Cache Server: Why Rebuild What Already Exists?</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the features we wanted from a cache are already in MySQL &#8212; the only problem is that MySQL writes to disk</text>
+
+  <!-- LEFT: hand-built cache -->
+  <rect x="60" y="104" width="520" height="312" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="84" y="140" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">What we hand-built last time</text>
+
+  <rect x="200" y="158" width="240" height="58" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="320" y="186" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">in-memory hashmap</text>
+  <text x="320" y="206" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">a distributed cache, from scratch</text>
+
+  <g font-family="sans-serif" font-size="15" fill="#cbd5e1">
+    <text x="84" y="256">&#8226; key &#8594; value lookup, by hand</text>
+    <text x="84" y="288">&#8226; TTL and eviction, by hand</text>
+    <text x="84" y="320">&#8226; sharding and replication, by hand</text>
+    <text x="84" y="352">&#8226; every feature is code <tspan fill="#ff8a8a" font-weight="bold">we</tspan> maintain</text>
+  </g>
+  <text x="84" y="392" fill="#9aa6b2" font-family="sans-serif" font-size="13">Fast &#8212; but we rebuilt a lot of what a database already does.</text>
+
+  <!-- RIGHT: MySQL already has it -->
+  <rect x="620" y="104" width="520" height="312" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="644" y="140" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">What MySQL already gives us</text>
+
+  <g stroke="#ffff99" stroke-width="2.5" fill="#1d1d12">
+    <ellipse cx="880" cy="166" rx="46" ry="15"/>
+    <rect x="834" y="166" width="92" height="46" fill="#1d1d12" stroke="none"/>
+    <path d="M834,166 L834,212" fill="none"/><path d="M926,166 L926,212" fill="none"/>
+    <path d="M834,212 A46,15 0 0 0 926,212" fill="none"/>
+    <ellipse cx="880" cy="166" rx="46" ry="15" fill="none"/>
+  </g>
+  <text x="880" y="238" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MySQL</text>
+
+  <g font-family="sans-serif" font-size="15" fill="#cbd5e1">
+    <text x="644" y="280">&#8226; SQL: point lookups, ranges, JOINs</text>
+    <text x="644" y="312">&#8226; secondary indexes, for free</text>
+    <text x="644" y="344">&#8226; replication and durability, for free</text>
+    <text x="644" y="376">&#8226; decades of battle-testing</text>
+  </g>
+
+  <!-- bottom: the catch + the question -->
+  <rect x="60" y="440" width="1080" height="84" rx="12" fill="#1d1216" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="84" y="474" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">The catch:</text>
+  <text x="182" y="474" fill="#cbd5e1" font-family="sans-serif" font-size="16">normal MySQL persists every write to <tspan fill="#ffff99" font-weight="bold">disk</tspan>. Minimized, but real disk I/O on the hot path &#8212; we'd lose the latency and</text>
+  <text x="84" y="502" fill="#cbd5e1" font-family="sans-serif" font-size="16">throughput that made the in-memory cache worth building.</text>
+
+  <rect x="60" y="544" width="1080" height="72" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="600" y="578" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">The question: can we keep all of MySQL's features but get in-memory speed?</text>
+  <text x="600" y="602" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">To answer it, we have to open MySQL up and find out exactly who is writing to disk.</text>
+</svg>

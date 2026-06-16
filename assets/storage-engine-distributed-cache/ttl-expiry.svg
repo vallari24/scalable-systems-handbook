@@ -1,0 +1,73 @@
+<svg width="1200" height="740" viewBox="0 0 1200 740" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ttl-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="ttl-r" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="ttl-b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="740" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Expiry: Who Actually Removes The Dead Keys?</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">each key stores an absolute expiry time &#8212; then lazy delete on read, plus an active sweep</text>
+
+  <!-- value struct -->
+  <rect x="60" y="110" width="300" height="160" rx="10" fill="#1a1320" stroke="#ff8bd2" stroke-width="3"/>
+  <text x="210" y="142" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">value object</text>
+  <text x="84" y="178" fill="#ffff99" font-family="monospace" font-size="15">type:</text><text x="180" y="178" fill="#cbd5e1" font-family="monospace" font-size="15">"stack"</text>
+  <text x="84" y="212" fill="#93c5fd" font-family="monospace" font-size="15">exp:</text><text x="180" y="212" fill="#93c5fd" font-family="monospace" font-size="15">1735&#160;(abs)</text>
+  <text x="84" y="246" fill="#ffff99" font-family="monospace" font-size="15">data:</text><text x="180" y="246" fill="#cbd5e1" font-family="monospace" font-size="15">[ &#8230; ]</text>
+  <text x="210" y="292" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">exp = absolute wall-clock time, not a countdown</text>
+
+  <!-- lazy delete -->
+  <rect x="420" y="110" width="720" height="160" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="446" y="144" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">1. Lazy delete &#8212; check on read</text>
+  <text x="446" y="178" fill="#cbd5e1" font-family="monospace" font-size="15">GET k</text>
+  <line x1="520" y1="173" x2="585" y2="173" stroke="#ffffff" stroke-width="2" marker-end="url(#ttl-w)"/>
+  <text x="600" y="178" fill="#cbd5e1" font-family="monospace" font-size="15">exp &lt; now ?</text>
+  <line x1="730" y1="173" x2="795" y2="173" stroke="#ff8a8a" stroke-width="2" marker-end="url(#ttl-r)"/>
+  <text x="810" y="178" fill="#ff8a8a" font-family="monospace" font-size="15">free(obj)</text>
+  <text x="920" y="178" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8594; return MISS</text>
+  <text x="446" y="216" fill="#cbd5e1" font-family="sans-serif" font-size="15">cost: nearly free &#8212; you were already touching the key.</text>
+  <text x="446" y="246" fill="#9aa6b2" font-family="sans-serif" font-size="14">gap: a key that expires but is never read again just sits there wasting memory &#8594; we also need an active sweep</text>
+
+  <text x="600" y="320" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="18" font-weight="bold">2. Active cleanup &#8212; a background thread reclaims the rest</text>
+  <text x="600" y="344" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">runs as a thread inside the process &#8212; a separate process can't see the in-memory hashtable</text>
+
+  <!-- option A: priority queue -->
+  <rect x="60" y="368" width="540" height="320" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="86" y="402" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">A. Priority Queue by expiry</text>
+  <text x="86" y="428" fill="#9aa6b2" font-family="sans-serif" font-size="14">keys ordered by absolute expiry &#8212; soonest at the head</text>
+
+  <g font-family="monospace" font-size="15" text-anchor="middle">
+    <rect x="86" y="448" width="110" height="46" rx="6" fill="#1d1d12" stroke="#ff8a8a" stroke-width="2.5"/><text x="141" y="477" fill="#ff8a8a">k2 :100</text>
+    <rect x="206" y="448" width="110" height="46" rx="6" fill="#16191e" stroke="#ffff99" stroke-width="2"/><text x="261" y="477" fill="#cbd5e1">k7 :101</text>
+    <rect x="326" y="448" width="110" height="46" rx="6" fill="#16191e" stroke="#ffff99" stroke-width="2"/><text x="381" y="477" fill="#cbd5e1">k9 :105</text>
+    <rect x="446" y="448" width="110" height="46" rx="6" fill="#16191e" stroke="#ffff99" stroke-width="2"/><text x="501" y="477" fill="#cbd5e1">k3 :110</text>
+  </g>
+  <text x="141" y="516" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">head expires first</text>
+  <line x1="141" y1="524" x2="141" y2="498" stroke="#ff8a8a" stroke-width="2" marker-end="url(#ttl-r)"/>
+  <text x="86" y="560" fill="#cbd5e1" font-family="sans-serif" font-size="15">pop the head while <tspan font-family="monospace">exp &lt; now</tspan>, <tspan fill="#ff8a8a" font-weight="bold">free(obj)</tspan>, repeat.</text>
+  <text x="86" y="600" fill="#8aff8a" font-family="sans-serif" font-size="14"><tspan font-weight="bold">+</tspan> simple, consistent &#8212; exact expiry order</text>
+  <text x="86" y="628" fill="#ff8a8a" font-family="sans-serif" font-size="14"><tspan font-weight="bold">&#8722;</tspan> an extra data structure to store and maintain</text>
+  <text x="86" y="664" fill="#9aa6b2" font-family="sans-serif" font-size="13">every PUT with a TTL also has to update the queue</text>
+
+  <!-- option B: sampling -->
+  <rect x="630" y="368" width="510" height="320" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="656" y="402" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">B. Random sampling <tspan fill="#9aa6b2" font-size="14">[Redis]</tspan></text>
+  <text x="656" y="428" fill="#9aa6b2" font-family="sans-serif" font-size="14">no extra structure &#8212; just probe and reclaim</text>
+
+  <text x="656" y="466" fill="#cbd5e1" font-family="sans-serif" font-size="15">1. sample <tspan fill="#93c5fd" font-weight="bold">20 random keys</tspan></text>
+  <text x="656" y="498" fill="#cbd5e1" font-family="sans-serif" font-size="15">2. <tspan fill="#ff8a8a" font-weight="bold">free(obj)</tspan> the expired ones</text>
+  <text x="656" y="530" fill="#cbd5e1" font-family="sans-serif" font-size="15">3. if &gt; 25% were expired, <tspan fill="#93c5fd" font-weight="bold">repeat immediately</tspan></text>
+  <line x1="656" y1="548" x2="1110" y2="548" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="656" y="582" fill="#8aff8a" font-family="sans-serif" font-size="14"><tspan font-weight="bold">+</tspan> O(1) memory, no per-key bookkeeping</text>
+  <text x="656" y="610" fill="#ff8a8a" font-family="sans-serif" font-size="14"><tspan font-weight="bold">&#8722;</tspan> approximate &#8212; some expired keys linger a while</text>
+  <text x="656" y="646" fill="#9aa6b2" font-family="sans-serif" font-size="13">the 25% threshold keeps the expired fraction bounded:</text>
+  <text x="656" y="668" fill="#9aa6b2" font-family="sans-serif" font-size="13">sweep hard when there's lots to clean, back off when clean</text>
+</svg>

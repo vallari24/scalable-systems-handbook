@@ -1,0 +1,77 @@
+<svg width="1200" height="640" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ct-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="ct-g" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="640" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Short-Lived vs Persistent Connections</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the TCP handshake is a tax &#8212; pay it per request, or pay it once</text>
+
+  <!-- ===== LEFT: HTTP/1.1 ===== -->
+  <rect x="50" y="106" width="540" height="500" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="320" y="142" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">HTTP/1.1 REST &#8212; new connection each time</text>
+
+  <text x="150" y="178" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">client</text>
+  <text x="490" y="178" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">cache</text>
+  <line x1="150" y1="190" x2="150" y2="470" stroke="#3a3f47" stroke-width="2"/>
+  <line x1="490" y1="190" x2="490" y2="470" stroke="#3a3f47" stroke-width="2"/>
+
+  <text x="320" y="212" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">1. TCP 3-way handshake</text>
+  <text x="320" y="231" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="11">SYN</text>
+  <line x1="150" y1="238" x2="488" y2="238" stroke="#ffffff" stroke-width="2" marker-end="url(#ct-w)"/>
+  <text x="320" y="257" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="11">SYN-ACK</text>
+  <line x1="490" y1="264" x2="152" y2="264" stroke="#ffffff" stroke-width="2" marker-end="url(#ct-w)"/>
+  <text x="320" y="283" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="11">ACK</text>
+  <line x1="150" y1="290" x2="488" y2="290" stroke="#ffffff" stroke-width="2" marker-end="url(#ct-w)"/>
+
+  <text x="320" y="322" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">2. request / response</text>
+  <text x="320" y="341" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="11">GET k1</text>
+  <line x1="150" y1="348" x2="488" y2="348" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+  <text x="320" y="367" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="11">value</text>
+  <line x1="490" y1="374" x2="152" y2="374" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+
+  <text x="320" y="406" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">3. teardown</text>
+  <text x="320" y="425" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="11">FIN</text>
+  <line x1="150" y1="432" x2="488" y2="432" stroke="#ffffff" stroke-width="2" marker-end="url(#ct-w)"/>
+  <text x="320" y="451" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="11">ACK</text>
+  <line x1="490" y1="458" x2="152" y2="458" stroke="#ffffff" stroke-width="2" marker-end="url(#ct-w)"/>
+
+  <rect x="90" y="482" width="460" height="108" rx="10" fill="#2a1620" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="320" y="512" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">&#8635; every request pays handshake + teardown</text>
+  <text x="320" y="538" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">simplest way to expose a cache over the internet</text>
+  <text x="320" y="560" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">(firewalls, proxies, TLS, browsers all speak HTTP)</text>
+  <text x="320" y="582" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">use keep-alive to reuse the socket where you can</text>
+
+  <!-- ===== RIGHT: gRPC / TCP ===== -->
+  <rect x="610" y="106" width="540" height="500" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="880" y="142" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">gRPC / raw TCP &#8212; one persistent pipe</text>
+
+  <text x="710" y="178" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">client</text>
+  <text x="1050" y="178" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">cache</text>
+  <line x1="710" y1="190" x2="710" y2="470" stroke="#3a3f47" stroke-width="2"/>
+  <line x1="1050" y1="190" x2="1050" y2="470" stroke="#3a3f47" stroke-width="2"/>
+
+  <text x="880" y="222" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">handshake ONCE</text>
+  <text x="880" y="241" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="11">SYN / SYN-ACK / ACK</text>
+  <line x1="710" y1="248" x2="1048" y2="248" stroke="#ffffff" stroke-width="2" marker-end="url(#ct-w)"/>
+
+  <text x="880" y="288" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">then many req/resp on the same connection</text>
+  <line x1="710" y1="312" x2="1048" y2="312" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+  <line x1="1050" y1="336" x2="712" y2="336" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+  <line x1="710" y1="360" x2="1048" y2="360" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+  <line x1="1050" y1="384" x2="712" y2="384" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+  <line x1="710" y1="408" x2="1048" y2="408" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+  <line x1="1050" y1="432" x2="712" y2="432" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ct-g)"/>
+
+  <rect x="650" y="482" width="460" height="108" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="880" y="512" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">handshake cost amortized &#8594; higher throughput</text>
+  <text x="880" y="538" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">gRPC = HTTP/2 + protobuf (compact binary)</text>
+  <text x="880" y="560" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">raw TCP = your own protocol (what Redis does)</text>
+  <text x="880" y="582" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">best for high-volume internal service-to-service traffic</text>
+</svg>

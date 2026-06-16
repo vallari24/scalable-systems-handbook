@@ -1,0 +1,83 @@
+<svg width="1200" height="660" viewBox="0 0 1200 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="r4-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="r4-g" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="r4-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="660" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Four Ways to Route a Key to its Owner</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">routing answers one question: <tspan fill="#ff8bd2" font-weight="bold">which node owns this key?</tspan> &#8212; here are four places that decision can live</text>
+
+  <!-- ===== Panel 1: Proxy / LB ===== -->
+  <rect x="40" y="98" width="555" height="268" rx="12" fill="#16191e" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="62" y="130" fill="#ff8bd2" font-family="sans-serif" font-size="19" font-weight="bold">1. Proxy / load balancer decides</text>
+  <text x="62" y="154" fill="#9aa6b2" font-family="sans-serif" font-size="13">a middle layer knows ownership and forwards for you</text>
+
+  <text x="92" y="232" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13">client</text>
+  <rect x="200" y="200" width="92" height="44" rx="8" fill="#1a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="246" y="227" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">proxy</text>
+  <g font-family="monospace" font-size="12">
+    <rect x="400" y="178" width="120" height="34" rx="6" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/><text x="460" y="200" text-anchor="middle" fill="#9aa6b2">node 1</text>
+    <rect x="400" y="220" width="120" height="34" rx="6" fill="#1d1d12" stroke="#8aff8a" stroke-width="2"/><text x="460" y="242" text-anchor="middle" fill="#8aff8a">node 2</text>
+    <rect x="400" y="262" width="120" height="34" rx="6" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/><text x="460" y="284" text-anchor="middle" fill="#9aa6b2">node 3</text>
+  </g>
+  <line x1="120" y1="222" x2="196" y2="222" stroke="#ffffff" stroke-width="2" marker-end="url(#r4-w)"/>
+  <line x1="292" y1="222" x2="396" y2="237" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#r4-g)"/>
+  <text x="320" y="338" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ffff99" font-weight="bold">Bank:</tspan> the &#8220;may I help you?&#8221; desk sends you to the right counter.</text>
+
+  <!-- ===== Panel 2: Client-side ===== -->
+  <rect x="615" y="98" width="545" height="268" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="637" y="130" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">2. Client decides for itself</text>
+  <text x="637" y="154" fill="#9aa6b2" font-family="sans-serif" font-size="13">the routing table lives in the client &#8212; it connects directly</text>
+
+  <text x="690" y="232" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13">client</text>
+  <rect x="648" y="244" width="84" height="26" rx="5" fill="#10243a" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="690" y="262" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="11">key&#8594;node</text>
+  <g font-family="monospace" font-size="12">
+    <rect x="970" y="178" width="120" height="34" rx="6" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/><text x="1030" y="200" text-anchor="middle" fill="#9aa6b2">node 1</text>
+    <rect x="970" y="220" width="120" height="34" rx="6" fill="#1d1d12" stroke="#8aff8a" stroke-width="2"/><text x="1030" y="242" text-anchor="middle" fill="#8aff8a">node 2</text>
+    <rect x="970" y="262" width="120" height="34" rx="6" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/><text x="1030" y="284" text-anchor="middle" fill="#9aa6b2">node 3</text>
+  </g>
+  <line x1="732" y1="224" x2="966" y2="237" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#r4-g)"/>
+  <text x="895" y="338" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ffff99" font-weight="bold">Bank:</tspan> a regular walks straight to the counter they know.</text>
+
+  <!-- ===== Panel 3: Closest-node forwarding ===== -->
+  <rect x="40" y="382" width="555" height="258" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="62" y="414" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">3. Nearest node forwards</text>
+  <text x="62" y="438" fill="#9aa6b2" font-family="sans-serif" font-size="13">no proxy &#8212; peers pass the request toward the owner</text>
+
+  <text x="92" y="512" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13">client</text>
+  <g font-family="monospace" font-size="12">
+    <rect x="220" y="490" width="110" height="34" rx="6" fill="#1d1d12" stroke="#cbd5e1" stroke-width="1.5"/><text x="275" y="512" text-anchor="middle" fill="#cbd5e1">nearest</text>
+    <rect x="420" y="490" width="110" height="34" rx="6" fill="#1d1d12" stroke="#8aff8a" stroke-width="2"/><text x="475" y="512" text-anchor="middle" fill="#8aff8a">owner</text>
+  </g>
+  <line x1="120" y1="507" x2="216" y2="507" stroke="#ffffff" stroke-width="2" marker-end="url(#r4-w)"/>
+  <line x1="330" y1="507" x2="416" y2="507" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#r4-g)"/>
+  <text x="372" y="486" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">forward</text>
+  <text x="318" y="566" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ffff99" font-weight="bold">Bank:</tspan> ask the closest teller; they walk it over.</text>
+  <text x="318" y="592" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">decentralized &#8212; e.g. IPFS, peer-to-peer (DHT)</text>
+
+  <!-- ===== Panel 4: Redirect / referral ===== -->
+  <rect x="615" y="382" width="545" height="258" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="637" y="414" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">4. Node redirects you</text>
+  <text x="637" y="438" fill="#9aa6b2" font-family="sans-serif" font-size="13">first node answers with the address of the real owner</text>
+
+  <text x="690" y="512" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13">client</text>
+  <g font-family="monospace" font-size="12">
+    <rect x="810" y="490" width="120" height="34" rx="6" fill="#1d1d12" stroke="#cbd5e1" stroke-width="1.5"/><text x="870" y="512" text-anchor="middle" fill="#cbd5e1">follower</text>
+    <rect x="1020" y="490" width="120" height="34" rx="6" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/><text x="1080" y="512" text-anchor="middle" fill="#ffff99">master</text>
+  </g>
+  <line x1="718" y1="500" x2="806" y2="500" stroke="#ffffff" stroke-width="2" marker-end="url(#r4-w)"/>
+  <path d="M870,526 q5,28 -150,28" fill="none" stroke="#ff8a8a" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="800" y="470" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="11">&#8220;go to master&#8221; + IP</text>
+  <line x1="722" y1="556" x2="1016" y2="520" stroke="#ffff99" stroke-width="2.5" marker-end="url(#r4-y)"/>
+  <text x="888" y="610" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13"><tspan fill="#ffff99" font-weight="bold">Bank:</tspan> first counter says &#8220;go to counter 3.&#8221;  <tspan fill="#ffff99" font-weight="bold">Redis</tspan> does this.</text>
+</svg>

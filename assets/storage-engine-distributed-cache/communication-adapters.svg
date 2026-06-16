@@ -1,0 +1,71 @@
+<svg width="1200" height="520" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ca-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="ca-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="520" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">One Store, Many Front Doors</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">abstract out the protocol &#8212; TCP, HTTP, and gRPC adapters all feed the same hashtable</text>
+
+  <!-- clients -->
+  <g font-family="sans-serif" font-size="14" text-anchor="middle">
+    <rect x="60" y="150" width="120" height="50" rx="8" fill="#16191e" stroke="#ffffff" stroke-width="2"/><text x="120" y="180" fill="#ffffff">TCP client</text>
+    <rect x="60" y="235" width="120" height="50" rx="8" fill="#16191e" stroke="#ffffff" stroke-width="2"/><text x="120" y="265" fill="#ffffff">browser</text>
+    <rect x="60" y="320" width="120" height="50" rx="8" fill="#16191e" stroke="#ffffff" stroke-width="2"/><text x="120" y="350" fill="#ffffff">gRPC service</text>
+  </g>
+
+  <!-- cache server process -->
+  <rect x="360" y="120" width="430" height="300" rx="14" fill="#16191e" stroke="#5b6470" stroke-width="2.5"/>
+  <text x="575" y="152" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="bold">Cache Server Process</text>
+
+  <!-- adapter ports -->
+  <g font-family="monospace" font-size="15">
+    <rect x="390" y="170" width="150" height="50" rx="8" fill="#10243a" stroke="#93c5fd" stroke-width="2"/><text x="465" y="201" text-anchor="middle" fill="#93c5fd">TCP</text>
+    <rect x="390" y="240" width="150" height="50" rx="8" fill="#10243a" stroke="#93c5fd" stroke-width="2"/><text x="465" y="271" text-anchor="middle" fill="#93c5fd">HTTP</text>
+    <rect x="390" y="310" width="150" height="50" rx="8" fill="#10243a" stroke="#93c5fd" stroke-width="2"/><text x="465" y="341" text-anchor="middle" fill="#93c5fd">gRPC</text>
+  </g>
+  <text x="465" y="392" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">protocol adapters</text>
+
+  <!-- router -->
+  <rect x="585" y="220" width="170" height="100" rx="10" fill="#1a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="670" y="262" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">command</text>
+  <text x="670" y="284" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">router</text>
+
+  <!-- client -> adapter arrows -->
+  <line x1="182" y1="175" x2="386" y2="190" stroke="#ffffff" stroke-width="2" marker-end="url(#ca-w)"/>
+  <line x1="182" y1="260" x2="386" y2="263" stroke="#ffffff" stroke-width="2" marker-end="url(#ca-w)"/>
+  <line x1="182" y1="345" x2="386" y2="335" stroke="#ffffff" stroke-width="2" marker-end="url(#ca-w)"/>
+
+  <!-- adapters -> router -->
+  <line x1="542" y1="195" x2="583" y2="245" stroke="#cbd5e1" stroke-width="2" marker-end="url(#ca-w)"/>
+  <line x1="542" y1="265" x2="583" y2="268" stroke="#cbd5e1" stroke-width="2" marker-end="url(#ca-w)"/>
+  <line x1="542" y1="335" x2="583" y2="295" stroke="#cbd5e1" stroke-width="2" marker-end="url(#ca-w)"/>
+
+  <!-- hash table -->
+  <g stroke="#ffff99" stroke-width="3" fill="#1d1d12">
+    <ellipse cx="960" cy="200" rx="70" ry="22"/>
+    <path d="M890,200 L890,320" fill="none"/>
+    <path d="M1030,200 L1030,320" fill="none"/>
+    <path d="M890,320 A70,22 0 0 0 1030,320" fill="none"/>
+  </g>
+  <rect x="889" y="200" width="142" height="120" fill="#1d1d12" stroke="none"/>
+  <g stroke="#ffff99" stroke-width="3" fill="none">
+    <ellipse cx="960" cy="200" rx="70" ry="22"/>
+    <path d="M890,200 L890,320"/>
+    <path d="M1030,200 L1030,320"/>
+    <path d="M890,320 A70,22 0 0 0 1030,320"/>
+  </g>
+  <text x="960" y="360" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Hash Table</text>
+  <text x="960" y="382" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">the one source of truth</text>
+
+  <line x1="757" y1="270" x2="884" y2="262" stroke="#ffff99" stroke-width="2.5" marker-end="url(#ca-y)"/>
+
+  <text x="600" y="455" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">the protocol is just the <tspan fill="#93c5fd" font-weight="bold">front door</tspan> &#8212; swap or add one without touching the <tspan fill="#ffff99" font-weight="bold">store</tspan> behind it</text>
+  <text x="600" y="486" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">support all three at once by keeping the transport layer pluggable</text>
+</svg>

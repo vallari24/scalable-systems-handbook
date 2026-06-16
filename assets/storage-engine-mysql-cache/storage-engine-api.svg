@@ -1,0 +1,75 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="se-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="700" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Storage Engine: One API, Many Implementations</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the evaluator talks to a <tspan fill="#ffffff" font-weight="bold">fixed API</tspan> &#8212; pluck out InnoDB, plug in MEMORY, and the same SQL now lives in RAM</text>
+
+  <!-- evaluator -->
+  <rect x="470" y="100" width="260" height="52" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="600" y="133" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Query Evaluator</text>
+  <line x1="600" y1="152" x2="600" y2="176" stroke="#ffffff" stroke-width="2.5" marker-end="url(#se-w)"/>
+
+  <!-- the API contract bar -->
+  <rect x="120" y="180" width="960" height="86" rx="10" fill="#1c1f25" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="600" y="212" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Storage Engine API &#8212; a fixed contract anyone can implement</text>
+  <text x="600" y="240" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15">open &#183; write_row &#183; rnd_next (read next row) &#183; delete_row &#183; read_page / write_page</text>
+  <text x="600" y="258" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">it defines how rows and pages are read and written &#8212; not where they physically live</text>
+
+  <!-- three engine columns -->
+  <line x1="240" y1="266" x2="240" y2="306" stroke="#ffffff" stroke-width="2.5" marker-end="url(#se-w)"/>
+  <line x1="600" y1="266" x2="600" y2="306" stroke="#ffffff" stroke-width="2.5" marker-end="url(#se-w)"/>
+  <line x1="960" y1="266" x2="960" y2="306" stroke="#ffffff" stroke-width="2.5" marker-end="url(#se-w)"/>
+
+  <!-- InnoDB -->
+  <rect x="80" y="308" width="320" height="232" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="240" y="340" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">InnoDB</text>
+  <text x="240" y="362" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">the default engine</text>
+  <text x="240" y="392" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">stores rows in a <tspan fill="#ffff99" font-weight="bold">B+ tree</tspan></text>
+  <!-- disk cylinder -->
+  <g stroke="#ffff99" stroke-width="2.5" fill="#1d1d12">
+    <ellipse cx="240" cy="430" rx="42" ry="13"/>
+    <rect x="198" y="430" width="84" height="48" fill="#1d1d12" stroke="none"/>
+    <path d="M198,430 L198,478" fill="none"/><path d="M282,430 L282,478" fill="none"/>
+    <path d="M198,478 A42,13 0 0 0 282,478" fill="none"/>
+    <ellipse cx="240" cy="430" rx="42" ry="13" fill="none"/>
+  </g>
+  <text x="240" y="506" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">writes to disk</text>
+  <text x="240" y="526" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">durable, ACID, crash-safe</text>
+
+  <!-- MEMORY (highlighted) -->
+  <rect x="440" y="300" width="320" height="248" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="3.5"/>
+  <text x="600" y="334" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">MEMORY engine</text>
+  <text x="600" y="356" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">the one that makes a cache</text>
+  <text x="600" y="386" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">stores rows in an <tspan fill="#8aff8a" font-weight="bold">in-memory dictionary</tspan></text>
+  <!-- RAM glyph -->
+  <rect x="540" y="404" width="120" height="56" rx="8" fill="#15281b" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="600" y="438" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">RAM</text>
+  <text x="600" y="488" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">writes to memory</text>
+  <text x="600" y="510" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">fast &#8212; but <tspan fill="#ff8a8a" font-weight="bold">volatile</tspan>: lost on restart</text>
+  <text x="600" y="532" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">same SQL on top &#8594; MySQL is now a cache</text>
+
+  <!-- CSV -->
+  <rect x="800" y="308" width="320" height="232" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="960" y="340" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">CSV engine</text>
+  <text x="960" y="362" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">stores each table as a file</text>
+  <text x="960" y="392" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">one plain <tspan fill="#93c5fd" font-weight="bold">.csv file</tspan> per table</text>
+  <!-- file glyph -->
+  <path d="M928,412 L976,412 L992,428 L992,478 L928,478 Z" fill="#0c1622" stroke="#93c5fd" stroke-width="2.5"/>
+  <path d="M976,412 L976,428 L992,428" fill="none" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="938" y1="444" x2="982" y2="444" stroke="#93c5fd" stroke-width="1.6"/>
+  <line x1="938" y1="456" x2="982" y2="456" stroke="#93c5fd" stroke-width="1.6"/>
+  <line x1="938" y1="468" x2="970" y2="468" stroke="#93c5fd" stroke-width="1.6"/>
+  <text x="960" y="506" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">users.csv, profile.csv ...</text>
+  <text x="960" y="526" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">open it in Excel, edits land in the DB</text>
+
+  <!-- bottom takeaway -->
+  <rect x="80" y="572" width="1040" height="96" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="600" y="606" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Same SQL, same parser, same optimizer &#8212; only the bottom layer changes.</text>
+  <text x="600" y="636" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">Pluck out <tspan fill="#ffff99" font-weight="bold">InnoDB</tspan>, plug in the <tspan fill="#8aff8a" font-weight="bold">MEMORY</tspan> engine, and the table now lives in RAM. That is MySQL as a cache.</text>
+</svg>

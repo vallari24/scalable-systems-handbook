@@ -1,0 +1,83 @@
+<svg width="1200" height="640" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="dh-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="dh-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="640" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Underneath It All: a Distributed Hash Table</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a distributed cache <tspan font-style="italic">is</tspan> a DHT &#8212; values mapped to keys, spread across nodes, tuned for minimal data movement</text>
+
+  <!-- ===== LEFT: what a DHT is ===== -->
+  <rect x="40" y="98" width="520" height="500" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="62" y="130" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">What a DHT gives you</text>
+
+  <text x="62" y="166" fill="#cbd5e1" font-family="sans-serif" font-size="15">A hash table whose buckets live on <tspan fill="#93c5fd" font-weight="bold">different</tspan></text>
+  <text x="62" y="188" fill="#cbd5e1" font-family="sans-serif" font-size="15">machines. <tspan font-family="monospace" fill="#9aa6b2">data &#8594; hash &#8594; i &#8594; node[i]</tspan></text>
+
+  <!-- mini flow -->
+  <g font-family="monospace" font-size="13" text-anchor="middle">
+    <rect x="62" y="206" width="120" height="34" rx="6" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/><text x="122" y="228" fill="#cbd5e1">data(key)</text>
+    <rect x="220" y="206" width="130" height="34" rx="6" fill="#1d1d12" stroke="#5b6470" stroke-width="1.5"/><text x="285" y="228" fill="#cbd5e1">hash fn</text>
+    <rect x="388" y="206" width="100" height="34" rx="6" fill="#1d1d12" stroke="#8aff8a" stroke-width="2"/><text x="438" y="228" fill="#8aff8a">node i</text>
+  </g>
+  <line x1="184" y1="223" x2="216" y2="223" stroke="#ffffff" stroke-width="2" marker-end="url(#dh-w)"/>
+  <line x1="352" y1="223" x2="384" y2="223" stroke="#ffffff" stroke-width="2" marker-end="url(#dh-w)"/>
+
+  <text x="62" y="284" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">Optimised for minimal data movement</text>
+  <text x="62" y="306" fill="#9aa6b2" font-family="sans-serif" font-size="14">when nodes are added or removed (the ring trick).</text>
+
+  <text x="62" y="346" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Where DHTs show up</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <text x="80" y="374">&#8226; distributed file systems &#8212; <tspan fill="#8aff8a">IPFS</tspan></text>
+    <text x="80" y="400">&#8226; DNS</text>
+    <text x="80" y="426">&#8226; instant messaging</text>
+    <text x="80" y="452">&#8226; peer-to-peer sharing &#8212; <tspan fill="#8aff8a">BitTorrent</tspan></text>
+  </g>
+
+  <rect x="62" y="476" width="436" height="100" rx="10" fill="#1d1216" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="280" y="508" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">No load balancer!</text>
+  <text x="280" y="534" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">a pure DHT is fully decentralized &#8212; no proxy,</text>
+  <text x="280" y="556" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">no node holds the full picture of who owns what.</text>
+
+  <!-- ===== RIGHT: decentralized routing ===== -->
+  <rect x="580" y="98" width="580" height="500" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="602" y="130" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Decentralized routing: hop toward the answer</text>
+
+  <!-- peer cloud -->
+  <path d="M 760,200 q -60,-30 -90,40 q -60,10 -30,80 q -30,70 50,80 q 40,60 130,30 q 80,40 150,-20 q 80,0 70,-80 q 40,-60 -30,-100 q -20,-70 -110,-50 q -80,-40 -140,20 z"
+        fill="#15171c" stroke="#5b6470" stroke-width="2"/>
+  <g fill="#cbd5e1">
+    <circle cx="760" cy="260" r="6"/>
+    <circle cx="850" cy="230" r="6"/>
+    <circle cx="930" cy="290" r="6"/>
+    <circle cx="800" cy="330" r="6"/>
+    <circle cx="890" cy="360" r="6"/>
+    <circle cx="985" cy="350" r="8" fill="#8aff8a"/>
+  </g>
+  <text x="1000" y="356" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">owner</text>
+
+  <!-- request entry -->
+  <text x="630" y="296" fill="#cbd5e1" font-family="sans-serif" font-size="14">request</text>
+  <line x1="636" y1="270" x2="754" y2="262" stroke="#ffffff" stroke-width="2" marker-end="url(#dh-w)"/>
+  <!-- hops toward owner -->
+  <line x1="766" y1="262" x2="844" y2="234" stroke="#8aff8a" stroke-width="2" marker-end="url(#dh-g)"/>
+  <line x1="856" y1="234" x2="924" y2="286" stroke="#8aff8a" stroke-width="2" marker-end="url(#dh-g)"/>
+  <line x1="936" y1="292" x2="978" y2="344" stroke="#8aff8a" stroke-width="2" marker-end="url(#dh-g)"/>
+  <text x="820" y="208" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">each hop &#8594; a node "closer" to the key</text>
+
+  <text x="602" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="14">Each node knows only <tspan fill="#8aff8a" font-weight="bold">some</tspan> peers. It forwards</text>
+  <text x="602" y="458" fill="#cbd5e1" font-family="sans-serif" font-size="14">your request to whichever it knows is nearest the</text>
+  <text x="602" y="480" fill="#cbd5e1" font-family="sans-serif" font-size="14">target id &#8212; an overlay network that <tspan fill="#8aff8a" font-weight="bold">converges</tspan>.</text>
+  <text x="602" y="506" fill="#9aa6b2" font-family="sans-serif" font-size="13">This routing algorithm is <tspan fill="#ffff99" font-weight="bold">Kademlia</tspan>.</text>
+
+  <!-- decision box -->
+  <rect x="602" y="524" width="536" height="56" rx="9" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="618" y="548" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Know the node count?</text>
+  <text x="618" y="570" fill="#cbd5e1" font-family="sans-serif" font-size="13">yes &#8594; <tspan fill="#ffff99" font-weight="bold">consistent hashing</tspan> (proxy holds the ring)   &#183;   no / open membership &#8594; <tspan fill="#ffff99" font-weight="bold">Kademlia</tspan></text>
+</svg>

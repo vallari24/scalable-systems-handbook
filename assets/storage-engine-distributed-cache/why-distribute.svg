@@ -1,0 +1,69 @@
+<svg width="1200" height="560" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="wd-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="560" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Why Distribute &#8212; and the One Rule</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">one machine hits a wall; we split keys across nodes that each own a <tspan fill="#ff8bd2" font-weight="bold">disjoint</tspan> slice</text>
+
+  <!-- LEFT: one machine maxes out -->
+  <rect x="50" y="110" width="430" height="400" rx="12" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="265" y="146" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">One machine maxes out</text>
+
+  <g font-family="sans-serif">
+    <rect x="80" y="172" width="370" height="96" rx="9" fill="#1d1216" stroke="#ff8a8a" stroke-width="1.5"/>
+    <text x="100" y="204" fill="#ffff99" font-size="17" font-weight="bold">Too much DATA</text>
+    <text x="100" y="232" fill="#cbd5e1" font-size="14">the working set no longer fits in one box's RAM.</text>
+    <text x="100" y="254" fill="#9aa6b2" font-size="13">100 GB of keys, 64 GB of memory &#8212; impossible.</text>
+
+    <rect x="80" y="284" width="370" height="96" rx="9" fill="#1d1216" stroke="#ff8a8a" stroke-width="1.5"/>
+    <text x="100" y="316" fill="#ffff99" font-size="17" font-weight="bold">Too much LOAD</text>
+    <text x="100" y="344" fill="#cbd5e1" font-size="14">more ops/sec than one NIC + CPU can serve.</text>
+    <text x="100" y="366" fill="#9aa6b2" font-size="13">traffic outgrows a single server's throughput.</text>
+
+    <rect x="80" y="396" width="370" height="96" rx="9" fill="#1d1216" stroke="#ff8a8a" stroke-width="1.5"/>
+    <text x="100" y="428" fill="#ffff99" font-size="17" font-weight="bold">Too much COMPUTE</text>
+    <text x="100" y="456" fill="#cbd5e1" font-size="14">heavier work than one machine can keep up with.</text>
+    <text x="100" y="478" fill="#9aa6b2" font-size="13">spread the work, not just the storage.</text>
+  </g>
+
+  <!-- RIGHT: one coherent cache -->
+  <rect x="520" y="110" width="630" height="400" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="835" y="146" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Many nodes, one coherent cache</text>
+
+  <!-- client -->
+  <circle cx="585" cy="300" r="14" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="585" y1="314" x2="585" y2="345" stroke="#ffffff" stroke-width="2"/>
+  <line x1="568" y1="326" x2="602" y2="326" stroke="#ffffff" stroke-width="2"/>
+  <line x1="585" y1="345" x2="572" y2="368" stroke="#ffffff" stroke-width="2"/>
+  <line x1="585" y1="345" x2="598" y2="368" stroke="#ffffff" stroke-width="2"/>
+  <text x="585" y="392" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">client</text>
+  <text x="585" y="412" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">talks to ONE</text>
+  <text x="585" y="428" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">address</text>
+
+  <!-- proxy -->
+  <rect x="660" y="278" width="120" height="56" rx="9" fill="#1a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="720" y="304" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">Proxy</text>
+  <text x="720" y="324" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">routes by key</text>
+  <line x1="618" y1="306" x2="656" y2="306" stroke="#ffffff" stroke-width="2" marker-end="url(#wd-w)"/>
+
+  <!-- caches -->
+  <g font-family="monospace" font-size="15">
+    <rect x="870" y="190" width="230" height="50" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+    <text x="900" y="221" fill="#ffff99">Cache 1</text><text x="1075" y="221" text-anchor="end" fill="#8aff8a">k = a</text>
+    <rect x="870" y="285" width="230" height="50" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+    <text x="900" y="316" fill="#ffff99">Cache 2</text><text x="1075" y="316" text-anchor="end" fill="#8aff8a">k = b</text>
+    <rect x="870" y="380" width="230" height="50" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+    <text x="900" y="411" fill="#ffff99">Cache 3</text><text x="1075" y="411" text-anchor="end" fill="#8aff8a">k = c</text>
+  </g>
+  <line x1="782" y1="298" x2="866" y2="220" stroke="#cbd5e1" stroke-width="2" marker-end="url(#wd-w)"/>
+  <line x1="782" y1="306" x2="866" y2="308" stroke="#cbd5e1" stroke-width="2" marker-end="url(#wd-w)"/>
+  <line x1="782" y1="314" x2="866" y2="400" stroke="#cbd5e1" stroke-width="2" marker-end="url(#wd-w)"/>
+
+  <text x="835" y="468" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Mutual exclusivity: every key lives on exactly ONE node</text>
+  <text x="835" y="492" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">k=a is never on two caches &#8212; no ambiguity about who owns it</text>
+</svg>

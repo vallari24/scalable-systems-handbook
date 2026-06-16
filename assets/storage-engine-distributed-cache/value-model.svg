@@ -1,0 +1,56 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="vm-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="vm-r" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="600" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Every Value Carries Its Own Type</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a hashmap of string keys &#8594; typed values, so the server knows what each value <tspan font-style="italic">is</tspan></text>
+
+  <!-- hashmap -->
+  <text x="150" y="150" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">HashMap</text>
+  <g font-family="monospace" font-size="15">
+    <rect x="80" y="170" width="300" height="46" rx="6" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+    <text x="100" y="199" fill="#8aff8a">"user:42"</text><text x="240" y="199" fill="#cbd5e1">&#8594; value</text>
+    <rect x="80" y="226" width="300" height="46" rx="6" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+    <text x="100" y="255" fill="#8aff8a">"cart:9"</text><text x="240" y="255" fill="#cbd5e1">&#8594; value</text>
+    <rect x="80" y="282" width="300" height="46" rx="6" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+    <text x="100" y="311" fill="#8aff8a">"seen:7"</text><text x="240" y="311" fill="#cbd5e1">&#8594; value</text>
+  </g>
+  <text x="230" y="356" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">key = string</text>
+
+  <!-- value struct -->
+  <rect x="470" y="180" width="270" height="138" rx="10" fill="#1a1320" stroke="#ff8bd2" stroke-width="3"/>
+  <text x="605" y="212" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">value object</text>
+  <text x="492" y="252" fill="#ffff99" font-family="monospace" font-size="16">type:</text><text x="582" y="252" fill="#cbd5e1" font-family="monospace" font-size="16">"list"</text>
+  <text x="492" y="288" fill="#ffff99" font-family="monospace" font-size="16">data:</text><text x="582" y="288" fill="#cbd5e1" font-family="monospace" font-size="16">[ &#8230; ]</text>
+
+  <line x1="380" y1="249" x2="466" y2="249" stroke="#ffffff" stroke-width="2.5" marker-end="url(#vm-w)"/>
+
+  <!-- supported types list -->
+  <text x="900" y="150" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">data can be any supported type</text>
+  <g font-family="monospace" font-size="15" text-anchor="middle">
+    <rect x="820" y="170" width="120" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="880" y="196" fill="#cbd5e1">int</text>
+    <rect x="960" y="170" width="120" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="1020" y="196" fill="#cbd5e1">str</text>
+    <rect x="820" y="222" width="120" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="880" y="248" fill="#cbd5e1">list</text>
+    <rect x="960" y="222" width="120" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="1020" y="248" fill="#cbd5e1">hashmap</text>
+    <rect x="820" y="274" width="120" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="880" y="300" fill="#cbd5e1">set</text>
+    <rect x="960" y="274" width="120" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="1020" y="300" fill="#cbd5e1">pq</text>
+    <rect x="820" y="326" width="260" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="950" y="352" fill="#cbd5e1">bloom filter</text>
+  </g>
+  <line x1="744" y1="249" x2="816" y2="220" stroke="#ffffff" stroke-width="2" marker-end="url(#vm-w)"/>
+
+  <!-- type-check callout -->
+  <rect x="80" y="410" width="1040" height="150" rx="12" fill="#16191e" stroke="#3a3f47" stroke-width="2"/>
+  <text x="106" y="444" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">Why store the type? To check the operation is legal.</text>
+  <text x="106" y="480" fill="#cbd5e1" font-family="monospace" font-size="16">PUSH k1 x1</text>
+  <text x="280" y="480" fill="#cbd5e1" font-family="sans-serif" font-size="15">&#8594; first look up k1, confirm its <tspan fill="#ffff99" font-weight="bold">type == "list"</tspan>, then push. Wrong type &#8594; reject.</text>
+  <text x="106" y="516" fill="#cbd5e1" font-family="sans-serif" font-size="15">The stored <tspan fill="#ffff99" font-weight="bold">type</tspan> tag makes this a cheap field read.</text>
+  <text x="106" y="546" fill="#cbd5e1" font-family="sans-serif" font-size="15">Inferring the type at runtime with <tspan fill="#ff8a8a" font-weight="bold">reflection is slow</tspan> &#8212; store the tag, don't reflect.</text>
+</svg>

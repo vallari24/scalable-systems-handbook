@@ -1,0 +1,75 @@
+<svg width="1200" height="640" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="dw-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="dw-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="640" fill="#111317"/>
+
+  <text x="600" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Dual-Write Problem: Two Writes, No Transaction</text>
+  <text x="600" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the API must write the DB <tspan font-style="italic">and</tspan> publish to Kafka &#8212; separate systems, so they can&#8217;t be <tspan fill="#ffff99" font-weight="bold">atomic</tspan></text>
+
+  <!-- lifeline headers -->
+  <rect x="140" y="108" width="130" height="52" rx="9" fill="#1c1f25" stroke="#ffffff" stroke-width="2"/>
+  <text x="205" y="141" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">API</text>
+
+  <g stroke="#ffff99" stroke-width="2.5" fill="#1d1d12">
+    <ellipse cx="560" cy="120" rx="44" ry="14"/>
+    <rect x="516" y="120" width="88" height="40" fill="#1d1d12" stroke="none"/>
+    <path d="M516,120 L516,160" fill="none"/><path d="M604,120 L604,160" fill="none"/>
+    <path d="M516,160 A44,14 0 0 0 604,160" fill="none"/>
+    <ellipse cx="560" cy="120" rx="44" ry="14" fill="none"/>
+  </g>
+  <text x="560" y="186" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MongoDB</text>
+
+  <rect x="856" y="104" width="128" height="44" rx="22" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="920" y="132" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Kafka</text>
+  <text x="920" y="186" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">&#8594; workers &#8594; MySQL</text>
+
+  <!-- lifelines -->
+  <line x1="205" y1="196" x2="205" y2="470" stroke="#5b6470" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <line x1="560" y1="196" x2="560" y2="470" stroke="#5b6470" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <line x1="920" y1="196" x2="920" y2="470" stroke="#5b6470" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+  <!-- t1: write succeeds -->
+  <text x="60" y="248" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">t1</text>
+  <line x1="210" y1="252" x2="514" y2="252" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#dw-g)"/>
+  <text x="360" y="240" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">INSERT like row</text>
+  <text x="628" y="257" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">&#10003; stored</text>
+
+  <!-- t2: crash -->
+  <text x="60" y="328" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">t2</text>
+  <g stroke="#ff8a8a" stroke-width="2.5" fill="#1d1216">
+    <path d="M205,308 l10,18 l18,-6 l-10,16 l16,12 l-20,2 l4,18 l-18,-12 l-18,12 l4,-18 l-20,-2 l16,-12 l-10,-16 l18,6 z"/>
+  </g>
+  <text x="248" y="332" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">API crashes &#8212; the process dies</text>
+
+  <!-- t3: publish never runs -->
+  <text x="60" y="410" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">t3</text>
+  <line x1="210" y1="414" x2="470" y2="414" stroke="#ff8a8a" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <line x1="476" y1="404" x2="500" y2="424" stroke="#ff8a8a" stroke-width="3"/>
+  <line x1="500" y1="404" x2="476" y2="424" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="340" y="402" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">publish event &#8212; never runs</text>
+  <text x="760" y="419" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">Kafka gets nothing &#8594; MySQL never updates</text>
+
+  <!-- outcome banner -->
+  <rect x="40" y="498" width="1120" height="116" rx="12" fill="#1d1216" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="62" y="532" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">Result: the two stores disagree &#8212; and nothing retries</text>
+
+  <rect x="640" y="516" width="220" height="80" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="750" y="544" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">MongoDB</text>
+  <text x="750" y="572" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">like row &#10003; present</text>
+
+  <text x="884" y="566" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="30" font-weight="bold">&#8800;</text>
+
+  <rect x="908" y="516" width="232" height="80" rx="9" fill="#1d1216" stroke="#ff8a8a" stroke-width="1.8"/>
+  <text x="1024" y="544" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">MySQL (analytics)</text>
+  <text x="1024" y="572" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">like row &#10007; missing</text>
+
+  <text x="62" y="568" fill="#cbd5e1" font-family="sans-serif" font-size="14">The source of truth moved on;</text>
+  <text x="62" y="590" fill="#cbd5e1" font-family="sans-serif" font-size="14">the analytics copy is stale forever.</text>
+</svg>

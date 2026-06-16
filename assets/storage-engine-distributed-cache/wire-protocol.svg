@@ -1,0 +1,57 @@
+<svg width="1200" height="560" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="wp-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="wp-b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="560" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Wire Protocol: Both Sides Must Agree</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">client and cache serialize/deserialize the same format &#8212; JSON, or a custom one like RESP</text>
+
+  <!-- client -->
+  <rect x="60" y="150" width="180" height="96" rx="10" fill="#16191e" stroke="#ffffff" stroke-width="3"/>
+  <text x="150" y="195" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Client</text>
+  <text x="150" y="222" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">app library</text>
+
+  <!-- cache -->
+  <rect x="960" y="150" width="180" height="96" rx="10" fill="#16191e" stroke="#ffff99" stroke-width="3"/>
+  <text x="1050" y="195" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">Cache</text>
+  <text x="1050" y="222" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">in-memory store</text>
+
+  <!-- wire / protocol band -->
+  <rect x="300" y="176" width="600" height="44" rx="22" fill="#10243a" stroke="#93c5fd" stroke-width="3"/>
+  <text x="600" y="204" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="16">*3  $3 SET  $2 k1  $1 5</text>
+  <text x="600" y="250" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">application-layer protocol &#183; agreed wire format</text>
+
+  <!-- request arrow (serialize) -->
+  <line x1="240" y1="186" x2="296" y2="186" stroke="#ffffff" stroke-width="2.5" marker-end="url(#wp-w)"/>
+  <text x="268" y="172" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">serialize</text>
+  <line x1="904" y1="186" x2="956" y2="186" stroke="#ffffff" stroke-width="2.5" marker-end="url(#wp-w)"/>
+  <text x="930" y="172" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">deserialize</text>
+
+  <!-- reply arrow -->
+  <line x1="956" y1="210" x2="904" y2="210" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#wp-b)"/>
+  <line x1="296" y1="210" x2="244" y2="210" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#wp-b)"/>
+  <text x="600" y="236" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">reply travels back in the same format</text>
+
+  <!-- JSON box -->
+  <rect x="120" y="330" width="480" height="170" rx="12" fill="#16191e" stroke="#3a3f47" stroke-width="2"/>
+  <text x="146" y="364" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">JSON works&#8230; until it doesn't</text>
+  <text x="146" y="396" fill="#cbd5e1" font-family="sans-serif" font-size="15"><tspan fill="#8aff8a" font-weight="bold">&#10003;</tspan><tspan dx="8">supports int, str, float, list, map</tspan></text>
+  <text x="146" y="428" fill="#cbd5e1" font-family="sans-serif" font-size="15"><tspan fill="#ff8a8a" font-weight="bold">&#10007;</tspan><tspan dx="8">no bloom filter, set, priority queue, raw bytes</tspan></text>
+  <text x="146" y="466" fill="#cbd5e1" font-family="sans-serif" font-size="14">Need a type the format can't express?</text>
+  <text x="146" y="488" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">&#8594; define your own protocol (this is what RESP is)</text>
+
+  <!-- RESP box -->
+  <rect x="640" y="330" width="440" height="170" rx="12" fill="#16191e" stroke="#3a3f47" stroke-width="2"/>
+  <text x="666" y="364" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">RESP: Redis's own protocol</text>
+  <text x="666" y="396" fill="#cbd5e1" font-family="sans-serif" font-size="15">a compact, typed, line-based format the</text>
+  <text x="666" y="418" fill="#cbd5e1" font-family="sans-serif" font-size="15">server parses fast and unambiguously.</text>
+  <text x="666" y="456" fill="#9aa6b2" font-family="sans-serif" font-size="14">Both client and server ship a RESP</text>
+  <text x="666" y="478" fill="#9aa6b2" font-family="sans-serif" font-size="14">encoder/decoder &#8212; that's the contract.</text>
+</svg>

@@ -1,0 +1,86 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="cc-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="cc-r" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="760" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Concurrent Writes: The Lost Update</text>
+  <text x="600" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">two updates to the same key at once &#8212; <tspan font-family="monospace">count++</tspan> is read-modify-write, three steps, not atomic</text>
+
+  <!-- the race -->
+  <rect x="60" y="104" width="1080" height="240" rx="12" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+
+  <!-- shared cell -->
+  <rect x="510" y="128" width="180" height="50" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="600" y="160" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="17">a = 10</text>
+  <text x="600" y="196" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">shared value in the hashtable</text>
+
+  <!-- thread A -->
+  <text x="230" y="232" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">Thread A: a++</text>
+  <text x="230" y="262" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">read 10</text>
+  <text x="230" y="288" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">10 + 1 = 11</text>
+  <text x="230" y="314" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">write 11</text>
+
+  <!-- thread B -->
+  <text x="970" y="232" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Thread B: a++</text>
+  <text x="970" y="262" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">read 10</text>
+  <text x="970" y="288" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">10 + 1 = 11</text>
+  <text x="970" y="314" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">write 11</text>
+
+  <!-- both read 10 -->
+  <line x1="505" y1="158" x2="320" y2="256" stroke="#93c5fd" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#cc-w)"/>
+  <line x1="695" y1="158" x2="880" y2="256" stroke="#ff8bd2" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#cc-w)"/>
+
+  <!-- result -->
+  <rect x="470" y="280" width="260" height="48" rx="8" fill="#2a1620" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="600" y="310" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="16" font-weight="bold">a = 11  (expected 12)</text>
+  <line x1="318" y1="308" x2="466" y2="306" stroke="#ff8a8a" stroke-width="2" marker-end="url(#cc-r)"/>
+  <line x1="882" y1="308" x2="734" y2="306" stroke="#ff8a8a" stroke-width="2" marker-end="url(#cc-r)"/>
+  <text x="600" y="232" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">one increment vanished &#8212; lost update</text>
+
+  <!-- three fixes header -->
+  <text x="600" y="392" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="18" font-weight="bold">Three ways to make it safe</text>
+
+  <!-- fix 1: pessimistic -->
+  <rect x="60" y="412" width="345" height="300" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="80" y="446" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Pessimistic lock</text>
+  <text x="80" y="472" fill="#9aa6b2" font-family="sans-serif" font-size="13">assume conflict &#8212; take a lock first</text>
+  <text x="80" y="508" fill="#cbd5e1" font-family="monospace" font-size="14">acquire_lock(k)</text>
+  <text x="80" y="534" fill="#cbd5e1" font-family="monospace" font-size="14">a = a + 1</text>
+  <text x="80" y="560" fill="#cbd5e1" font-family="monospace" font-size="14">release_lock(k)</text>
+  <text x="80" y="600" fill="#cbd5e1" font-family="sans-serif" font-size="14">the other writer <tspan fill="#ffff99" font-weight="bold">waits</tspan> its turn.</text>
+  <text x="80" y="634" fill="#9aa6b2" font-family="sans-serif" font-size="13">built from mutex / semaphore;</text>
+  <text x="80" y="656" fill="#9aa6b2" font-family="sans-serif" font-size="13">atomic variables track the lock.</text>
+  <text x="80" y="692" fill="#9aa6b2" font-family="sans-serif" font-size="13">use when MANY threads compete</text>
+
+  <!-- fix 2: optimistic -->
+  <rect x="427" y="412" width="345" height="300" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="447" y="446" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Optimistic (CAS)</text>
+  <text x="447" y="472" fill="#9aa6b2" font-family="sans-serif" font-size="13">assume no conflict &#8212; check at write</text>
+  <text x="447" y="508" fill="#cbd5e1" font-family="monospace" font-size="13">set a=11 where a=10</text>
+  <text x="447" y="534" fill="#cbd5e1" font-family="monospace" font-size="13">set a=11 where a=10</text>
+  <text x="447" y="566" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">one succeeds, the rest fail</text>
+  <text x="447" y="592" fill="#cbd5e1" font-family="sans-serif" font-size="14">no thread blocks &#8212; on failure</text>
+  <text x="447" y="614" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ff8a8a" font-weight="bold">the caller decides</tspan>: retry or drop</text>
+  <text x="447" y="648" fill="#cbd5e1" font-family="sans-serif" font-size="14">primitive: compare-and-swap (CAS)</text>
+  <text x="447" y="692" fill="#9aa6b2" font-family="sans-serif" font-size="13">use when contention is LOW</text>
+
+  <!-- fix 3: single-threaded -->
+  <rect x="794" y="412" width="346" height="300" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="814" y="446" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Single-threaded</text>
+  <text x="814" y="472" fill="#9aa6b2" font-family="sans-serif" font-size="13">remove the race entirely</text>
+  <text x="814" y="508" fill="#cbd5e1" font-family="sans-serif" font-size="14">one thread runs every command,</text>
+  <text x="814" y="530" fill="#cbd5e1" font-family="sans-serif" font-size="14">one at a time &#8212; no shared-state</text>
+  <text x="814" y="552" fill="#cbd5e1" font-family="sans-serif" font-size="14">overlap, so no locks needed.</text>
+  <text x="814" y="588" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">this is the Redis model.</text>
+  <text x="814" y="624" fill="#cbd5e1" font-family="sans-serif" font-size="14">a cache is <tspan fill="#93c5fd" font-weight="bold">memory-bound</tspan>, not</text>
+  <text x="814" y="646" fill="#cbd5e1" font-family="sans-serif" font-size="14">CPU-bound &#8212; extra cores buy</text>
+  <text x="814" y="668" fill="#cbd5e1" font-family="sans-serif" font-size="14">little, lock contention costs a lot.</text>
+  <text x="814" y="700" fill="#9aa6b2" font-family="sans-serif" font-size="13">simplest, and often the fastest</text>
+</svg>
