@@ -1,0 +1,214 @@
+<svg width="1280" height="900" viewBox="0 0 1280 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1280" height="900" fill="#111317"/>
+
+  <defs>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="arrRed" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <!-- ===================== TITLE ===================== -->
+  <text x="640" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="32" font-weight="bold">The Complete S3</text>
+  <text x="640" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="18">a flat keyspace of paths, made cheap, infinite, indestructible, and self-healing</text>
+
+  <!-- ===================== PLANE 1: REQUEST / DATA PATH ===================== -->
+  <!-- user stick figure -->
+  <g stroke="#cbd5e1" stroke-width="2.5" fill="none">
+    <circle cx="70" cy="150" r="14"/>
+    <line x1="70" y1="164" x2="70" y2="202"/>
+    <line x1="70" y1="174" x2="51" y2="192"/>
+    <line x1="70" y1="174" x2="89" y2="192"/>
+    <line x1="70" y1="202" x2="53" y2="228"/>
+    <line x1="70" y1="202" x2="87" y2="228"/>
+  </g>
+  <text x="70" y="252" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">user</text>
+
+  <!-- GET (green) and PUT (pink) labels from user to LB -->
+  <line x1="92" y1="160" x2="178" y2="160" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <text x="135" y="150" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">GET</text>
+  <line x1="92" y1="192" x2="178" y2="192" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <text x="135" y="212" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">PUT</text>
+
+  <!-- Load Balancer (blue rectangle) -->
+  <rect x="184" y="128" width="120" height="96" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="244" y="170" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">Load</text>
+  <text x="244" y="192" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">Balancer</text>
+
+  <!-- LB -> stateless API server fleet (green spread) -->
+  <line x1="304" y1="160" x2="378" y2="148" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <line x1="304" y1="176" x2="378" y2="200" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <text x="345" y="138" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">spread</text>
+
+  <!-- S3 API Server FLEET (green, stacked) -->
+  <rect x="404" y="138" width="190" height="86" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <rect x="390" y="124" width="190" height="86" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <rect x="376" y="110" width="190" height="86" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="471" y="142" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">S3 API Fleet</text>
+  <text x="471" y="164" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">stateless servers</text>
+  <text x="471" y="184" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">resolve key, forward</text>
+
+  <!-- PMT cylinder (center) - read path source -->
+  <text x="800" y="106" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">shared, replicated</text>
+  <g>
+    <ellipse cx="800" cy="140" rx="78" ry="18" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <path d="M722,140 L722,188 A78,18 0 0 0 878,188 L878,140" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <ellipse cx="800" cy="140" rx="78" ry="18" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <text x="800" y="148" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Partition Map</text>
+    <text x="800" y="180" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">key -&gt; owner</text>
+  </g>
+
+  <!-- API fleet -> PMT (green dashed: lookup key -> owning server) -->
+  <line x1="566" y1="150" x2="720" y2="150" stroke="#8aff8a" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrGreen)"/>
+  <text x="640" y="138" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">lookup key -&gt; owning server</text>
+
+  <!-- ===================== PLANE 4: CONTROL PLANE (top-right) ===================== -->
+  <text x="1100" y="106" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">control plane - HA via leader election</text>
+  <rect x="1030" y="158" width="200" height="86" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="1016" y="144" width="200" height="86" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="1002" y="130" width="200" height="86" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="1102" y="160" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">Partition Manager</text>
+  <text x="1102" y="182" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">replicated, leader-elected</text>
+  <text x="1102" y="202" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">Raft / Paxos</text>
+
+  <!-- Manager <-> PMT (blue dashed: owns / writes ownership) -->
+  <line x1="1000" y1="172" x2="882" y2="160" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <text x="940" y="200" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">owns / writes</text>
+  <text x="940" y="216" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">the map</text>
+
+  <!-- ===================== PLANE 2: PARTITION / SERVING LAYER ===================== -->
+  <text x="640" y="290" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">Partition Servers - each the single logical owner of one or more range partitions</text>
+
+  <!-- PS1 -->
+  <rect x="80" y="308" width="290" height="100" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="225" y="336" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Partition Server 1</text>
+  <rect x="110" y="352" width="100" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="160" y="377" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[a,b]</text>
+  <rect x="240" y="352" width="100" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="290" y="377" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[c,f]</text>
+
+  <!-- PS2 -->
+  <rect x="495" y="308" width="290" height="100" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="640" y="336" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Partition Server 2</text>
+  <rect x="540" y="352" width="200" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="640" y="377" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[g,m]</text>
+
+  <!-- PS3 -->
+  <rect x="910" y="308" width="290" height="100" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="1055" y="336" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Partition Server 3</text>
+  <rect x="955" y="352" width="200" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="1055" y="377" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[n,z]</text>
+
+  <!-- API fleet -> partition servers (forward request: GET green, PUT pink) -->
+  <path d="M 450 196 C 380 250, 250 256, 215 304" fill="none" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <path d="M 490 196 C 560 250, 620 256, 635 304" fill="none" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <path d="M 520 188 C 760 246, 1000 250, 1045 304" fill="none" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <text x="640" y="246" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">forward GET/PUT to owning partition server</text>
+
+  <!-- Manager -> partition servers HEALTHCHECK (blue dashed) -->
+  <path d="M 1140 218 C 1175 250, 1150 270, 1090 304" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <text x="1200" y="262" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">healthcheck</text>
+
+  <!-- ===================== PLANE 3: STORAGE LAYER ===================== -->
+  <text x="640" y="446" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">Storage layer - racks of commodity HDD nodes, log-structured &amp; append-only (reached over a FUSE mount)</text>
+
+  <!-- storage cabinet -->
+  <rect x="80" y="460" width="1120" height="150" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+
+  <!-- disk slots -->
+  <g font-family="sans-serif" font-size="12" fill="#9aa6b2" text-anchor="middle">
+    <rect x="100" y="480" width="46" height="92" rx="3" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+    <text x="123" y="588" fill="#8aff8a" font-weight="bold">HEAD</text>
+    <rect x="156" y="480" width="46" height="92" rx="3" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+    <text x="179" y="588">D2</text>
+    <rect x="212" y="480" width="46" height="92" rx="3" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+    <text x="235" y="588">D3</text>
+    <rect x="268" y="480" width="46" height="92" rx="3" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+    <text x="291" y="588">D4</text>
+    <rect x="324" y="480" width="46" height="92" rx="3" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+    <text x="347" y="588">D5</text>
+    <rect x="380" y="480" width="46" height="92" rx="3" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+    <text x="403" y="588">D6</text>
+    <rect x="436" y="480" width="46" height="92" rx="3" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+    <text x="459" y="588">D7</text>
+    <rect x="492" y="480" width="46" height="92" rx="3" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+    <text x="515" y="588">D8</text>
+  </g>
+
+  <!-- active head -> roll forward arrow -->
+  <line x1="146" y1="500" x2="156" y2="500" stroke="#ffff99" stroke-width="2.5" marker-end="url(#arrYellow)"/>
+  <text x="320" y="476" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13">writes append to active HEAD, roll forward at ~70%</text>
+
+  <!-- storage durability callouts (right side of cabinet) -->
+  <rect x="560" y="478" width="300" height="118" rx="6" fill="#16191e" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="710" y="500" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Durability</text>
+  <g font-family="sans-serif" font-size="13" fill="#cbd5e1">
+    <text x="575" y="522">sync in-rack + async across &gt;=3 AZs</text>
+    <text x="575" y="542">replicated across geographies</text>
+    <text x="575" y="562">erasure coding within a node</text>
+    <text x="575" y="582">end-to-end checksums, every hop</text>
+  </g>
+
+  <!-- storage background callouts -->
+  <rect x="880" y="478" width="300" height="118" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="1030" y="500" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Background (async)</text>
+  <g font-family="sans-serif" font-size="13" fill="#cbd5e1">
+    <text x="895" y="522">per-node storage monitors</text>
+    <text x="895" y="542">compaction of log segments</text>
+    <text x="895" y="562">cross-AZ / geo replication</text>
+    <text x="895" y="582">background checksum scrubbing</text>
+  </g>
+
+  <!-- partition servers -> storage (yellow read/write bytes) -->
+  <line x1="225" y1="408" x2="225" y2="456" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <line x1="640" y1="408" x2="640" y2="456" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <line x1="1055" y1="408" x2="1055" y2="456" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <text x="225" y="430" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13">read/write</text>
+
+  <!-- ===================== FAILURE CALLOUT (control plane defends) ===================== -->
+  <rect x="80" y="632" width="560" height="86" rx="6" fill="#2a1320" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="100" y="658" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">Self-healing: server dies</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <text x="100" y="682">Partition Manager reassigns the dead server's logical</text>
+    <text x="100" y="702" fill="#8aff8a" font-weight="bold">partitions to healthy servers - NO data moves, just a table edit.</text>
+  </g>
+  <!-- red arrow: manager defends server failure -->
+  <path d="M 1100 244 C 1130 480, 900 600, 645 668" fill="none" stroke="#ff8a8a" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrRed)"/>
+  <text x="1128" y="430" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" transform="rotate(82 1128 430)">reassign partitions</text>
+
+  <!-- ===================== LEGEND ===================== -->
+  <rect x="664" y="632" width="536" height="86" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+  <text x="684" y="656" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">Legend</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <line x1="684" y1="676" x2="724" y2="676" stroke="#8aff8a" stroke-width="3"/>
+    <text x="732" y="681">read path</text>
+    <line x1="850" y1="676" x2="890" y2="676" stroke="#ff8bd2" stroke-width="3"/>
+    <text x="898" y="681">write / ownership</text>
+    <line x1="1060" y1="676" x2="1100" y2="676" stroke="#ffff99" stroke-width="3"/>
+    <text x="1108" y="681">storage</text>
+    <line x1="684" y1="702" x2="724" y2="702" stroke="#93c5fd" stroke-width="3" stroke-dasharray="6 4"/>
+    <text x="732" y="707">control / async</text>
+    <line x1="850" y1="702" x2="890" y2="702" stroke="#ff8a8a" stroke-width="3" stroke-dasharray="6 4"/>
+    <text x="898" y="707">failure modes defended</text>
+  </g>
+
+  <!-- ===================== SUMMARY SENTENCE ===================== -->
+  <rect x="80" y="736" width="1120" height="120" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <g font-family="sans-serif" font-size="17" fill="#ffff99" text-anchor="middle" font-weight="bold">
+    <text x="640" y="772">S3 is a flat key-value store of paths to blobs - cheap via log-structured HDDs,</text>
+    <text x="640" y="800">infinite via range partitions over racks, indestructible via replication + checksums,</text>
+    <text x="640" y="828">self-healing via a control plane that owns partitions logically</text>
+    <text x="640" y="850">so failover is just editing a table.</text>
+  </g>
+</svg>

@@ -1,0 +1,92 @@
+<svg width="1180" height="840" viewBox="0 0 1180 840" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="840" fill="#111317"/>
+
+  <defs>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Routing 2 — Consistent Hashing</text>
+
+  <!-- Rule callout -->
+  <rect x="240" y="70" width="700" height="46" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="590" y="99" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">Partitions &amp; keys sit on one consistent hash ring — the node to the clockwise right owns the data.</text>
+
+  <!-- ===== HASH RING ===== -->
+  <!-- ring center (340, 430) radius 230 -->
+  <circle cx="340" cy="440" r="230" fill="none" stroke="#3a4150" stroke-width="2.5"/>
+  <text x="340" y="445" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">hash ring</text>
+  <text x="340" y="468" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">0 .. max .. 0</text>
+
+  <!-- 0/max marker at top -->
+  <line x1="340" y1="210" x2="340" y2="190" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="340" y="180" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">0 / max</text>
+
+  <!-- HDD 1 : top-right of ring (~ -45deg from top, place at angle 45 deg clockwise from top) -->
+  <!-- top = (340,210). HDD1 at angle 50deg cw: x=340+230*sin50=516, y=440-230*cos50=292 -->
+  <rect x="492" y="262" width="78" height="40" rx="4" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="531" y="287" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">HDD 1</text>
+
+  <!-- HDD 2 : bottom-right. angle 140deg cw: x=340+230*sin140=488, y=440-230*cos140=616 -->
+  <rect x="500" y="596" width="78" height="40" rx="4" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="539" y="621" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">HDD 2</text>
+
+  <!-- HDD 3 : bottom-left. angle 220deg cw: x=340+230*sin220=192, y=440-230*cos220=616 -->
+  <rect x="110" y="596" width="78" height="40" rx="4" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="149" y="621" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">HDD 3</text>
+
+  <!-- HDD 4 : top-left. angle 310deg cw: x=340+230*sin310=164, y=440-230*cos310=292 -->
+  <rect x="110" y="262" width="78" height="40" rx="4" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="149" y="287" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">HDD 4</text>
+
+  <!-- key hash tick on rim: place between top(0) and HDD1, angle 20deg cw: x=340+230*sin20=419, y=440-230*cos20=224 -->
+  <circle cx="419" cy="224" r="7" fill="#ff8bd2"/>
+  <text x="455" y="206" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">key hashed here</text>
+
+  <!-- short clockwise arrow from key tick to HDD1 along rim -->
+  <path d="M 433 218 A 230 230 0 0 1 500 280" fill="none" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <text x="560" y="225" fill="#ff8bd2" font-family="sans-serif" font-size="14">clockwise →</text>
+
+  <!-- key being hashed -->
+  <text x="340" y="730" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">bucket.s3.aws.com/images/logo.jpg</text>
+  <text x="340" y="752" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">hashes to a point → owned by next disk clockwise = HDD 1</text>
+
+  <!-- ===== RIGHT COLUMN ===== -->
+  <!-- ADVANTAGES -->
+  <text x="640" y="170" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Advantages</text>
+  <rect x="640" y="186" width="480" height="218" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="1.5"/>
+  <g font-family="sans-serif" fill="#cbd5e1">
+    <text x="664" y="222" font-size="15" font-weight="bold" fill="#8aff8a">Minimal data transfer on add / remove</text>
+    <text x="664" y="246" font-size="15">Only keys in the one arc next to the changed</text>
+    <text x="664" y="268" font-size="15">node move — not the whole keyspace.</text>
+    <text x="664" y="290" font-size="14" fill="#9aa6b2">(fixes the rebalancing storm of plain hashing)</text>
+
+    <text x="664" y="334" font-size="15" font-weight="bold" fill="#8aff8a">Even spread preserved</text>
+    <text x="664" y="358" font-size="15">Near-random, near-uniform distribution</text>
+    <text x="664" y="380" font-size="15">of objects across nodes.</text>
+  </g>
+
+  <!-- DISADVANTAGE -->
+  <text x="640" y="450" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">Disadvantage</text>
+  <rect x="640" y="466" width="480" height="232" rx="6" fill="#16191e" stroke="#ff8a8a" stroke-width="1.5"/>
+  <g font-family="sans-serif" fill="#cbd5e1">
+    <text x="664" y="502" font-size="15" font-weight="bold" fill="#ff8a8a">Still no tenant isolation</text>
+    <text x="664" y="526" font-size="15">A workload spike on one node still affects</text>
+    <text x="664" y="548" font-size="15">its ring neighbors.</text>
+
+    <text x="664" y="588" font-size="15" font-weight="bold" fill="#ff8a8a">Still no locality</text>
+    <text x="664" y="612" font-size="15">One tenant's files remain spread across</text>
+    <text x="664" y="634" font-size="15">many nodes around the ring:</text>
+    <text x="664" y="664" font-size="15" font-family="monospace" fill="#ff8bd2">a/b.png → HDD1</text>
+    <text x="664" y="686" font-size="15" font-family="monospace" fill="#93c5fd">a/c.png → HDD2</text>
+  </g>
+
+  <!-- Takeaway -->
+  <rect x="80" y="780" width="1040" height="44" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="600" y="808" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Takeaway: consistent hashing fixes elastic add/remove but still scatters a tenant and still cannot isolate load.</text>
+</svg>

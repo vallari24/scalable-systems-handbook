@@ -1,0 +1,102 @@
+<svg width="1180" height="820" viewBox="0 0 1180 820" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="820" fill="#111317"/>
+
+  <defs>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="arrRed" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Routing 1 — Hash-Based Routing</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">Deterministic disk pick: a GET lands on the same disk a PUT chose — no broadcast</text>
+
+  <!-- API server -->
+  <rect x="80" y="150" width="250" height="120" rx="6" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="205" y="182" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">S3 API Server</text>
+  <text x="205" y="212" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">bucket.s3.com/</text>
+  <text x="205" y="232" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">images/logo.jpg</text>
+  <text x="205" y="256" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">PUT / GET object</text>
+
+  <!-- Hash compute box -->
+  <rect x="80" y="320" width="250" height="78" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="205" y="350" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Compute disk index</text>
+  <text x="205" y="378" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="16">hash(path) % N</text>
+
+  <!-- arrow server -> hash -->
+  <line x1="205" y1="270" x2="205" y2="316" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+
+  <!-- Disk rack: row of vertical drive slots -->
+  <text x="780" y="138" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">Rack of HDDs — N disks</text>
+  <rect x="500" y="155" width="560" height="120" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+
+  <!-- 8 drive slots -->
+  <!-- slot template: width 44, gap 18, start x=520 -->
+  <g font-family="sans-serif" font-size="13" fill="#9aa6b2" text-anchor="middle">
+    <rect x="520" y="172" width="44" height="86" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="542" y="272">D0</text>
+    <rect x="582" y="172" width="44" height="86" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="604" y="272">D1</text>
+    <rect x="644" y="172" width="44" height="86" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="666" y="272">D2</text>
+    <!-- chosen disk D3 -->
+    <rect x="706" y="172" width="44" height="86" rx="3" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+    <text x="728" y="272" fill="#8aff8a" font-weight="bold">D3</text>
+    <rect x="768" y="172" width="44" height="86" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="790" y="272">D4</text>
+    <rect x="830" y="172" width="44" height="86" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="852" y="272">D5</text>
+    <rect x="892" y="172" width="44" height="86" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="914" y="272">D6</text>
+    <rect x="954" y="172" width="44" height="86" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="976" y="272">D7</text>
+  </g>
+
+  <!-- chosen object label -->
+  <text x="728" y="166" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">chosen disk</text>
+
+  <!-- dotted deterministic arc from hash box to chosen disk D3 -->
+  <path d="M 330 352 C 470 340, 560 420, 728 268" fill="none" stroke="#ffff99" stroke-width="3" stroke-dasharray="3 7" marker-end="url(#arrYellow)"/>
+  <text x="500" y="410" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15">deterministic pick → exactly one disk</text>
+
+  <!-- ADVANTAGES -->
+  <text x="80" y="478" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Advantages</text>
+  <rect x="80" y="494" width="500" height="250" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="1.5"/>
+  <g font-family="sans-serif" font-size="16" fill="#cbd5e1">
+    <text x="104" y="534">Near-random allocation of objects</text>
+    <text x="104" y="574">Near-uniform distribution across all disks</text>
+    <text x="104" y="614">No static / explicit configuration needed</text>
+  </g>
+  <text x="104" y="660" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Same function on read &amp; write</text>
+  <text x="104" y="688" fill="#9aa6b2" font-family="sans-serif" font-size="14">GET recomputes hash(path) % N and finds</text>
+  <text x="104" y="710" fill="#9aa6b2" font-family="sans-serif" font-size="14">the exact disk the PUT used — no broadcast.</text>
+
+  <!-- DISADVANTAGES -->
+  <text x="620" y="478" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">Disadvantages</text>
+  <rect x="620" y="494" width="500" height="250" rx="6" fill="#16191e" stroke="#ff8a8a" stroke-width="1.5"/>
+  <g font-family="sans-serif" font-size="15" fill="#cbd5e1">
+    <text x="644" y="528" fill="#ff8a8a" font-weight="bold">1. Disk count change = rebalancing storm</text>
+    <text x="644" y="550">Add/fail a disk → modulo changes for nearly</text>
+    <text x="644" y="570">every key → almost all objects move &amp; reindex.</text>
+
+    <text x="644" y="606" fill="#ff8a8a" font-weight="bold">2. No locality</text>
+    <text x="644" y="628">One bucket's files scatter across many disks.</text>
+
+    <text x="644" y="664" fill="#ff8a8a" font-weight="bold">3. No tenant isolation (worst)</text>
+    <text x="644" y="686">Many customers' files land on the same disk;</text>
+    <text x="644" y="706">one tenant's spike degrades everyone sharing it.</text>
+  </g>
+
+  <!-- Takeaway -->
+  <rect x="80" y="762" width="1040" height="44" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="600" y="790" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Takeaway: hashing distributes evenly but loses control — it cannot keep a tenant's data together or apart.</text>
+</svg>

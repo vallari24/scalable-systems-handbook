@@ -1,0 +1,115 @@
+<svg width="1180" height="820" viewBox="0 0 1180 820" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="820" fill="#111317"/>
+
+  <defs>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="arrGray" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#9aa6b2"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Who Knows Where Things Live?</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">Two questions: which partition is on which node, and who moves partitions around?</text>
+
+  <!-- Q1 / Q2 banners -->
+  <text x="100" y="128" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">Q1: which partition lives on which node?  →  an entry must exist somewhere = the PMT</text>
+  <text x="100" y="152" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Q2: who manages partition movement?  →  the Partition Manager</text>
+
+  <!-- Partition Manager (left, control box) -->
+  <rect x="80" y="200" width="220" height="118" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="190" y="248" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Partition</text>
+  <text x="190" y="272" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Manager</text>
+  <text x="190" y="300" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">the control brain</text>
+
+  <!-- three logical partitions (center column) -->
+  <text x="560" y="186" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">three logical partitions (ranges)</text>
+
+  <rect x="450" y="200" width="220" height="60" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="540" y="226" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Partition 1</text>
+  <text x="540" y="248" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">[a,b]</text>
+
+  <rect x="450" y="285" width="220" height="60" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="540" y="311" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Partition 2</text>
+  <text x="540" y="333" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">[c,f]</text>
+
+  <rect x="450" y="370" width="220" height="60" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="540" y="396" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Partition 3</text>
+  <text x="540" y="418" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">[g,z]</text>
+
+  <!-- Partition Manager -> partitions (control arrows) -->
+  <line x1="300" y1="230" x2="446" y2="230" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+  <line x1="300" y1="259" x2="446" y2="315" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+  <line x1="300" y1="288" x2="446" y2="400" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+  <text x="360" y="200" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">manages</text>
+
+  <!-- Physical storage rack (right) -->
+  <text x="940" y="186" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">rack of physical storage disks</text>
+  <rect x="760" y="200" width="360" height="230" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+  <g font-family="sans-serif" font-size="13" fill="#9aa6b2" text-anchor="middle">
+    <rect x="785" y="222" width="44" height="186" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="807" y="422" fill="#ffff99" font-weight="bold">Node 1</text>
+    <rect x="845" y="222" width="44" height="186" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="867" y="422">N2</text>
+    <rect x="905" y="222" width="44" height="186" rx="3" fill="#10243a" stroke="#3a4150" stroke-width="1.5"/>
+    <text x="927" y="422">...</text>
+    <rect x="965" y="222" width="44" height="186" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="987" y="422" fill="#ffff99" font-weight="bold">Node 7</text>
+    <rect x="1025" y="222" width="44" height="186" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="1047" y="422" fill="#ffff99" font-weight="bold">Node 8</text>
+  </g>
+
+  <!-- partitions -> physical disks (mapping arrows) -->
+  <line x1="670" y1="230" x2="781" y2="300" stroke="#9aa6b2" stroke-width="2.5" marker-end="url(#arrGray)"/>
+  <line x1="670" y1="315" x2="961" y2="310" stroke="#9aa6b2" stroke-width="2.5" marker-end="url(#arrGray)"/>
+  <line x1="670" y1="400" x2="1021" y2="330" stroke="#9aa6b2" stroke-width="2.5" marker-end="url(#arrGray)"/>
+  <text x="720" y="250" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">map onto</text>
+
+  <!-- PMT cylinder beneath the Partition Manager -->
+  <text x="190" y="378" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">the manager owns the PMT</text>
+  <!-- ownership arrow PM -> PMT -->
+  <line x1="190" y1="318" x2="190" y2="392" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+
+  <g>
+    <ellipse cx="190" cy="408" rx="100" ry="22" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <path d="M90,408 L90,470 A100,22 0 0 0 290,470 L290,408" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <ellipse cx="190" cy="408" rx="100" ry="22" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <text x="190" y="450" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">P.M.T.</text>
+    <text x="190" y="510" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">a small database: the source of truth</text>
+  </g>
+
+  <!-- PMT contents table -->
+  <text x="640" y="540" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">PMT contents — each partition's range maps to a node</text>
+  <rect x="320" y="556" width="640" height="150" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <line x1="320" y1="592" x2="960" y2="592" stroke="#3a4150" stroke-width="1.5"/>
+  <g font-family="monospace" font-size="17" fill="#cbd5e1" text-anchor="middle">
+    <text x="640" y="582" fill="#9aa6b2" font-size="14">partition (logical range)  ->  node (physical)</text>
+    <text x="640" y="626">partition 1 [a,b]  ->  Node 1</text>
+    <text x="640" y="660">partition 2 [c,f]  ->  Node 7</text>
+    <text x="640" y="694">partition 3 [g,z]  ->  Node 8</text>
+  </g>
+
+  <!-- Cliffhanger note -->
+  <rect x="80" y="556" width="220" height="150" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="190" y="586" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">But wait...</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1" text-anchor="middle">
+    <text x="190" y="616">a partition is just a</text>
+    <text x="190" y="636">logical range — there</text>
+    <text x="190" y="656">must be a server that</text>
+    <text x="190" y="676">actually owns &amp; serves</text>
+    <text x="190" y="696">it.  (next diagram)</text>
+  </g>
+
+  <!-- Takeaway -->
+  <rect x="80" y="746" width="1040" height="52" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="600" y="769" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Takeaway: the PMT is the lookup that turns a key into a node;</text>
+  <text x="600" y="790" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">the Partition Manager is the brain that decides when partitions split, move, or get reassigned.</text>
+</svg>

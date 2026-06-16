@@ -1,0 +1,136 @@
+<svg width="1180" height="780" viewBox="0 0 1180 780" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="sh-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="sh-p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="sh-b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="sh-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="sh-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="780" fill="#111317"/>
+
+  <!-- Title -->
+  <text x="590" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Storage Layer: Infinite, Cheap, Log-Structured</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">pick the cheapest durable medium, then make slow disks fast by never seeking</text>
+
+  <!-- ===================== TOP: storage hierarchy axis ===================== -->
+  <text x="80" y="124" fill="#9aa6b2" font-family="sans-serif" font-size="15">the storage hierarchy - fast / expensive / small on the left, slow / cheap / huge on the right</text>
+
+  <!-- gradient bracket labels -->
+  <text x="80" y="156" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">fast - expensive - small</text>
+  <text x="1100" y="156" text-anchor="end" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">slow - cheap - huge</text>
+
+  <!-- the axis line -->
+  <line x1="120" y1="200" x2="1060" y2="200" stroke="#5b6470" stroke-width="3" marker-end="url(#sh-y)"/>
+
+  <!-- ticks: cache, RAM, SSD, (gap), Disk HDD, Tape -->
+  <!-- cache -->
+  <line x1="160" y1="190" x2="160" y2="210" stroke="#8aff8a" stroke-width="3"/>
+  <text x="160" y="182" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">cache</text>
+  <text x="160" y="234" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="12">ns</text>
+  <!-- RAM -->
+  <line x1="300" y1="190" x2="300" y2="210" stroke="#8aff8a" stroke-width="3"/>
+  <text x="300" y="182" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">RAM</text>
+  <text x="300" y="234" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="12">100 ns</text>
+  <!-- SSD -->
+  <line x1="440" y1="190" x2="440" y2="210" stroke="#93c5fd" stroke-width="3"/>
+  <text x="440" y="182" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">SSD</text>
+  <text x="440" y="234" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="12">100 us</text>
+
+  <!-- the gap -->
+  <line x1="520" y1="200" x2="640" y2="200" stroke="#3a4150" stroke-width="3" stroke-dasharray="3 7"/>
+  <text x="580" y="182" text-anchor="middle" fill="#5b6470" font-family="sans-serif" font-size="13">gap</text>
+
+  <!-- Disk HDD (CHOSEN, yellow) -->
+  <line x1="720" y1="186" x2="720" y2="214" stroke="#ffff99" stroke-width="4"/>
+  <text x="720" y="178" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Disk (HDD)</text>
+  <text x="720" y="236" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="12">10 ms</text>
+  <!-- Tape -->
+  <line x1="940" y1="190" x2="940" y2="210" stroke="#7c8694" stroke-width="3"/>
+  <text x="940" y="182" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15" font-weight="bold">Tape</text>
+  <text x="940" y="234" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="12">seconds</text>
+
+  <!-- CHOSEN bracket marking Disk -->
+  <path d="M644 268 L644 280 L796 280 L796 268" fill="none" stroke="#ffff99" stroke-width="2.5"/>
+  <line x1="720" y1="280" x2="720" y2="296" stroke="#ffff99" stroke-width="2.5" marker-end="url(#sh-y)"/>
+  <rect x="588" y="300" width="264" height="62" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="720" y="326" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">CHOSEN medium: Disk (HDD)</text>
+  <text x="720" y="350" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">cheap per byte - durable</text>
+
+  <!-- divider -->
+  <line x1="40" y1="396" x2="1140" y2="396" stroke="#3a4150" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+  <!-- ===================== BOTTOM-LEFT: storage rack ===================== -->
+  <text x="290" y="432" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">a storage rack - a cabinet of disk nodes</text>
+
+  <!-- rack cabinet -->
+  <rect x="120" y="446" width="200" height="280" rx="8" fill="#16191e" stroke="#ffff99" stroke-width="2.5"/>
+  <!-- slots (nodes) -->
+  <rect x="138" y="462" width="164" height="26" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="220" y="480" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">node - 10 to 20 TB</text>
+  <rect x="138" y="494" width="164" height="26" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="220" y="512" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">node - 10 to 20 TB</text>
+  <rect x="138" y="526" width="164" height="26" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="220" y="544" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">node - 10 to 20 TB</text>
+  <rect x="138" y="558" width="164" height="26" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="220" y="576" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="15">...</text>
+  <rect x="138" y="590" width="164" height="26" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="220" y="608" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">node - 10 to 20 TB</text>
+  <rect x="138" y="622" width="164" height="26" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="220" y="640" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">node - 10 to 20 TB</text>
+  <text x="220" y="676" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Storage Rack</text>
+  <text x="220" y="700" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">20 to 30 nodes per rack</text>
+
+  <!-- add more racks => infinite -->
+  <rect x="356" y="476" width="120" height="220" rx="8" fill="#16191e" stroke="#3a4150" stroke-width="2" stroke-dasharray="6 5"/>
+  <rect x="368" y="490" width="96" height="22" rx="3" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+  <rect x="368" y="518" width="96" height="22" rx="3" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+  <rect x="368" y="546" width="96" height="22" rx="3" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+  <text x="416" y="586" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="15">...</text>
+  <rect x="368" y="600" width="96" height="22" rx="3" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+  <rect x="368" y="628" width="96" height="22" rx="3" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+  <text x="416" y="682" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">+ more racks</text>
+
+  <line x1="320" y1="586" x2="354" y2="586" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#sh-g)"/>
+  <text x="416" y="468" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">infinite storage</text>
+  <text x="416" y="716" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">just add more racks</text>
+
+  <!-- ===================== BOTTOM-RIGHT: reasoning chain ===================== -->
+  <text x="800" y="432" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">why log-structured? - the reasoning for the disk choice</text>
+
+  <!-- step 1: HDD cheap -->
+  <rect x="540" y="446" width="520" height="56" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="560" y="470" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">spinning disk (HDD) is cheap</text>
+  <text x="560" y="492" fill="#cbd5e1" font-family="sans-serif" font-size="14">lowest cost per byte, and durable</text>
+  <line x1="800" y1="502" x2="800" y2="522" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#sh-r)"/>
+
+  <!-- step 2: avoid seeks -->
+  <rect x="540" y="524" width="520" height="56" rx="8" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="560" y="548" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">but it is slow - you must avoid disk SEEKS</text>
+  <text x="560" y="570" fill="#cbd5e1" font-family="sans-serif" font-size="14">to get good write performance from a slow HDD</text>
+  <line x1="800" y1="580" x2="800" y2="600" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#sh-g)"/>
+
+  <!-- step 3: log-structured -->
+  <rect x="540" y="602" width="520" height="64" rx="8" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="560" y="626" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">avoid seeks with log-structured storage</text>
+  <text x="560" y="648" fill="#cbd5e1" font-family="sans-serif" font-size="14">sequential, append-only filesystem - the Bitcask lesson reused</text>
+
+  <!-- result -->
+  <rect x="540" y="682" width="520" height="44" rx="8" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="800" y="710" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">each node runs a log-structured store, writing sequentially</text>
+
+  <!-- ===================== closing question / takeaway ===================== -->
+  <rect x="60" y="742" width="1060" height="0" fill="none"/>
+  <text x="80" y="752" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">Next: how do we get infinite/scalable storage, and how does a partition server actually write to these disks?</text>
+  <text x="700" y="768" fill="#cbd5e1" font-family="sans-serif" font-size="13.5"><tspan fill="#ffff99" font-weight="bold">Takeaway: </tspan>cheap HDDs in racks give infinite capacity; log-structured (append-only, seek-free) writes keep those cheap disks fast.</text>
+</svg>

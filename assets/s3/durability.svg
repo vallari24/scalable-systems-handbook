@@ -1,0 +1,133 @@
+<svg width="1180" height="800" viewBox="0 0 1180 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="800" fill="#111317"/>
+
+  <defs>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Durability: Never Lose a Byte</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">replicate sync nearby and async far away - across at least 3 availability zones</text>
+
+  <!-- Legend -->
+  <g font-family="sans-serif" font-size="13">
+    <rect x="822" y="100" width="316" height="86" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+    <line x1="838" y1="124" x2="876" y2="124" stroke="#ff8bd2" stroke-width="3"/>
+    <text x="884" y="128" fill="#cbd5e1">SYNC (solid) - on the write path</text>
+    <line x1="838" y1="150" x2="876" y2="150" stroke="#93c5fd" stroke-width="3" stroke-dasharray="6 5"/>
+    <text x="884" y="154" fill="#cbd5e1">ASYNC (dashed) - background</text>
+    <rect x="838" y="166" width="20" height="14" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="884" y="178" fill="#cbd5e1">storage node / durable copy</text>
+  </g>
+
+  <!-- ===================== TOP: replication at 3 distances ===================== -->
+
+  <!-- Primary storage node (center-left) -->
+  <rect x="80" y="240" width="190" height="150" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="175" y="270" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Primary</text>
+  <text x="175" y="291" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Storage Node</text>
+  <g>
+    <rect x="100" y="306" width="150" height="14" rx="2" fill="#2a2a18" stroke="#ffff99" stroke-width="1"/>
+    <rect x="100" y="324" width="150" height="14" rx="2" fill="#2a2a18" stroke="#ffff99" stroke-width="1"/>
+    <rect x="100" y="342" width="150" height="14" rx="2" fill="#2a2a18" stroke="#ffff99" stroke-width="1"/>
+    <rect x="100" y="360" width="150" height="14" rx="2" fill="#2a2a18" stroke="#ffff99" stroke-width="1"/>
+  </g>
+  <text x="175" y="408" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">receives the client write</text>
+
+  <!-- (1) SYNC - same rack -->
+  <rect x="430" y="150" width="200" height="118" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="530" y="180" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Storage Node 2</text>
+  <g>
+    <rect x="450" y="194" width="160" height="13" rx="2" fill="#2a1320" stroke="#ff8bd2" stroke-width="1"/>
+    <rect x="450" y="211" width="160" height="13" rx="2" fill="#2a1320" stroke="#ff8bd2" stroke-width="1"/>
+    <rect x="450" y="228" width="160" height="13" rx="2" fill="#2a1320" stroke="#ff8bd2" stroke-width="1"/>
+  </g>
+  <text x="530" y="258" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">same rack</text>
+  <line x1="270" y1="290" x2="426" y2="222" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <text x="350" y="240" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">SYNC</text>
+  <text x="700" y="200" fill="#cbd5e1" font-family="sans-serif" font-size="14">replicated within rack - fast, on the</text>
+  <text x="700" y="220" fill="#cbd5e1" font-family="sans-serif" font-size="14">write path. The write is not acknowledged</text>
+  <text x="700" y="240" fill="#cbd5e1" font-family="sans-serif" font-size="14">until the in-rack copy is safe.</text>
+
+  <!-- (2) ASYNC - another DC -->
+  <rect x="430" y="320" width="200" height="118" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="530" y="350" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Storage Node 3</text>
+  <g>
+    <rect x="450" y="364" width="160" height="13" rx="2" fill="#10243a" stroke="#93c5fd" stroke-width="1"/>
+    <rect x="450" y="381" width="160" height="13" rx="2" fill="#10243a" stroke="#93c5fd" stroke-width="1"/>
+    <rect x="450" y="398" width="160" height="13" rx="2" fill="#10243a" stroke="#93c5fd" stroke-width="1"/>
+  </g>
+  <text x="530" y="428" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">another data center</text>
+  <line x1="270" y1="330" x2="426" y2="375" stroke="#93c5fd" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <text x="350" y="372" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">ASYNC</text>
+  <text x="700" y="360" fill="#cbd5e1" font-family="sans-serif" font-size="14">replicated across DC (availability zone)</text>
+  <text x="700" y="380" fill="#9aa6b2" font-family="sans-serif" font-size="14">survives losing a whole data center.</text>
+
+  <!-- (3) ASYNC - across geography -> globe -->
+  <g transform="translate(990,360)">
+    <circle cx="0" cy="0" r="58" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+    <ellipse cx="0" cy="0" rx="58" ry="22" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <ellipse cx="0" cy="0" rx="24" ry="58" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+    <line x1="-58" y1="0" x2="58" y2="0" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="0" y="86" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Storage Node 8</text>
+    <text x="0" y="106" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">across geography</text>
+  </g>
+  <path d="M270,360 C540,480 720,500 924,400" fill="none" stroke="#93c5fd" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <text x="560" y="490" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">ASYNC</text>
+  <text x="560" y="510" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">replicated across geography - for disaster recovery</text>
+
+  <!-- Principle box -->
+  <rect x="80" y="440" width="350" height="120" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="100" y="466" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Principle</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <text x="100" y="490">Synchronous nearby for a durable</text>
+    <text x="100" y="510">acknowledgement; asynchronous far away</text>
+    <text x="100" y="530">to survive a whole DC or region failure.</text>
+    <text x="100" y="550">S3 spreads every object across 3+ AZs.</text>
+  </g>
+
+  <!-- ===================== BOTTOM: within a single node ===================== -->
+  <line x1="40" y1="588" x2="1140" y2="588" stroke="#3a4150" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <text x="320" y="618" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Inside a single storage node: RAID / erasure coding</text>
+
+  <!-- erasure coding shards -->
+  <rect x="80" y="636" width="480" height="120" rx="6" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="100" y="662" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Reed-Solomon erasure coding</text>
+  <g font-family="monospace" font-size="13" text-anchor="middle">
+    <rect x="100" y="676" width="56" height="36" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="128" y="699" fill="#ffff99">D1</text>
+    <rect x="162" y="676" width="56" height="36" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="190" y="699" fill="#ffff99">D2</text>
+    <rect x="224" y="676" width="56" height="36" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="252" y="699" fill="#ffff99">D3</text>
+    <rect x="286" y="676" width="56" height="36" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="314" y="699" fill="#ffff99">D4</text>
+    <rect x="362" y="676" width="56" height="36" rx="3" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="390" y="699" fill="#93c5fd">P1</text>
+    <rect x="424" y="676" width="56" height="36" rx="3" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="452" y="699" fill="#93c5fd">P2</text>
+  </g>
+  <text x="320" y="734" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">data shards + parity shards - rebuild the object even if several shards are lost,</text>
+  <text x="320" y="750" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">far cheaper in space than full copies.</text>
+
+  <!-- Red callout -->
+  <rect x="590" y="636" width="510" height="120" rx="6" fill="#2a1313" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="610" y="662" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">The only lever is duplication</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <text x="610" y="688">The only way to achieve durability is duplicating</text>
+    <text x="610" y="710">data. The design question is just how near, how far,</text>
+    <text x="610" y="732">sync or async, and full copies vs erasure-coded shards.</text>
+  </g>
+
+  <!-- Takeaway -->
+  <rect x="80" y="770" width="1020" height="26" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="590" y="788" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Takeaway: sync within the rack, async across DCs and geographies, RAID/erasure coding per node - redundancy at every distance buys eleven nines.</text>
+</svg>

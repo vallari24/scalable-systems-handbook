@@ -1,0 +1,85 @@
+<svg width="1180" height="820" viewBox="0 0 1180 820" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="820" fill="#111317"/>
+  <defs>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Designing S3: It's Just a Key-Value Store</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">The map is the path; the value is the blob of bytes</text>
+
+  <!-- KEY-VALUE banner -->
+  <rect x="44" y="104" width="1092" height="118" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <!-- key box -->
+  <rect x="70" y="130" width="560" height="66" rx="8" fill="#16191e" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="80" y="152" fill="#9aa6b2" font-family="sans-serif" font-size="14">KEY (the map)</text>
+  <text x="80" y="180" fill="#ffffff" font-family="monospace" font-size="17">s3://bucket.s3.aws.com/images/logo.jpg</text>
+  <!-- arrow key->value -->
+  <line x1="638" y1="163" x2="700" y2="163" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <text x="669" y="153" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">maps to</text>
+  <!-- value box -->
+  <rect x="712" y="130" width="398" height="66" rx="8" fill="#16191e" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="724" y="152" fill="#9aa6b2" font-family="sans-serif" font-size="14">VALUE (the blob)</text>
+  <text x="724" y="180" fill="#cbd5e1" font-family="sans-serif" font-size="16">opaque bytes — the file (any size)</text>
+
+  <!-- THREE REQUIREMENTS -->
+  <text x="44" y="262" fill="#9aa6b2" font-family="sans-serif" font-size="16" font-weight="bold">THREE REQUIREMENTS — each with a consequence</text>
+
+  <!-- Req 1 -->
+  <rect x="44" y="278" width="356" height="180" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="64" y="308" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">1. Blob storage</text>
+  <text x="64" y="334" fill="#cbd5e1" font-family="sans-serif" font-size="14">Store &amp; serve opaque files of any size.</text>
+  <text x="64" y="366" fill="#ffff99" font-family="monospace" font-size="14">PUT(path, blob)</text>
+  <text x="64" y="388" fill="#ffff99" font-family="monospace" font-size="14">GET(path)</text>
+  <text x="64" y="410" fill="#ffff99" font-family="monospace" font-size="14">DELETE(path)</text>
+  <text x="64" y="438" fill="#9aa6b2" font-family="sans-serif" font-size="13">Tiny API: one key per op. No ranges, no joins.</text>
+
+  <!-- Req 2 -->
+  <rect x="412" y="278" width="356" height="180" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="432" y="308" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">2. Network file system</text>
+  <text x="432" y="336" fill="#cbd5e1" font-family="sans-serif" font-size="14">Clients talk over HTTP from anywhere.</text>
+  <text x="432" y="360" fill="#cbd5e1" font-family="sans-serif" font-size="14">Reachable by URL.</text>
+  <text x="432" y="416" fill="#9aa6b2" font-family="sans-serif" font-size="13">Behaves like a giant shared disk</text>
+  <text x="432" y="436" fill="#9aa6b2" font-family="sans-serif" font-size="13">that anyone can reach.</text>
+
+  <!-- Req 3 -->
+  <rect x="780" y="278" width="356" height="180" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="800" y="308" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">3. Scalable &amp; cheap</text>
+  <text x="800" y="336" fill="#cbd5e1" font-family="sans-serif" font-size="14">Grow to exabytes on the</text>
+  <text x="800" y="360" fill="#cbd5e1" font-family="sans-serif" font-size="14">cheapest hardware.</text>
+  <text x="800" y="392" fill="#9aa6b2" font-family="sans-serif" font-size="13">Commodity spinning HDDs.</text>
+  <text x="800" y="426" fill="#9aa6b2" font-family="sans-serif" font-size="13">Cost per byte is a</text>
+  <text x="800" y="446" fill="#9aa6b2" font-family="sans-serif" font-size="13">first-class constraint.</text>
+
+  <!-- THREE HARD PROBLEMS -->
+  <text x="44" y="500" fill="#9aa6b2" font-family="sans-serif" font-size="16" font-weight="bold">THREE HARD PROBLEMS — where the real difficulty lives</text>
+
+  <!-- Problem 1 STORAGE -->
+  <rect x="44" y="516" width="356" height="120" rx="10" fill="#16191e" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="64" y="544" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">STORAGE</text>
+  <text x="64" y="574" fill="#cbd5e1" font-family="sans-serif" font-size="14">Infinite space from finite</text>
+  <text x="64" y="594" fill="#cbd5e1" font-family="sans-serif" font-size="14">10TB disks.</text>
+  <text x="64" y="620" fill="#9aa6b2" font-family="sans-serif" font-size="13">How do many small disks look endless?</text>
+
+  <!-- Problem 2 ACCESS/ROUTING -->
+  <rect x="412" y="516" width="356" height="120" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="432" y="544" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">ACCESS / ROUTING</text>
+  <text x="432" y="574" fill="#cbd5e1" font-family="sans-serif" font-size="14">Which of thousands of disks</text>
+  <text x="432" y="594" fill="#cbd5e1" font-family="sans-serif" font-size="14">holds this one key?</text>
+  <text x="432" y="620" fill="#9aa6b2" font-family="sans-serif" font-size="13">Find the bytes from the path alone.</text>
+
+  <!-- Problem 3 HOT PARTITION -->
+  <rect x="780" y="516" width="356" height="120" rx="10" fill="#16191e" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="800" y="544" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">HOT PARTITION</text>
+  <text x="800" y="574" fill="#cbd5e1" font-family="sans-serif" font-size="14">One popular bucket can</text>
+  <text x="800" y="594" fill="#cbd5e1" font-family="sans-serif" font-size="14">swamp a single node.</text>
+  <text x="800" y="620" fill="#9aa6b2" font-family="sans-serif" font-size="13">Spread and isolate load (balancing).</text>
+
+  <!-- KEY INSIGHT -->
+  <rect x="44" y="664" width="1092" height="118" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="3"/>
+  <text x="64" y="694" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">THE MOST IMPORTANT DESIGN DECISION</text>
+  <text x="64" y="724" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Directories are logical and virtual — there is no real folder tree on disk.</text>
+  <text x="64" y="750" fill="#cbd5e1" font-family="sans-serif" font-size="15">The slashes in <tspan fill="#ffff99" font-family="monospace">/images/logo.jpg</tspan> are just characters in a flat key. A bucket is a naming convention, not a place.</text>
+  <text x="64" y="772" fill="#9aa6b2" font-family="sans-serif" font-size="14">Everything is path-based.</text>
+</svg>

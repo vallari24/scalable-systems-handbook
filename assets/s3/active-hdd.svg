@@ -1,0 +1,184 @@
+<svg width="1180" height="880" viewBox="0 0 1180 880" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah-p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="ah-b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="ah-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="ah-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="880" fill="#111317"/>
+
+  <!-- Title -->
+  <text x="590" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Writing to Disk: The Active HEAD and the FUSE Mount</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">writes roll forward through the slots; a monitor rotates and compacts; servers reach bytes over <tspan fill="#93c5fd" font-weight="bold">FUSE</tspan></text>
+
+  <!-- ===================== TOP: single partition server -> node, HEAD ===================== -->
+
+  <!-- Partition Server (pink) -->
+  <rect x="80" y="150" width="200" height="96" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="180" y="190" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Partition</text>
+  <text x="180" y="212" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Server</text>
+
+  <!-- storage node cabinet -->
+  <text x="470" y="138" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">one storage node - a cabinet of HDD slots</text>
+  <rect x="380" y="150" width="180" height="300" rx="8" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+
+  <!-- top slot: ACTIVE HDD (pink / HEAD) -->
+  <rect x="396" y="166" width="148" height="44" rx="4" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.8"/>
+  <text x="470" y="187" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">active HDD</text>
+  <text x="470" y="204" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="12">HEAD</text>
+
+  <!-- frozen slots -->
+  <rect x="396" y="220" width="148" height="44" rx="4" fill="#1a1a10" stroke="#7c8694" stroke-width="1.8"/>
+  <text x="470" y="247" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">frozen - RO</text>
+  <rect x="396" y="274" width="148" height="44" rx="4" fill="#1a1a10" stroke="#7c8694" stroke-width="1.8"/>
+  <text x="470" y="301" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">frozen - RO</text>
+  <rect x="396" y="328" width="148" height="44" rx="4" fill="#1a1a10" stroke="#7c8694" stroke-width="1.8"/>
+  <text x="470" y="355" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">frozen - RO</text>
+  <rect x="396" y="382" width="148" height="44" rx="4" fill="#16191e" stroke="#3a4150" stroke-width="1.8"/>
+  <text x="470" y="409" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">empty</text>
+
+  <!-- writes to HEAD arrow (pink) -->
+  <line x1="284" y1="188" x2="392" y2="188" stroke="#ff8bd2" stroke-width="3" marker-end="url(#ah-p)"/>
+  <text x="338" y="176" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">writes to the HEAD</text>
+
+  <!-- HEAD advances arrow (down, blue dashed) -->
+  <line x1="572" y1="200" x2="572" y2="370" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ah-b)"/>
+  <text x="600" y="290" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">HEAD</text>
+  <text x="600" y="308" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">advances</text>
+  <text x="600" y="326" fill="#9aa6b2" font-family="sans-serif" font-size="12">on rotation</text>
+
+  <!-- RULE box (right, pink) -->
+  <rect x="688" y="150" width="432" height="130" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="708" y="178" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">The rule - always write to the HEAD</text>
+  <text x="708" y="206" fill="#cbd5e1" font-family="sans-serif" font-size="14">The partition server always appends to the active HEAD.</text>
+  <text x="708" y="228" fill="#cbd5e1" font-family="sans-serif" font-size="14">When a node hits <tspan fill="#ff8bd2" font-weight="bold">~70% capacity</tspan> it is moved down -</text>
+  <text x="708" y="250" fill="#cbd5e1" font-family="sans-serif" font-size="14">frozen, read-only - and the HEAD advances to the</text>
+  <text x="708" y="272" fill="#cbd5e1" font-family="sans-serif" font-size="14">next slot.</text>
+
+  <!-- Storage Monitor (blue) -->
+  <rect x="688" y="298" width="200" height="92" rx="8" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="788" y="326" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Storage Monitor</text>
+  <text x="788" y="350" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">watches capacity,</text>
+  <text x="788" y="370" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">triggers rotation</text>
+
+  <!-- monitor watches node -->
+  <line x1="688" y1="344" x2="564" y2="290" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ah-b)"/>
+
+  <!-- compaction box (blue) -->
+  <rect x="908" y="298" width="212" height="92" rx="8" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1014" y="324" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">merge &amp; compaction</text>
+  <text x="1014" y="346" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">background defrag to</text>
+  <text x="1014" y="364" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">reclaim space from</text>
+  <text x="1014" y="382" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">overwritten / deleted</text>
+
+  <!-- example objects appended to log (yellow) -->
+  <rect x="80" y="300" width="280" height="126" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="100" y="326" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">variable-size blobs appended to the log</text>
+  <rect x="100" y="340" width="240" height="32" rx="4" fill="#16191e" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="112" y="361" fill="#cbd5e1" font-family="monospace" font-size="13">s3://amzn/img/a.jpg</text>
+  <text x="328" y="361" text-anchor="end" fill="#ffff99" font-family="monospace" font-size="13" font-weight="bold">1KB</text>
+  <rect x="100" y="380" width="240" height="32" rx="4" fill="#16191e" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="112" y="401" fill="#cbd5e1" font-family="monospace" font-size="13">s3://amzn/imp/a.jpg</text>
+  <text x="328" y="401" text-anchor="end" fill="#ffff99" font-family="monospace" font-size="13" font-weight="bold">2KB</text>
+
+  <!-- objects appended into HEAD (pink dashed) -->
+  <line x1="360" y1="360" x2="394" y2="300" stroke="#ff8bd2" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#ah-p)"/>
+
+  <!-- divider -->
+  <line x1="40" y1="476" x2="1140" y2="476" stroke="#3a4150" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+  <!-- ===================== BOTTOM: many-to-many FUSE mount ===================== -->
+  <text x="590" y="510" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">The FUSE Mount - filesystem in userspace</text>
+  <text x="590" y="534" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">three partition servers mounted to three storage nodes - a many-to-many mount</text>
+
+  <!-- three partition servers (pink) -->
+  <rect x="120" y="560" width="180" height="66" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="210" y="590" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">Partition Server A</text>
+  <text x="210" y="612" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">writes to its HEAD</text>
+
+  <rect x="500" y="560" width="180" height="66" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="590" y="590" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">Partition Server B</text>
+  <text x="590" y="612" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">writes to its HEAD</text>
+
+  <rect x="880" y="560" width="180" height="66" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="970" y="590" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">Partition Server C</text>
+  <text x="970" y="612" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">writes to its HEAD</text>
+
+  <!-- FUSE mount band -->
+  <rect x="120" y="652" width="940" height="40" rx="8" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="590" y="678" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="15" font-weight="bold">FUSE mount - open  read  write  seek  close  stat</text>
+
+  <!-- three storage nodes (cabinets) -->
+  <!-- node 1 -->
+  <rect x="150" y="718" width="120" height="104" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+  <rect x="162" y="728" width="96" height="20" rx="3" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="162" y="752" width="96" height="20" rx="3" fill="#1a1a10" stroke="#7c8694" stroke-width="1.5"/>
+  <rect x="162" y="776" width="96" height="20" rx="3" fill="#1a1a10" stroke="#7c8694" stroke-width="1.5"/>
+  <text x="210" y="814" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">Storage Node 1</text>
+
+  <!-- node 2 -->
+  <rect x="530" y="718" width="120" height="104" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+  <rect x="542" y="728" width="96" height="20" rx="3" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="542" y="752" width="96" height="20" rx="3" fill="#1a1a10" stroke="#7c8694" stroke-width="1.5"/>
+  <rect x="542" y="776" width="96" height="20" rx="3" fill="#1a1a10" stroke="#7c8694" stroke-width="1.5"/>
+  <text x="590" y="814" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">Storage Node 2</text>
+
+  <!-- node 3 -->
+  <rect x="910" y="718" width="120" height="104" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+  <rect x="922" y="728" width="96" height="20" rx="3" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="922" y="752" width="96" height="20" rx="3" fill="#1a1a10" stroke="#7c8694" stroke-width="1.5"/>
+  <rect x="922" y="776" width="96" height="20" rx="3" fill="#1a1a10" stroke="#7c8694" stroke-width="1.5"/>
+  <text x="970" y="814" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">Storage Node 3</text>
+
+  <!-- per-node Storage Monitor boxes -->
+  <rect x="290" y="730" width="160" height="48" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="370" y="752" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">Storage Monitor</text>
+  <text x="370" y="769" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">rotation + compaction</text>
+
+  <rect x="670" y="730" width="160" height="48" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="750" y="752" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">Storage Monitor</text>
+  <text x="750" y="769" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">rotation + compaction</text>
+
+  <rect x="1050" y="730" width="110" height="48" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1105" y="752" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">Storage</text>
+  <text x="1105" y="769" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">Monitor</text>
+
+  <!-- crossing colored mount lines (many-to-many) server -> band, band -> node -->
+  <!-- servers down to band -->
+  <line x1="210" y1="626" x2="210" y2="650" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#ah-p)"/>
+  <line x1="590" y1="626" x2="590" y2="650" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#ah-p)"/>
+  <line x1="970" y1="626" x2="970" y2="650" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#ah-p)"/>
+
+  <!-- band down to nodes, crossing (A->node2, B->node1&3, C->node2) -->
+  <line x1="300" y1="692" x2="560" y2="716" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ah-g)"/>
+  <line x1="500" y1="692" x2="240" y2="716" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ah-g)"/>
+  <line x1="700" y1="692" x2="960" y2="716" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ah-g)"/>
+  <line x1="900" y1="692" x2="620" y2="716" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ah-g)"/>
+
+  <!-- FUSE explanation -->
+  <text x="590" y="712" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">FUSE lets a partition server treat remote storage-node files as if they were local</text>
+
+  <!-- Legend -->
+  <g font-family="sans-serif" font-size="13">
+    <rect x="80" y="838" width="14" height="14" rx="2" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+    <text x="100" y="850" fill="#cbd5e1">write / HEAD / active</text>
+    <rect x="270" y="838" width="14" height="14" rx="2" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <text x="290" y="850" fill="#cbd5e1">control / monitor / compaction</text>
+    <rect x="540" y="838" width="14" height="14" rx="2" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="560" y="850" fill="#cbd5e1">storage / objects</text>
+    <line x1="710" y1="845" x2="744" y2="845" stroke="#8aff8a" stroke-width="3" marker-end="url(#ah-g)"/>
+    <text x="752" y="850" fill="#cbd5e1">mount path (file ops over FUSE)</text>
+  </g>
+
+  <!-- Takeaway -->
+  <text x="590" y="874" text-anchor="middle" font-family="sans-serif" font-size="13.5"><tspan fill="#ffff99" font-weight="bold">Takeaway: </tspan><tspan fill="#cbd5e1">writes go to the active HEAD and roll forward as disks fill; a storage monitor handles rotation and compaction; servers reach bytes through a FUSE mount of ordinary file ops.</tspan></text>
+</svg>

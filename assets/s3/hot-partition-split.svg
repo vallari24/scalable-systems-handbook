@@ -1,0 +1,106 @@
+<svg width="1180" height="820" viewBox="0 0 1180 820" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="820" fill="#111317"/>
+  <defs>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="arrRed" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Hot Partitions: Split, and Throttle</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">Two complementary tactics: cool a range structurally, protect the node meanwhile</text>
+
+  <!-- Legend -->
+  <rect x="44" y="100" width="1092" height="40" rx="8" fill="#16191e" stroke="#9aa6b2" stroke-width="1.5"/>
+  <circle cx="68" cy="120" r="7" fill="#ff8a8a"/>
+  <text x="82" y="125" fill="#cbd5e1" font-family="sans-serif" font-size="14">hot / overload</text>
+  <rect x="208" y="113" width="14" height="14" rx="3" fill="#ff8bd2"/>
+  <text x="230" y="125" fill="#cbd5e1" font-family="sans-serif" font-size="14">write / ownership (split)</text>
+  <rect x="430" y="113" width="14" height="14" rx="3" fill="#93c5fd"/>
+  <text x="452" y="125" fill="#cbd5e1" font-family="sans-serif" font-size="14">throttle / control</text>
+  <rect x="606" y="113" width="14" height="14" rx="3" fill="#ffff99"/>
+  <text x="628" y="125" fill="#cbd5e1" font-family="sans-serif" font-size="14">storage / range</text>
+  <text x="780" y="125" fill="#9aa6b2" font-family="monospace" font-size="14">[l,r] = key range owned by a node</text>
+
+  <!-- ===== TACTIC 1: SPLIT (left two-thirds) ===== -->
+  <text x="44" y="172" fill="#ff8bd2" font-family="sans-serif" font-size="18" font-weight="bold">TACTIC 1 — Split the hot range in two</text>
+
+  <!-- Hot node -->
+  <rect x="240" y="190" width="320" height="150" rx="10" fill="#2a1316" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="400" y="216" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">Hot Node — OVERLOADED</text>
+  <text x="400" y="238" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="16">owns [l,r]</text>
+  <!-- crammed dots -->
+  <g fill="#ff8a8a">
+    <circle cx="268" cy="262" r="5"/><circle cx="290" cy="258" r="5"/><circle cx="312" cy="266" r="5"/><circle cx="334" cy="260" r="5"/><circle cx="356" cy="268" r="5"/><circle cx="378" cy="259" r="5"/><circle cx="400" cy="267" r="5"/><circle cx="422" cy="261" r="5"/><circle cx="444" cy="268" r="5"/><circle cx="466" cy="260" r="5"/><circle cx="488" cy="266" r="5"/><circle cx="510" cy="259" r="5"/><circle cx="532" cy="267" r="5"/>
+    <circle cx="280" cy="284" r="5"/><circle cx="302" cy="290" r="5"/><circle cx="324" cy="282" r="5"/><circle cx="346" cy="289" r="5"/><circle cx="368" cy="283" r="5"/><circle cx="390" cy="290" r="5"/><circle cx="412" cy="283" r="5"/><circle cx="434" cy="290" r="5"/><circle cx="456" cy="282" r="5"/><circle cx="478" cy="289" r="5"/><circle cx="500" cy="283" r="5"/><circle cx="522" cy="290" r="5"/><circle cx="544" cy="284" r="5"/>
+    <circle cx="268" cy="308" r="5"/><circle cx="290" cy="314" r="5"/><circle cx="312" cy="306" r="5"/><circle cx="334" cy="313" r="5"/><circle cx="356" cy="307" r="5"/><circle cx="378" cy="314" r="5"/><circle cx="400" cy="307" r="5"/><circle cx="422" cy="314" r="5"/><circle cx="444" cy="306" r="5"/><circle cx="466" cy="313" r="5"/><circle cx="488" cy="307" r="5"/><circle cx="510" cy="314" r="5"/><circle cx="532" cy="308" r="5"/>
+  </g>
+
+  <!-- branching arrows down -->
+  <line x1="360" y1="340" x2="220" y2="420" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <line x1="440" y1="340" x2="540" y2="420" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <text x="400" y="392" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">split at point m</text>
+
+  <!-- Node 1 -->
+  <rect x="72" y="426" width="290" height="130" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="217" y="452" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Node 1 (stays)</text>
+  <text x="217" y="474" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="16">owns [l,m]</text>
+  <g fill="#ff8bd2">
+    <circle cx="110" cy="498" r="5"/><circle cx="135" cy="494" r="5"/><circle cx="160" cy="502" r="5"/><circle cx="185" cy="495" r="5"/><circle cx="210" cy="503" r="5"/><circle cx="235" cy="496" r="5"/><circle cx="260" cy="502" r="5"/><circle cx="285" cy="495" r="5"/><circle cx="310" cy="502" r="5"/>
+    <circle cx="122" cy="522" r="5"/><circle cx="147" cy="528" r="5"/><circle cx="172" cy="520" r="5"/><circle cx="197" cy="527" r="5"/><circle cx="222" cy="521" r="5"/><circle cx="247" cy="528" r="5"/><circle cx="272" cy="520" r="5"/><circle cx="297" cy="527" r="5"/>
+  </g>
+
+  <!-- Node 2 -->
+  <rect x="398" y="426" width="290" height="130" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="543" y="452" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">Node 2 (new machine)</text>
+  <text x="543" y="474" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="16">owns [n,r]</text>
+  <g fill="#8aff8a">
+    <circle cx="436" cy="498" r="5"/><circle cx="461" cy="494" r="5"/><circle cx="486" cy="502" r="5"/><circle cx="511" cy="495" r="5"/><circle cx="536" cy="503" r="5"/><circle cx="561" cy="496" r="5"/><circle cx="586" cy="502" r="5"/><circle cx="611" cy="495" r="5"/><circle cx="636" cy="502" r="5"/>
+    <circle cx="448" cy="522" r="5"/><circle cx="473" cy="528" r="5"/><circle cx="498" cy="520" r="5"/><circle cx="523" cy="527" r="5"/><circle cx="548" cy="521" r="5"/><circle cx="573" cy="528" r="5"/><circle cx="598" cy="520" r="5"/><circle cx="623" cy="527" r="5"/>
+  </g>
+
+  <!-- disjoint note -->
+  <text x="380" y="588" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">Ranges are mutually exclusive and together cover the original; one half</text>
+  <text x="380" y="608" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">moves to a new physical node — load halves.</text>
+
+  <!-- range-based note -->
+  <rect x="44" y="630" width="672" height="80" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="64" y="656" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Why this is simple: partitioning is range-based</text>
+  <text x="64" y="680" fill="#cbd5e1" font-family="sans-serif" font-size="14">A contiguous range cuts cleanly in two at a split point. A hash scheme</text>
+  <text x="64" y="700" fill="#cbd5e1" font-family="sans-serif" font-size="14">scatters keys everywhere and cannot be cut like this.</text>
+
+  <!-- ===== TACTIC 2: THROTTLE (right third) ===== -->
+  <text x="744" y="172" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">TACTIC 2 — Throttle per account</text>
+
+  <rect x="744" y="190" width="392" height="200" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="764" y="218" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">Cap requests per account</text>
+  <text x="764" y="244" fill="#cbd5e1" font-family="sans-serif" font-size="14">While a split is in progress, or against</text>
+  <text x="764" y="264" fill="#cbd5e1" font-family="sans-serif" font-size="14">abuse, limit each account's request rate.</text>
+
+  <!-- request flow -->
+  <rect x="764" y="288" width="120" height="56" rx="8" fill="#16191e" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="824" y="312" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">account</text>
+  <text x="824" y="332" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">requests</text>
+  <line x1="888" y1="316" x2="952" y2="316" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrBlue)"/>
+  <text x="920" y="306" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">over limit?</text>
+  <rect x="956" y="288" width="156" height="56" rx="8" fill="#2a1316" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="1034" y="312" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">throttled:</text>
+  <text x="1034" y="332" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="14">503 SlowDown</text>
+  <text x="764" y="372" fill="#9aa6b2" font-family="sans-serif" font-size="13">Extra requests above the per-account cap are rejected.</text>
+
+  <!-- Real-world numbers box -->
+  <rect x="744" y="406" width="392" height="180" rx="10" fill="#16191e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="764" y="432" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Real S3 numbers (per partitioned prefix)</text>
+  <text x="764" y="460" fill="#8aff8a" font-family="monospace" font-size="16">~5,500 reads / sec</text>
+  <text x="764" y="484" fill="#ff8bd2" font-family="monospace" font-size="16">~3,500 writes / sec</text>
+  <text x="764" y="512" fill="#cbd5e1" font-family="sans-serif" font-size="14">No limit on number of prefixes.</text>
+  <text x="764" y="536" fill="#cbd5e1" font-family="sans-serif" font-size="14">Auto-splits hot partitions behind the</text>
+  <text x="764" y="556" fill="#cbd5e1" font-family="sans-serif" font-size="14">scenes (30&#8211;60 min), returning</text>
+  <text x="764" y="576" fill="#ff8a8a" font-family="monospace" font-size="14">503 SlowDown</text>
+  <text x="877" y="576" fill="#cbd5e1" font-family="sans-serif" font-size="14">until ready.</text>
+
+  <!-- Takeaway -->
+  <rect x="44" y="730" width="1092" height="66" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="3"/>
+  <text x="64" y="758" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">TAKEAWAY</text>
+  <text x="64" y="782" fill="#ffffff" font-family="sans-serif" font-size="17">Splitting cools a hot range <tspan fill="#8aff8a">structurally and permanently</tspan>; throttling <tspan fill="#93c5fd">protects the node in the meantime</tspan> and caps any single tenant.</text>
+</svg>

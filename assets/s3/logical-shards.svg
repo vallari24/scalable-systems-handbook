@@ -1,0 +1,81 @@
+<svg width="1180" height="740" viewBox="0 0 1180 740" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="740" fill="#111317"/>
+  <defs>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Detour: Many Logical Shards on Few Machines</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">Treat the shard, not the key, as the unit of movement</text>
+
+  <!-- Legend -->
+  <rect x="44" y="100" width="1092" height="40" rx="8" fill="#16191e" stroke="#9aa6b2" stroke-width="1.5"/>
+  <rect x="64" y="113" width="14" height="14" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="86" y="125" fill="#cbd5e1" font-family="sans-serif" font-size="14">logical shard (a logical partition)</text>
+  <rect x="350" y="113" width="14" height="14" rx="3" fill="#16191e" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="372" y="125" fill="#cbd5e1" font-family="sans-serif" font-size="14">physical node (a machine)</text>
+  <rect x="600" y="113" width="14" height="14" rx="3" fill="#93c5fd"/>
+  <text x="622" y="125" fill="#cbd5e1" font-family="sans-serif" font-size="14">rebalance: move a whole shard</text>
+
+  <!-- ===== THREE PHYSICAL NODES ===== -->
+  <!-- Node 1: one shard -->
+  <rect x="60" y="170" width="320" height="230" rx="12" fill="#16191e" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="220" y="200" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Node 1</text>
+  <text x="220" y="222" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">1 logical shard</text>
+  <rect x="120" y="250" width="180" height="100" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="210" y="306" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="15">shard A</text>
+
+  <!-- Node 2: three shards -->
+  <rect x="430" y="170" width="320" height="230" rx="12" fill="#16191e" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="590" y="200" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Node 2</text>
+  <text x="590" y="222" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">3 logical shards</text>
+  <rect x="460" y="244" width="118" height="64" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="519" y="282" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="15">shard B</text>
+  <rect x="602" y="244" width="118" height="64" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="661" y="282" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="15">shard C</text>
+  <rect x="460" y="320" width="118" height="64" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="519" y="358" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="15">shard D</text>
+
+  <!-- Node 3: three shards -->
+  <rect x="800" y="170" width="320" height="230" rx="12" fill="#16191e" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="960" y="200" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Node 3</text>
+  <text x="960" y="222" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">3 logical shards</text>
+  <rect x="830" y="244" width="118" height="64" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="889" y="282" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="15">shard E</text>
+  <rect x="972" y="244" width="118" height="64" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="1031" y="282" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="15">shard F</text>
+  <rect x="830" y="320" width="118" height="64" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="889" y="358" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="15">shard G</text>
+
+  <!-- callout arrow to one shard -->
+  <line x1="220" y1="470" x2="200" y2="354" stroke="#ffff99" stroke-width="2.5" marker-end="url(#arrYellow)"/>
+  <text x="220" y="492" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">one logical shard</text>
+  <text x="220" y="512" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">a self-contained subset of data</text>
+
+  <!-- rebalance arrow: move a shard from Node 3 to Node 1 -->
+  <path d="M 948 352 C 600 440, 360 430, 305 332" fill="none" stroke="#93c5fd" stroke-width="3" stroke-dasharray="9,6" marker-end="url(#arrBlue)"/>
+  <text x="620" y="468" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">to cool Node 3 or rebalance: relocate an ENTIRE shard</text>
+  <text x="620" y="488" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">never re-cut a range, never move individual keys</text>
+
+  <!-- IDEA box -->
+  <rect x="44" y="534" width="540" height="118" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="64" y="562" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">The idea</text>
+  <text x="64" y="588" fill="#cbd5e1" font-family="sans-serif" font-size="14">Over-provision logical shards far beyond the number</text>
+  <text x="64" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="14">of machines, so each machine hosts a handful.</text>
+  <text x="64" y="636" fill="#9aa6b2" font-family="sans-serif" font-size="14">Load balancing becomes relocating whole shards.</text>
+
+  <!-- KEY REASON box (highlighted) -->
+  <rect x="596" y="534" width="540" height="118" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="3"/>
+  <text x="616" y="562" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Why it works (key reason)</text>
+  <text x="616" y="588" fill="#ffffff" font-family="sans-serif" font-size="14">Moving one self-contained, mutually-exclusive subset</text>
+  <text x="616" y="608" fill="#ffffff" font-family="sans-serif" font-size="14">across data nodes is far simpler and more efficient</text>
+  <text x="616" y="628" fill="#cbd5e1" font-family="sans-serif" font-size="14">than splitting live ranges.</text>
+  <text x="616" y="646" fill="#9aa6b2" font-family="sans-serif" font-size="13">Real world: Elasticsearch (shards, HEAD plugin); Instagram's posts table.</text>
+
+  <!-- Takeaway -->
+  <rect x="44" y="666" width="1092" height="58" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="3"/>
+  <text x="64" y="692" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">TAKEAWAY</text>
+  <text x="64" y="714" fill="#ffffff" font-family="sans-serif" font-size="17">Pre-create many logical shards; treat the shard, not the key, as the unit of movement &#8212; rebalancing is just &quot;pick up this shard, put it on that node.&quot;</text>
+</svg>

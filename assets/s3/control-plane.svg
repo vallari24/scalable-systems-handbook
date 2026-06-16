@@ -1,0 +1,189 @@
+<svg width="1180" height="880" viewBox="0 0 1180 880" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="880" fill="#111317"/>
+
+  <defs>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="arrRed" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">The Complete Control Plane (and Failover)</text>
+  <text x="590" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the important design decision: logical ownership makes failover a table edit</text>
+
+  <!-- ============ USER + API SERVERS (highlighted boundary, top-left) ============ -->
+  <rect x="50" y="100" width="540" height="200" rx="8" fill="none" stroke="#8aff8a" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="70" y="124" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">stateless request path</text>
+
+  <!-- user stick figure -->
+  <g stroke="#cbd5e1" stroke-width="2.5" fill="none">
+    <circle cx="105" cy="170" r="14"/>
+    <line x1="105" y1="184" x2="105" y2="222"/>
+    <line x1="105" y1="194" x2="86" y2="212"/>
+    <line x1="105" y1="194" x2="124" y2="212"/>
+    <line x1="105" y1="222" x2="88" y2="248"/>
+    <line x1="105" y1="222" x2="122" y2="248"/>
+  </g>
+  <text x="105" y="272" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">user</text>
+
+  <!-- two stateless API servers -->
+  <rect x="190" y="140" width="180" height="64" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="280" y="168" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">S3 API Server</text>
+  <text x="280" y="190" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">stateless</text>
+
+  <rect x="190" y="218" width="180" height="64" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="280" y="246" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">S3 API Server</text>
+  <text x="280" y="268" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">stateless</text>
+
+  <!-- user -> api servers (green read path) -->
+  <line x1="128" y1="200" x2="186" y2="172" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <line x1="128" y1="210" x2="186" y2="250" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+
+  <!-- ============ PMT cylinder with replicas (center) ============ -->
+  <text x="445" y="128" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">shared, replicated</text>
+  <g>
+    <!-- replica copies behind -->
+    <ellipse cx="465" cy="172" rx="70" ry="18" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <path d="M395,172 L395,224 A70,18 0 0 0 535,224 L535,172" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <ellipse cx="455" cy="162" rx="70" ry="18" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <path d="M385,162 L385,214 A70,18 0 0 0 525,214 L525,162" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <ellipse cx="445" cy="152" rx="70" ry="18" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <path d="M375,152 L375,204 A70,18 0 0 0 515,204 L515,152" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <ellipse cx="445" cy="152" rx="70" ry="18" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+    <text x="445" y="186" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">P.M.T.</text>
+    <text x="445" y="252" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">replica copies</text>
+  </g>
+
+  <!-- api servers -> PMT (read to resolve key) green -->
+  <line x1="370" y1="172" x2="378" y2="172" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <line x1="370" y1="250" x2="400" y2="206" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <text x="445" y="278" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">resolve key</text>
+
+  <!-- ============ Partition Manager STACK (top-right) ============ -->
+  <text x="930" y="120" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">HA via leader election</text>
+  <rect x="880" y="158" width="200" height="78" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="865" y="143" width="200" height="78" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="850" y="128" width="200" height="78" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="950" y="158" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Partition Manager</text>
+  <text x="950" y="180" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">replicated stack</text>
+  <text x="950" y="198" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">rebalances partitions</text>
+
+  <!-- manager <-> PMT (control read/write) blue -->
+  <line x1="846" y1="170" x2="520" y2="172" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <text x="690" y="158" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">reads / writes PMT (ownership)</text>
+
+  <!-- ============ MIDDLE ROW: three partition servers ============ -->
+
+  <!-- PS1 -->
+  <rect x="120" y="376" width="260" height="96" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="250" y="404" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Partition Server 1</text>
+  <rect x="150" y="418" width="90" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="195" y="443" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[a,b]</text>
+  <rect x="262" y="418" width="90" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="307" y="443" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[b,c]</text>
+
+  <!-- PS2 -->
+  <rect x="460" y="376" width="260" height="96" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="590" y="404" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Partition Server 2</text>
+  <rect x="510" y="418" width="160" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="590" y="443" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[c,f]</text>
+
+  <!-- PS3 -->
+  <rect x="800" y="376" width="260" height="96" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="930" y="404" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Partition Server 3</text>
+  <rect x="850" y="418" width="160" height="40" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="930" y="443" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">[g,z]</text>
+
+  <!-- API servers -> partition servers (BLUE request path, via a clean distribution bus so no arrow crosses a label) -->
+  <text x="590" y="330" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">API forwards the request to the one owning partition server</text>
+  <!-- feeder from the API tier down to the bus -->
+  <path d="M 300 282 L 300 348" fill="none" stroke="#93c5fd" stroke-width="3"/>
+  <!-- horizontal distribution bus -->
+  <line x1="250" y1="348" x2="930" y2="348" stroke="#93c5fd" stroke-width="3"/>
+  <!-- three short, vertical drops to each partition server -->
+  <line x1="250" y1="348" x2="250" y2="372" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrBlue)"/>
+  <line x1="590" y1="348" x2="590" y2="372" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrBlue)"/>
+  <line x1="930" y1="348" x2="930" y2="372" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrBlue)"/>
+
+  <!-- Partition Manager -> partition servers HEALTHCHECK (blue dashed, downward) -->
+  <path d="M 980 206 C 1010 280, 1000 330, 955 372" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <text x="1055" y="320" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">healthcheck</text>
+  <text x="1055" y="338" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">(periodic)</text>
+
+  <!-- ============ BOTTOM: shared storage rack ============ -->
+  <text x="590" y="520" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">shared rack of physical storage disks — the same bytes for everyone</text>
+  <rect x="120" y="534" width="940" height="120" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+  <g font-family="sans-serif" font-size="13" fill="#9aa6b2" text-anchor="middle">
+    <rect x="150" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="175" y="650">N1</text>
+    <rect x="225" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="250" y="650">N2</text>
+    <rect x="300" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="325" y="650">N3</text>
+    <rect x="375" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="400" y="650">N4</text>
+    <rect x="450" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="475" y="650">N5</text>
+    <rect x="525" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="550" y="650">N6</text>
+    <rect x="600" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="625" y="650">N7</text>
+    <rect x="675" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="700" y="650">N8</text>
+    <rect x="750" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="775" y="650">N9</text>
+    <rect x="825" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="850" y="650">N10</text>
+    <rect x="900" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="925" y="650">N11</text>
+    <rect x="975" y="552" width="50" height="84" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="1000" y="650">N12</text>
+  </g>
+
+  <!-- partition servers -> storage (YELLOW storage path) -->
+  <line x1="250" y1="472" x2="250" y2="530" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <line x1="590" y1="472" x2="590" y2="530" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <line x1="930" y1="472" x2="930" y2="530" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <text x="640" y="500" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13">read/write bytes</text>
+
+  <!-- ============ LEGEND ============ -->
+  <rect x="120" y="676" width="430" height="120" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+  <text x="140" y="702" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">Legend</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <line x1="140" y1="724" x2="180" y2="724" stroke="#8aff8a" stroke-width="3"/>
+    <text x="190" y="729">read path</text>
+    <line x1="320" y1="724" x2="360" y2="724" stroke="#ff8bd2" stroke-width="3"/>
+    <text x="370" y="729">write / ownership</text>
+    <line x1="140" y1="756" x2="180" y2="756" stroke="#ffff99" stroke-width="3"/>
+    <text x="190" y="761">storage</text>
+    <line x1="320" y1="756" x2="360" y2="756" stroke="#93c5fd" stroke-width="3" stroke-dasharray="6 4"/>
+    <text x="370" y="761">control / health</text>
+  </g>
+
+  <!-- ============ FAILURE SCENARIO ============ -->
+  <rect x="572" y="676" width="488" height="120" rx="6" fill="#2a1320" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="592" y="702" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">What happens when a partition server goes down?</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <text x="592" y="726">Because partitions are logical, the dead server's partitions</text>
+    <text x="592" y="746">are reassigned by the Partition Manager to healthy servers.</text>
+    <text x="592" y="768" fill="#8aff8a" font-weight="bold">Seamless: nothing physical moves — only the PMT entry</text>
+    <text x="592" y="788" fill="#8aff8a" font-weight="bold">changes; the new owner reads the same shared bytes.</text>
+  </g>
+
+  <!-- Takeaway -->
+  <rect x="120" y="806" width="940" height="60" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="590" y="831" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14.5" font-weight="bold">Takeaway: separating logical ownership from physical bytes makes failover instant —</text>
+  <text x="590" y="854" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14.5" font-weight="bold">reassigning a dead server's partitions is just editing the PMT.</text>
+</svg>

@@ -1,0 +1,168 @@
+<svg width="1180" height="840" viewBox="0 0 1180 840" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="840" fill="#111317"/>
+
+  <defs>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Data Integrity: Never Return a Wrong Byte</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">recompute and compare a checksum at every hop, in and out</text>
+
+  <!-- Legend -->
+  <g font-family="sans-serif" font-size="13">
+    <rect x="828" y="98" width="310" height="64" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="1.5"/>
+    <line x1="844" y1="122" x2="882" y2="122" stroke="#ff8bd2" stroke-width="3"/>
+    <text x="890" y="126" fill="#cbd5e1">WRITE path (in)</text>
+    <line x1="1010" y1="122" x2="1048" y2="122" stroke="#8aff8a" stroke-width="3"/>
+    <text x="1056" y="126" fill="#cbd5e1">READ path (out)</text>
+    <line x1="844" y1="148" x2="882" y2="148" stroke="#93c5fd" stroke-width="3" stroke-dasharray="6 5"/>
+    <text x="890" y="152" fill="#cbd5e1">background scrub (async)</text>
+  </g>
+
+  <!-- ===================== WRITE PATH (pink) ===================== -->
+  <text x="110" y="120" fill="#ff8bd2" font-family="sans-serif" font-size="18" font-weight="bold">WRITE path - validate on the way in</text>
+
+  <!-- Client -->
+  <rect x="60" y="140" width="150" height="90" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="135" y="168" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Client</text>
+  <text x="135" y="192" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">computes</text>
+  <rect x="78" y="200" width="114" height="22" rx="3" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="135" y="216" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">checksum</text>
+
+  <!-- API server -->
+  <rect x="290" y="140" width="170" height="90" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="375" y="168" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">API Server</text>
+  <text x="375" y="192" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">recompute</text>
+  <text x="375" y="212" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">compare ==</text>
+
+  <!-- Partition server -->
+  <rect x="540" y="140" width="170" height="90" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="625" y="162" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Partition</text>
+  <text x="625" y="182" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Server</text>
+  <text x="625" y="204" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">compare ==</text>
+
+  <!-- Storage node -->
+  <rect x="790" y="140" width="170" height="90" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="875" y="162" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Storage Node</text>
+  <text x="875" y="184" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">compare ==</text>
+  <text x="875" y="204" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">stores object +</text>
+  <text x="875" y="220" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">checksum on disk</text>
+
+  <!-- write arrows -->
+  <line x1="210" y1="170" x2="286" y2="170" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <line x1="460" y1="170" x2="536" y2="170" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+  <line x1="710" y1="170" x2="786" y2="170" stroke="#ff8bd2" stroke-width="3" marker-end="url(#arrPink)"/>
+
+  <!-- write rejection note -->
+  <rect x="990" y="140" width="148" height="90" rx="6" fill="#2a1313" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="1064" y="166" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">mismatch?</text>
+  <text x="1064" y="190" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">write is</text>
+  <text x="1064" y="208" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">rejected -</text>
+  <text x="1064" y="224" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">no corruption persisted</text>
+
+  <text x="510" y="252" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">at each component the checksum is recomputed and compared; data proceeds only if they match.</text>
+
+  <!-- ===================== READ PATH (green) ===================== -->
+  <line x1="40" y1="282" x2="1140" y2="282" stroke="#3a4150" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <text x="110" y="316" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">READ path - re-verify on the way out</text>
+
+  <!-- Storage node (read source) -->
+  <rect x="790" y="336" width="170" height="90" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="875" y="362" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Storage Node</text>
+  <text x="875" y="386" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">reads bytes +</text>
+  <text x="875" y="406" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">stored checksum</text>
+
+  <rect x="540" y="336" width="170" height="90" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="625" y="358" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Partition</text>
+  <text x="625" y="378" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Server</text>
+  <text x="625" y="400" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">re-verify</text>
+
+  <rect x="290" y="336" width="170" height="90" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="375" y="364" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">API Server</text>
+  <text x="375" y="388" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">re-verify</text>
+  <text x="375" y="408" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">checksum</text>
+
+  <rect x="60" y="336" width="150" height="90" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="135" y="368" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Client</text>
+  <text x="135" y="392" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">verified bytes</text>
+  <text x="135" y="410" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">only</text>
+
+  <!-- read arrows (right to left) -->
+  <line x1="790" y1="381" x2="714" y2="381" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <line x1="540" y1="381" x2="464" y2="381" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <line x1="290" y1="381" x2="214" y2="381" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+
+  <text x="510" y="448" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">each hop re-verifies the stored checksum against the bytes it reads - bit rot on disk or a bad link is caught before reaching the client.</text>
+
+  <!-- ===================== BOTTOM ROW: multipart, scrub, caution ===================== -->
+  <line x1="40" y1="476" x2="1140" y2="476" stroke="#3a4150" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+  <!-- Multi-part panel -->
+  <text x="60" y="510" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Multi-part objects</text>
+  <rect x="60" y="524" width="540" height="220" rx="6" fill="#16191e" stroke="#3a4150" stroke-width="2"/>
+  <text x="80" y="552" fill="#cbd5e1" font-family="sans-serif" font-size="14">A large object stored as chunks - each chunk carries its own checksum.</text>
+
+  <!-- chunks -->
+  <g font-family="monospace" font-size="13" text-anchor="middle">
+    <rect x="80" y="566" width="110" height="64" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="135" y="592" fill="#cbd5e1">chunk 1</text>
+    <text x="135" y="614" fill="#ffff99">cksum_1</text>
+
+    <rect x="205" y="566" width="110" height="64" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="260" y="592" fill="#cbd5e1">chunk 2</text>
+    <text x="260" y="614" fill="#ffff99">cksum_2</text>
+
+    <rect x="330" y="566" width="110" height="64" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="385" y="592" fill="#cbd5e1">chunk 3</text>
+    <text x="385" y="614" fill="#ffff99">cksum_3</text>
+  </g>
+
+  <!-- combined checksum -->
+  <line x1="455" y1="598" x2="494" y2="598" stroke="#ffff99" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+  <rect x="460" y="566" width="120" height="64" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="520" y="590" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">combined</text>
+  <text x="520" y="612" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">ETag</text>
+
+  <text x="80" y="664" fill="#9aa6b2" font-family="sans-serif" font-size="13">When chunks are combined the system computes a</text>
+  <text x="80" y="684" fill="#9aa6b2" font-family="sans-serif" font-size="13">rolled-up checksum over the whole object, so the</text>
+  <text x="80" y="704" fill="#9aa6b2" font-family="sans-serif" font-size="13">reassembled result is verified as a unit.</text>
+  <text x="80" y="730" fill="#cbd5e1" font-family="sans-serif" font-size="13">(this is how S3 multipart ETags work)</text>
+
+  <!-- Background scrub (blue) -->
+  <text x="630" y="510" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">Background scrubbing</text>
+  <rect x="630" y="524" width="470" height="96" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <rect x="650" y="548" width="150" height="48" rx="4" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="725" y="577" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Storage Node</text>
+  <line x1="804" y1="560" x2="880" y2="560" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <line x1="880" y1="584" x2="804" y2="584" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrBlue)"/>
+  <g font-family="sans-serif" font-size="13" fill="#cbd5e1">
+    <text x="892" y="558">continuously re-reads</text>
+    <text x="892" y="578">objects in the background,</text>
+    <text x="892" y="598">compares vs stored checksum,</text>
+    <text x="892" y="614">repairs bit rot proactively.</text>
+  </g>
+
+  <!-- Red caution: bat vs cat -->
+  <rect x="630" y="636" width="470" height="108" rx="6" fill="#2a1313" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="650" y="664" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">A single flipped bit is silent</text>
+  <g font-family="monospace" font-size="20" text-anchor="middle">
+    <text x="720" y="704" fill="#8aff8a">bat</text>
+    <text x="790" y="704" fill="#ff8a8a" font-family="sans-serif" font-size="16">flips to</text>
+    <text x="880" y="704" fill="#ff8a8a">cat</text>
+  </g>
+  <text x="650" y="732" fill="#cbd5e1" font-family="sans-serif" font-size="13">one valid word becomes another - no error unless a checksum catches it.</text>
+
+  <!-- Takeaway -->
+  <rect x="60" y="766" width="1060" height="48" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="590" y="788" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Takeaway: validate checksums at every component on the way in and out, checksum each chunk and the combined whole, and scrub continuously -</text>
+  <text x="590" y="808" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">so a corrupted byte is always detected, never served.</text>
+</svg>

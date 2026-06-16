@@ -1,0 +1,127 @@
+<svg width="1180" height="840" viewBox="0 0 1180 840" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="840" fill="#111317"/>
+  <defs>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Split the Two Jobs: API and Storage Scale Separately</text>
+  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">Each plane grows on its own axis</text>
+
+  <!-- ===== TOP: starting point ===== -->
+  <text x="44" y="116" fill="#9aa6b2" font-family="sans-serif" font-size="15" font-weight="bold">STARTING POINT</text>
+  <rect x="44" y="128" width="300" height="120" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="194" y="156" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">One computer</text>
+  <rect x="70" y="172" width="118" height="56" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="129" y="205" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15">HDD1</text>
+  <rect x="200" y="172" width="118" height="56" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="259" y="205" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15">HDD2</text>
+  <text x="194" y="244" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">attached over USB</text>
+
+  <text x="380" y="170" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">What if one computer cannot support all the requests?</text>
+  <text x="380" y="198" fill="#9aa6b2" font-family="sans-serif" font-size="15">Add more machines &#8212; but first make storage central</text>
+  <text x="380" y="220" fill="#9aa6b2" font-family="sans-serif" font-size="15">and put a load balancer in front.</text>
+
+  <!-- divider -->
+  <line x1="44" y1="278" x2="1136" y2="278" stroke="#333" stroke-width="1.5"/>
+
+  <!-- ===== BOTTOM: two-plane architecture ===== -->
+  <text x="44" y="306" fill="#9aa6b2" font-family="sans-serif" font-size="15" font-weight="bold">TWO-PLANE ARCHITECTURE</text>
+
+  <!-- Users -->
+  <g stroke="#8aff8a" stroke-width="2.5" fill="none">
+    <circle cx="84" cy="400" r="13"/>
+    <line x1="84" y1="413" x2="84" y2="446"/>
+    <line x1="84" y1="423" x2="68" y2="437"/>
+    <line x1="84" y1="423" x2="100" y2="437"/>
+    <line x1="84" y1="446" x2="69" y2="470"/>
+    <line x1="84" y1="446" x2="99" y2="470"/>
+  </g>
+  <g stroke="#8aff8a" stroke-width="2.5" fill="none">
+    <circle cx="84" cy="520" r="13"/>
+    <line x1="84" y1="533" x2="84" y2="566"/>
+    <line x1="84" y1="543" x2="68" y2="557"/>
+    <line x1="84" y1="543" x2="100" y2="557"/>
+    <line x1="84" y1="566" x2="69" y2="590"/>
+    <line x1="84" y1="566" x2="99" y2="590"/>
+  </g>
+  <text x="84" y="620" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">Users</text>
+
+  <!-- arrows users -> LB -->
+  <line x1="112" y1="440" x2="186" y2="465" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <line x1="112" y1="525" x2="186" y2="495" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+
+  <!-- Load Balancer -->
+  <rect x="196" y="420" width="130" height="120" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="261" y="472" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Load</text>
+  <text x="261" y="496" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Balancer</text>
+  <text x="261" y="522" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">(LB)</text>
+
+  <!-- arrows LB -> API fleet -->
+  <line x1="326" y1="455" x2="416" y2="420" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrBlue)"/>
+  <line x1="326" y1="505" x2="416" y2="540" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrBlue)"/>
+  <text x="372" y="430" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">fan out</text>
+
+  <!-- API fleet -->
+  <rect x="426" y="378" width="210" height="84" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="531" y="424" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">S3 API</text>
+  <rect x="426" y="498" width="210" height="84" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="531" y="544" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">S3 API</text>
+
+  <!-- API bracket (below the fleet) -->
+  <path d="M426 596 q0 10 10 10 h85 q10 0 10 8 q0 -8 10 -8 h85 q10 0 10 -10" fill="none" stroke="#8aff8a" stroke-width="2"/>
+  <text x="531" y="632" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">API &#8212; scales independently</text>
+  <text x="531" y="654" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">add API servers when request rate grows;</text>
+  <text x="531" y="674" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">stateless, holds no files &#8212; any server, any request</text>
+
+  <!-- arrows API -> storage -->
+  <line x1="636" y1="420" x2="876" y2="448" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <line x1="636" y1="540" x2="876" y2="498" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <text x="748" y="500" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">read / write bytes</text>
+
+  <!-- Storage tier -->
+  <rect x="886" y="372" width="250" height="220" rx="12" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="1011" y="402" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Storage</text>
+  <text x="1011" y="424" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14">(network-attached)</text>
+  <!-- physical disks underneath -->
+  <g fill="#16191e" stroke="#ffff99" stroke-width="1.5">
+    <rect x="912" y="444" width="24" height="120" rx="3"/>
+    <rect x="942" y="444" width="24" height="120" rx="3"/>
+    <rect x="972" y="444" width="24" height="120" rx="3"/>
+    <rect x="1002" y="444" width="24" height="120" rx="3"/>
+    <rect x="1032" y="444" width="24" height="120" rx="3"/>
+    <rect x="1062" y="444" width="24" height="120" rx="3"/>
+    <rect x="1092" y="444" width="24" height="120" rx="3"/>
+  </g>
+  <text x="1011" y="582" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">physical hard disks</text>
+
+  <!-- Storage bracket -->
+  <path d="M1124 372 q12 0 12 12 v98 q0 12 12 12 q-12 0 -12 12 v98 q0 12 -12 12" fill="none" stroke="#ffff99" stroke-width="2" transform="translate(2,0)"/>
+
+  <!-- Storage independent label below -->
+  <text x="886" y="624" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Storage &#8212; scales independently</text>
+  <text x="886" y="646" fill="#9aa6b2" font-family="sans-serif" font-size="13">add disks when bytes grow; shared by all</text>
+  <text x="886" y="666" fill="#9aa6b2" font-family="sans-serif" font-size="13">API servers</text>
+
+  <!-- note pointing at storage -->
+  <text x="886" y="700" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">Next thing we must scale &#8657;</text>
+
+  <!-- Key idea / caption box -->
+  <rect x="44" y="700" width="800" height="100" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="64" y="728" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">KEY IDEA</text>
+  <text x="64" y="752" fill="#cbd5e1" font-family="sans-serif" font-size="15">The API tier is stateless and holds no files, so any API server can handle any request.</text>
+  <text x="64" y="774" fill="#cbd5e1" font-family="sans-serif" font-size="15">The storage tier holds the bytes and is shared by everyone.</text>
+  <text x="64" y="794" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Let's scale storage.</text>
+
+  <!-- Legend -->
+  <rect x="864" y="724" width="272" height="92" rx="8" fill="#16191e" stroke="#9aa6b2" stroke-width="1.5"/>
+  <text x="878" y="746" fill="#9aa6b2" font-family="sans-serif" font-size="13" font-weight="bold">LEGEND</text>
+  <rect x="878" y="756" width="16" height="12" fill="#8aff8a"/>
+  <text x="902" y="767" fill="#cbd5e1" font-family="sans-serif" font-size="13">serve / API plane</text>
+  <rect x="878" y="776" width="16" height="12" fill="#ffff99"/>
+  <text x="902" y="787" fill="#cbd5e1" font-family="sans-serif" font-size="13">storage</text>
+  <rect x="878" y="796" width="16" height="12" fill="#93c5fd"/>
+  <text x="902" y="807" fill="#cbd5e1" font-family="sans-serif" font-size="13">load balancer</text>
+</svg>

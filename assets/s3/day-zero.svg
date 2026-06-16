@@ -1,0 +1,85 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+  <defs>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="50" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Day Zero: S3 on One Laptop</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">S3 is just like a static file server</text>
+
+  <!-- Users -->
+  <text x="120" y="150" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">Users</text>
+  <!-- user 1 -->
+  <g stroke="#8aff8a" stroke-width="2.5" fill="none">
+    <circle cx="100" cy="200" r="14"/>
+    <line x1="100" y1="214" x2="100" y2="250"/>
+    <line x1="100" y1="225" x2="82" y2="240"/>
+    <line x1="100" y1="225" x2="118" y2="240"/>
+    <line x1="100" y1="250" x2="84" y2="276"/>
+    <line x1="100" y1="250" x2="116" y2="276"/>
+  </g>
+  <!-- user 2 -->
+  <g stroke="#8aff8a" stroke-width="2.5" fill="none">
+    <circle cx="100" cy="330" r="14"/>
+    <line x1="100" y1="344" x2="100" y2="380"/>
+    <line x1="100" y1="355" x2="82" y2="370"/>
+    <line x1="100" y1="355" x2="118" y2="370"/>
+    <line x1="100" y1="380" x2="84" y2="406"/>
+    <line x1="100" y1="380" x2="116" y2="406"/>
+  </g>
+
+  <!-- requests arrows from users to computer -->
+  <line x1="140" y1="240" x2="318" y2="265" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <line x1="140" y1="345" x2="318" y2="305" stroke="#8aff8a" stroke-width="3" marker-end="url(#arrGreen)"/>
+  <text x="222" y="245" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">requests (HTTP)</text>
+
+  <!-- Computer box -->
+  <rect x="328" y="150" width="430" height="320" rx="12" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="543" y="180" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="bold">Computer</text>
+
+  <!-- API responsibility (inside computer) -->
+  <rect x="356" y="206" width="374" height="100" rx="8" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="543" y="232" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">API server</text>
+  <text x="543" y="258" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">Exposes operations over HTTP to talk to disk:</text>
+  <text x="543" y="284" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">create  read  write  delete</text>
+
+  <!-- responsibility 1 bracket label -->
+  <text x="543" y="340" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">Responsibility 1: the API</text>
+  <text x="543" y="362" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">receives the request, finds the file by its path</text>
+
+  <!-- USB connection line -->
+  <line x1="758" y1="280" x2="852" y2="280" stroke="#ffff99" stroke-width="3" marker-end="url(#arrYellow)"/>
+  <text x="805" y="268" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">HDD connected</text>
+  <text x="805" y="300" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">via USB</text>
+
+  <!-- Storage / hard disk -->
+  <rect x="862" y="180" width="240" height="260" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="982" y="210" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Storage</text>
+  <text x="982" y="232" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">hard disk drive</text>
+  <!-- drive slots -->
+  <g fill="#16191e" stroke="#ffff99" stroke-width="1.5">
+    <rect x="892" y="250" width="26" height="160" rx="3"/>
+    <rect x="924" y="250" width="26" height="160" rx="3"/>
+    <rect x="956" y="250" width="26" height="160" rx="3"/>
+    <rect x="988" y="250" width="26" height="160" rx="3"/>
+    <rect x="1020" y="250" width="26" height="160" rx="3"/>
+    <rect x="1052" y="250" width="26" height="160" rx="3"/>
+  </g>
+  <text x="982" y="428" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">holds all the files</text>
+  <text x="982" y="468" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">Responsibility 2: storage</text>
+
+  <!-- Example request flow box -->
+  <rect x="44" y="500" width="1092" height="128" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="64" y="528" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">EXAMPLE REQUEST</text>
+  <text x="64" y="556" fill="#ffffff" font-family="monospace" font-size="16">GET  s3://bucket.s3.aws.com/images/logo.jpg</text>
+  <text x="64" y="586" fill="#cbd5e1" font-family="sans-serif" font-size="15">1. Request arrives at the API server.   2. API server goes to storage.   3. Fetches the file at the location the path names.</text>
+  <text x="64" y="610" fill="#cbd5e1" font-family="sans-serif" font-size="15">4. Returns it to the user.</text>
+
+  <!-- forward looking question -->
+  <rect x="44" y="648" width="1092" height="88" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="3"/>
+  <text x="64" y="680" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">WHAT'S NEXT?</text>
+  <text x="64" y="708" fill="#ffffff" font-family="sans-serif" font-size="17">If one HDD is not enough, what is the next stage of evolution?</text>
+  <text x="64" y="730" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Answer: two HDDs.</text>
+</svg>

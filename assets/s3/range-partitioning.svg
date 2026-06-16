@@ -1,0 +1,120 @@
+<svg width="1180" height="840" viewBox="0 0 1180 840" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="840" fill="#111317"/>
+
+  <defs>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="arrPink" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Routing 3 — Range-Based Partitioning (what S3 uses)</text>
+
+  <!-- Top callout (pink/yellow highlighted) -->
+  <rect x="170" y="68" width="840" height="56" rx="6" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="590" y="93" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">Hash-based approaches lose locality of objects.</text>
+  <text x="590" y="114" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16">We want more control over partitioning logic.</text>
+
+  <!-- Sorted keyspace label -->
+  <text x="100" y="162" fill="#9aa6b2" font-family="sans-serif" font-size="15">Sorted keyspace split into contiguous lexicographic ranges — keys stay sorted, neighbors stay together:</text>
+
+  <!-- ===== PARTITION GRID 3 cols x 2 rows ===== -->
+  <!-- partition box style: yellow-tint, 220x118; dots = objects -->
+  <!-- row1 y=180, row2 y=320; cols x=100,360,620 -->
+
+  <!-- helper: each partition as a box with range label + scatter dots -->
+  <!-- P1 [a,e] -->
+  <g>
+    <rect x="100" y="180" width="240" height="118" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="120" y="208" fill="#ffff99" font-family="monospace" font-size="18" font-weight="bold">[a,e]</text>
+    <circle cx="140" cy="240" r="4" fill="#8aff8a"/><circle cx="170" cy="258" r="4" fill="#8aff8a"/><circle cx="205" cy="234" r="4" fill="#8aff8a"/><circle cx="240" cy="262" r="4" fill="#8aff8a"/><circle cx="280" cy="240" r="4" fill="#8aff8a"/><circle cx="310" cy="270" r="4" fill="#8aff8a"/><circle cx="200" cy="278" r="4" fill="#8aff8a"/>
+  </g>
+  <!-- P2 [f,h] -->
+  <g>
+    <rect x="360" y="180" width="240" height="118" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="380" y="208" fill="#ffff99" font-family="monospace" font-size="18" font-weight="bold">[f,h]</text>
+    <circle cx="400" cy="240" r="4" fill="#8aff8a"/><circle cx="435" cy="262" r="4" fill="#8aff8a"/><circle cx="470" cy="238" r="4" fill="#8aff8a"/><circle cx="510" cy="266" r="4" fill="#8aff8a"/><circle cx="545" cy="244" r="4" fill="#8aff8a"/><circle cx="575" cy="272" r="4" fill="#8aff8a"/>
+  </g>
+  <!-- P3 [i,k] -->
+  <g>
+    <rect x="620" y="180" width="240" height="118" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="640" y="208" fill="#ffff99" font-family="monospace" font-size="18" font-weight="bold">[i,k]</text>
+    <circle cx="660" cy="242" r="4" fill="#8aff8a"/><circle cx="695" cy="260" r="4" fill="#8aff8a"/><circle cx="735" cy="236" r="4" fill="#8aff8a"/><circle cx="775" cy="266" r="4" fill="#8aff8a"/><circle cx="810" cy="246" r="4" fill="#8aff8a"/><circle cx="835" cy="272" r="4" fill="#8aff8a"/>
+  </g>
+  <!-- P4 [l,r] -->
+  <g>
+    <rect x="100" y="320" width="240" height="118" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="120" y="348" fill="#ffff99" font-family="monospace" font-size="18" font-weight="bold">[l,r]</text>
+    <circle cx="140" cy="380" r="4" fill="#8aff8a"/><circle cx="175" cy="398" r="4" fill="#8aff8a"/><circle cx="210" cy="376" r="4" fill="#8aff8a"/><circle cx="250" cy="404" r="4" fill="#8aff8a"/><circle cx="285" cy="382" r="4" fill="#8aff8a"/><circle cx="315" cy="410" r="4" fill="#8aff8a"/><circle cx="230" cy="416" r="4" fill="#8aff8a"/>
+  </g>
+  <!-- P5 [s,u] -->
+  <g>
+    <rect x="360" y="320" width="240" height="118" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="380" y="348" fill="#ffff99" font-family="monospace" font-size="18" font-weight="bold">[s,u]</text>
+    <circle cx="400" cy="382" r="4" fill="#8aff8a"/><circle cx="435" cy="400" r="4" fill="#8aff8a"/><circle cx="475" cy="378" r="4" fill="#8aff8a"/><circle cx="515" cy="406" r="4" fill="#8aff8a"/><circle cx="550" cy="384" r="4" fill="#8aff8a"/><circle cx="578" cy="412" r="4" fill="#8aff8a"/>
+  </g>
+  <!-- P6 [v,z] -->
+  <g>
+    <rect x="620" y="320" width="240" height="118" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+    <text x="640" y="348" fill="#ffff99" font-family="monospace" font-size="18" font-weight="bold">[v,z]</text>
+    <circle cx="660" cy="382" r="4" fill="#8aff8a"/><circle cx="695" cy="400" r="4" fill="#8aff8a"/><circle cx="735" cy="378" r="4" fill="#8aff8a"/><circle cx="775" cy="406" r="4" fill="#8aff8a"/><circle cx="812" cy="384" r="4" fill="#8aff8a"/><circle cx="838" cy="412" r="4" fill="#8aff8a"/>
+  </g>
+
+  <!-- locality example callout pointing into P1 -->
+  <rect x="100" y="476" width="760" height="80" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="120" y="506" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Locality: adjacent keys land in the same partition</text>
+  <text x="120" y="534" fill="#cbd5e1" font-family="monospace" font-size="15">amzn/images/a.jpg</text>
+  <text x="320" y="534" fill="#9aa6b2" font-family="sans-serif" font-size="14">and</text>
+  <text x="360" y="534" fill="#cbd5e1" font-family="monospace" font-size="15">amzn/images/b.jpg</text>
+  <text x="565" y="534" fill="#9aa6b2" font-family="sans-serif" font-size="14">→ both in</text>
+  <text x="650" y="534" fill="#ffff99" font-family="monospace" font-size="15" font-weight="bold">[a,e]</text>
+  <!-- pink arrow from this callout up to P1 -->
+  <path d="M 220 476 C 220 460, 220 320, 220 302" fill="none" stroke="#ff8bd2" stroke-width="2.5" stroke-dasharray="4 5" marker-end="url(#arrPink)"/>
+
+  <!-- ===== BENEFITS (right column) ===== -->
+  <text x="900" y="170" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">Benefits</text>
+  <rect x="900" y="186" width="240" height="388" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="1.5"/>
+  <g font-family="sans-serif" fill="#cbd5e1">
+    <text x="922" y="222" font-size="15" font-weight="bold" fill="#8aff8a">Performance isolation</text>
+    <text x="922" y="246" font-size="14">A noisy tenant is</text>
+    <text x="922" y="266" font-size="14">confined to its own</text>
+    <text x="922" y="286" font-size="14">partition.</text>
+
+    <text x="922" y="328" font-size="15" font-weight="bold" fill="#8aff8a">Locality of objects</text>
+    <text x="922" y="352" font-size="14">A bucket's keys stay</text>
+    <text x="922" y="372" font-size="14">together, so listing /</text>
+    <text x="922" y="392" font-size="14">scanning is cheap.</text>
+
+    <text x="922" y="434" font-size="15" font-weight="bold" fill="#8aff8a">Deliberate placement</text>
+    <text x="922" y="458" font-size="14">Place ranges on nodes</text>
+    <text x="922" y="478" font-size="14">on purpose instead of</text>
+    <text x="922" y="498" font-size="14">letting a hash decide.</text>
+
+    <text x="922" y="540" font-size="13" fill="#9aa6b2">More control over where</text>
+    <text x="922" y="556" font-size="13" fill="#9aa6b2">objects reside.</text>
+  </g>
+
+  <!-- assignment: ranges -> nodes (control) row near bottom -->
+  <text x="100" y="606" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">Contiguous ranges assigned deliberately to nodes</text>
+  <g font-family="monospace" font-size="14" fill="#cbd5e1">
+    <rect x="100" y="624" width="240" height="60" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="220" y="650" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Node A</text>
+    <text x="220" y="672" text-anchor="middle">[a,e] [f,h]</text>
+
+    <rect x="360" y="624" width="240" height="60" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="480" y="650" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Node B</text>
+    <text x="480" y="672" text-anchor="middle">[i,k] [l,r]</text>
+
+    <rect x="620" y="624" width="240" height="60" rx="6" fill="#10243a" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="740" y="650" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Node C</text>
+    <text x="740" y="672" text-anchor="middle">[s,u] [v,z]</text>
+  </g>
+
+  <!-- Takeaway -->
+  <rect x="80" y="752" width="1040" height="62" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="600" y="780" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Takeaway: keep keys sorted and assign contiguous ranges to nodes —</text>
+  <text x="600" y="802" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">a tenant's objects are contiguous and a tenant can be isolated: exactly what a multi-tenant object store needs.</text>
+</svg>
