@@ -1,0 +1,74 @@
+<svg width="1180" height="680" viewBox="0 0 1180 680" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="kvr-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="680" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">The Brief: A Superfast Key-Value Database</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a tiny API &#8212; the gift is <tspan fill="#8aff8a" font-weight="bold">single-key access</tspan>; the hard word is <tspan fill="#ffff99" font-weight="bold">persistence</tspan></text>
+
+  <!-- REQUIREMENTS panel (yellow/storage) -->
+  <rect x="48" y="108" width="540" height="218" rx="12" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="72" y="144" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">Requirements</text>
+  <g font-family="sans-serif" font-size="16" fill="#cbd5e1">
+    <text x="72" y="180"><tspan fill="#ffff99" font-weight="bold">&#183;</tspan>  superfast reads</text>
+    <text x="72" y="212"><tspan fill="#ffff99" font-weight="bold">&#183;</tspan>  superfast writes</text>
+    <text x="72" y="244"><tspan fill="#ffff99" font-weight="bold">&#183;</tspan>  superfast deletes</text>
+    <text x="72" y="282"><tspan fill="#ffff99" font-weight="bold">&#183;</tspan>  <tspan fill="#ffff99" font-weight="bold">persistence</tspan> &#8212; data survives</text>
+    <text x="90" y="304" fill="#9aa6b2" font-size="14">a crash or a reboot</text>
+  </g>
+
+  <!-- API panel (tiny API) -->
+  <rect x="612" y="108" width="520" height="218" rx="12" fill="#16191e" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="636" y="144" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">The Tiny API</text>
+  <rect x="636" y="160" width="200" height="130" rx="9" fill="#13161b" stroke="#5b6470" stroke-width="2"/>
+  <g font-family="monospace" font-size="18" fill="#cbd5e1" font-weight="bold">
+    <text x="660" y="198">PUT(k, v)</text>
+    <text x="660" y="234">GET(k)</text>
+    <text x="660" y="270">DEL(k)</text>
+  </g>
+  <text x="860" y="190" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">every op touches</text>
+  <text x="860" y="212" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">exactly ONE key</text>
+  <text x="860" y="244" fill="#9aa6b2" font-family="sans-serif" font-size="14">no ranges, no scans,</text>
+  <text x="860" y="264" fill="#9aa6b2" font-family="sans-serif" font-size="14">no joins.</text>
+  <text x="860" y="296" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">That smallness is the gift.</text>
+
+  <!-- FOUR dimensions row -->
+  <text x="590" y="374" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="18" font-weight="bold">Four dimensions any design must get right</text>
+
+  <!-- 1 Write path (pink) -->
+  <rect x="48" y="394" width="258" height="150" rx="11" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="68" y="426" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">1 &#183; Write path</text>
+  <text x="68" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="15">make a write as cheap</text>
+  <text x="68" y="482" fill="#cbd5e1" font-family="sans-serif" font-size="15">as the disk allows</text>
+  <text x="68" y="520" fill="#9aa6b2" font-family="sans-serif" font-size="14">how few bytes, how few seeks?</text>
+
+  <!-- 2 Read path (green) -->
+  <rect x="318" y="394" width="258" height="150" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="338" y="426" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">2 &#183; Read path</text>
+  <text x="338" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="15">find one key in</text>
+  <text x="338" y="482" fill="#cbd5e1" font-family="monospace" font-size="16" font-weight="bold">O(1)</text>
+  <text x="338" y="520" fill="#9aa6b2" font-family="sans-serif" font-size="14">no scanning the whole file</text>
+
+  <!-- 3 Durability (yellow) -->
+  <rect x="588" y="394" width="258" height="150" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="608" y="426" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">3 &#183; Durability</text>
+  <text x="608" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="15">data survives a crash</text>
+  <text x="608" y="482" fill="#cbd5e1" font-family="sans-serif" font-size="15">mid-write</text>
+  <text x="608" y="520" fill="#9aa6b2" font-family="sans-serif" font-size="14">what is on disk when we die?</text>
+
+  <!-- 4 Space (blue) -->
+  <rect x="858" y="394" width="274" height="150" rx="11" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="878" y="426" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">4 &#183; Space</text>
+  <text x="878" y="460" fill="#cbd5e1" font-family="sans-serif" font-size="15">stop the files growing</text>
+  <text x="878" y="482" fill="#cbd5e1" font-family="sans-serif" font-size="15">without bound</text>
+  <text x="878" y="520" fill="#9aa6b2" font-family="sans-serif" font-size="14">reclaim dead keys &#183; compact</text>
+
+  <!-- Bottom takeaway -->
+  <rect x="48" y="572" width="1084" height="84" rx="12" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="72" y="606" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">The one hard constraint: persistence</text>
+  <text x="72" y="634" fill="#cbd5e1" font-family="sans-serif" font-size="15.5">It forces the bytes onto disk &#8212; and disk is slow in exactly one way, <tspan fill="#ffff99" font-weight="bold">the seek</tspan>, that shapes the whole design.</text>
+</svg>

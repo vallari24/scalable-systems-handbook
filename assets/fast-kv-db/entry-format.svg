@@ -1,0 +1,89 @@
+<svg width="1180" height="640" viewBox="0 0 1180 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ef-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="ef-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="640" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Anatomy of an Entry: Framing Variable-Length Records</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">you cannot delimit binary values with a newline &#8212; <tspan fill="#8aff8a" font-weight="bold">prefix each record with its field lengths</tspan></text>
+
+  <!-- ============ STEP 1: naive layout (red problem) ============ -->
+  <text x="64" y="124" fill="#ff8a8a" font-family="sans-serif" font-size="19" font-weight="bold">STEP 1 &#183; the naive layout</text>
+
+  <!-- byte strip: [ K | V ] -->
+  <rect x="64" y="142" width="280" height="60" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="204" y="178" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="20" font-weight="bold">K</text>
+
+  <rect x="344" y="142" width="380" height="60" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="534" y="178" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="20" font-weight="bold">V</text>
+
+  <text x="204" y="226" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">key (variable length)</text>
+  <text x="534" y="226" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">value (variable length)</text>
+
+  <!-- where does K end? -->
+  <line x1="344" y1="124" x2="344" y2="142" stroke="#ff8a8a" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="440" y="118" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">? where does K end ?</text>
+
+  <!-- problem callout card -->
+  <rect x="760" y="118" width="356" height="124" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="782" y="148" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">The reader is lost</text>
+  <text x="782" y="174" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">No idea where K ends and V begins. It can't</text>
+  <text x="782" y="195" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">read "until newline": a value may contain</text>
+  <text x="782" y="216" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">ANY bytes (newlines too), and both fields</text>
+  <text x="782" y="237" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">are variable length.</text>
+
+  <!-- divider -->
+  <line x1="64" y1="270" x2="1116" y2="270" stroke="#2b3340" stroke-width="1.5"/>
+
+  <!-- ============ STEP 2: length-prefixed fix (green/yellow) ============ -->
+  <text x="64" y="306" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">STEP 2 &#183; the fix: length-prefixed record</text>
+
+  <!-- byte-size labels -->
+  <g font-family="monospace" font-size="13" fill="#9aa6b2" font-weight="bold">
+    <text x="104" y="338" text-anchor="middle">4 B</text>
+    <text x="184" y="338" text-anchor="middle">4 B</text>
+    <text x="314" y="338" text-anchor="middle">KSZ bytes</text>
+    <text x="544" y="338" text-anchor="middle">VSZ bytes</text>
+  </g>
+
+  <!-- byte strip: [ KSZ | VSZ | K | V ] -->
+  <rect x="64" y="346" width="80" height="60" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="104" y="383" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="16" font-weight="bold">KSZ</text>
+
+  <rect x="144" y="346" width="80" height="60" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="184" y="383" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="16" font-weight="bold">VSZ</text>
+
+  <rect x="224" y="346" width="180" height="60" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="314" y="383" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="18" font-weight="bold">K</text>
+
+  <rect x="404" y="346" width="280" height="60" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="544" y="383" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="18" font-weight="bold">V</text>
+
+  <!-- fixed-width brace under KSZ|VSZ -->
+  <text x="144" y="432" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">4 bytes each &#8212; key size &amp; value size (fixed)</text>
+  <text x="454" y="432" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">variable-width payload, arbitrary bytes</text>
+
+  <!-- READ PROCEDURE card -->
+  <rect x="724" y="290" width="392" height="228" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="748" y="320" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Read procedure</text>
+  <g font-family="sans-serif" font-size="15" fill="#cbd5e1">
+    <text x="748" y="352"><tspan fill="#8aff8a" font-weight="bold">1.</tspan> read first 4 bytes &#8594; <tspan font-family="monospace" fill="#ffff99">KSZ</tspan></text>
+    <text x="748" y="380"><tspan fill="#8aff8a" font-weight="bold">2.</tspan> read next 4 bytes &#8594; <tspan font-family="monospace" fill="#ffff99">VSZ</tspan></text>
+    <text x="748" y="408"><tspan fill="#8aff8a" font-weight="bold">3.</tspan> read exactly KSZ bytes &#8594; the key</text>
+    <text x="748" y="436"><tspan fill="#8aff8a" font-weight="bold">4.</tspan> read exactly VSZ bytes &#8594; the value</text>
+  </g>
+  <text x="748" y="466" fill="#9aa6b2" font-family="sans-serif" font-size="13">The two sizes sit at fixed offsets at the FRONT of</text>
+  <text x="748" y="486" fill="#9aa6b2" font-family="sans-serif" font-size="13">every record &#8212; the reader always knows how far to</text>
+  <text x="748" y="506" fill="#9aa6b2" font-family="sans-serif" font-size="13">read. No delimiter; the value can hold arbitrary bytes.</text>
+
+  <!-- ============ bottom takeaway ============ -->
+  <rect x="64" y="548" width="1052" height="68" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="88" y="580" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Takeaway</text>
+  <text x="88" y="604" fill="#cbd5e1" font-family="sans-serif" font-size="15.5">Prefix variable-length data with its length &#8212; this is how essentially every binary on-disk format frames its records.</text>
+</svg>

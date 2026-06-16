@@ -1,0 +1,115 @@
+<svg width="1180" height="700" viewBox="0 0 1180 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="bc-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="bc-b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="700" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">What We Built: Bitcask</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the design we derived from first principles is a real engine, shipping inside <tspan fill="#93c5fd" font-weight="bold">Riak</tspan></text>
+
+  <!-- ===================== TOP: summary card ===================== -->
+  <!-- LIMITATION (red) -->
+  <rect x="60" y="104" width="340" height="190" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="84" y="138" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">LIMITATION</text>
+  <text x="84" y="174" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">All keys must fit in memory.</text>
+  <text x="84" y="206" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">The in-RAM hash index holds one</text>
+  <text x="84" y="228" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">entry per key. Your keyspace is</text>
+  <text x="84" y="250" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">bounded by a node's RAM &#8212; values</text>
+  <text x="84" y="272" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">live on disk, but every key does not.</text>
+
+  <!-- STRENGTHS (green) -->
+  <rect x="420" y="104" width="340" height="190" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="444" y="138" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">STRENGTHS</text>
+  <g font-family="sans-serif" font-size="14.5" fill="#cbd5e1">
+    <text x="444" y="170"><tspan fill="#8aff8a" font-weight="bold">O(1)</tspan> reads, writes, and deletes</text>
+    <text x="444" y="200">high throughput, low latency</text>
+    <text x="444" y="230">append-only writes saturate disk I/O</text>
+    <text x="444" y="260">easy backups &#8212; just copy the files</text>
+  </g>
+  <text x="444" y="285" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">predictable cost per operation, no read amplification</text>
+
+  <!-- "What we just designed is Bitcask" badge (pink) -->
+  <rect x="788" y="104" width="332" height="190" rx="12" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <rect x="812" y="128" width="284" height="50" rx="9" fill="#3a1c2e" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="954" y="160" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16.5" font-weight="bold">What we just designed is Bitcask</text>
+  <text x="812" y="210" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">A real log-structured key-value</text>
+  <text x="812" y="232" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">storage engine &#8212; not a toy.</text>
+  <text x="812" y="262" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Append-only log + in-RAM hash</text>
+  <text x="812" y="284" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">index, exactly as we derived it.</text>
+
+  <!-- ===================== BOTTOM: production deployment ===================== -->
+  <text x="60" y="346" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Where Bitcask runs in production</text>
+
+  <!-- client (stick figure) -->
+  <circle cx="92" cy="430" r="13" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="443" x2="92" y2="470" stroke="#ffffff" stroke-width="2"/>
+  <line x1="74" y1="455" x2="110" y2="455" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="470" x2="81" y2="488" stroke="#ffffff" stroke-width="2"/>
+  <line x1="92" y1="470" x2="103" y2="488" stroke="#ffffff" stroke-width="2"/>
+  <text x="92" y="514" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">client</text>
+
+  <line x1="116" y1="446" x2="178" y2="446" stroke="#ffffff" stroke-width="2.5" marker-end="url(#bc-w)"/>
+
+  <!-- proxy -->
+  <rect x="182" y="416" width="116" height="62" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="240" y="445" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">proxy</text>
+  <text x="240" y="466" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">routes by key</text>
+
+  <!-- fan-out to Riak ring -->
+  <line x1="298" y1="436" x2="372" y2="408" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#bc-b)"/>
+  <line x1="298" y1="447" x2="372" y2="447" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#bc-b)"/>
+  <line x1="298" y1="458" x2="372" y2="486" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#bc-b)"/>
+
+  <!-- Riak node 1 -->
+  <rect x="376" y="372" width="170" height="150" rx="12" fill="#16191e" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="461" y="400" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Riak node</text>
+  <rect x="402" y="416" width="118" height="58" rx="9" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="461" y="440" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Bitcask</text>
+  <text x="461" y="461" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">local disk</text>
+  <text x="461" y="503" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">node's own data</text>
+
+  <!-- Riak node 2 -->
+  <rect x="566" y="372" width="170" height="150" rx="12" fill="#16191e" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="651" y="400" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Riak node</text>
+  <rect x="592" y="416" width="118" height="58" rx="9" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="651" y="440" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Bitcask</text>
+  <text x="651" y="461" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">local disk</text>
+  <text x="651" y="503" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">node's own data</text>
+
+  <!-- Riak node 3 -->
+  <rect x="756" y="372" width="170" height="150" rx="12" fill="#16191e" stroke="#ffffff" stroke-width="2.5"/>
+  <text x="841" y="400" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Riak node</text>
+  <rect x="782" y="416" width="118" height="58" rx="9" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="841" y="440" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Bitcask</text>
+  <text x="841" y="461" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">local disk</text>
+  <text x="841" y="503" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">node's own data</text>
+
+  <!-- ellipsis -->
+  <text x="946" y="455" fill="#9aa6b2" font-family="sans-serif" font-size="22" font-weight="bold">&#183;&#183;&#183;</text>
+
+  <!-- right note (blue/muted) -->
+  <rect x="990" y="372" width="130" height="150" rx="12" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1003" y="400" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">One ring</text>
+  <text x="1003" y="426" fill="#cbd5e1" font-family="sans-serif" font-size="13">Each node</text>
+  <text x="1003" y="446" fill="#cbd5e1" font-family="sans-serif" font-size="13">runs its own</text>
+  <text x="1003" y="466" fill="#cbd5e1" font-family="sans-serif" font-size="13">independent</text>
+  <text x="1003" y="486" fill="#cbd5e1" font-family="sans-serif" font-size="13">Bitcask on</text>
+  <text x="1003" y="506" fill="#cbd5e1" font-family="sans-serif" font-size="13">local disk.</text>
+
+  <!-- notes strip (blue/muted) -->
+  <rect x="60" y="540" width="1060" height="58" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="84" y="566" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">In context:</text>
+  <text x="200" y="566" fill="#cbd5e1" font-family="sans-serif" font-size="14">Bitcask is one of the most efficient embedded KV stores, built as the storage backend for Riak (a distributed key-value database).</text>
+  <text x="200" y="588" fill="#cbd5e1" font-family="sans-serif" font-size="14">Each Riak node runs an independent Bitcask instance storing that node's data on local disk.</text>
+
+  <!-- bottom takeaway (yellow) -->
+  <rect x="60" y="616" width="1060" height="64" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="84" y="646" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Every decision we made IS Bitcask.</text>
+  <text x="84" y="670" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Append-only log &#183; in-RAM hash index &#183; CRC-framed records &#183; rotation &#183; compaction &#8212; we re-derived a production storage engine from first principles.</text>
+</svg>

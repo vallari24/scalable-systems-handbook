@@ -1,0 +1,110 @@
+<svg width="1180" height="700" viewBox="0 0 1180 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ci-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="ci-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="ci-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="700" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Crash Safety: Detecting Torn Writes with a Checksum</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a crash mid-append leaves half a record; a <tspan fill="#8aff8a" font-weight="bold">CRC</tspan> up front lets the reader <tspan fill="#8aff8a" font-weight="bold">detect and skip</tspan> it</text>
+
+  <!-- ============ TOP: THE PROBLEM (red) ============ -->
+  <rect x="40" y="100" width="1100" height="244" rx="12" fill="#1d1216" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="64" y="132" fill="#ff8a8a" font-family="sans-serif" font-size="19" font-weight="bold">The torn write &#8212; a crash mid-append</text>
+
+  <!-- byte-size labels -->
+  <g font-family="monospace" font-size="13" fill="#9aa6b2" font-weight="bold">
+    <text x="120" y="166" text-anchor="middle">KSZ</text>
+    <text x="200" y="166" text-anchor="middle">VSZ=200</text>
+    <text x="290" y="166" text-anchor="middle">K</text>
+    <text x="540" y="166" text-anchor="middle">V (claims 200 B)</text>
+  </g>
+
+  <!-- byte strip: KSZ | VSZ | K | torn V -->
+  <rect x="80" y="176" width="80" height="56" fill="#16191e" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="120" y="211" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15" font-weight="bold">5</text>
+
+  <rect x="160" y="176" width="80" height="56" fill="#16191e" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="200" y="211" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15" font-weight="bold">200</text>
+
+  <rect x="240" y="176" width="100" height="56" fill="#13161b" stroke="#9aa6b2" stroke-width="2.5"/>
+  <text x="290" y="211" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15" font-weight="bold">apple</text>
+
+  <!-- value cell: written portion (~110B) then jagged broken edge mid-value -->
+  <path d="M 340 176 L 560 176 L 560 192 L 552 200 L 560 208 L 552 216 L 560 224 L 560 232 L 340 232 Z"
+        fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="450" y="206" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="14" font-weight="bold">value bytes 1&#8230;110</text>
+
+  <!-- ghost of the missing bytes -->
+  <rect x="568" y="176" width="280" height="56" fill="none" stroke="#5b6470" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="708" y="200" text-anchor="middle" fill="#7c8694" font-family="monospace" font-size="13">bytes 111&#8230;200</text>
+  <text x="708" y="220" text-anchor="middle" fill="#7c8694" font-family="monospace" font-size="13">never reached disk</text>
+
+  <text x="864" y="200" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">machine crashed while</text>
+  <text x="864" y="219" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">writing value &#8212; only</text>
+  <text x="864" y="238" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">110 of 200 bytes on disk</text>
+
+  <!-- reader callout -->
+  <rect x="64" y="252" width="1052" height="76" rx="9" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="84" y="282" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">A reader that blindly trusts VSZ&#160;=&#160;200</text>
+  <text x="84" y="312" fill="#cbd5e1" font-family="sans-serif" font-size="15">reads 200 bytes &#8212; past the 110 real ones, into whatever follows on disk &#8212; <tspan fill="#ff8a8a" font-weight="bold">reads GARBAGE and silently returns a corrupt value.</tspan></text>
+
+  <!-- ============ BOTTOM: THE FIX (yellow/green) ============ -->
+  <rect x="40" y="360" width="1100" height="252" rx="12" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="64" y="392" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">The fix &#8212; a self-verifying record: <tspan font-family="monospace">[ CRC | TS | KSZ | VSZ | K | V ]</tspan></text>
+
+  <!-- final byte strip -->
+  <g font-family="monospace" font-size="14" font-weight="bold">
+    <rect x="80" y="408" width="120" height="54" fill="#15281b" stroke="#8aff8a" stroke-width="2.5"/>
+    <text x="140" y="441" text-anchor="middle" fill="#8aff8a">CRC</text>
+
+    <rect x="200" y="408" width="140" height="54" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+    <text x="270" y="441" text-anchor="middle" fill="#ffff99">TS</text>
+
+    <rect x="340" y="408" width="100" height="54" fill="#16191e" stroke="#9aa6b2" stroke-width="2.5"/>
+    <text x="390" y="441" text-anchor="middle" fill="#cbd5e1">KSZ</text>
+
+    <rect x="440" y="408" width="100" height="54" fill="#16191e" stroke="#9aa6b2" stroke-width="2.5"/>
+    <text x="490" y="441" text-anchor="middle" fill="#cbd5e1">VSZ</text>
+
+    <rect x="540" y="408" width="120" height="54" fill="#13161b" stroke="#9aa6b2" stroke-width="2.5"/>
+    <text x="600" y="441" text-anchor="middle" fill="#cbd5e1">K</text>
+
+    <rect x="660" y="408" width="260" height="54" fill="#13161b" stroke="#9aa6b2" stroke-width="2.5"/>
+    <text x="790" y="441" text-anchor="middle" fill="#cbd5e1">V</text>
+  </g>
+
+  <!-- "covers everything after it" bracket -->
+  <path d="M 200 472 L 200 482 L 920 482 L 920 472" fill="none" stroke="#8aff8a" stroke-width="1.8"/>
+  <line x1="140" y1="462" x2="140" y2="496" stroke="#8aff8a" stroke-width="1.8" stroke-dasharray="4 4"/>
+  <text x="560" y="500" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">CRC is computed over &#8212; and flushed first &#8212; so its presence vouches for everything after it</text>
+
+  <!-- CRC callout (green) -->
+  <rect x="64" y="514" width="412" height="84" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="84" y="540" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">CRC &#8212; a checksum, written FIRST</text>
+  <text x="84" y="562" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">On read, recompute the CRC over the bytes read and</text>
+  <text x="84" y="580" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">compare. If they <tspan fill="#8aff8a" font-weight="bold">DIFFER</tspan> the record is torn &#8212;</text>
+  <text x="84" y="595" fill="#cbd5e1" font-family="sans-serif" font-size="13.5"><tspan fill="#8aff8a" font-weight="bold">DISCARD it</tspan>: corruption is detected, never returned.</text>
+
+  <!-- TS callout (yellow) -->
+  <rect x="488" y="514" width="324" height="84" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="508" y="540" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">TS &#8212; a per-record timestamp</text>
+  <text x="508" y="562" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">When a key appears more than once, the</text>
+  <text x="508" y="580" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">timestamp resolves the conflict &#8212; it decides</text>
+  <text x="508" y="595" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">which write is <tspan fill="#ffff99" font-weight="bold">newer</tspan> and wins.</text>
+
+  <!-- before/after arrow -->
+  <line x1="828" y1="556" x2="868" y2="556" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ci-g)"/>
+
+  <!-- bottom takeaway -->
+  <rect x="40" y="628" width="1100" height="56" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="590" y="662" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15.5">A checksum turns <tspan fill="#ff8a8a" font-weight="bold">&#8220;silently return garbage&#8221;</tspan> into <tspan fill="#8aff8a" font-weight="bold">&#8220;detect and skip the broken record&#8221;</tspan> &#8212; that is what makes the persistence trustworthy.</text>
+</svg>

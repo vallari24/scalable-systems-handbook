@@ -1,0 +1,114 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="av-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="av-p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="av-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="700" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Log-Structured Storage: Append, Never Overwrite</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">turning random in-place writes into one <tspan fill="#8aff8a" font-weight="bold">sequential append</tspan> is the biggest lever for write speed on disk</text>
+
+  <!-- ============ LEFT PANEL: update in place (red anti-pattern) ============ -->
+  <rect x="48" y="104" width="540" height="338" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="72" y="138" fill="#ff8a8a" font-family="sans-serif" font-size="19" font-weight="bold">Update in place</text>
+  <text x="318" y="138" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">&#8212; the anti-pattern</text>
+
+  <!-- the file / platter with scattered keys -->
+  <rect x="76" y="158" width="118" height="256" rx="10" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="135" y="180" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">data file</text>
+
+  <!-- scattered key slots at different positions -->
+  <rect x="92" y="194" width="86" height="30" rx="6" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="135" y="214" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="14" font-weight="bold">key C</text>
+
+  <rect x="92" y="244" width="86" height="30" rx="6" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="135" y="264" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="14" font-weight="bold">key A</text>
+
+  <rect x="92" y="294" width="86" height="30" rx="6" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="135" y="314" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="14" font-weight="bold">key D</text>
+
+  <rect x="92" y="344" width="86" height="30" rx="6" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="135" y="364" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="14" font-weight="bold">key B</text>
+
+  <!-- disk head seeking back and forth -->
+  <text x="356" y="184" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">disk head seeks to each key</text>
+
+  <!-- write A: head jumps to slot A -->
+  <path d="M 280 206 C 230 220, 210 248, 184 256" fill="none" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#av-r)"/>
+  <!-- write B: jumps far down to slot B -->
+  <path d="M 290 232 C 240 320, 220 352, 184 358" fill="none" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#av-r)"/>
+  <!-- write C: jumps back up to top slot -->
+  <path d="M 280 258 C 235 222, 215 212, 184 208" fill="none" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#av-r)"/>
+  <!-- write D: jumps to mid slot -->
+  <path d="M 290 284 C 245 296, 222 306, 184 308" fill="none" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#av-r)"/>
+
+  <text x="300" y="230" fill="#ffffff" font-family="monospace" font-size="13">put A</text>
+  <text x="306" y="320" fill="#ffffff" font-family="monospace" font-size="13">put B</text>
+  <text x="298" y="266" fill="#ffffff" font-family="monospace" font-size="13">put C</text>
+  <text x="306" y="282" fill="#ffffff" font-family="monospace" font-size="13">put D</text>
+
+  <!-- label badge -->
+  <rect x="278" y="364" width="284" height="42" rx="9" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="420" y="391" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">one seek per write &#8212; slow</text>
+
+  <!-- ============ RIGHT PANEL: append-only log (green/pink) ============ -->
+  <rect x="612" y="104" width="540" height="338" rx="12" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="636" y="138" fill="#ff8bd2" font-family="sans-serif" font-size="19" font-weight="bold">Append-only log</text>
+  <text x="826" y="138" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">&#8212; write to the end, always</text>
+
+  <!-- the single log file, records stack at the end -->
+  <rect x="900" y="158" width="160" height="256" rx="10" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="980" y="180" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">log file (one file)</text>
+
+  <rect x="916" y="194" width="128" height="28" rx="6" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="980" y="213" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">put A</text>
+  <rect x="916" y="228" width="128" height="28" rx="6" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="980" y="247" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">put B</text>
+  <rect x="916" y="262" width="128" height="28" rx="6" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="980" y="281" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">put C</text>
+  <rect x="916" y="296" width="128" height="28" rx="6" fill="#2a1420" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="980" y="315" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="13" font-weight="bold">put D</text>
+  <!-- end-of-log marker / next write position -->
+  <rect x="916" y="330" width="128" height="28" rx="6" fill="none" stroke="#8aff8a" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="980" y="349" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">&#8592; next append</text>
+
+  <!-- single downward sequential arrow -->
+  <line x1="724" y1="186" x2="724" y2="360" stroke="#8aff8a" stroke-width="3" marker-end="url(#av-g)"/>
+  <text x="690" y="276" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold" transform="rotate(-90 690 276)">writes stream sequentially &#8212; head never moves back</text>
+  <text x="800" y="196" fill="#9aa6b2" font-family="sans-serif" font-size="13">records stack at the end</text>
+
+  <!-- label badge -->
+  <rect x="700" y="364" width="284" height="42" rx="9" fill="#15281b" stroke="#8aff8a" stroke-width="2"/>
+  <text x="842" y="391" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">sequential &#8212; no seeks</text>
+
+  <!-- ============ WHAT WE GET band ============ -->
+  <rect x="48" y="458" width="700" height="118" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="72" y="492" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">What we get</text>
+  <text x="72" y="524" fill="#cbd5e1" font-family="sans-serif" font-size="15"><tspan fill="#8aff8a" font-weight="bold">HIGH write throughput</tspan> even on a</text>
+  <text x="72" y="548" fill="#cbd5e1" font-family="sans-serif" font-size="15">spinning HDD &#8212; the slow seek is gone.</text>
+
+  <!-- pink gain badge -->
+  <rect x="486" y="486" width="234" height="68" rx="12" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="603" y="518" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="26" font-weight="bold">~5000x gain</text>
+  <text x="603" y="540" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">over random writes on HDD</text>
+
+  <!-- ============ SSD caveat note (blue) ============ -->
+  <rect x="768" y="458" width="384" height="118" rx="12" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="792" y="492" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Caveat: SSDs</text>
+  <text x="792" y="518" fill="#cbd5e1" font-family="sans-serif" font-size="14">No moving head &#8212; an SSD does NOT get this dramatic</text>
+  <text x="792" y="538" fill="#cbd5e1" font-family="sans-serif" font-size="14">sequential gain. Append-only still wins for subtler</text>
+  <text x="792" y="558" fill="#cbd5e1" font-family="sans-serif" font-size="14">reasons: less write amplification, simpler crash recovery.</text>
+
+  <!-- ============ bottom takeaway ============ -->
+  <rect x="48" y="594" width="1104" height="70" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="72" y="626" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Takeaway</text>
+  <text x="72" y="650" fill="#cbd5e1" font-family="sans-serif" font-size="16">Append-only <tspan fill="#8aff8a" font-weight="bold">deletes the seek</tspan> from the write path &#8212; that is why even a spinning HDD can scream.</text>
+</svg>

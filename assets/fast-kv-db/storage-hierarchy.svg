@@ -1,0 +1,105 @@
+<svg width="1180" height="770" viewBox="0 0 1180 770" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="sh-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+    <marker id="sh-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="sh-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="770" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">The Storage Hierarchy: Persistence Means Disk, and Disk Hates Seeks</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">every rung trades speed for durability; <tspan fill="#ffff99" font-weight="bold">persistence</tspan> drags us to a durable rung, where the <tspan fill="#ff8a8a" font-weight="bold">seek</tspan> is the enemy</text>
+
+  <!-- ===== LADDER axis labels (left) ===== -->
+  <text x="78" y="118" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">fastest</text>
+  <text x="78" y="134" fill="#9aa6b2" font-family="sans-serif" font-size="12">most expensive</text>
+  <text x="78" y="150" fill="#9aa6b2" font-family="sans-serif" font-size="12">volatile</text>
+
+  <text x="78" y="494" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">slowest</text>
+  <text x="78" y="510" fill="#9aa6b2" font-family="sans-serif" font-size="12">cheapest</text>
+  <text x="78" y="526" fill="#9aa6b2" font-family="sans-serif" font-size="12">durable</text>
+
+  <!-- vertical guide arrow -->
+  <line x1="158" y1="116" x2="158" y2="520" stroke="#5b6470" stroke-width="2" stroke-dasharray="5 5"/>
+
+  <!-- ===== RUNGS (pyramid: narrow on top, wide at bottom) ===== -->
+
+  <!-- Rung 1: registers & cache (narrowest, top) -->
+  <rect x="370" y="108" width="440" height="48" rx="9" fill="#15281b" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="392" y="138" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">CPU registers &amp; cache</text>
+  <text x="700" y="132" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15" font-weight="bold">&#8776; 1 ns</text>
+  <text x="788" y="132" text-anchor="end" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">volatile</text>
+
+  <!-- Rung 2: RAM -->
+  <rect x="320" y="172" width="540" height="56" rx="9" fill="#15281b" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="342" y="206" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">RAM</text>
+  <text x="700" y="200" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15" font-weight="bold">&#8776; 100 ns</text>
+  <text x="838" y="200" text-anchor="end" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">volatile</text>
+
+  <!-- Rung 3: SSD -->
+  <rect x="270" y="244" width="640" height="56" rx="9" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="292" y="278" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">SSD</text>
+  <text x="700" y="272" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15" font-weight="bold">&#8776; 100 &#181;s</text>
+  <text x="888" y="272" text-anchor="end" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">durable</text>
+
+  <!-- Rung 4: HDD (HIGHLIGHTED) -->
+  <rect x="216" y="316" width="748" height="68" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="4"/>
+  <text x="238" y="346" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Magnetic disk / HDD</text>
+  <text x="238" y="368" fill="#9aa6b2" font-family="sans-serif" font-size="13">spinning platter &#183; moving read/write head</text>
+  <text x="700" y="357" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="17" font-weight="bold">&#8776; 10 ms</text>
+  <text x="942" y="350" text-anchor="end" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">durable</text>
+
+  <!-- Rung 5: Tape (widest, bottom) -->
+  <rect x="166" y="400" width="848" height="56" rx="9" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="188" y="434" fill="#9aa6b2" font-family="sans-serif" font-size="18" font-weight="bold">Tape</text>
+  <text x="700" y="428" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15" font-weight="bold">seconds</text>
+  <text x="992" y="428" text-anchor="end" fill="#9aa6b2" font-family="sans-serif" font-size="13" font-weight="bold">durable &#183; archival</text>
+
+  <!-- ===== Callout pointing at HDD rung (red) ===== -->
+  <rect x="996" y="120" width="160" height="150" rx="11" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="1076" y="148" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">that 10 ms</text>
+  <text x="1076" y="170" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">is SEEK time</text>
+  <g font-family="sans-serif" font-size="12.5" fill="#cbd5e1">
+    <text x="1012" y="194">the head physically</text>
+    <text x="1012" y="212">moving across the</text>
+    <text x="1012" y="230">platter to the right</text>
+    <text x="1012" y="248">track &#8212; NOT the</text>
+    <text x="1012" y="266">time to transfer bytes</text>
+  </g>
+  <!-- arrow from callout to HDD rung -->
+  <line x1="1010" y1="270" x2="956" y2="350" stroke="#ff8a8a" stroke-width="3" marker-end="url(#sh-r)"/>
+
+  <!-- ===== Contrast block: random vs sequential ===== -->
+  <!-- Random access (red) -->
+  <rect x="60" y="490" width="540" height="158" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="84" y="524" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">Random access</text>
+  <text x="84" y="552" fill="#cbd5e1" font-family="sans-serif" font-size="15">pays a <tspan fill="#ff8a8a" font-weight="bold">seek on EVERY operation</tspan></text>
+  <!-- mini diagram: scattered reads each seeking -->
+  <g font-family="monospace" font-size="13" fill="#ff8a8a">
+    <text x="84" y="586">seek &#8594; read &#183; seek &#8594; read &#183; seek &#8594; read</text>
+  </g>
+  <text x="84" y="616" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">10 ms wasted before each tiny read &#8212; the head</text>
+  <text x="84" y="636" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">flies back and forth across the platter.</text>
+
+  <!-- Sequential access (green) -->
+  <rect x="620" y="490" width="500" height="158" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="644" y="524" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Sequential access</text>
+  <text x="644" y="552" fill="#cbd5e1" font-family="sans-serif" font-size="15">pays the <tspan fill="#8aff8a" font-weight="bold">seek ONCE</tspan>, then streams</text>
+  <g font-family="monospace" font-size="13" fill="#8aff8a">
+    <text x="644" y="586">seek &#8594; read &#8594; read &#8594; read &#8594; read &#8594; &#8230;</text>
+  </g>
+  <text x="644" y="616" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">one seek, then the platter spins bytes under a</text>
+  <text x="644" y="636" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">still head &#8212; pure transfer, no more seeking.</text>
+
+  <!-- ===== Bottom takeaway ===== -->
+  <rect x="60" y="668" width="1060" height="86" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="84" y="700" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Takeaway &#8212; on disk, the seek is the enemy, not the bytes</text>
+  <text x="84" y="726" fill="#cbd5e1" font-family="sans-serif" font-size="15"><tspan fill="#ffff99" font-weight="bold">Persistence</tspan> forces our authoritative bytes onto a durable rung (disk); the enemy is not reading or writing bytes, it is the <tspan fill="#ff8a8a" font-weight="bold">seek BETWEEN them</tspan>.</text>
+  <text x="84" y="746" fill="#cbd5e1" font-family="sans-serif" font-size="15">Avoid seeks &#8212; lay data out sequentially &#8212; and even a slow <tspan fill="#ffff99" font-weight="bold">HDD</tspan> becomes fast.</text>
+</svg>

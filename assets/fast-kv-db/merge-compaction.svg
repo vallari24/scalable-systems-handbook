@@ -1,0 +1,107 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="mc-w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffffff"/>
+    </marker>
+    <marker id="mc-g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="mc-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="mc-r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="720" fill="#111317"/>
+
+  <text x="600" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Merge and Compaction: Reclaiming the Wasted Space</text>
+  <text x="600" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">fold many garbage-filled <tspan fill="#93c5fd" font-weight="bold">immutable</tspan> files into a few dense ones, then <tspan fill="#ffff99" font-weight="bold">atomically</tspan> repoint the index</text>
+
+  <!-- ===================== LEFT: sawtooth disk-usage graph ===================== -->
+  <text x="80" y="120" fill="#ff8bd2" font-family="sans-serif" font-size="18" font-weight="bold">Disk usage over time</text>
+
+  <!-- plot frame -->
+  <rect x="80" y="136" width="470" height="320" rx="10" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+
+  <!-- axes -->
+  <line x1="128" y1="160" x2="128" y2="420" stroke="#9aa6b2" stroke-width="2.5"/>
+  <line x1="128" y1="420" x2="520" y2="420" stroke="#9aa6b2" stroke-width="2.5"/>
+  <!-- axis arrowheads -->
+  <line x1="128" y1="170" x2="128" y2="158" stroke="#9aa6b2" stroke-width="2.5" marker-end="url(#mc-w)"/>
+  <line x1="510" y1="420" x2="522" y2="420" stroke="#9aa6b2" stroke-width="2.5" marker-end="url(#mc-w)"/>
+
+  <!-- axis labels -->
+  <text x="92" y="150" fill="#9aa6b2" font-family="sans-serif" font-size="14" font-weight="bold" transform="rotate(-90 92 150)" text-anchor="end">disk usage</text>
+  <text x="324" y="448" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14" font-weight="bold">time</text>
+
+  <!-- bound line (where usage is held under) -->
+  <line x1="128" y1="206" x2="516" y2="206" stroke="#8aff8a" stroke-width="1.5" stroke-dasharray="5 6" opacity="0.7"/>
+  <text x="512" y="200" text-anchor="end" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">bounded ceiling</text>
+
+  <!-- SAWTOOTH: climbs (appends) then drops sharply (compaction) -->
+  <polyline points="128,406 196,300 196,372 264,222 264,300 332,214 332,290 400,212 400,288 468,212 468,288 516,256"
+            fill="none" stroke="#ff8bd2" stroke-width="3" stroke-linejoin="round"/>
+
+  <!-- compaction-drop markers -->
+  <g font-family="sans-serif" font-size="11" fill="#9aa6b2">
+    <text x="196" y="392" text-anchor="middle">compact</text>
+    <text x="264" y="320" text-anchor="middle">compact</text>
+    <text x="332" y="310" text-anchor="middle">compact</text>
+    <text x="400" y="308" text-anchor="middle">compact</text>
+  </g>
+
+  <!-- caption under the plot -->
+  <rect x="80" y="466" width="470" height="64" rx="10" fill="#2a1420" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="104" y="492" fill="#ff8bd2" font-family="sans-serif" font-size="14.5" font-weight="bold">Climb: stale + tombstoned records pile up.</text>
+  <text x="104" y="515" fill="#cbd5e1" font-family="sans-serif" font-size="14">Each drop is a compaction run &#8212; usage stays <tspan fill="#8aff8a" font-weight="bold">bounded</tspan>.</text>
+
+  <!-- ===================== RIGHT: what compaction does ===================== -->
+  <text x="600" y="120" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">What a compaction run does</text>
+
+  <!-- immutable input stack (blue) -->
+  <text x="600" y="148" fill="#9aa6b2" font-family="sans-serif" font-size="13">several immutable files</text>
+  <rect x="612" y="176" width="120" height="44" rx="9" fill="#10243a" stroke="#7c8694" stroke-width="2"/>
+  <rect x="600" y="190" width="120" height="44" rx="9" fill="#10243a" stroke="#7c8694" stroke-width="2"/>
+  <rect x="588" y="204" width="120" height="44" rx="9" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="576" y="218" width="120" height="44" rx="9" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="636" y="246" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">immutable</text>
+  <text x="636" y="296" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">old data files</text>
+
+  <!-- merge arrow -->
+  <line x1="704" y1="240" x2="788" y2="240" stroke="#ffffff" stroke-width="3" marker-end="url(#mc-w)"/>
+  <text x="746" y="226" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">merge &amp;</text>
+  <text x="746" y="260" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">compact</text>
+
+  <!-- compacted output (green/yellow, fewer) -->
+  <text x="848" y="148" fill="#8aff8a" font-family="sans-serif" font-size="13">fewer, dense files</text>
+  <rect x="816" y="190" width="124" height="48" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="878" y="220" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">compacted</text>
+  <rect x="816" y="248" width="124" height="48" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="878" y="278" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">compacted</text>
+  <text x="878" y="316" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">new data files</text>
+
+  <!-- skip rule 1: STALE -->
+  <rect x="600" y="336" width="540" height="74" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="620" y="362" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">STALE entries skipped</text>
+  <text x="620" y="384" fill="#cbd5e1" font-family="sans-serif" font-size="14">a key with many versions keeps only its <tspan fill="#8aff8a" font-weight="bold">newest</tspan> record;</text>
+  <text x="620" y="403" fill="#cbd5e1" font-family="sans-serif" font-size="14">older overwritten versions are dropped.</text>
+
+  <!-- skip rule 2: DELETED -->
+  <rect x="600" y="420" width="540" height="74" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="620" y="446" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">DELETED entries skipped</text>
+  <text x="620" y="468" fill="#cbd5e1" font-family="sans-serif" font-size="14">a <tspan fill="#ff8a8a" font-weight="bold">tombstone</tspan> and the dead record it shadows are both</text>
+  <text x="620" y="487" fill="#cbd5e1" font-family="sans-serif" font-size="14">dropped &#8212; space for the deleted key is finally reclaimed.</text>
+
+  <!-- note: only immutable touched, active untouched (green) -->
+  <rect x="600" y="504" width="540" height="62" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="620" y="530" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Reads and writes never block.</text>
+  <text x="620" y="552" fill="#cbd5e1" font-family="sans-serif" font-size="14">Compaction only touches <tspan fill="#93c5fd" font-weight="bold">immutable</tspan> files; the <tspan fill="#ff8bd2" font-weight="bold">active</tspan> file keeps taking writes.</text>
+
+  <!-- ===================== BOTTOM TAKEAWAY (yellow, critical) ===================== -->
+  <rect x="80" y="586" width="1060" height="104" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="104" y="618" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Records move into new files &#8212; the in-memory index must be repointed atomically</text>
+  <text x="104" y="646" fill="#cbd5e1" font-family="sans-serif" font-size="15">Every surviving key's <tspan fill="#ffff99" font-weight="bold" font-family="monospace">File ID + VPOS</tspan> changes, so the index swap must be <tspan fill="#ffff99" font-weight="bold">atomic</tspan> &#8212; otherwise a concurrent <tspan fill="#8aff8a" font-weight="bold" font-family="monospace">GET</tspan> follows a stale pointer</text>
+  <text x="104" y="670" fill="#cbd5e1" font-family="sans-serif" font-size="15">into a file that no longer holds the record. Only after the swap are the <tspan fill="#93c5fd" font-weight="bold">old immutable files</tspan> deleted.</text>
+</svg>

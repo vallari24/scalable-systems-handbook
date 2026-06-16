@@ -1,0 +1,114 @@
+<svg width="1180" height="680" viewBox="0 0 1180 680" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="fr-p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="fr-y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="680" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">When the File Grows Too Big: Rotation, Active and Immutable</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">rotate the active file at a size threshold so writes stay <tspan fill="#ff8bd2" font-weight="bold">sequential</tspan> to one file while data spreads across many</text>
+
+  <!-- THE RULE (pink) -->
+  <rect x="60" y="104" width="1060" height="92" rx="12" fill="#2a1420" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="84" y="138" fill="#ff8bd2" font-family="sans-serif" font-size="19" font-weight="bold">The rule &#8212; rotate at a size threshold</text>
+  <text x="84" y="168" fill="#cbd5e1" font-family="sans-serif" font-size="15">When the current file grows past <tspan fill="#ff8bd2" font-weight="bold" font-family="monospace">t</tspan> bytes, <tspan fill="#ff8bd2" font-weight="bold">ROTATE</tspan>: create a brand-new file to append to, and</text>
+  <text x="84" y="190" fill="#cbd5e1" font-family="sans-serif" font-size="15">freeze the old file as <tspan fill="#93c5fd" font-weight="bold">IMMUTABLE</tspan> &#8212; read-only, never written again.</text>
+
+  <!-- FILE ROW LAYOUT -->
+  <!-- IMMUTABLE brace label (blue) -->
+  <text x="290" y="246" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold"><tspan fill="#93c5fd">IMMUTABLE</tspan><tspan fill="#9aa6b2">&#160;&#8212; available for reads only</tspan></text>
+  <!-- brace over the four files -->
+  <path d="M88 264 q0 -12 12 -12 L284 252 q6 0 6 -8 q0 8 6 8 L482 252 q12 0 12 12" fill="none" stroke="#93c5fd" stroke-width="2"/>
+
+  <!-- FILE GLYPH: four immutable (white/gray) -->
+  <!-- file 1 -->
+  <g>
+    <rect x="92" y="280" width="92" height="120" rx="6" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+    <path d="M160 280 l24 24 M160 280 l0 24 l24 0" fill="#111317" stroke="#7c8694" stroke-width="2"/>
+    <line x1="108" y1="320" x2="168" y2="320" stroke="#5b6470" stroke-width="2"/>
+    <line x1="108" y1="338" x2="168" y2="338" stroke="#5b6470" stroke-width="2"/>
+    <line x1="108" y1="356" x2="168" y2="356" stroke="#5b6470" stroke-width="2"/>
+    <line x1="108" y1="374" x2="150" y2="374" stroke="#5b6470" stroke-width="2"/>
+    <text x="138" y="422" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">001.log</text>
+  </g>
+  <!-- file 2 -->
+  <g>
+    <rect x="196" y="280" width="92" height="120" rx="6" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+    <path d="M264 280 l24 24 M264 280 l0 24 l24 0" fill="#111317" stroke="#7c8694" stroke-width="2"/>
+    <line x1="212" y1="320" x2="272" y2="320" stroke="#5b6470" stroke-width="2"/>
+    <line x1="212" y1="338" x2="272" y2="338" stroke="#5b6470" stroke-width="2"/>
+    <line x1="212" y1="356" x2="272" y2="356" stroke="#5b6470" stroke-width="2"/>
+    <line x1="212" y1="374" x2="254" y2="374" stroke="#5b6470" stroke-width="2"/>
+    <text x="242" y="422" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">002.log</text>
+  </g>
+  <!-- file 3 -->
+  <g>
+    <rect x="300" y="280" width="92" height="120" rx="6" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+    <path d="M368 280 l24 24 M368 280 l0 24 l24 0" fill="#111317" stroke="#7c8694" stroke-width="2"/>
+    <line x1="316" y1="320" x2="376" y2="320" stroke="#5b6470" stroke-width="2"/>
+    <line x1="316" y1="338" x2="376" y2="338" stroke="#5b6470" stroke-width="2"/>
+    <line x1="316" y1="356" x2="376" y2="356" stroke="#5b6470" stroke-width="2"/>
+    <line x1="316" y1="374" x2="358" y2="374" stroke="#5b6470" stroke-width="2"/>
+    <text x="346" y="422" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">003.log</text>
+  </g>
+  <!-- file 4 -->
+  <g>
+    <rect x="404" y="280" width="92" height="120" rx="6" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+    <path d="M472 280 l24 24 M472 280 l0 24 l24 0" fill="#111317" stroke="#7c8694" stroke-width="2"/>
+    <line x1="420" y1="320" x2="480" y2="320" stroke="#5b6470" stroke-width="2"/>
+    <line x1="420" y1="338" x2="480" y2="338" stroke="#5b6470" stroke-width="2"/>
+    <line x1="420" y1="356" x2="480" y2="356" stroke="#5b6470" stroke-width="2"/>
+    <line x1="420" y1="374" x2="462" y2="374" stroke="#5b6470" stroke-width="2"/>
+    <text x="446" y="422" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">004.log</text>
+  </g>
+
+  <!-- rotation arrow from last immutable to active -->
+  <line x1="506" y1="340" x2="592" y2="340" stroke="#ff8bd2" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#fr-p)"/>
+  <text x="549" y="328" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12" font-weight="bold">rotate</text>
+  <text x="549" y="362" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">at t bytes</text>
+
+  <!-- ACTIVE file (yellow) -->
+  <text x="650" y="246" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">ACTIVE</text>
+  <g>
+    <rect x="604" y="280" width="92" height="120" rx="6" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+    <path d="M672 280 l24 24 M672 280 l0 24 l24 0" fill="#111317" stroke="#ffff99" stroke-width="2.5"/>
+    <line x1="620" y1="320" x2="680" y2="320" stroke="#ffff99" stroke-width="2" stroke-opacity="0.6"/>
+    <line x1="620" y1="338" x2="680" y2="338" stroke="#ffff99" stroke-width="2" stroke-opacity="0.6"/>
+    <line x1="620" y1="356" x2="662" y2="356" stroke="#ffff99" stroke-width="2" stroke-opacity="0.6"/>
+    <text x="650" y="422" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13" font-weight="bold">005.log</text>
+  </g>
+  <!-- writes arrow up into active (pink) -->
+  <line x1="650" y1="492" x2="650" y2="406" stroke="#ff8bd2" stroke-width="3" marker-end="url(#fr-p)"/>
+  <text x="650" y="514" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">all writes go here</text>
+
+  <!-- NOTE (green) right side -->
+  <rect x="760" y="232" width="360" height="180" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="784" y="266" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">Sequential write preserved</text>
+  <text x="784" y="298" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Only the single <tspan fill="#ffff99" font-weight="bold">active</tspan> file ever receives</text>
+  <text x="784" y="320" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">appends, so the append-only / sequential</text>
+  <text x="784" y="342" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">write property still holds &#8212; we did NOT</text>
+  <text x="784" y="364" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">scatter writes across files.</text>
+  <text x="784" y="394" fill="#8aff8a" font-family="sans-serif" font-size="14.5" font-weight="bold">Reads hit any file via the in-memory index.</text>
+
+  <!-- CONSEQUENCE CALLOUTS -->
+  <!-- (a) blue: backup + compact -->
+  <rect x="60" y="540" width="528" height="84" rx="11" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="84" y="570" fill="#93c5fd" font-family="sans-serif" font-size="15.5" font-weight="bold">Immutable files never change</text>
+  <text x="84" y="596" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8594; trivially safe to <tspan fill="#93c5fd" font-weight="bold">back up</tspan> and to <tspan fill="#93c5fd" font-weight="bold">compact</tspan> in the</text>
+  <text x="84" y="616" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#160;&#160;&#160;background, with no risk of a concurrent write.</text>
+
+  <!-- (b) yellow: no contention -->
+  <rect x="608" y="540" width="512" height="84" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="632" y="570" fill="#ffff99" font-family="sans-serif" font-size="15.5" font-weight="bold">Only the active file is written</text>
+  <text x="632" y="596" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8594; never a writer and a reader contending on the</text>
+  <text x="632" y="616" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#160;&#160;&#160;same file at the same time.</text>
+
+  <!-- BOTTOM TAKEAWAY -->
+  <rect x="60" y="640" width="1060" height="0" rx="0" fill="none"/>
+  <text x="590" y="664" text-anchor="middle" font-family="sans-serif" font-size="14.5"><tspan fill="#ffff99" font-weight="bold">Takeaway: </tspan><tspan fill="#cbd5e1">always exactly&#160;</tspan><tspan fill="#ffff99" font-weight="bold">one active file</tspan><tspan fill="#cbd5e1">&#160;taking writes, and many frozen&#160;</tspan><tspan fill="#93c5fd" font-weight="bold">immutable</tspan><tspan fill="#cbd5e1">&#160;files for reads, backups, and compaction.</tspan></text>
+</svg>
