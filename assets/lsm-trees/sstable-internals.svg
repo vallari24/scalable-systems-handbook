@@ -1,0 +1,90 @@
+<svg width="1180" height="700" viewBox="0 0 1180 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="st-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="700" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Inside an SSTable: Sorted Data + Sparse Index</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">An SSTable = a sorted <tspan fill="#ffff99" font-weight="bold">DATA</tspan> section + an <tspan fill="#8aff8a" font-weight="bold">INDEX</tspan> section (key &#8594; byte offset)</text>
+
+  <!-- TOP caption -->
+  <text x="590" y="112" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">The index lets a lookup jump straight to a record instead of scanning the whole data section.</text>
+
+  <!-- INDEX block (green, bottom-left) -->
+  <text x="80" y="172" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">INDEX section</text>
+  <text x="80" y="194" fill="#9aa6b2" font-family="sans-serif" font-size="13">key &#8594; byte offset &#183; on disk, with the file</text>
+  <rect x="80" y="210" width="300" height="318" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+
+  <!-- index entries -->
+  <rect x="104" y="244" width="252" height="48" rx="8" fill="#15281b" stroke="#8aff8a" stroke-width="2"/>
+  <text x="128" y="274" fill="#8aff8a" font-family="monospace" font-size="18" font-weight="bold">k1 &#8594; o1</text>
+  <rect x="104" y="328" width="252" height="48" rx="8" fill="#15281b" stroke="#8aff8a" stroke-width="2"/>
+  <text x="128" y="358" fill="#8aff8a" font-family="monospace" font-size="18" font-weight="bold">k2 &#8594; o2</text>
+  <rect x="104" y="412" width="252" height="48" rx="8" fill="#15281b" stroke="#8aff8a" stroke-width="2"/>
+  <text x="128" y="442" fill="#8aff8a" font-family="monospace" font-size="18" font-weight="bold">k3 &#8594; o3</text>
+  <text x="230" y="502" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">one entry &#8594; one record's offset</text>
+
+  <!-- DATA block (yellow, bottom-right) -->
+  <text x="430" y="172" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">DATA section</text>
+  <text x="430" y="194" fill="#9aa6b2" font-family="sans-serif" font-size="13">records in SORTED key order &#183; each at a known byte offset</text>
+  <rect x="430" y="210" width="430" height="318" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+
+  <!-- data records -->
+  <rect x="454" y="244" width="382" height="48" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="478" y="266" fill="#9aa6b2" font-family="monospace" font-size="13">o1</text>
+  <text x="478" y="284" fill="#cbd5e1" font-family="monospace" font-size="17" font-weight="bold">k1 : v1</text>
+  <rect x="454" y="328" width="382" height="48" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="478" y="350" fill="#9aa6b2" font-family="monospace" font-size="13">o2</text>
+  <text x="478" y="368" fill="#cbd5e1" font-family="monospace" font-size="17" font-weight="bold">k2 : v2</text>
+  <rect x="454" y="412" width="382" height="48" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="478" y="434" fill="#9aa6b2" font-family="monospace" font-size="13">o3</text>
+  <text x="478" y="452" fill="#cbd5e1" font-family="monospace" font-size="17" font-weight="bold">k3 : v3</text>
+  <text x="645" y="502" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">sorted by key &#8594; binary-searchable</text>
+
+  <!-- thin yellow arrows from each index entry to matching record -->
+  <path d="M384 268 L 450 268" fill="none" stroke="#ffff99" stroke-width="2" marker-end="url(#st-y)"/>
+  <path d="M384 352 L 450 352" fill="none" stroke="#ffff99" stroke-width="2" marker-end="url(#st-y)"/>
+  <path d="M384 436 L 450 436" fill="none" stroke="#ffff99" stroke-width="2" marker-end="url(#st-y)"/>
+
+  <!-- SSTable file glyph (tall narrow rounded rect) -->
+  <rect x="372" y="560" width="68" height="110" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <rect x="372" y="560" width="68" height="14" rx="7" fill="#ffff99"/>
+  <rect x="380" y="582" width="52" height="20" rx="4" fill="#0f2417" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="406" y="597" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="11" font-weight="bold">index</text>
+  <rect x="380" y="608" width="52" height="14" rx="3" fill="#16191e" stroke="#5b6470" stroke-width="1.2"/>
+  <rect x="380" y="626" width="52" height="14" rx="3" fill="#16191e" stroke="#5b6470" stroke-width="1.2"/>
+  <rect x="380" y="644" width="52" height="14" rx="3" fill="#16191e" stroke="#5b6470" stroke-width="1.2"/>
+  <text x="406" y="688" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14" font-weight="bold">001.sst</text>
+
+  <!-- RIGHT note: GET-inside-one-file path -->
+  <rect x="888" y="158" width="248" height="222" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="912" y="190" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">GET inside one file</text>
+  <g font-family="sans-serif" font-size="14" fill="#cbd5e1">
+    <text x="912" y="222"><tspan fill="#8aff8a" font-weight="bold">1.</tspan> look key up in this</text>
+    <text x="932" y="242">file's index &#8594; offset</text>
+    <text x="912" y="272"><tspan fill="#8aff8a" font-weight="bold">2.</tspan> seek to that offset</text>
+    <text x="912" y="302"><tspan fill="#8aff8a" font-weight="bold">3.</tspan> read the record</text>
+  </g>
+  <text x="912" y="338" fill="#9aa6b2" font-family="sans-serif" font-size="13">one index lookup +</text>
+  <text x="912" y="356" fill="#9aa6b2" font-family="sans-serif" font-size="13">one seek-read, like Bitcask</text>
+
+  <!-- note: per-file on disk -->
+  <rect x="888" y="396" width="248" height="132" rx="12" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="912" y="426" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">but the index is...</text>
+  <text x="912" y="452" fill="#cbd5e1" font-family="sans-serif" font-size="13"><tspan fill="#ffff99" font-weight="bold">PER-FILE</tspan>, and lives on disk</text>
+  <text x="912" y="472" fill="#cbd5e1" font-family="sans-serif" font-size="13">WITH the file &#8212; not one</text>
+  <text x="912" y="492" fill="#cbd5e1" font-family="sans-serif" font-size="13">giant in-RAM index for</text>
+  <text x="912" y="512" fill="#cbd5e1" font-family="sans-serif" font-size="13">all keys.</text>
+
+  <!-- SECOND note: sparse index -->
+  <rect x="80" y="548" width="784" height="74" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="104" y="578" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">Sorted &#8594; the index can be SPARSE</text>
+  <text x="104" y="604" fill="#cbd5e1" font-family="sans-serif" font-size="14">one entry every N records + binary search within the block &#8212; so the index stays tiny even for a big file.</text>
+
+  <!-- BOTTOM caption (green) -->
+  <rect x="80" y="640" width="1056" height="44" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="608" y="668" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Keys are on disk now (in each file's index), not all in RAM &#8212; that's how we broke Bitcask's memory ceiling.</text>
+</svg>

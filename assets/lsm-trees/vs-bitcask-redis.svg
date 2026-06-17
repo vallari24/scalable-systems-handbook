@@ -1,0 +1,118 @@
+<svg width="1180" height="720" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="vc-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="vc-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="720" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">LSM vs Bitcask vs Redis &#8212; and When to Use It</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">same fast writes, but the index lives on <tspan fill="#ffff99" font-weight="bold">disk</tspan> &#8212; so keys are bounded by disk, not RAM</text>
+
+  <!-- ===================== PANEL 1: vs Bitcask ===================== -->
+  <rect x="44" y="104" width="356" height="436" rx="12" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="222" y="138" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">vs Bitcask</text>
+
+  <!-- header row -->
+  <rect x="68" y="156" width="148" height="40" rx="8" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="142" y="181" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">Bitcask</text>
+  <rect x="228" y="156" width="148" height="40" rx="8" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="302" y="181" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">LSM</text>
+
+  <!-- row: index location -->
+  <rect x="68" y="202" width="148" height="84" rx="8" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="142" y="226" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13.5" font-weight="bold">keys MEMORY-bound</text>
+  <text x="142" y="248" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">every key's index</text>
+  <text x="142" y="265" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">in RAM</text>
+  <text x="142" y="280" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5" font-weight="bold">RAM is the ceiling</text>
+
+  <rect x="228" y="202" width="148" height="84" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="302" y="226" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">keys DISK-bound</text>
+  <text x="302" y="248" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">RAM holds only</text>
+  <text x="302" y="265" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">memtable + per-file</text>
+  <text x="302" y="280" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Bloom filters</text>
+
+  <!-- row: read cost -->
+  <rect x="68" y="292" width="148" height="78" rx="8" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="142" y="316" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">O(1) reads</text>
+  <text x="142" y="338" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">one lookup +</text>
+  <text x="142" y="355" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">one seek</text>
+
+  <rect x="228" y="292" width="148" height="78" rx="8" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="302" y="314" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">reads cost a bit more</text>
+  <text x="302" y="334" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">memtable + Bloom-</text>
+  <text x="302" y="350" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">guarded SSTable probes</text>
+  <text x="302" y="366" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">far more keys / machine</text>
+
+  <!-- verdict -->
+  <rect x="68" y="386" width="308" height="138" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="222" y="412" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Verdict</text>
+  <text x="222" y="440" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">comparable write cost, but LSM</text>
+  <text x="222" y="460" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">lifts Bitcask's memory ceiling &#8212;</text>
+  <text x="222" y="486" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">keys bounded by disk,</text>
+  <text x="222" y="508" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">not RAM</text>
+
+  <!-- ===================== PANEL 2: why not just Redis? ===================== -->
+  <rect x="412" y="104" width="356" height="436" rx="12" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="590" y="138" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">why not just Redis?</text>
+
+  <!-- Redis problem box -->
+  <rect x="436" y="158" width="308" height="170" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="590" y="184" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">Redis: all data in RAM</text>
+  <text x="590" y="212" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">keeps <tspan fill="#ff8a8a" font-weight="bold">ALL</tspan> data in RAM</text>
+  <text x="590" y="232" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8594; the same memory wall</text>
+  <text x="590" y="266" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">a key with a <tspan fill="#ff8a8a" font-weight="bold">TTL expires</tspan></text>
+  <text x="590" y="286" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">&#8594; data gone</text>
+  <text x="590" y="312" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">volatile by design</text>
+
+  <!-- LSM advantage box -->
+  <rect x="436" y="342" width="308" height="182" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="590" y="368" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">LSM: RAM + durable disk</text>
+  <text x="590" y="396" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">keeps <tspan fill="#8aff8a" font-weight="bold">hot / recent</tspan> data in RAM</text>
+  <text x="590" y="416" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">(the memtable)</text>
+  <text x="590" y="444" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">+ the rest durably <tspan fill="#ffff99" font-weight="bold">on disk</tspan></text>
+  <text x="590" y="478" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">persists beyond RAM size</text>
+  <text x="590" y="500" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">and beyond a TTL</text>
+
+  <!-- ===================== PANEL 3: who uses LSM + use cases ===================== -->
+  <rect x="780" y="104" width="356" height="436" rx="12" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="958" y="138" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">who uses LSM + use cases</text>
+
+  <!-- engines -->
+  <text x="804" y="166" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Engines</text>
+  <rect x="804" y="176" width="100" height="32" rx="7" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="854" y="197" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">RocksDB</text>
+  <rect x="912" y="176" width="100" height="32" rx="7" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="962" y="197" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">LevelDB</text>
+  <rect x="1020" y="176" width="92" height="32" rx="7" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="1066" y="197" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12.5">BadgerDB</text>
+  <rect x="804" y="214" width="104" height="32" rx="7" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="856" y="235" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">Cassandra</text>
+  <rect x="916" y="214" width="80" height="32" rx="7" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="956" y="235" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">HBase</text>
+
+  <!-- use-case spotlight -->
+  <rect x="804" y="262" width="308" height="208" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="958" y="288" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Spotlight: ad-tech / RTB</text>
+  <text x="958" y="314" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">a bid lives <tspan fill="#ff8bd2" font-weight="bold">~4 min</tspan> then must persist</text>
+  <text x="958" y="338" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">in Redis the key would <tspan fill="#ff8a8a" font-weight="bold">expire</tspan></text>
+  <text x="958" y="356" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">and vanish, but an LSM serves</text>
+  <text x="958" y="380" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">the <tspan fill="#8aff8a" font-weight="bold">hot recent bid fast</tspan> from the</text>
+  <text x="958" y="398" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">memtable <tspan fill="#8aff8a" font-weight="bold">AND</tspan> keeps it</text>
+  <text x="958" y="416" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13"><tspan fill="#ffff99" font-weight="bold">durable on disk</tspan></text>
+  <rect x="828" y="430" width="260" height="30" rx="7" fill="#0f2417" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="958" y="450" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">read-after-write on recent data</text>
+
+  <text x="958" y="492" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">Pattern named: data that must</text>
+  <text x="958" y="510" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">also survive</text>
+
+  <!-- ===================== BOTTOM CAPTION ===================== -->
+  <rect x="44" y="560" width="1092" height="120" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="590" y="600" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">When LSM wins</text>
+  <text x="590" y="634" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">LSM wins when recent data is <tspan fill="#8aff8a" font-weight="bold">hot</tspan> AND everything must <tspan fill="#ffff99" font-weight="bold">persist</tspan>,</text>
+  <text x="590" y="660" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">at a scale too large to keep <tspan fill="#ff8a8a" font-weight="bold">every key in RAM</tspan>.</text>
+</svg>

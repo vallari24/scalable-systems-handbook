@@ -1,0 +1,104 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="fp-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="fp-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+
+  <text x="590" y="48" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Periodic Flush and Capacity Planning</text>
+  <text x="590" y="80" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">flush the in-memory buffer to disk when <tspan fill="#ff8bd2" font-weight="bold">size</tspan> or <tspan fill="#93c5fd" font-weight="bold">time</tspan> fires &#8212; then size the buffer from a benchmark</text>
+
+  <!-- TOP: timeline -->
+  <text x="60" y="124" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">Periodic flush timeline</text>
+
+  <!-- timeline axis -->
+  <line x1="80" y1="172" x2="1010" y2="172" stroke="#7c8694" stroke-width="2.5"/>
+  <path d="M1010 172 L1000 167 L1000 177 Z" fill="#7c8694"/>
+  <!-- evenly spaced flush ticks -->
+  <g>
+    <line x1="170" y1="158" x2="170" y2="186" stroke="#93c5fd" stroke-width="3"/>
+    <line x1="320" y1="158" x2="320" y2="186" stroke="#93c5fd" stroke-width="3"/>
+    <line x1="470" y1="158" x2="470" y2="186" stroke="#93c5fd" stroke-width="3"/>
+    <line x1="620" y1="158" x2="620" y2="186" stroke="#93c5fd" stroke-width="3"/>
+    <line x1="770" y1="158" x2="770" y2="186" stroke="#93c5fd" stroke-width="3"/>
+    <line x1="920" y1="158" x2="920" y2="186" stroke="#93c5fd" stroke-width="3"/>
+  </g>
+  <text x="170" y="210" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">flush</text>
+  <text x="320" y="210" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">flush</text>
+  <text x="470" y="210" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">flush</text>
+  <text x="620" y="210" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">flush</text>
+  <text x="770" y="210" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="bold">flush</text>
+  <text x="1015" y="160" fill="#9aa6b2" font-family="sans-serif" font-size="13">time &#8594;</text>
+
+  <!-- interval annotation between two ticks -->
+  <line x1="320" y1="240" x2="470" y2="240" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="320" y1="234" x2="320" y2="246" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="470" y1="234" x2="470" y2="246" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="395" y="232" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13" font-weight="bold">t minutes</text>
+  <text x="395" y="262" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">every t minutes the in-memory buffer is</text>
+  <text x="395" y="280" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">flushed to disk at once</text>
+
+  <!-- trigger note (neutral box on the right of timeline) -->
+  <rect x="710" y="232" width="410" height="64" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="730" y="258" fill="#cbd5e1" font-family="sans-serif" font-size="13">flush when <tspan fill="#ffffff" font-weight="bold">EITHER</tspan> trigger fires first &#8212;</text>
+  <text x="730" y="278" fill="#cbd5e1" font-family="sans-serif" font-size="13"><tspan fill="#ff8bd2" font-weight="bold">size threshold</tspan> (buffer hits its byte cap) <tspan fill="#93c5fd" font-weight="bold">OR time</tspan> (t min)</text>
+
+  <!-- MIDDLE: capacity math (yellow) -->
+  <rect x="60" y="322" width="640" height="240" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="84" y="354" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">capacity math</text>
+
+  <rect x="84" y="372" width="592" height="44" rx="8" fill="#111317" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="104" y="400" fill="#ffff99" font-family="monospace" font-size="15" font-weight="bold">time-to-fill = RAM buffer size &#247; ingestion rate</text>
+
+  <rect x="84" y="424" width="592" height="44" rx="8" fill="#111317" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="104" y="452" fill="#ffff99" font-family="monospace" font-size="15" font-weight="bold">ingestion rate = write throughput &#215; avg payload size</text>
+
+  <text x="84" y="494" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">worked example</text>
+  <text x="84" y="516" fill="#cbd5e1" font-family="sans-serif" font-size="14">64 MB buffer at 8 MB/s &#8594; fills in 8 s, so flush</text>
+  <text x="84" y="536" fill="#cbd5e1" font-family="sans-serif" font-size="14">on <tspan fill="#ff8bd2" font-weight="bold">size</tspan>, not the timer.</text>
+
+  <!-- caption under capacity math -->
+  <text x="60" y="588" fill="#9aa6b2" font-family="sans-serif" font-size="13">size the RAM buffer and pick t from a benchmark of real ingestion + hardware</text>
+  <text x="60" y="606" fill="#9aa6b2" font-family="sans-serif" font-size="13">tolerance, not by guessing.</text>
+
+  <!-- MIDDLE-RIGHT placeholder kept open; SLA callout sits bottom-right -->
+
+  <!-- BOTTOM-LEFT: watch for signals -->
+  <rect x="60" y="630" width="540" height="108" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="84" y="658" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">watch for signals</text>
+  <!-- load graph with spike -->
+  <polyline points="84,720 120,716 156,720 192,714 228,718 252,700 268,664 284,700 320,716 360,718 400,714" fill="none" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="268" y="654" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12" font-weight="bold">spike</text>
+  <text x="420" y="678" fill="#cbd5e1" font-family="sans-serif" font-size="13">marketing campaign</text>
+  <text x="420" y="700" fill="#cbd5e1" font-family="sans-serif" font-size="13">Prime Day</text>
+  <text x="420" y="722" fill="#cbd5e1" font-family="sans-serif" font-size="13">product launch</text>
+  <text x="84" y="734" fill="#9aa6b2" font-family="sans-serif" font-size="12">predictable spikes you pre-provision RAM for</text>
+
+  <!-- BOTTOM-RIGHT / RIGHT: SLA callout (yellow) -->
+  <rect x="720" y="322" width="400" height="416" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="744" y="356" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">SLA &#8212; a tuning knob</text>
+  <text x="744" y="392" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ffff99" font-weight="bold">SLA = Service Level Agreement:</tspan></text>
+  <text x="744" y="414" fill="#cbd5e1" font-family="sans-serif" font-size="14">your promise on latency / durability /</text>
+  <text x="744" y="434" fill="#cbd5e1" font-family="sans-serif" font-size="14">availability.</text>
+
+  <line x1="744" y1="456" x2="1096" y2="456" stroke="#3a3a28" stroke-width="1.5"/>
+
+  <text x="744" y="486" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">flush more often</text>
+  <text x="744" y="510" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; less data at risk on a crash</text>
+  <text x="764" y="530" fill="#8aff8a" font-family="sans-serif" font-size="14">(stronger durability)</text>
+  <text x="744" y="556" fill="#ff8a8a" font-family="sans-serif" font-size="14">&#8226; but more disk I/O</text>
+
+  <line x1="744" y1="578" x2="1096" y2="578" stroke="#3a3a28" stroke-width="1.5"/>
+
+  <text x="744" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="14">It's a tuning knob: trade durability</text>
+  <text x="744" y="628" fill="#cbd5e1" font-family="sans-serif" font-size="14">against I/O cost by choosing how</text>
+  <text x="744" y="648" fill="#cbd5e1" font-family="sans-serif" font-size="14">often you flush.</text>
+
+  <rect x="744" y="672" width="352" height="48" rx="8" fill="#111317" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="764" y="702" fill="#ffff99" font-family="monospace" font-size="13" font-weight="bold">durability  &#8645;  I/O cost</text>
+</svg>

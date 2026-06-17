@@ -1,0 +1,106 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="w-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="w-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="w-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Durability: The Write-Ahead Log</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">write to the durable <tspan fill="#ffff99" font-weight="bold">log</tspan> FIRST, then the <tspan fill="#ff8bd2" font-weight="bold">memtable</tspan> &#8212; that's write-ahead</text>
+
+  <!-- CENTER write path -->
+  <!-- incoming op -->
+  <rect x="478" y="112" width="224" height="56" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="590" y="138" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="16" font-weight="bold">PUT / DEL op arrives</text>
+  <text x="590" y="158" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">goes two places, in order</text>
+
+  <!-- STEP 1: WAL append (yellow) -->
+  <text x="430" y="208" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">STEP 1</text>
+  <rect x="330" y="222" width="200" height="240" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <rect x="330" y="222" width="200" height="14" rx="6" fill="#ffff99"/>
+  <text x="430" y="258" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">WAL file on disk</text>
+  <text x="430" y="277" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">append-only log</text>
+  <rect x="348" y="292" width="164" height="34" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="430" y="314" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">PUT k1 v1</text>
+  <rect x="348" y="332" width="164" height="34" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="430" y="354" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">DEL k1</text>
+  <rect x="348" y="372" width="164" height="34" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="430" y="394" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">PUT k1 v2</text>
+  <rect x="348" y="412" width="164" height="34" rx="6" fill="#16191e" stroke="#5b6470" stroke-width="2"/>
+  <text x="430" y="434" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">PUT k2 v3</text>
+
+  <!-- STEP 2: memtable (pink) -->
+  <text x="700" y="208" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">STEP 2</text>
+  <rect x="610" y="222" width="180" height="120" rx="11" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="700" y="256" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">memtable</text>
+  <text x="700" y="278" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">in RAM</text>
+  <text x="700" y="306" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">apply the op to the</text>
+  <text x="700" y="324" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">sorted in-memory map</text>
+
+  <!-- arrows: op -> step1 (yellow) -->
+  <path d="M530 154 C 470 170, 430 190, 430 218" fill="none" stroke="#ffff99" stroke-width="2.5" marker-end="url(#w-y)"/>
+  <text x="408" y="190" text-anchor="end" fill="#ffff99" font-family="sans-serif" font-size="12" font-weight="bold">1. append</text>
+  <!-- arrows: op -> step2 (pink) -->
+  <path d="M650 168 C 690 185, 700 195, 700 218" fill="none" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#w-p)"/>
+  <text x="716" y="190" fill="#ff8bd2" font-family="sans-serif" font-size="12" font-weight="bold">2. apply</text>
+
+  <!-- LEFT: crash-recovery cycle (blue) -->
+  <rect x="44" y="222" width="262" height="296" rx="11" fill="#16203a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="68" y="252" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">Crash recovery</text>
+  <text x="68" y="284" fill="#cbd5e1" font-family="sans-serif" font-size="13">On crash / reboot the</text>
+  <text x="68" y="304" fill="#cbd5e1" font-family="sans-serif" font-size="13">memtable (RAM) is <tspan fill="#ff8a8a" font-weight="bold">empty</tspan>.</text>
+  <text x="68" y="338" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">&#8595; REPLAY the WAL</text>
+  <text x="68" y="358" fill="#cbd5e1" font-family="sans-serif" font-size="13">read it back from disk,</text>
+  <text x="68" y="378" fill="#cbd5e1" font-family="sans-serif" font-size="13">re-apply each logged op</text>
+  <text x="68" y="412" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">&#8595; REBUILD</text>
+  <text x="68" y="432" fill="#cbd5e1" font-family="sans-serif" font-size="13">the exact pre-crash</text>
+  <text x="68" y="452" fill="#cbd5e1" font-family="sans-serif" font-size="13">memtable, op for op.</text>
+  <rect x="68" y="468" width="214" height="36" rx="8" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="175" y="492" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">zero data loss</text>
+
+  <!-- arrow WAL -> recovery (replay) -->
+  <path d="M328 360 C 318 360, 312 360, 308 360" fill="none" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#w-b)"/>
+
+  <!-- RIGHT: truncation (blue, background/flush) -->
+  <rect x="874" y="222" width="262" height="296" rx="11" fill="#16203a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="898" y="252" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">Truncation</text>
+  <text x="898" y="284" fill="#cbd5e1" font-family="sans-serif" font-size="13">When the memtable is</text>
+  <text x="898" y="304" fill="#cbd5e1" font-family="sans-serif" font-size="13"><tspan fill="#93c5fd" font-weight="bold">flushed</tspan> to an <tspan fill="#ffff99" font-weight="bold">SSTable</tspan>,</text>
+  <text x="898" y="324" fill="#cbd5e1" font-family="sans-serif" font-size="13">those writes are durable</text>
+  <text x="898" y="344" fill="#cbd5e1" font-family="sans-serif" font-size="13">in the SSTable.</text>
+  <text x="898" y="378" fill="#cbd5e1" font-family="sans-serif" font-size="13">So the WAL covering them</text>
+  <text x="898" y="398" fill="#cbd5e1" font-family="sans-serif" font-size="13">is no longer needed &#8594;</text>
+  <rect x="898" y="412" width="214" height="36" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="1005" y="436" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">truncate to zero bytes</text>
+  <text x="898" y="476" fill="#cbd5e1" font-family="sans-serif" font-size="13">The WAL only holds ops not</text>
+  <text x="898" y="496" fill="#cbd5e1" font-family="sans-serif" font-size="13">yet flushed &#8212; <tspan fill="#8aff8a" font-weight="bold">it stays small.</tspan></text>
+
+  <!-- arrow memtable -> truncation/SSTable (flush, blue) -->
+  <path d="M792 300 C 840 300, 850 320, 872 332" fill="none" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#w-b)"/>
+  <text x="840" y="288" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="bold">flush</text>
+
+  <!-- BOTTOM cost / trade panel (red -> yellow) -->
+  <rect x="44" y="560" width="1092" height="172" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="68" y="592" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">The cost: durability is a CONFIG / SLA knob</text>
+  <text x="68" y="620" fill="#cbd5e1" font-family="sans-serif" font-size="14">For <tspan fill="#ff8a8a" font-weight="bold">100% durability</tspan> the WAL must be <tspan fill="#ff8a8a" font-weight="bold">fsync'd to disk on EVERY write</tspan> = a disk write per op &#8212; this erases the</text>
+  <text x="68" y="642" fill="#cbd5e1" font-family="sans-serif" font-size="14">"writes never touch disk" speed win. So you tune where you sit on the spectrum:</text>
+
+  <!-- spectrum -->
+  <rect x="68" y="666" width="500" height="48" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="318" y="688" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">fsync-every-write</text>
+  <text x="318" y="706" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">zero loss, slower</text>
+
+  <text x="592" y="696" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="22" font-weight="bold">&#10231;</text>
+
+  <rect x="616" y="666" width="496" height="48" rx="10" fill="#16203a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="864" y="688" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">batched / async fsync</text>
+  <text x="864" y="706" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">tiny loss window, faster</text>
+</svg>

@@ -1,0 +1,116 @@
+<svg width="1180" height="720" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="bf-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="bf-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="bf-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="720" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">The Bloom Filter: "Definitely No" or "Maybe"</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a tiny bit array that can rule a key out for certain &#8212; and save a wasted disk read</text>
+
+  <!-- INSERT explanation + worked inserts (LEFT) -->
+  <text x="60" y="120" fill="#ff8bd2" font-family="sans-serif" font-size="19" font-weight="bold">INSERT key</text>
+  <text x="60" y="142" fill="#9aa6b2" font-family="sans-serif" font-size="14">hash to bit positions, set those bits to 1</text>
+
+  <rect x="60" y="158" width="300" height="178" rx="11" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="80" y="186" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Worked inserts</text>
+  <text x="80" y="218" fill="#cbd5e1" font-family="monospace" font-size="15"><tspan fill="#ff8bd2" font-weight="bold">Apple</tspan>  &#8594; pos 3  (set bit 3=1)</text>
+  <text x="80" y="252" fill="#cbd5e1" font-family="monospace" font-size="15"><tspan fill="#ff8bd2" font-weight="bold">Banana</tspan> &#8594; pos 2  (set bit 2=1)</text>
+  <text x="80" y="286" fill="#cbd5e1" font-family="monospace" font-size="15"><tspan fill="#ff8bd2" font-weight="bold">Cat</tspan>    &#8594; pos 3  (already 1)</text>
+  <text x="80" y="320" fill="#9aa6b2" font-family="sans-serif" font-size="13">result below: bits 2 and 3 are set</text>
+
+  <!-- BIT ARRAY (8 slots) -->
+  <text x="430" y="120" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">Bit array &#183; 8 slots</text>
+  <text x="430" y="142" fill="#9aa6b2" font-family="sans-serif" font-size="14">all start at 0; after the inserts, bits 2 &amp; 3 = 1</text>
+
+  <!-- slots: 8 cells of width 80, starting x=430, y=170, h=70 -->
+  <!-- slot 0 -->
+  <rect x="430" y="170" width="80" height="70" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="470" y="215" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="26" font-weight="bold">0</text>
+  <text x="470" y="262" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="14">idx 0</text>
+  <!-- slot 1 -->
+  <rect x="514" y="170" width="80" height="70" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="554" y="215" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="26" font-weight="bold">0</text>
+  <text x="554" y="262" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="14">idx 1</text>
+  <!-- slot 2 = 1 (pink, set by Banana) -->
+  <rect x="598" y="170" width="80" height="70" rx="9" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="638" y="215" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="26" font-weight="bold">1</text>
+  <text x="638" y="262" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="14" font-weight="bold">idx 2</text>
+  <!-- slot 3 = 1 (pink, set by Apple/Cat) -->
+  <rect x="682" y="170" width="80" height="70" rx="9" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="722" y="215" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="26" font-weight="bold">1</text>
+  <text x="722" y="262" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="14" font-weight="bold">idx 3</text>
+  <!-- slot 4 -->
+  <rect x="766" y="170" width="80" height="70" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="806" y="215" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="26" font-weight="bold">0</text>
+  <text x="806" y="262" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="14">idx 4</text>
+  <!-- slot 5 -->
+  <rect x="850" y="170" width="80" height="70" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="890" y="215" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="26" font-weight="bold">0</text>
+  <text x="890" y="262" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="14">idx 5</text>
+  <!-- slot 6 (queried by dog) -->
+  <rect x="934" y="170" width="80" height="70" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="974" y="215" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="26" font-weight="bold">0</text>
+  <text x="974" y="262" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="14">idx 6</text>
+  <!-- slot 7 -->
+  <rect x="1018" y="170" width="80" height="70" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="1058" y="215" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="26" font-weight="bold">0</text>
+  <text x="1058" y="262" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="14">idx 7</text>
+
+  <!-- QUERIES -->
+  <text x="60" y="392" fill="#cbd5e1" font-family="sans-serif" font-size="19" font-weight="bold">Two queries</text>
+  <text x="60" y="414" fill="#9aa6b2" font-family="sans-serif" font-size="14">hash the key, then read the bit it points at</text>
+
+  <!-- Query dog: DEFINITE NO (green) -->
+  <rect x="60" y="430" width="520" height="118" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="80" y="460" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">is dog present?</text>
+  <text x="80" y="488" fill="#cbd5e1" font-family="monospace" font-size="15">dog &#8594; pos 6 &#183; bit[6] = <tspan fill="#8aff8a" font-weight="bold">0</tspan></text>
+  <text x="80" y="514" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">&#8594; DEFINITE NO</text>
+  <text x="80" y="536" fill="#cbd5e1" font-family="sans-serif" font-size="13">if any hashed bit is 0, the key was never inserted.</text>
+  <!-- arrow from slot 6 to dog query (descends right of header, lands on box top) -->
+  <path d="M974 242 C 974 320, 470 320, 430 426" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#bf-g)"/>
+
+  <!-- Query elephant: MAYBE (pink) -->
+  <rect x="60" y="560" width="520" height="118" rx="11" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="80" y="590" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">is elephant present?</text>
+  <text x="80" y="618" fill="#cbd5e1" font-family="monospace" font-size="15">elephant &#8594; pos 2 &#183; bit[2] = <tspan fill="#ff8bd2" font-weight="bold">1</tspan></text>
+  <text x="80" y="644" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">&#8594; MAYBE</text>
+  <text x="80" y="666" fill="#cbd5e1" font-family="sans-serif" font-size="13">bit is set, but maybe by a different key (collision / false positive).</text>
+  <!-- arrow from slot 2 down the gap, into elephant box right edge -->
+  <path d="M638 242 C 590 300, 588 420, 588 560 C 588 600, 586 612, 582 614" fill="none" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#bf-p)"/>
+
+  <!-- TWO guarantees boxed (center column) -->
+  <rect x="600" y="430" width="270" height="100" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="620" y="460" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">returns NO</text>
+  <text x="620" y="488" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8594; DEFINITELY not present</text>
+  <text x="620" y="512" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">(no false negatives)</text>
+
+  <rect x="600" y="542" width="270" height="100" rx="11" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="620" y="572" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">returns YES</text>
+  <text x="620" y="600" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8594; POSSIBLY present</text>
+  <text x="620" y="624" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">(false positives allowed)</text>
+
+  <!-- RIGHT panel: why space-efficient (yellow) -->
+  <rect x="890" y="430" width="230" height="212" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="910" y="460" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Why it's space-</text>
+  <text x="910" y="482" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">efficient</text>
+  <text x="910" y="512" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">Stores <tspan fill="#ffff99" font-weight="bold">no keys</tspan> and <tspan fill="#ffff99" font-weight="bold">no</tspan></text>
+  <text x="910" y="531" fill="#cbd5e1" font-family="sans-serif" font-size="13.5"><tspan fill="#ffff99" font-weight="bold">values</tspan> &#8212; only a bit array</text>
+  <text x="910" y="550" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">+ a few hash functions.</text>
+  <text x="910" y="578" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8776;10 bits/key for ~1%</text>
+  <text x="910" y="597" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">false-positive rate &#8212;</text>
+  <text x="910" y="616" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">orders of magnitude</text>
+  <text x="910" y="635" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">smaller than a set; <tspan fill="#ffff99" font-weight="bold">fits in RAM</tspan>.</text>
+
+  <!-- BOTTOM caption -->
+  <rect x="60" y="686" width="1060" height="0.1" fill="none"/>
+  <text x="590" y="704" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">A Bloom filter trades exactness for size &#8212; it can say <tspan fill="#ff8bd2" font-weight="bold">"maybe yes,"</tspan> but when it says <tspan fill="#8aff8a" font-weight="bold">"no"</tspan> it's always right.</text>
+</svg>

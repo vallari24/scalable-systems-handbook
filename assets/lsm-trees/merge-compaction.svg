@@ -1,0 +1,131 @@
+<svg width="1180" height="720" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="mc-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="mc-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="mc-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="720" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Merge and Compaction: Fewer Files to Search</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">many small sorted files are merged into one &#8212; <tspan fill="#93c5fd" font-weight="bold">in the background</tspan>, dropping stale and dead entries</text>
+
+  <!-- LEFT: input SSTables -->
+  <text x="60" y="116" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">Immutable input SSTables</text>
+  <text x="60" y="138" fill="#9aa6b2" font-family="sans-serif" font-size="13">on disk &#183; each internally sorted by key</text>
+
+  <!-- SSTable file A -->
+  <rect x="60" y="158" width="110" height="232" rx="11" fill="#16203a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="60" y="158" width="110" height="16" rx="8" fill="#93c5fd"/>
+  <text x="115" y="194" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">SSTable A</text>
+  <text x="86" y="222" fill="#cbd5e1" font-family="monospace" font-size="14">a : v1</text>
+  <text x="68" y="226" fill="#ffff99" font-family="monospace" font-size="13" font-weight="bold">&#9656;</text>
+  <text x="86" y="252" fill="#cbd5e1" font-family="monospace" font-size="14">c : v1</text>
+  <text x="86" y="282" fill="#cbd5e1" font-family="monospace" font-size="14">f : v1</text>
+  <text x="86" y="312" fill="#cbd5e1" font-family="monospace" font-size="14">k : v1</text>
+
+  <!-- SSTable file B -->
+  <rect x="184" y="158" width="110" height="232" rx="11" fill="#16203a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="184" y="158" width="110" height="16" rx="8" fill="#93c5fd"/>
+  <text x="239" y="194" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">SSTable B</text>
+  <text x="210" y="222" fill="#cbd5e1" font-family="monospace" font-size="14">c : v2</text>
+  <text x="192" y="226" fill="#ffff99" font-family="monospace" font-size="13" font-weight="bold">&#9656;</text>
+  <text x="210" y="252" fill="#cbd5e1" font-family="monospace" font-size="14">d : v1</text>
+  <text x="210" y="282" fill="#cbd5e1" font-family="monospace" font-size="14">k : &#9760;tomb</text>
+  <text x="210" y="312" fill="#cbd5e1" font-family="monospace" font-size="14">m : v1</text>
+
+  <!-- SSTable file C -->
+  <rect x="308" y="158" width="110" height="232" rx="11" fill="#16203a" stroke="#93c5fd" stroke-width="2.5"/>
+  <rect x="308" y="158" width="110" height="16" rx="8" fill="#93c5fd"/>
+  <text x="363" y="194" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">SSTable C</text>
+  <text x="334" y="222" fill="#cbd5e1" font-family="monospace" font-size="14">a : v2</text>
+  <text x="316" y="226" fill="#ffff99" font-family="monospace" font-size="13" font-weight="bold">&#9656;</text>
+  <text x="334" y="252" fill="#cbd5e1" font-family="monospace" font-size="14">f : v2</text>
+  <text x="334" y="282" fill="#cbd5e1" font-family="monospace" font-size="14">p : v1</text>
+  <text x="334" y="312" fill="#cbd5e1" font-family="monospace" font-size="14">z : v1</text>
+
+  <text x="239" y="362" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">one read pointer per file, advancing together</text>
+
+  <!-- MERGE step box -->
+  <rect x="468" y="190" width="180" height="168" rx="12" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="558" y="222" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Merge step</text>
+  <text x="558" y="252" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">pick the smallest key</text>
+  <text x="558" y="272" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">across the pointers,</text>
+  <text x="558" y="292" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">emit it, advance it</text>
+  <text x="558" y="328" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">k-way merge, like</text>
+  <text x="558" y="346" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">merging sorted lists</text>
+
+  <!-- arrows from inputs to merge -->
+  <path d="M422 240 C 444 256, 448 270, 466 274" fill="none" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#mc-b)"/>
+  <path d="M422 274 L 466 274" fill="none" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#mc-b)"/>
+  <path d="M422 300 C 444 290, 448 280, 466 276" fill="none" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#mc-b)"/>
+
+  <!-- O(n) merge label -->
+  <text x="558" y="408" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">O(n) merge &#8212; inputs already sorted</text>
+  <text x="558" y="428" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">&#8594; a linear merge-sort pass</text>
+
+  <!-- RIGHT: output SSTable -->
+  <text x="700" y="116" fill="#ffff99" font-family="sans-serif" font-size="19" font-weight="bold">Output SSTable</text>
+  <text x="700" y="138" fill="#9aa6b2" font-family="sans-serif" font-size="13">one smaller, dense, still-sorted file</text>
+
+  <rect x="700" y="158" width="130" height="244" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <rect x="700" y="158" width="130" height="16" rx="8" fill="#ffff99"/>
+  <text x="765" y="194" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">merged</text>
+  <text x="720" y="222" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">a : v2</text>
+  <text x="720" y="250" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">c : v2</text>
+  <text x="720" y="278" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">d : v1</text>
+  <text x="720" y="306" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">f : v2</text>
+  <text x="720" y="334" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">m : v1</text>
+  <text x="720" y="362" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">p : v1</text>
+  <text x="720" y="390" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">z : v1</text>
+
+  <path d="M650 274 L 696 274" fill="none" stroke="#ffff99" stroke-width="2.5" marker-end="url(#mc-y)"/>
+  <text x="765" y="424" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">replaces all inputs</text>
+
+  <!-- TWO skip rules (red) -->
+  <rect x="60" y="418" width="600" height="62" rx="11" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="80" y="444" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">Stale entries skipped</text>
+  <text x="80" y="468" fill="#cbd5e1" font-family="sans-serif" font-size="13">for a key with several versions (e.g. <tspan fill="#ff8a8a" font-weight="bold">a:v1</tspan>, <tspan fill="#8aff8a" font-weight="bold">a:v2</tspan>), only the newest survives.</text>
+
+  <rect x="60" y="492" width="600" height="62" rx="11" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="80" y="518" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">Tombstoned entries skipped</text>
+  <text x="80" y="542" fill="#cbd5e1" font-family="sans-serif" font-size="13">a delete tombstone (<tspan fill="#ff8a8a" font-weight="bold">k:&#9760;</tspan>) + the dead record it shadows are both dropped, reclaiming space.</text>
+
+  <!-- compaction-only-immutable note (blue) -->
+  <rect x="860" y="158" width="270" height="244" rx="11" fill="#16203a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="880" y="188" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">Never blocks live traffic</text>
+  <text x="880" y="216" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">Compaction only touches</text>
+  <text x="880" y="236" fill="#cbd5e1" font-family="sans-serif" font-size="13.5"><tspan fill="#93c5fd" font-weight="bold">immutable</tspan> files, never the live</text>
+  <text x="880" y="256" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">memtable.</text>
+  <text x="880" y="288" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">It runs as a background job,</text>
+  <text x="880" y="308" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">so reads &amp; writes never block</text>
+  <text x="880" y="328" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">and never wait on it.</text>
+  <text x="880" y="364" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">Old inputs are deleted only</text>
+  <text x="880" y="382" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">once the merge is complete.</text>
+
+  <!-- SAWTOOTH graph callout -->
+  <rect x="700" y="448" width="430" height="200" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="720" y="476" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">Number of files over time = a sawtooth</text>
+  <!-- axes -->
+  <line x1="745" y1="496" x2="745" y2="612" stroke="#9aa6b2" stroke-width="1.5"/>
+  <line x1="745" y1="612" x2="1105" y2="612" stroke="#9aa6b2" stroke-width="1.5"/>
+  <text x="730" y="556" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11" transform="rotate(-90 730 556)">files (k)</text>
+  <text x="925" y="632" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">time</text>
+  <!-- sawtooth: climbs (flushes), drops (compaction) -->
+  <polyline points="745,600 775,580 775,560 805,540 805,520 835,500 835,596 865,576 865,556 895,536 895,592 925,572 925,552 955,532 955,512 985,496 985,594 1015,574 1015,554 1045,534 1045,590 1075,570 1075,550 1100,530" fill="none" stroke="#ffff99" stroke-width="2.5"/>
+  <!-- bound line -->
+  <line x1="745" y1="500" x2="1105" y2="500" stroke="#8aff8a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="1100" y="494" text-anchor="end" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">bound on k</text>
+  <text x="765" y="585" fill="#ff8bd2" font-family="sans-serif" font-size="11">climbs: flushes add files</text>
+  <text x="1010" y="568" text-anchor="end" fill="#93c5fd" font-family="sans-serif" font-size="11">drops: compaction</text>
+
+  <!-- BOTTOM caption -->
+  <rect x="60" y="668" width="1070" height="44" rx="11" fill="#15281b" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="595" y="695" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Fewer files = fewer index probes per read; compaction keeps read cost from growing forever.</text>
+</svg>
