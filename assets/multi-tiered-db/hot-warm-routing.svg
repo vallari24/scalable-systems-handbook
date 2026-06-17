@@ -1,0 +1,68 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+  <defs>
+    <marker id="r" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/></marker>
+    <marker id="y" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+    <marker id="c" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+  </defs>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">How does Orders know to read from HOT or WARM?</text>
+  <text x="590" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">a read arrives &#8212; the router must pick a tier before touching a disk</text>
+
+  <!-- read request + router -->
+  <text x="80" y="200" fill="#8aff8a" font-family="monospace" font-size="15">get_order(id)</text>
+  <line x1="200" y1="195" x2="276" y2="195" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#c)"/>
+  <rect x="280" y="160" width="150" height="70" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="355" y="200" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">Router</text>
+
+  <!-- HOT and WARM -->
+  <g>
+    <path d="M980,150 L980,196 A40,12 0 0 0 1060,196 L1060,150" fill="#1c1113" stroke="#ff8a8a" stroke-width="2.5"/>
+    <ellipse cx="1020" cy="150" rx="40" ry="12" fill="#1c1113" stroke="#ff8a8a" stroke-width="2.5"/>
+  </g>
+  <text x="1020" y="186" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">HOT</text>
+  <text x="1020" y="228" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">recent, fast</text>
+
+  <g>
+    <path d="M980,270 L980,316 A40,12 0 0 0 1060,316 L1060,270" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+    <ellipse cx="1020" cy="270" rx="40" ry="12" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  </g>
+  <text x="1020" y="306" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="16" font-weight="bold">WARM</text>
+  <text x="1020" y="348" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">historical</text>
+
+  <!-- four option cards -->
+  <!-- A -->
+  <rect x="60" y="300" width="520" height="100" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="80" y="330" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">A &#183; Age / timestamp threshold  &#9733; default</text>
+  <text x="80" y="356" fill="#cbd5e1" font-family="sans-serif" font-size="14">ID encodes creation time. age &lt; 90d &#8594; HOT, else &#8594; WARM.</text>
+  <text x="80" y="380" fill="#9aa6b2" font-family="sans-serif" font-size="13">no extra lookup, one branch. Use when the cutover age is predictable.</text>
+
+  <!-- B -->
+  <rect x="60" y="416" width="520" height="100" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="80" y="446" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">B &#183; Try HOT, fall back to WARM</text>
+  <text x="80" y="472" fill="#cbd5e1" font-family="sans-serif" font-size="14">look in HOT; on miss, read WARM. Always correct, no clock guess.</text>
+  <text x="80" y="496" fill="#9aa6b2" font-family="sans-serif" font-size="13">costs a wasted HOT lookup on every old read. Use when ages are fuzzy.</text>
+
+  <!-- C -->
+  <rect x="60" y="532" width="520" height="100" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="80" y="562" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">C &#183; Tier flag in a metadata/index table</text>
+  <text x="80" y="588" fill="#cbd5e1" font-family="sans-serif" font-size="14">a tiny table maps id &#8594; current tier; updated when data moves.</text>
+  <text x="80" y="612" fill="#9aa6b2" font-family="sans-serif" font-size="13">exact, but one more lookup + must stay in sync. Use when data moves irregularly.</text>
+
+  <!-- D -->
+  <rect x="600" y="416" width="520" height="100" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="620" y="446" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">D &#183; SLA / latency-based</text>
+  <text x="620" y="472" fill="#cbd5e1" font-family="sans-serif" font-size="14">latency-critical call &#8594; HOT only; tolerant call &#8594; WARM ok.</text>
+  <text x="620" y="496" fill="#9aa6b2" font-family="sans-serif" font-size="13">routes by the caller's need, not the data's age. Combine with A.</text>
+
+  <!-- recommendation -->
+  <rect x="600" y="532" width="520" height="100" rx="10" fill="#101a14" stroke="#8aff8a" stroke-width="2"/>
+  <text x="620" y="562" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">In practice</text>
+  <text x="620" y="588" fill="#cbd5e1" font-family="sans-serif" font-size="14">Start with A (age). Add D when some calls are latency-critical.</text>
+  <text x="620" y="612" fill="#cbd5e1" font-family="sans-serif" font-size="14">Reach for B/C only when the move boundary is unpredictable.</text>
+
+  <!-- router to options/stores -->
+  <line x1="355" y1="230" x2="300" y2="300" stroke="#cbd5e1" stroke-width="1.5"/>
+  <line x1="430" y1="180" x2="976" y2="175" stroke="#ff8a8a" stroke-width="2" marker-end="url(#r)"/>
+  <line x1="430" y1="210" x2="976" y2="295" stroke="#ffd27f" stroke-width="2" marker-end="url(#y)"/>
+</svg>

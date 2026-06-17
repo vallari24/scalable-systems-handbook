@@ -1,0 +1,83 @@
+<svg width="1180" height="720" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="720" fill="#111317"/>
+  <defs>
+    <marker id="sc" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="so" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+  </defs>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Staging storage: many shapes in, one format out</text>
+  <text x="590" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">land each source raw &amp; as-is, then normalize to one columnar format (Parquet) downstream</text>
+
+  <!-- sources -->
+  <text x="150" y="116" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15" font-weight="bold">Heterogeneous sources</text>
+  <g font-family="monospace" font-size="11.5">
+    <rect x="40" y="140" width="220" height="80" rx="8" fill="#16191e" stroke="#ff8a8a" stroke-width="1.5"/>
+    <text x="56" y="162" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">MySQL / Postgres</text>
+    <text x="56" y="184" fill="#cbd5e1">rows: id | status | total</text>
+    <text x="56" y="204" fill="#9aa6b2">relational, typed columns</text>
+
+    <rect x="40" y="240" width="220" height="80" rx="8" fill="#16191e" stroke="#8aff8a" stroke-width="1.5"/>
+    <text x="56" y="262" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">MongoDB</text>
+    <text x="56" y="284" fill="#cbd5e1">{ _id, items:[..], addr:{} }</text>
+    <text x="56" y="304" fill="#9aa6b2">nested JSON documents</text>
+
+    <rect x="40" y="340" width="220" height="80" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="56" y="362" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">Cassandra</text>
+    <text x="56" y="384" fill="#cbd5e1">wide rows, partition keys</text>
+    <text x="56" y="404" fill="#9aa6b2">column families</text>
+
+    <rect x="40" y="440" width="220" height="80" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="1.5"/>
+    <text x="56" y="462" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">SaaS APIs / events</text>
+    <text x="56" y="484" fill="#cbd5e1">JSON / Avro payloads</text>
+    <text x="56" y="504" fill="#9aa6b2">schema drifts over time</text>
+  </g>
+
+  <!-- extractors -->
+  <g stroke="#cbd5e1" stroke-width="2">
+    <line x1="262" y1="180" x2="360" y2="300" marker-end="url(#sc)"/>
+    <line x1="262" y1="280" x2="360" y2="310" marker-end="url(#sc)"/>
+    <line x1="262" y1="380" x2="360" y2="330" marker-end="url(#sc)"/>
+    <line x1="262" y1="480" x2="360" y2="340" marker-end="url(#sc)"/>
+  </g>
+  <rect x="364" y="270" width="150" height="120" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2"/>
+  <text x="439" y="320" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">Extractors</text>
+  <text x="439" y="344" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">per-source</text>
+  <text x="439" y="362" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">connector / dumper</text>
+
+  <!-- staging -->
+  <line x1="514" y1="330" x2="586" y2="330" stroke="#ffd27f" stroke-width="2.5" marker-end="url(#so)"/>
+  <rect x="590" y="150" width="280" height="400" rx="12" fill="#0d1117" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="730" y="184" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Staging storage</text>
+  <text x="730" y="206" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">cheap object store (S3)</text>
+
+  <!-- bronze raw -->
+  <rect x="612" y="226" width="236" height="120" rx="8" fill="#1a1510" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="730" y="250" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">1. Land RAW, as-is</text>
+  <text x="730" y="274" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="11.5">JSON / Avro, schema-on-read</text>
+  <text x="730" y="294" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">no transform yet &#8212; replay-safe,</text>
+  <text x="730" y="312" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">decouples extract from load</text>
+  <text x="730" y="332" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="11.5">this is the "bronze" layer</text>
+
+  <rect x="612" y="368" width="236" height="120" rx="8" fill="#101a14" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="730" y="392" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">2. Normalize &#8594; Parquet</text>
+  <text x="730" y="416" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">one columnar schema, flattened</text>
+  <text x="730" y="436" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">docs/wide-rows &#8594; typed columns</text>
+  <text x="730" y="456" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">partitioned by date</text>
+  <text x="730" y="476" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5">now uniformly queryable</text>
+
+  <text x="730" y="524" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">transform can be eager (on land)</text>
+  <text x="730" y="540" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">or lazy (on read) &#8212; ELT defers it</text>
+
+  <!-- query -->
+  <line x1="870" y1="350" x2="942" y2="350" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#sc)"/>
+  <rect x="946" y="270" width="200" height="160" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="1046" y="306" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">One engine,</text>
+  <text x="1046" y="328" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">one SQL</text>
+  <text x="1046" y="358" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">Spark / Trino read</text>
+  <text x="1046" y="378" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">every source the</text>
+  <text x="1046" y="398" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">same way &#8212; the</text>
+  <text x="1046" y="418" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">shape difference is gone</text>
+
+  <text x="590" y="600" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14">Key idea: staging absorbs the format chaos. Each source dumps in its own shape; a single normalization step</text>
+  <text x="590" y="624" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14">turns them all into the same columnar table, so everything downstream sees one schema.</text>
+</svg>

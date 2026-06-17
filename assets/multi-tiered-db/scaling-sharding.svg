@@ -1,0 +1,62 @@
+<svg width="1120" height="720" viewBox="0 0 1120 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1120" height="720" fill="#111317"/>
+  <defs>
+    <marker id="aW" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="aR" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/></marker>
+  </defs>
+
+  <!-- Top: sharding -->
+  <text x="40" y="52" fill="#cbd5e1" font-family="sans-serif" font-size="18">The next phase of DB scaling seems&#8230;</text>
+  <rect x="70" y="78" width="150" height="36" rx="18" fill="#173a2a" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="145" y="102" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">Sharding</text>
+
+  <!-- single db -->
+  <g>
+    <path d="M280,82 L280,124 A26,9 0 0 0 332,124 L332,82" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+    <ellipse cx="306" cy="82" rx="26" ry="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <line x1="350" y1="103" x2="420" y2="103" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#aW)"/>
+
+  <!-- shards -->
+  <g>
+    <path d="M450,70 L450,104 A22,7 0 0 0 494,104 L494,70" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+    <ellipse cx="472" cy="70" rx="22" ry="7" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <text x="520" y="92" fill="#cbd5e1" font-family="sans-serif" font-size="15">Shard 1</text>
+  <g>
+    <path d="M450,128 L450,162 A22,7 0 0 0 494,162 L494,128" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+    <ellipse cx="472" cy="128" rx="22" ry="7" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <text x="520" y="150" fill="#cbd5e1" font-family="sans-serif" font-size="15">Shard 2</text>
+  <g>
+    <path d="M450,186 L450,220 A22,7 0 0 0 494,220 L494,186" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+    <ellipse cx="472" cy="186" rx="22" ry="7" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  </g>
+  <text x="520" y="208" fill="#cbd5e1" font-family="sans-serif" font-size="15">Shard 3</text>
+
+  <!-- sharding downside -->
+  <text x="700" y="78" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Sharding is not always</text>
+  <text x="700" y="102" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">a great choice because&#8230;</text>
+  <text x="710" y="146" fill="#ff8a8a" font-family="sans-serif" font-size="16">&#8211; Multi-tenant isolation</text>
+  <text x="710" y="176" fill="#ff8a8a" font-family="sans-serif" font-size="16">&#8211; Operational overhead</text>
+  <text x="710" y="206" fill="#9aa6b2" font-family="sans-serif" font-size="14">&#8230; and it sidesteps the real cause</text>
+
+  <line x1="40" y1="252" x2="1080" y2="252" stroke="#3a3f47" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+  <!-- root cause -->
+  <text x="40" y="298" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">What next after replicas?</text>
+  <text x="300" y="372" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">Root cause</text>
+  <text x="300" y="398" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">of DB degradation</text>
+  <line x1="430" y1="380" x2="540" y2="380" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#aR)"/>
+  <rect x="552" y="356" width="280" height="44" rx="10" fill="#3a2418" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="692" y="385" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="18" font-weight="bold">Table is too large</text>
+  <text x="552" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="16">Computation takes time</text>
+  <text x="552" y="464" fill="#cbd5e1" font-family="sans-serif" font-size="16">Index lookups are disk-bound</text>
+
+  <!-- the question -->
+  <rect x="350" y="520" width="420" height="86" rx="10" fill="#1c1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <rect x="358" y="528" width="404" height="70" rx="8" fill="none" stroke="#ffd27f" stroke-width="1.5"/>
+  <text x="560" y="556" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">Can we reduce the</text>
+  <text x="560" y="586" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">table size?</text>
+  <text x="560" y="652" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">&#8230; without paying the operational tax of sharding</text>
+</svg>

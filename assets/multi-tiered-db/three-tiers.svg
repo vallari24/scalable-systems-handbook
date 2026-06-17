@@ -1,0 +1,54 @@
+<svg width="1120" height="780" viewBox="0 0 1120 780" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1120" height="780" fill="#111317"/>
+  <defs>
+    <marker id="aD" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+  </defs>
+
+  <text x="40" y="44" fill="#cbd5e1" font-family="sans-serif" font-size="17">Tiered datastore: <tspan fill="#93c5fd">by moving data from one tier to another, we reduce the time to computation.</tspan></text>
+
+  <!-- down arrows between tiers -->
+  <line x1="80" y1="262" x2="80" y2="320" stroke="#ffd27f" stroke-width="2.5" marker-end="url(#aD)"/>
+  <line x1="80" y1="512" x2="80" y2="570" stroke="#ffd27f" stroke-width="2.5" marker-end="url(#aD)"/>
+
+  <!-- HOT -->
+  <rect x="40" y="90" width="1040" height="170" rx="12" fill="#1c1113" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="70" y="140" fill="#ff8a8a" font-family="sans-serif" font-size="22" font-weight="bold">Hot Store</text>
+  <g>
+    <path d="M250,118 L250,160 A28,9 0 0 0 306,160 L306,118" fill="#1a1a10" stroke="#ff8a8a" stroke-width="2"/>
+    <ellipse cx="278" cy="118" rx="28" ry="9" fill="#1a1a10" stroke="#ff8a8a" stroke-width="2"/>
+  </g>
+  <text x="340" y="140" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Transactional Store (Read / Write)</text>
+  <text x="340" y="186" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Transactional</text>
+  <text x="340" y="214" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Low latency</text>
+  <text x="340" y="242" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Strong consistency</text>
+  <text x="720" y="186" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Read / Writes</text>
+  <text x="720" y="214" fill="#ffd27f" font-family="sans-serif" font-size="16">&#8211; Expensive</text>
+
+  <!-- WARM -->
+  <rect x="40" y="340" width="1040" height="170" rx="12" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="70" y="390" fill="#ffd27f" font-family="sans-serif" font-size="22" font-weight="bold">Warm Store</text>
+  <g>
+    <path d="M250,368 L250,410 A28,9 0 0 0 306,410 L306,368" fill="#16191e" stroke="#ffd27f" stroke-width="2"/>
+    <ellipse cx="278" cy="368" rx="28" ry="9" fill="#16191e" stroke="#ffd27f" stroke-width="2"/>
+  </g>
+  <text x="340" y="390" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Read-only workloads</text>
+  <text x="340" y="430" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Read-only</text>
+  <text x="340" y="456" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Non-transactional</text>
+  <text x="340" y="482" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Frequent reads</text>
+  <text x="720" y="430" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Could be a little slower</text>
+  <text x="720" y="456" fill="#8aff8a" font-family="sans-serif" font-size="16">&#8211; Horizontally scalable</text>
+  <text x="720" y="482" fill="#ffd27f" font-family="sans-serif" font-size="16">&#8211; Less expensive</text>
+
+  <!-- COLD -->
+  <rect x="40" y="590" width="1040" height="160" rx="12" fill="#101622" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="70" y="640" fill="#93c5fd" font-family="sans-serif" font-size="22" font-weight="bold">Cold Store</text>
+  <g>
+    <path d="M250,618 L250,660 A28,9 0 0 0 306,660 L306,618" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+    <ellipse cx="278" cy="618" rx="28" ry="9" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  </g>
+  <text x="340" y="640" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Infrequent reads, cheap, very slow</text>
+  <text x="340" y="682" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Read-only</text>
+  <text x="340" y="708" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Very infrequent reads</text>
+  <text x="340" y="734" fill="#cbd5e1" font-family="sans-serif" font-size="16">&#8211; Compliance and accounting</text>
+  <text x="720" y="682" fill="#93c5fd" font-family="sans-serif" font-size="16">&#8211; Offline analytics</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg width="1180" height="700" viewBox="0 0 1180 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="700" fill="#111317"/>
+  <defs>
+    <marker id="bl" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="gr" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The data pipeline: ingest &#8594; transform &#8594; query</text>
+  <text x="590" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">same three stages, two cadences &#8212; batch (cheap, high latency) and streaming (costly, low latency)</text>
+
+  <!-- column headers -->
+  <text x="245" y="120" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="17" font-weight="bold">INGEST</text>
+  <text x="590" y="120" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="17" font-weight="bold">TRANSFORM</text>
+  <text x="935" y="120" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="17" font-weight="bold">QUERY / SERVE</text>
+  <line x1="400" y1="100" x2="400" y2="640" stroke="#2a2f37" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <line x1="760" y1="100" x2="760" y2="640" stroke="#2a2f37" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+  <!-- sources -->
+  <rect x="40" y="300" width="120" height="120" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="100" y="350" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">Sources</text>
+  <text x="100" y="374" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">apps, DBs,</text>
+  <text x="100" y="392" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">SaaS, events</text>
+
+  <!-- ===== BATCH lane (top) ===== -->
+  <rect x="180" y="150" width="980" height="200" rx="12" fill="#101a14" stroke="#8aff8a" stroke-width="1.5" stroke-dasharray="7 5"/>
+  <text x="200" y="178" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">BATCH  &#183;  minutes&#8211;hours  &#183;  default for tiering</text>
+
+  <rect x="210" y="196" width="170" height="64" rx="8" fill="#16191e" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="295" y="222" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Airbyte / dumper</text>
+  <text x="295" y="244" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">CRON, Airflow DAG</text>
+
+  <rect x="510" y="196" width="170" height="64" rx="8" fill="#16191e" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="595" y="222" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Spark batch</text>
+  <text x="595" y="244" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">+ dbt models</text>
+
+  <rect x="850" y="196" width="180" height="64" rx="8" fill="#16191e" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="940" y="222" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Trino / Athena</text>
+  <text x="940" y="244" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">BI dashboards</text>
+
+  <text x="445" y="232" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">lake (bronze)</text>
+  <text x="765" y="232" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">lake (gold)</text>
+  <line x1="380" y1="228" x2="508" y2="228" stroke="#8aff8a" stroke-width="2" marker-end="url(#gr)"/>
+  <line x1="680" y1="228" x2="848" y2="228" stroke="#8aff8a" stroke-width="2" marker-end="url(#gr)"/>
+
+  <!-- ===== STREAMING lane (bottom) ===== -->
+  <rect x="180" y="440" width="980" height="200" rx="12" fill="#101622" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="7 5"/>
+  <text x="200" y="468" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">STREAMING  &#183;  milliseconds&#8211;seconds  &#183;  real-time only</text>
+
+  <rect x="210" y="486" width="170" height="64" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="295" y="512" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">CDC / Kafka</text>
+  <text x="295" y="534" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">change events</text>
+
+  <rect x="510" y="486" width="170" height="64" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="595" y="512" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Flink</text>
+  <text x="595" y="534" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">stateful, event-time</text>
+
+  <rect x="850" y="486" width="180" height="64" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="940" y="512" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">live store / alerts</text>
+  <text x="940" y="534" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">real-time dashboard</text>
+
+  <line x1="380" y1="518" x2="508" y2="518" stroke="#93c5fd" stroke-width="2" marker-end="url(#bl)"/>
+  <line x1="680" y1="518" x2="848" y2="518" stroke="#93c5fd" stroke-width="2" marker-end="url(#bl)"/>
+
+  <!-- sources fan into both lanes -->
+  <line x1="160" y1="340" x2="208" y2="240" stroke="#8aff8a" stroke-width="2" marker-end="url(#gr)"/>
+  <line x1="160" y1="380" x2="208" y2="510" stroke="#93c5fd" stroke-width="2" marker-end="url(#bl)"/>
+
+  <text x="590" y="676" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">Lambda = run both lanes and merge &#183; Kappa = one streaming lane, replay the log for history</text>
+</svg>

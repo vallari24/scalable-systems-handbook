@@ -1,0 +1,58 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+  <defs>
+    <marker id="dc" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="dr" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/></marker>
+  </defs>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The data-delete policy: how a tier sheds what it moved</text>
+  <text x="590" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">a delete only fires after the next tier confirms the copy &#8212; never before</text>
+
+  <!-- safe sequence -->
+  <text x="40" y="118" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">1 &#183; The safe order: copy &#8594; verify &#8594; delete</text>
+  <g font-family="sans-serif" font-size="14" text-anchor="middle">
+    <rect x="60" y="138" width="200" height="60" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="1.5"/>
+    <text x="160" y="165" fill="#ffffff" font-weight="bold">COPY</text><text x="160" y="185" fill="#9aa6b2" font-size="12">load rows into next tier</text>
+    <rect x="340" y="138" width="200" height="60" rx="8" fill="#16191e" stroke="#ffd27f" stroke-width="1.5"/>
+    <text x="440" y="165" fill="#ffd27f" font-weight="bold">VERIFY</text><text x="440" y="185" fill="#9aa6b2" font-size="12">row counts / checksums match</text>
+    <rect x="620" y="138" width="200" height="60" rx="8" fill="#1c1113" stroke="#ff8a8a" stroke-width="1.5"/>
+    <text x="720" y="165" fill="#ff8a8a" font-weight="bold">DELETE</text><text x="720" y="185" fill="#9aa6b2" font-size="12">remove from this tier</text>
+  </g>
+  <line x1="262" y1="168" x2="336" y2="168" stroke="#cbd5e1" stroke-width="2" marker-end="url(#dc)"/>
+  <line x1="542" y1="168" x2="616" y2="168" stroke="#cbd5e1" stroke-width="2" marker-end="url(#dc)"/>
+  <rect x="860" y="138" width="280" height="60" rx="8" fill="#3a1818" stroke="#ff8a8a" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="1000" y="162" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">delete-before-verify</text>
+  <text x="1000" y="184" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">= permanent data loss</text>
+
+  <!-- soft vs hard -->
+  <text x="40" y="258" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">2 &#183; Lazy (soft) delete vs hard delete</text>
+
+  <rect x="60" y="278" width="520" height="220" rx="10" fill="#16191e" stroke="#ffd27f" stroke-width="2"/>
+  <text x="80" y="306" fill="#ffd27f" font-family="sans-serif" font-size="16" font-weight="bold">LAZY / SOFT delete  &#9733; default</text>
+  <text x="80" y="332" fill="#cbd5e1" font-family="sans-serif" font-size="14">Mark a tombstone, reclaim space later.</text>
+  <text x="100" y="360" fill="#cbd5e1" font-family="monospace" font-size="13">UPDATE orders SET <tspan fill="#ff8a8a">deleted=true</tspan></text>
+  <text x="100" y="382" fill="#cbd5e1" font-family="monospace" font-size="13">  (or set a TTL / expiry timestamp)</text>
+  <text x="80" y="412" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; instant, cheap, no rewrite of big files</text>
+  <text x="80" y="434" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; reversible until garbage-collected</text>
+  <text x="80" y="456" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; a background <tspan fill="#ffd27f">compaction / GC</tspan> later</text>
+  <text x="96" y="478" fill="#9aa6b2" font-family="sans-serif" font-size="13">physically purges tombstoned rows (log-structured)</text>
+
+  <rect x="620" y="278" width="520" height="220" rx="10" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="640" y="306" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">HARD delete</text>
+  <text x="640" y="332" fill="#cbd5e1" font-family="sans-serif" font-size="14">Physically remove the bytes now.</text>
+  <text x="660" y="360" fill="#cbd5e1" font-family="monospace" font-size="13">DELETE FROM orders WHERE &#8230;</text>
+  <text x="640" y="392" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; expensive: rewrites pages / files</text>
+  <text x="640" y="414" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; irreversible &#8212; gone immediately</text>
+  <text x="640" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; required for <tspan fill="#ffff99">GDPR erase</tspan> / legal</text>
+  <text x="640" y="458" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; on S3 lakehouse: a delete-file +</text>
+  <text x="656" y="478" fill="#9aa6b2" font-family="sans-serif" font-size="13">rewrite via Iceberg/Delta to truly purge</text>
+
+  <!-- cache -->
+  <text x="40" y="552" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">3 &#183; What about the cache?</text>
+  <rect x="60" y="572" width="1080" height="150" rx="10" fill="#101622" stroke="#93c5fd" stroke-width="2"/>
+  <text x="80" y="602" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">A deleted row can still live in a cache &#8212; you must evict it, or readers see a ghost.</text>
+  <text x="80" y="636" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; <tspan fill="#ffffff" font-weight="bold">Write-through invalidation:</tspan> the delete also drops the cache key (strong, but couples delete to cache).</text>
+  <text x="80" y="664" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; <tspan fill="#ffffff" font-weight="bold">TTL expiry:</tspan> let the entry age out on its own &#8212; simplest, but a stale window until it expires.</text>
+  <text x="80" y="692" fill="#cbd5e1" font-family="sans-serif" font-size="14">&#8226; <tspan fill="#ffffff" font-weight="bold">Tombstone read:</tspan> a soft-deleted row stays cacheable as "deleted", so reads still hit cache and return "gone".</text>
+  <text x="80" y="714" fill="#9aa6b2" font-family="sans-serif" font-size="13">Moving a tier is also a cache event: invalidate hot-tier cache entries when an order migrates to warm.</text>
+</svg>

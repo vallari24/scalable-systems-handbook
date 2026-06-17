@@ -1,0 +1,44 @@
+<svg width="1120" height="600" viewBox="0 0 1120 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1120" height="600" fill="#111317"/>
+  <defs>
+    <marker id="aX" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">Access Pattern</text>
+
+  <!-- axes -->
+  <line x1="150" y1="120" x2="150" y2="470" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#aX)" transform="rotate(180 150 295)"/>
+  <line x1="150" y1="470" x2="660" y2="470" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#aX)"/>
+  <text x="120" y="160" fill="#9aa6b2" font-family="sans-serif" font-size="12" text-anchor="end">access</text>
+  <text x="120" y="176" fill="#9aa6b2" font-family="sans-serif" font-size="12" text-anchor="end">freq.</text>
+  <text x="660" y="498" fill="#9aa6b2" font-family="sans-serif" font-size="13" text-anchor="end">age of order &#8594;</text>
+
+  <!-- region dividers -->
+  <line x1="250" y1="130" x2="250" y2="470" stroke="#ffff99" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <line x1="400" y1="130" x2="400" y2="470" stroke="#ffff99" stroke-width="1.5" stroke-dasharray="5 5"/>
+
+  <!-- decay curve -->
+  <path d="M168,150 C 200,150 215,300 250,345 C 300,408 360,440 430,452 C 510,464 590,466 650,467" fill="none" stroke="#ffffff" stroke-width="3"/>
+
+  <!-- region labels -->
+  <text x="200" y="500" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">Reads /</text>
+  <text x="200" y="518" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">Writes</text>
+  <text x="325" y="500" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Frequent</text>
+  <text x="325" y="518" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Reads</text>
+  <text x="530" y="500" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">Infrequent Reads</text>
+  <text x="530" y="518" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">[ Compliance ]</text>
+
+  <!-- graph title -->
+  <text x="405" y="200" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">Life cycle of an</text>
+  <text x="405" y="226" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">order</text>
+
+  <!-- the idea -->
+  <text x="720" y="180" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">The idea:</text>
+  <rect x="720" y="200" width="350" height="200" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="2"/>
+  <text x="744" y="238" font-family="sans-serif" font-size="17"><tspan fill="#ffd27f" font-weight="bold">Move</tspan><tspan fill="#cbd5e1"> orders from one DB</tspan></text>
+  <text x="744" y="266" fill="#cbd5e1" font-family="sans-serif" font-size="17">to another depending on</text>
+  <text x="744" y="294" fill="#cbd5e1" font-family="sans-serif" font-size="17">its <tspan fill="#ffff99" font-weight="bold">age</tspan> to</text>
+  <text x="744" y="322" font-family="sans-serif" font-size="17"><tspan fill="#8aff8a" font-weight="bold">reduce the load</tspan><tspan fill="#cbd5e1"> on the</tspan></text>
+  <text x="744" y="350" fill="#cbd5e1" font-family="sans-serif" font-size="17">transactional database.</text>
+  <text x="744" y="384" fill="#9aa6b2" font-family="sans-serif" font-size="13">Keep the hot table small &#8594; fast forever.</text>
+</svg>
