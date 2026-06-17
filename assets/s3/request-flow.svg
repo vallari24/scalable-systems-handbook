@@ -1,0 +1,157 @@
+<svg width="1340" height="1224" viewBox="0 0 1340 1224" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1340" height="1224" fill="#111317"/>
+  <defs>
+    <marker id="aBlue" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="aGreen" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="aPink" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="aYellow" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="aGrey" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#9aa6b2"/></marker>
+    <marker id="aRet" markerWidth="11" markerHeight="11" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#5fd38a"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="670" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Reading a Rider's Photo: the Request Flow</text>
+  <text x="670" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">GET rider-photo/r-99281/profile.jpg &#8212; the boxes, the PMT database, and the path a request takes</text>
+
+  <!-- ===== OUTSIDE AWS (top row) ===== -->
+  <!-- Phone -->
+  <rect x="60" y="120" width="160" height="64" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="140" y="148" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Rider's phone</text>
+  <text x="140" y="167" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">Lyft app</text>
+
+  <!-- Lyft API -->
+  <rect x="300" y="120" width="180" height="64" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="390" y="148" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Lyft backend API</text>
+  <text x="390" y="167" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">Lyft's own servers</text>
+
+  <!-- Lyft DB cylinder -->
+  <path d="M 318 234 h 144 v 50 a 72 8 0 0 1 -144 0 v -50" fill="#161a12" stroke="#9aa6b2" stroke-width="1.5"/>
+  <ellipse cx="390" cy="234" rx="72" ry="8" fill="#161a12" stroke="#9aa6b2" stroke-width="1.5"/>
+  <text x="390" y="256" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12" font-weight="bold">Lyft users DB</text>
+  <text x="390" y="273" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="10">r-99281 &#8594; the S3 key</text>
+
+  <!-- CloudFront -->
+  <rect x="580" y="120" width="180" height="64" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="670" y="148" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">CloudFront CDN</text>
+  <text x="670" y="167" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">edge cache</text>
+
+  <!-- arrows outside -->
+  <line x1="220" y1="152" x2="298" y2="152" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <text x="259" y="142" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9312;</text>
+  <line x1="390" y1="184" x2="390" y2="224" stroke="#9aa6b2" stroke-width="2" marker-end="url(#aGrey)"/>
+  <text x="406" y="210" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9313;</text>
+  <line x1="480" y1="152" x2="578" y2="152" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aBlue)"/>
+  <text x="529" y="142" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9314;</text>
+  <text x="670" y="205" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">presigned URL; phone fetches via CDN</text>
+
+  <!-- ===== AMAZON S3 boundary ===== -->
+  <rect x="40" y="296" width="1270" height="592" rx="14" fill="#0c0f0c" stroke="#3a4a3a" stroke-width="2"/>
+  <text x="64" y="326" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">AMAZON S3</text>
+
+  <!-- arrow CloudFront -> LB (crosses boundary) -->
+  <line x1="670" y1="184" x2="670" y2="346" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#aGreen)"/>
+  <text x="688" y="270" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9315;</text>
+  <text x="760" y="270" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">cache miss &#8594; into S3</text>
+
+  <!-- Load Balancer -->
+  <rect x="580" y="348" width="180" height="58" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="670" y="373" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Load Balancer</text>
+  <text x="670" y="392" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">Route 53 + ELB</text>
+  <text x="790" y="370" fill="#9aa6b2" font-family="sans-serif" font-size="11">bucket = hostname:</text>
+  <text x="790" y="388" fill="#cbd5e1" font-family="monospace" font-size="10.5">rider-photo.s3...</text>
+  <text x="790" y="404" fill="#5fd38a" font-family="monospace" font-size="10.5">&#8594; 52.219.40.12</text>
+
+  <!-- arrow LB -> API server -->
+  <line x1="670" y1="406" x2="668" y2="446" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#aGreen)"/>
+  <text x="688" y="432" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9316;</text>
+
+  <!-- S3 API servers -->
+  <rect x="560" y="448" width="220" height="54" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="670" y="480" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">S3 API server</text>
+  <rect x="544" y="510" width="220" height="50" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="1.5" opacity="0.6"/>
+  <text x="654" y="540" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">S3 API server</text>
+  <text x="670" y="580" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">stateless front-end &#183; authenticate (SigV4/IAM), then parse the bucket off the key:</text>
+  <text x="670" y="600" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="11.5">rider-photo/r-99281/profile.jpg &#8594; bucket "rider-photo"</text>
+
+  <!-- PMT cylinder -->
+  <path d="M 880 450 h 200 v 70 a 100 11 0 0 1 -200 0 v -70" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <ellipse cx="980" cy="450" rx="100" ry="11" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="980" y="478" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Partition Map Table</text>
+  <text x="980" y="497" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">key-range &#8594; partition server</text>
+  <text x="980" y="513" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">(real S3: the index subsystem)</text>
+
+  <!-- arrow API <-> PMT (the highlighted one) -->
+  <line x1="782" y1="466" x2="876" y2="466" stroke="#ffff99" stroke-width="2.5" marker-end="url(#aYellow)"/>
+  <line x1="876" y1="492" x2="782" y2="492" stroke="#ffff99" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#aYellow)"/>
+  <text x="828" y="456" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9317;</text>
+  <text x="830" y="430" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="11" font-weight="bold">range lookup</text>
+  <text x="830" y="525" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">answer: &#8594; Partition Server 7</text>
+
+  <!-- Partition Manager -->
+  <rect x="1100" y="348" width="180" height="64" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1190" y="376" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Partition Manager</text>
+  <text x="1190" y="395" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">the only WRITER of PMT</text>
+  <!-- PM writes PMT -->
+  <line x1="1100" y1="430" x2="1082" y2="455" stroke="#93c5fd" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#aBlue)"/>
+  <text x="1118" y="446" fill="#9aa6b2" font-family="sans-serif" font-size="10">writes splits/moves</text>
+
+  <!-- Partition servers -->
+  <rect x="360" y="648" width="220" height="60" rx="10" fill="#241018" stroke="#ff8bd2" stroke-width="2.8"/>
+  <text x="470" y="674" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">Partition Server 7</text>
+  <text x="470" y="694" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="10.5">owns [r-90000, r-100000]</text>
+
+  <rect x="620" y="648" width="200" height="60" rx="10" fill="#241018" stroke="#ff8bd2" stroke-width="1.8" opacity="0.8"/>
+  <text x="720" y="682" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13">Partition Server</text>
+
+  <rect x="860" y="648" width="200" height="60" rx="10" fill="#241018" stroke="#ff8bd2" stroke-width="1.8" opacity="0.8"/>
+  <text x="960" y="682" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13">Partition Server</text>
+
+  <!-- arrow API server -> PS7 -->
+  <path d="M 600 530 C 520 580, 480 600, 470 644" fill="none" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#aPink)"/>
+  <text x="505" y="600" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9318;</text>
+  <text x="430" y="628" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">forward to the owning server</text>
+
+  <!-- PM healthcheck to partition servers -->
+  <line x1="1190" y1="412" x2="990" y2="644" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#aBlue)"/>
+  <text x="1120" y="540" fill="#9aa6b2" font-family="sans-serif" font-size="10">healthcheck</text>
+
+  <!-- Storage rack -->
+  <rect x="360" y="772" width="660" height="96" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="690" y="762" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">Storage &#8212; log-structured HDDs (ShardStore), erasure-coded across &#8805;3 AZs</text>
+  <!-- disk slots -->
+  <g fill="#0c0f0c" stroke="#cbd5e1" stroke-width="1.6">
+    <rect x="380" y="790" width="22" height="60"/><rect x="410" y="790" width="22" height="60"/>
+    <rect x="440" y="790" width="22" height="60"/><rect x="470" y="790" width="22" height="60"/>
+    <rect x="500" y="790" width="22" height="60"/><rect x="530" y="790" width="22" height="60"/>
+    <rect x="560" y="790" width="22" height="60"/><rect x="590" y="790" width="22" height="60"/>
+    <rect x="620" y="790" width="22" height="60"/><rect x="650" y="790" width="22" height="60"/>
+  </g>
+  <text x="700" y="814" fill="#ff8bd2" font-family="monospace" font-size="12">node 12 &#183; file 0007.log</text>
+  <text x="700" y="834" fill="#ff8bd2" font-family="monospace" font-size="12">offset 4,182,016 &#183; len 51,204</text>
+  <text x="700" y="854" fill="#9aa6b2" font-family="sans-serif" font-size="11">seek &#8594; read &#8594; verify checksum</text>
+
+  <!-- arrow PS7 -> storage -->
+  <line x1="470" y1="708" x2="470" y2="788" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#aPink)"/>
+  <text x="486" y="752" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">&#9319;</text>
+  <text x="360" y="752" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">index &#8594; exact bytes</text>
+
+  <!-- return arrow (green dashed): back UP the chain to the API server, then out via the CDN -->
+  <polyline points="360,790 300,790 300,533 542,533" fill="none" stroke="#5fd38a" stroke-width="2.4" stroke-dasharray="8,5" marker-end="url(#aRet)"/>
+  <text x="296" y="650" text-anchor="end" fill="#5fd38a" font-family="sans-serif" font-size="15" font-weight="bold">&#9320;</text>
+  <text x="296" y="682" text-anchor="end" fill="#5fd38a" font-family="sans-serif" font-size="11.5">bytes return UP the chain</text>
+  <text x="296" y="698" text-anchor="end" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">storage &#8594; PS &#8594; API server &#8594; CDN &#8594; phone</text>
+
+  <!-- ===== Step legend (single column, larger) ===== -->
+  <rect x="40" y="900" width="1270" height="306" rx="10" fill="#16191e" stroke="#9aa6b2" stroke-width="1.5"/>
+  <text x="64" y="932" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">The flow, step by step (with the real values from this example)</text>
+  <text x="64" y="964" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9312;</tspan>&#160; Phone &#8594; Lyft API &#8212; the app asks Lyft for rider <tspan font-family="monospace">r-99281</tspan>'s photo.</text>
+  <text x="64" y="990" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9313;</tspan>&#160; Lyft API &#8594; Lyft DB &#8212; look up the key <tspan font-family="monospace" fill="#ffd27f">rider-photo/r-99281/profile.jpg</tspan>; Lyft returns a presigned URL.</text>
+  <text x="64" y="1016" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9314;</tspan>&#160; Phone &#8594; CloudFront &#8212; fetch the URL; on a cache miss, go to S3.</text>
+  <text x="64" y="1042" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9315;</tspan>&#160; CloudFront &#8594; Load Balancer &#8212; DNS resolves <tspan font-family="monospace" fill="#9fdcff">rider-photo.s3.amazonaws.com</tspan> &#8594; <tspan font-family="monospace" fill="#5fd38a">52.219.40.12</tspan>; LB picks a front-end.</text>
+  <text x="64" y="1068" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9316;</tspan>&#160; LB &#8594; S3 API server &#8212; authenticate (SigV4/IAM), then split the bucket <tspan font-family="monospace" fill="#ffd27f">rider-photo</tspan> off the key.</text>
+  <text x="64" y="1094" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9317;</tspan>&#160; S3 API server &#8596; PMT &#8212; range lookup: <tspan font-family="monospace" fill="#ffd27f">rider-photo/r-99281/profile.jpg</tspan> falls in <tspan font-family="monospace" fill="#ffff99">[r-90000, r-100000]</tspan> &#8594; Partition Server 7.</text>
+  <text x="92" y="1116" fill="#9aa6b2" font-family="sans-serif" font-size="13">(the API server READS the PMT; the Partition Manager is the only WRITER.)</text>
+  <text x="64" y="1142" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9318;</tspan>&#160; S3 API server &#8594; Partition Server 7 &#8212; forward to the server that owns that range.</text>
+  <text x="64" y="1168" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9319;</tspan>&#160; Partition Server &#8594; Storage &#8212; its index &#8594; <tspan font-family="monospace" fill="#ff8bd2">node 12 &#183; file 0007.log &#183; offset 4,182,016</tspan>; seek, read, verify checksum.</text>
+  <text x="64" y="1188" fill="#e5e7eb" font-family="sans-serif" font-size="15"><tspan fill="#ffffff" font-weight="bold">&#9320;</tspan>&#160; Return &#8212; bytes flow back UP the chain (storage &#8594; partition server &#8594; API server) &#8594; CloudFront caches &#8594; phone.</text>
+</svg>

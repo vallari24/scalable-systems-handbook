@@ -24,7 +24,62 @@ Three things are genuinely hard, and the rest of the post is just attacking them
 
 And one insight reframes everything — the most important design decision in the whole system. **A directory is a logical, virtual entity.** There is no folder tree on disk. The slashes in `images/logo.jpg` are just characters in a flat key. A "bucket" is a naming convention, not a place. Once you accept that everything is <span style="color:#ffff99"><strong>path-based</strong></span> and flat, routing becomes a question about strings, not about a filesystem.
 
-> **Memory hook:** *the API is PUT/GET/DELETE on one path; the three hard problems are storage, routing, and hot partitions; and the unlock is that directories are fake — it's all one flat keyspace of paths.*
+So how do you *browse* a folder, if folders don't exist? You don't open a directory — there's nothing to open. You ask the API to **list every key that starts with a prefix**:
+
+- <span style="color:#8aff8a"><strong>`LIST(prefix = "photos/2024/")`</strong></span> returns every object key in that slice of the keyspace.
+- The trailing `/` is just a **delimiter convention** that lets the API roll keys up into one "folder level."
+- The folder tree you see in the console is **reconstructed from key prefixes on the fly** — it was never stored as a tree.
+
+This is why keeping keys **sorted** will matter so much later: a prefix is a *contiguous slice* of a sorted keyspace, so "browse this directory" becomes a cheap <span style="color:#8aff8a"><strong>prefix scan</strong></span> instead of a fan-out across every disk.
+
+> **Memory hook:** *the API is PUT/GET/DELETE on one path; browsing a "folder" is a prefix scan, not a tree walk; the three hard problems are storage, routing, and hot partitions; and the unlock is that directories are fake — it's all one flat keyspace of paths.*
+
+### Buckets and "folders": both are naming conventions, not places
+
+We just said directories are fake. The same truth holds one level up, at the <span style="color:#ffff99"><strong>bucket</strong></span> — the **top-level namespace** for your keys, the first segment of every path. When you store:
+
+`s3://my-photos/2024/summer/cat.jpg`
+
+the real key S3 keeps is the flat string `2024/summer/cat.jpg`, and `my-photos` is the **bucket** that scopes it. There is no `my-photos` folder, and no `2024/` or `summer/` folder, anywhere on disk — it's one flat key, and the bucket is just the prefix that says "this key belongs to this namespace." What the bucket actually buys you:
+
+- **Uniqueness scope** — keys must be unique *within* a bucket, so your `cat.jpg` never collides with mine. (Bucket names themselves are globally unique, which is what makes the URL routable.)
+- **A unit of config** — permissions, region, billing, versioning, and lifecycle rules all attach at the bucket level.
+- **A cheap prefix scan** — "list my bucket" is just `LIST(prefix="…")` over a contiguous slice of the sorted keyspace, reconstructed on the fly — never a folder you open.
+
+So **a directory is a logical, virtual entity — and a bucket is too.** Both are labels that *group and scope* keys, not places that *hold* them.
+
+### How a real filesystem does it: inodes
+
+If folders are fake in S3, how does a *real* filesystem (ext4 and friends) find your file? Through an <span style="color:#ffff99"><strong>inode</strong></span> — a small record holding everything about a file **except its name**: size, permissions, timestamps, and crucially the **pointers to the disk blocks** that hold the actual bytes. A **directory** is then just a tiny table mapping **names → inode numbers**.
+
+So "open `cat.jpg`" really means: look up `cat.jpg` in the directory to get an inode number → read that inode to find the data blocks → read the blocks. The name and the data are **decoupled**, which is why you can rename a file, or hard-link two names to one inode, without moving a single byte. S3's design rhymes with this: the [PMT plus the partition server's index](#section-8--who-knows-where-things-live-the-partition-map-table-and-partition-manager) play the inode's role — mapping a key to *where the bytes physically live* — while the path is just a name. S3 took the filesystem's "names are separate from locations" trick and stretched it across a planet.
+
+### The vocabulary, in one place
+
+- <span style="color:#ffff99"><strong>Object</strong></span> — one file: the *value*. Opaque bytes S3 never looks inside.
+- <span style="color:#8aff8a"><strong>Key</strong></span> — the full path string that *names* an object (`bucket/images/logo.jpg`). The thing you hash or range-partition on.
+- <span style="color:#ffff99"><strong>Bucket</strong></span> — the top-level namespace/prefix that scopes keys (above).
+- <span style="color:#ff8bd2"><strong>Partition</strong></span> — a contiguous *range* of the sorted keyspace (`[a,e]`), owned by one partition server. Emphasis on **how the data is divided**.
+- <span style="color:#ff8bd2"><strong>Shard</strong></span> — the same slice seen as the **unit you place and move** between machines. *Partition = how it's split; shard = what you move — same thing, two angles.*
+- <span style="color:#93c5fd"><strong>Node</strong></span> — one **physical machine** (a box of disks + CPU) in the fleet. Partitions/shards are the *logical* slices; nodes are the *physical* hardware they sit on. The PMT maps a partition to the node currently holding it (`[a,b] → Node 1`), and "move a shard" / "a node died" are about this physical layer. *Logical (partition) vs. physical (node) is the split that makes failover a table edit.*
+- <span style="color:#93c5fd"><strong>Replica</strong></span> — a *copy* of a partition/shard for durability, **not** a different slice. Sharding spreads load; replication survives failure.
+- <span style="color:#8aff8a"><strong>Tenant</strong></span> — one customer of a shared (multi-tenant) service. S3 serves millions of tenants off the same fleet.
+- <span style="color:#ff8a8a"><strong>Tenant isolation</strong></span> — keeping one tenant's workload from hurting another's. A noisy tenant's traffic spike should not degrade everyone sharing the hardware. The measure of it is <span style="color:#ff8a8a"><strong>blast radius</strong></span>: when one tenant misbehaves, how many others feel it? This is *the* requirement that kills hash routing (which scatters every tenant across all disks, so one spike hits everyone) and picks **range partitioning** (a tenant's keys share a prefix → fall in one contiguous range → can be put on their own partition, so the blast radius is just that one tenant). It's also why hot partitions get **split** and abusive accounts get **throttled** ([Sections 5–6](#section-5--attempt-3-range-based-partitioning-the-one-s3-uses)).
+
+### How it all nests: tenant → buckets → partitions
+
+These three terms trip people up because they sit on *different axes*. One concrete example untangles them. Say **Lyft** has one S3 account — that's one <span style="color:#8aff8a"><strong>tenant</strong></span>. Under it, Lyft creates many <span style="color:#ffff99"><strong>buckets</strong></span>, one per dataset: `driver-photo/`, `rider-photo/`, `driver-pay/`, `rider-pay/`, `ride-history/`, `ml-model/`. And each bucket, as it fills up or gets hot, is sliced into many <span style="color:#ff8bd2"><strong>partitions</strong></span> — contiguous key ranges served on different machines.
+
+The four rules that actually matter:
+
+- **One tenant → many buckets.** Lyft owns all six.
+- **One bucket → exactly one owner.** `ride-history/` belongs to Lyft and only Lyft; a bucket is *never* shared across tenants.
+- **One bucket → many partitions.** `ride-history/` might be `partition 1 [a–h]`, `partition 2 [i–p]`, `partition 3 [q–z]` — and it splits into more as it grows or heats.
+- **One partition → never two buckets.** A partition is a range *inside one bucket*; the bucket boundary is always a split point, so `driver-pay/` and `rider-pay/` can never share a partition. That's exactly what keeps one dataset's load from leaking into another's.
+
+<img src="../assets/s3/tenant-bucket-partition.svg" alt="How tenant, bucket, and partition nest, using Lyft as the example. Top: a single tenant box, 'Lyft account (tenant = one AWS account)', fans out by grey arrows to six bucket boxes in a row: driver-photo/, rider-photo/, driver-pay/, rider-pay/, ride-history/, and ml-model/, each labelled 'bucket'. Caption: one tenant maps to many buckets, and each bucket has exactly one owner, never shared across tenants. Middle, 'Zoom into one bucket maps to many partitions': the ride-history/ bucket box on the left points by a yellow arrow to three partition boxes — partition 1 [a–h], partition 2 [i–p], partition 3 [q–z] — with a note that it splits into more as it grows or heats. Caption: one bucket maps to many partitions, each partition owning a contiguous key range inside that one bucket. Bottom, two side-by-side panels stating the rule. Left, green check: 'A partition lives inside ONE bucket' — the ride-history/ bucket drawn as a container holding partition 1, 2, and 3. Right, red cross: 'A partition can NOT span two buckets' — two buckets, driver-pay/ and rider-pay/, with a single dashed partition box drawn across both and struck through with a big red X, captioned 'a bucket boundary is always a split point'. Takeaway bar: tenant is who owns it (Lyft); bucket is the named dataset with one owner; partition is a key-range slice of one bucket. So one tenant to many buckets, one bucket to many partitions, one partition to exactly one bucket." width="1180">
+
+> **Memory hook:** *tenant owns many buckets; a bucket has one owner and splits into many partitions; a partition lives inside exactly one bucket. Tenant = who, bucket = the named dataset, partition = a key-range slice of it.*
 
 ---
 
@@ -117,7 +172,14 @@ Now the properties flip in our favor:
 
 This is also exactly how real S3 behaves: object keys are stored in [lexicographic (UTF-8) order](https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html) and the index is partitioned by key range. It's why the old advice was to add a random prefix to your keys — and why that advice is now obsolete: S3 auto-partitions hot ranges for you. We trade automatic uniformity for deliberate control, and for a multi-tenant store, control wins. But control has a cost: ranges can become uneven. One range can get *hot*.
 
-> **Memory hook:** *range partitioning keeps keys sorted and gives contiguous ranges to nodes — buying locality, tenant isolation, and control, at the price of ranges that can grow lopsided and hot.*
+**The clean way to hold all three strategies in your head — match the strategy to what you're routing:**
+
+- <span style="color:#93c5fd"><strong>Hash is for stateless work.</strong></span> Load balancers and API servers hash to spread requests *uniformly* across interchangeable machines — there you *want* to give up control and just smear load evenly.
+- <span style="color:#ffff99"><strong>Range is for stateful placement.</strong></span> When you must dictate *where data physically lives* — drop a new HDD exactly where you want it, keep a tenant together, split a range cleanly — a hash function simply can't give you that control. Ranges can.
+
+And the tenant-isolation win is really about <span style="color:#ff8a8a"><strong>blast radius</strong></span>: with hashing, a hot bucket shares disks with many other tenants, so one company's spike hurts all of them; with ranges, a hot bucket sits in its own range, so the blast radius is just that one tenant.
+
+> **Memory hook:** *range partitioning keeps keys sorted and gives contiguous ranges to nodes — buying locality, tenant isolation, and control, at the price of ranges that can grow lopsided and hot. Hash for stateless load-spreading; range for stateful placement you need to control.*
 
 ---
 
@@ -149,7 +211,40 @@ Now the <span style="color:#ffff99"><strong>unit of movement is a whole shard</s
 
 This isn't theoretical: <span style="color:#93c5fd"><strong>Elasticsearch</strong></span> works exactly this way (its shards, visible through the HEAD plugin), and <span style="color:#93c5fd"><strong>Instagram</strong></span> famously pre-sharded their main posts table into thousands of logical shards over a handful of Postgres machines. The lesson to carry forward: **make the logical partition the unit of ownership and movement.** That idea is about to become the backbone of S3's control plane.
 
-> **Memory hook:** *pre-create many small logical shards on few machines; rebalance by moving a whole shard, never by re-cutting ranges or moving keys one at a time. (Elasticsearch, Instagram.)*
+### The key idea: two maps, not one
+
+Why doesn't moving a shard force you to rewrite every key inside it? Because routing is split into **two levels of indirection**, and only one of them ever changes:
+
+- <span style="color:#ffff99"><strong>key → shard</strong></span> is a **fixed** function — `shard_id = hash(key) % N` with `N` large and **frozen forever** (you pick thousands of shards up front). This map *never* changes.
+- <span style="color:#93c5fd"><strong>shard → node</strong></span> is a **small lookup table** — "which machine hosts shard 4,217 right now?" This is the *only* thing rebalancing touches.
+
+So a key's shard is computed the same way before and after a move; you relocate the *container* and edit one row of the second map. (Contrast plain `hash(key) % num_machines`, where the divisor changes and every key's home moves — the disaster this avoids.)
+
+### End-to-end: a live shard move (data-on-node model, e.g. Elasticsearch)
+
+The hard case is when the shard's bytes physically live on the node you're moving them *off* of, while traffic keeps flowing. The move is a careful copy-then-cutover:
+
+1. **Decide.** The coordinator notices a hot node and picks shard `S` to move from node `A` to a quieter node `B`.
+2. **Copy in background.** `B` pulls a snapshot of `S` from `A` — and `A` <span style="color:#8aff8a"><strong>keeps serving reads and writes</strong></span> the whole time.
+3. **Log the delta.** Writes that land on `S` during the copy are recorded in a <span style="color:#ff8a8a"><strong>changelog</strong></span>, because `B`'s snapshot is now stale.
+4. **Catch up.** `B` replays the delta until it's nearly current with `A`.
+5. **Cutover.** `A` briefly <span style="color:#ffd27f"><strong>freezes `S`</strong></span> (queues writes), ships the final delta, and hands off ownership — a millisecond-to-second window, the only blocking moment.
+6. **Flip the map.** The coordinator updates <span style="color:#8aff8a"><strong>`S → B`</strong></span> and `A` drops its copy. **No key was ever rewritten.**
+
+### How does a request find out the shard isn't there anymore?
+
+Routing tables are <span style="color:#ffff99"><strong>caches</strong></span>, so right after a move a router can still hold a stale `S → A` and send a request to the wrong node. The system doesn't push an update to every router synchronously — it lets stale routes **self-correct**:
+
+- The old owner replies <span style="color:#ff8a8a"><strong>"I no longer own this shard"</strong></span> (HBase's `RegionMovedException`, MongoDB's *stale shard version*).
+- The router <span style="color:#93c5fd"><strong>refreshes its map</strong></span> from the control plane (the source of truth) and **retries** against the new owner.
+
+So nobody coordinates a fleet-wide cache invalidation; routers discover moves *lazily*, on the next miss.
+
+<img src="../assets/s3/shard-move.svg" alt="Moving a logical shard live, in two panels. Panel one, a live shard move where data lives on the node (Elasticsearch model): a control plane / master owns the shard-to-node map at top. Node A on the left is the current owner of shard S, which is LIVE and serving reads and writes, and keeps a changelog of writes that arrive during the copy. Node B on the right is the quieter target, where shard S is filling up and becomes owner only at cutover. A blue dashed arrow shows step 2, copy snapshot in the background while A keeps serving; a pink dashed arrow shows step 4, replay the delta of writes made during the copy; a blue arrow from the control plane to Node B shows step 6, flip the map S to B. A six-step ribbon spells out the full sequence: 1 Decide — coordinator picks shard S to move A to B; 2 Copy — B copies a snapshot from A while A still serves; 3 Log delta — writes during the copy recorded as a changelog; 4 Catch up — B replays the delta until nearly current; 5 Cutover — A freezes S, ships the final delta, hands off in a milliseconds-to-seconds window; 6 Flip map — the map flips S to B and A drops its copy, and keys never change. Panel two, how a stale request finds out the shard moved: a Router holds a stale cached map S to A; Node A is the former owner, Node B is the new owner, and the control plane is the source of truth holding S to B. Step 1 (red), the router sends a request on the stale route to A; step 2 (red dashed), A redirects with 'not my shard / moved' (RegionMovedException, stale-version); step 3 (blue dashed), the router refreshes its map from the source of truth; step 4 (green), the router retries and B serves. A note: self-correcting — routers cache the map and learn of moves lazily via redirects, no synchronous push to every router needed. Takeaway: keys are pinned to shards forever; only the shard-to-node map moves; copy-then-cutover when data lives on the node, just flip ownership when storage is shared as in S3." width="1180">
+
+In S3 this whole dance collapses. Because storage is **shared and network-attached**, steps 2–4 vanish — there are no bytes to copy. "Moving a shard" becomes just the cutover and the map flip: the [Partition Manager](#section-10--the-whole-control-plane-and-what-happens-when-a-server-dies) edits one PMT row and the new owner reads the *same* bytes off the *same* disks. That's the payoff the next sections are built to earn.
+
+> **Memory hook:** *pre-create many small logical shards on few machines; rebalance by moving a whole shard, never by re-cutting ranges or moving keys one at a time. Two maps: key→shard is fixed, shard→node moves. Live move = copy in background, log+replay the delta, freeze-and-cutover, flip the map. Stale routers self-correct via a "moved" redirect. (Elasticsearch, Instagram.)*
 
 ---
 
@@ -217,7 +312,17 @@ Walk down the [storage hierarchy](19-storage-engine-fast-kv-db.md) — cache, RA
 
 But a raw HDD is slow in exactly one way: the <span style="color:#ff8a8a"><strong>seek</strong></span>. The fix is the central lesson of the [Bitcask post](19-storage-engine-fast-kv-db.md): go <span style="color:#ffff99"><strong>log-structured</strong></span>. Never overwrite in place; only ever append to the end of a file. Sequential writes turn the HDD's weakness into its strength, and even cheap spinning rust writes at full speed. (Real S3's storage backend, [ShardStore](https://www.amazon.science/publications/using-lightweight-formal-methods-to-validate-a-key-value-storage-node-in-amazon-s3), is exactly this — a log-structured merge tree, sequential writes on HDD.)
 
-So how does a partition server actually write? It always appends to the <span style="color:#ff8bd2"><strong>HEAD</strong></span> — the one *active* disk currently taking writes. When that disk fills to about 70%, it's "moved down" (frozen, read-only) and the HEAD advances to a fresh disk. Background <span style="color:#93c5fd"><strong>merge and compaction</strong></span> defragment the frozen disks, reclaiming the space left by overwrites and deletes — the same compaction we built in the KV engine.
+**Now the scalability question: one HDD fills up — how do you add another *without moving data*?** Model a storage rack as a <span style="color:#ffff99"><strong>linked list of HDDs</strong></span>.
+
+<img src="../assets/s3/storage-linked-list.svg" alt="Scaling the storage layer by modelling a rack as a linked list of HDDs. Top: a Partition Server appends writes (pink arrow, 'append to log head') into the active HDD. A horizontal linked list of disk nodes — HDD 1 -> HDD 2 -> HDD 3 -> active HDD — connected by 'next' pointers; HDD 1 to 3 are frozen and read-only (yellow), and the active HDD is the tail (pink) where writes land. A dashed blue 'new HDD' node with a dashed 'link' pointer shows a fresh disk being appended onto the tail. A callout, 'Dynamic scaling = appending to a linked list': when the active HDD hits about 70 percent, freeze it (read-only) and link a new HDD at the tail, then advance the active pointer — an O(1) append with no data moves and no rebalancing; writes are never blocked because there is always an active HDD at the tail (the log head). A 'Many racks' strip shows three racks, each its own little linked list ending in its own active (pink) HDD, with the note that the proxy routes each key to a rack by range and within a rack every write appends to that rack's active HDD, so you add capacity by adding HDDs or whole racks. A 'Read tradeoff' panel: a read follows the index to whichever HDD holds the bytes (frozen or active), so reads may touch older disks; writes stay O(1) at the head while reads pay a little more. Takeaway: a rack is a logical linked list of HDDs with an active tail, so scaling out is just linking on another disk and writes are always accepted." width="1000">
+
+- The <span style="color:#ff8bd2"><strong>active HDD</strong></span> is the tail of the list — every write appends there (it's the log head).
+- When it fills to ~70%, **freeze it** (read-only) and **link a new HDD onto the tail**, then advance the active pointer. That's an `O(1)` append — <span style="color:#8aff8a"><strong>no data moves, no rebalancing</strong></span>.
+- So <span style="color:#ff8bd2"><strong>writes are always accepted</strong></span>: there is always an active HDD at the tail. Scaling capacity is literally "link on another disk" — or another whole rack, with the proxy routing each key to a rack by range.
+
+This also explains why **reads are the slower path**. Log-structured storage is *write-optimized*: a key's latest value can live on any HDD in the list, and stale versions linger until compaction, so a read must consult the index and may touch an older disk. That's a deliberate trade — S3's workload is <span style="color:#ff8a8a"><strong>write-heavy and infrequently read</strong></span> (huge volumes ingested, much of it rarely accessed), so spending a little on reads to keep writes and ingestion cheap is exactly the right bet.
+
+Zoom into one node and the write mechanics are exactly that linked-list rule: the partition server always appends to the <span style="color:#ff8bd2"><strong>active HDD (the HEAD)</strong></span>, a <span style="color:#93c5fd"><strong>storage monitor</strong></span> freezes it at ~70% and advances the HEAD, and background <span style="color:#93c5fd"><strong>merge and compaction</strong></span> defragment the frozen disks, reclaiming the space left by overwrites and deletes — the same compaction we built in the KV engine.
 
 <img src="../assets/s3/active-hdd.svg" alt="How a partition server writes to the storage nodes — the active-HEAD model and the FUSE mount. Top: a single Partition Server writes to a stack of storage slots on one node; an arrow into the top slot is labelled 'writes to the HEAD' and the top slot is marked the active HDD. The rule, stated to the right: the partition server always writes to the HEAD; when a node reaches about 70% of capacity it is 'moved down' (frozen as read-only) and the HEAD advances to the next slot. A storage monitor (a small box) watches the node's capacity and triggers the rotation, plus background merge-and-compaction / defragmenting to reclaim space from overwritten and deleted objects. Two example objects show variable-size blobs: s3://amzn/img/a.jpg is 1KB and s3://amzn/imp/a.jpg is 2KB, both appended to the log. Bottom: three Partition Servers are each 'mounted' to three storage nodes by crossing colored lines (a many-to-many mount), and the file operations they issue over the mount are listed: open, read, close, write, seek, stat. Each storage node has its own Storage Monitor box beneath it. The mount mechanism is labelled FUSE (filesystem in userspace), which lets a partition server treat remote storage-node files as if they were local files. The takeaway: writes always go to the active HEAD disk and roll forward as disks fill; a storage monitor handles rotation and compaction; and partition servers reach the bytes through a FUSE mount exposing ordinary file operations." width="1000">
 
@@ -258,6 +363,89 @@ The discipline is to <span style="color:#ffff99"><strong>validate the checksum a
 Two refinements complete it. For <span style="color:#ffff99"><strong>multi-part objects</strong></span>, each chunk carries its own checksum and the combined object gets a <span style="color:#ffff99"><strong>rolled-up checksum</strong></span> over the whole (this is what S3's multipart ETags are). And storage nodes <span style="color:#93c5fd"><strong>scrub continuously</strong></span> in the background — re-reading objects and comparing against stored checksums to find and repair bit rot *before* anyone asks for the data.
 
 > **Memory hook:** *checksum at every hop, both directions, plus a combined checksum across chunks and continuous background scrubbing — so corruption is always detected and never served. Durability keeps bytes present; integrity keeps them correct.*
+
+---
+
+## Section 14 — A Request, End to End: A Rider's Photo
+
+**Question: enough boxes — let's trace one real request all the way through. A rider opens the Lyft app and their profile photo needs to appear. Follow that one read from the phone in their hand to the exact byte on a spinning disk: who reads the key, where the bucket comes from, which database answers "which server?", and how we land on the right rack, the right HDD, the right file, at the right offset.**
+
+The object we're fetching has the key `rider-photo/r-99281/profile.jpg`. Watch what each layer does to that string. *(The component names below are the ones we built; where real S3 uses a different name, it's noted in parentheses — the architecture is the same. Mapping drawn from Andy Warfield's [S3 talk](https://www.allthingsdistributed.com/2023/07/building-and-operating-a-pretty-big-storage-system.html) and the [ShardStore paper](https://www.amazon.science/publications/using-lightweight-formal-methods-to-validate-a-key-value-storage-node-in-amazon-s3).)*
+
+<img src="../assets/s3/request-flow.svg" alt="An architecture diagram of reading a rider's photo, drawn as component boxes with the Partition Map Table as a database cylinder, and ten numbered arrows tracing the request. Outside AWS, a top row: the Rider's phone (Lyft app) box, the Lyft backend API box with a Lyft users DB cylinder beneath it (r-99281 maps to the S3 key), and a CloudFront CDN box. Arrow 1: phone to Lyft API. Arrow 2: Lyft API down to the Lyft users DB to look up the key (Lyft returns a presigned URL). Arrow 3: phone to CloudFront. A large 'AMAZON S3' boundary box contains the rest. Arrow 4: CloudFront down into S3 to the Load Balancer box (Route 53 + ELB; the bucket is the hostname, rider-photo.s3... resolves to an IP). Arrow 5: Load Balancer down to the S3 API server box (a stateless front-end fleet, drawn as two stacked boxes, that authenticate with SigV4/IAM and parse the bucket off the key). Arrow 6, highlighted: a two-way link between the S3 API server and the Partition Map Table cylinder — the range lookup — whose answer is Partition Server 7; a note says the API server READS the PMT while the Partition Manager box (top right) is the only WRITER of the PMT and also sends a dashed healthcheck arrow down to the partition servers. Arrow 7: the S3 API server forwards down to Partition Server 7 (highlighted), one of three Partition Server boxes in a row; Partition Server 7 owns the range [r-90000, r-100000]. Arrow 8: Partition Server 7 down to the Storage box — a rack of log-structured HDD slots (ShardStore, erasure-coded across at least 3 AZs) — using its own index to reach node 12, file 0007.log, offset 4,182,016, length 51,204, then seek, read, and verify checksum. Arrow 9 is that storage read; Arrow 10 (green dashed) is the return path: bytes flow back UP the chain — storage to partition server to S3 API server — then out via CloudFront, which caches them, and the phone shows the photo. A step-by-step legend at the bottom lists all ten steps. Takeaway: the key is read once at the front door to find the bucket, looked up by range in the PMT to find the owning partition server, then by that server's own index to the exact node, file, and offset." width="1340">
+
+### Stage 1 — Outside AWS: the app turns "a rider" into a key
+
+The phone has no idea where the photo physically lives, and it shouldn't. All it knows is "show me rider `r-99281`." Turning that into actual bytes is **Lyft's** job, not S3's.
+
+So the app calls **Lyft's own backend**, which looks the rider up in **Lyft's own database** (a Postgres or DynamoDB table — nothing to do with S3). That database row stores the photo's **S3 key**: `r-99281 → rider-photo/r-99281/profile.jpg`. This is the moment a friendly internal id becomes the flat string S3 actually understands.
+
+Lyft *could* now download the photo and forward it, but that would funnel every image through Lyft's own servers. Instead it hands the phone a **presigned URL** — an ordinary S3 link with a temporary signature attached that says, in effect, *"whoever holds this may read this one object for the next few minutes."* The phone fetches it directly, and Lyft never has to expose its AWS credentials. That URL almost always points at a **CDN (CloudFront)** — a worldwide network of edge caches sitting close to users. If a nearby edge already has the photo, it's returned instantly and **S3 is never touched at all**. Everything below is the harder case: a **cache miss**, where the edge has to go fetch the object from S3.
+
+### Stage 2 — The S3 front door: find a server, prove who you are
+
+The very first thing that happens at S3 is pure addressing, and **the bucket is the address**. The URL's hostname is `rider-photo.s3.amazonaws.com`, and **DNS** (Amazon's Route 53) translates that name into a real IP like `52.219.40.12` — exactly the way `google.com` becomes an IP. Bucket names are globally unique precisely so this translation is never ambiguous. That IP belongs to a **load balancer**, whose only job is to forward the request to *any* one of thousands of interchangeable **front-end API servers**. Those servers are **stateless** — they hold no data themselves — so it genuinely doesn't matter which one you land on.
+
+The server's first real task is **authentication**: proving the request is from someone allowed to make it. The request arrived carrying a **signature** (AWS's scheme is called SigV4) — a code computed from the request contents plus the caller's secret key. The server recomputes that code and checks it matches, which proves two things at once: the caller holds valid credentials, and nothing was tampered with in transit. It then checks the **permissions** attached to the bucket — *is this caller actually allowed to read from `rider-photo`?* No valid signature, or no permission, and the request dies here with a `403` — no data is ever touched.
+
+Only after that does the server do the cheapest but most pivotal step in the whole system: it **reads the key and slices off the bucket** — everything before the first `/`, here `rider-photo`. There's no lookup and no database involved; the bucket name is sitting right at the front of the key string.
+
+**So what is the bucket's role in this whole flow?** It does exactly three jobs, all of them *identity*, none of them *location*:
+
+- **The address (Stage 2).** The bucket *is* the hostname — `rider-photo.s3.amazonaws.com` — so DNS resolves it to an IP and gets the request to the right service and region.
+- **The auth boundary (Stage 2).** Permissions and ownership are looked up *by bucket name*: "is this caller allowed to read from `rider-photo`?" Wrong bucket or no permission → `403`, before any data lookup.
+- **The keyspace scope (Stage 3).** The PMT really sorts on `(bucket, key)`, so the bucket is the **high-order prefix** of the sort order — the range lookup happens *inside* `rider-photo`'s slice, and the bucket boundary is a hard wall (which is why a partition never spans two buckets).
+
+And what the bucket does **not** do: it never points at a server, a rack, an HDD, or a file. It narrows *which keyspace*; the **rest of the key** does the actual locating. To S3 the name `rider-photo` is opaque — it means "rider photos" only to Lyft's app, never to S3.
+
+### Stage 3 — Inside S3: which server owns this key?
+
+Now the front-end has to answer one question: *which machine is responsible for this key right now?* It answers by reading the **Partition Map Table (PMT)** — a small, replicated lookup database that every front-end shares. (This confirms the intuition from the control-plane diagram: yes, the S3 API server talks directly to the PMT. Real S3 calls this the *index subsystem*.)
+
+The PMT does **not** keep a row per object — there are hundreds of trillions of objects, so that would be hopeless. Instead it stores **ranges**: "every key from *here* to *there* lives on that server." Because keys are kept in **sorted order**, finding the right range is fast: the server does a **binary search** — jump to the middle of the list, decide whether the key is above or below, throw away half, repeat. Even across millions of ranges that's a couple dozen comparisons, never a scan. Our key `rider-photo/r-99281/...` lands in the range `[r-90000, r-100000]`, which the PMT says is owned by **Partition Server 7**.
+
+Two points are worth being precise about:
+
+- The front-end only ever **reads** the PMT. The one component allowed to **write** it is the **Partition Manager** — the control-plane brain that decides when to split a hot range or reassign one after a crash. *Many readers, a single writer* is what keeps the map consistent.
+- **Partition Server 7 owns the range but holds none of the actual photo bytes.** It's a process — just CPU and memory — that has been *assigned* responsibility for `[r-90000, r-100000]` by that PMT row. The bytes live on separate storage machines. This is exactly why a crash is cheap: if Server 7 dies, the Partition Manager simply writes a new PMT row handing its ranges to another server, which starts serving at once — nothing has to be copied, because nothing was ever stored *inside* Server 7.
+
+The front-end forwards the request to Partition Server 7, and now a **second, finer lookup** happens — this time *inside* that server.
+
+### Stage 4 — From the key to the exact bytes
+
+Partition Server 7 must turn the full key into a precise physical location, and it does this with **its own index**. It's worth being concrete about what that index *is*: an **in-memory map living in the partition server's RAM**, pairing each key the server owns with *where that object's bytes sit on disk*. It is **not** another database call across the network — it's a local memory lookup, which is what makes this step fast. (It's the same trick as the [Bitcask key-value engine](19-storage-engine-fast-kv-db.md): hold a map of `key → file + position` in memory, keep the data itself in files on disk, and rebuild the map from disk when the server restarts.)
+
+For our key, the index hands back something like: *node 12, file `0007.log`, offset 4,182,016, length 51,204.* Decoding that:
+
+- **Why a file called `0007.log`?** Remember the storage is **log-structured** (Section 11): the server never overwrites data in place, it only ever **appends** to the end. To keep that orderly, writes are poured into big sequential files called **segments** — `0001.log`, `0002.log`, and so on. The server keeps appending to the *current* segment until it fills up, then opens the next one. Our object simply happened to be written into segment `0007.log`. (A "segment file" is just one of those append-only chunks of the log.)
+- **Offset and length** then make the read trivial: the object's bytes begin at **byte number 4,182,016** inside that file and run for **51,204 bytes**. Reading is "jump to that position, read that many bytes" — one **seek**, one read, no searching. Note nothing *chose* this disk by a routing rule: the write went to whatever segment was open at the time, and the in-memory index **remembered** the spot. Reads follow that memory; writes always go to the current open segment.
+
+The partition server reaches that storage machine as if its files were local, through a **FUSE mount** — a Linux feature that makes a remote disk look like an ordinary local folder, so the server can just `open`, `seek`, and `read`.
+
+But there's one thing we glossed over: the photo **isn't stored as a single whole file on a single disk.** Keeping three full copies would be safe but wasteful, so S3 uses a cheaper scheme called **erasure coding**. The plain-language version: the object is split into some number of **data pieces**, and from those the system computes a few **extra "parity" pieces** (think of the parity as math-generated backup fragments, the same idea behind RAID). All the pieces — data and parity — are written to **different machines in different datacenters**; S3 spreads them across at least **three Availability Zones** (an Availability Zone is an independent datacenter in the same region, with its own power and network). The useful property: the *whole* object can be rebuilt from **any sufficient subset** of the pieces. So several disks — even an entire datacenter — can fail and the photo still reconstructs, at a fraction of the storage cost of full copies.
+
+Reading, then, really means: fetch enough pieces from those storage nodes and **reassemble** the object. And before any of it is returned, each piece's **checksum** is verified. A checksum is a short fingerprint computed from the bytes; S3 stored it when the object was written, recomputes it on read, and compares. If a single bit silently flipped on disk over the years ("bit rot"), the fingerprints won't match — and S3 rebuilds that piece from the others rather than ever handing back a corrupted photo.
+
+### Stage 5 — The return trip
+
+The reassembled, verified bytes travel **back up the same chain** they came down: storage node → Partition Server 7 → the front-end API server → out to **CloudFront**, which now **caches** the photo at the edge (so the next rider in that region skips this entire journey) → and finally the phone, which paints the image. The rider saw none of this — just a face appearing on screen in a few hundred milliseconds.
+
+### Who is hit, and what each one's job is
+
+| Hop | Component | Its one job |
+| --- | --- | --- |
+| 1 | **Lyft API + Lyft DB** | Turn "rider r-99281" into an S3 key + a presigned URL |
+| 2 | **CloudFront CDN** | Serve from edge cache; only forward to S3 on a miss |
+| 3 | **Route 53 + ELB** | Resolve endpoint, spread to a free front-end |
+| 4 | **Front-end API server** | Authenticate (SigV4/IAM); parse the **bucket** off the key |
+| 5 | **PMT** *(index subsystem)* | Range-lookup: key → owning **partition server** |
+| 6 | **Partition server** | Owns the key-range; its in-memory index turns the key → node·file·offset |
+| 7 | **Storage node** | Seek to the offset in the right segment file, read the bytes |
+| 8 | **Erasure coding + checksum** | Rebuild the object from its pieces across 3 datacenters; verify the fingerprints |
+
+The shape to remember: **the key is read once at the door (→ bucket), routed by *range* through the PMT to the owning partition server, then resolved by that server's *own in-memory index* to the exact file and offset.** A range lookup to find the *server*; a direct index lookup to find the *bytes*.
+
+> **Memory hook:** *phone → Lyft (gets the key from Lyft's own DB) → CDN → S3 front-end (check the signature, slice off the bucket) → PMT range-lookup (which server owns this key?) → partition server (owns the range, holds no bytes) → its in-memory index → segment file + offset → rebuild the object from its pieces spread across 3 datacenters, check the fingerprint → back up through the CDN to the phone.*
 
 ---
 

@@ -1,0 +1,112 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+  <defs>
+    <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="arrYellow" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="arrGrey" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#9aa6b2"/></marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">One Tenant &#8594; Many Buckets &#8594; Many Partitions</text>
+  <text x="590" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">Lyft&#8217;s account, its buckets, and how each bucket splits into partitions</text>
+
+  <!-- ===== Tenant ===== -->
+  <rect x="440" y="92" width="300" height="56" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="590" y="118" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">Lyft account</text>
+  <text x="590" y="138" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">tenant = one AWS account</text>
+
+  <!-- connectors tenant -> buckets -->
+  <line x1="590" y1="148" x2="130" y2="196" stroke="#9aa6b2" stroke-width="1.5" marker-end="url(#arrGrey)"/>
+  <line x1="590" y1="148" x2="314" y2="196" stroke="#9aa6b2" stroke-width="1.5" marker-end="url(#arrGrey)"/>
+  <line x1="590" y1="148" x2="498" y2="196" stroke="#9aa6b2" stroke-width="1.5" marker-end="url(#arrGrey)"/>
+  <line x1="590" y1="148" x2="682" y2="196" stroke="#9aa6b2" stroke-width="1.5" marker-end="url(#arrGrey)"/>
+  <line x1="590" y1="148" x2="866" y2="196" stroke="#9aa6b2" stroke-width="1.5" marker-end="url(#arrGrey)"/>
+  <line x1="590" y1="148" x2="1050" y2="196" stroke="#9aa6b2" stroke-width="1.5" marker-end="url(#arrGrey)"/>
+
+  <!-- ===== Buckets row ===== -->
+  <!-- 0 -->
+  <rect x="50" y="196" width="160" height="58" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="130" y="221" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">driver-photo/</text>
+  <text x="130" y="241" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">bucket</text>
+  <!-- 1 -->
+  <rect x="234" y="196" width="160" height="58" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="314" y="221" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">rider-photo/</text>
+  <text x="314" y="241" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">bucket</text>
+  <!-- 2 -->
+  <rect x="418" y="196" width="160" height="58" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="498" y="221" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">driver-pay/</text>
+  <text x="498" y="241" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">bucket</text>
+  <!-- 3 -->
+  <rect x="602" y="196" width="160" height="58" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="682" y="221" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">rider-pay/</text>
+  <text x="682" y="241" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">bucket</text>
+  <!-- 4 -->
+  <rect x="786" y="196" width="160" height="58" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="866" y="221" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">ride-history/</text>
+  <text x="866" y="241" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">bucket</text>
+  <!-- 5 -->
+  <rect x="970" y="196" width="160" height="58" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="1050" y="221" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14">ml-model/</text>
+  <text x="1050" y="241" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">bucket</text>
+
+  <text x="590" y="284" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#8aff8a" font-weight="bold">One tenant &#8594; many buckets.</tspan>&#160;&#160;Each bucket has exactly one owner &#8212; never shared across tenants.</text>
+
+  <!-- ===== Zoom into one bucket -> partitions ===== -->
+  <text x="64" y="322" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">Zoom into one bucket &#8594; many partitions</text>
+
+  <rect x="80" y="350" width="200" height="100" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="180" y="394" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="16">ride-history/</text>
+  <text x="180" y="416" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">one bucket</text>
+
+  <line x1="280" y1="400" x2="354" y2="400" stroke="#ffff99" stroke-width="2.5" marker-end="url(#arrYellow)"/>
+
+  <rect x="360" y="360" width="180" height="84" rx="8" fill="#241018" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="450" y="396" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">partition 1</text>
+  <text x="450" y="418" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">[a &#8211; h]</text>
+
+  <rect x="556" y="360" width="180" height="84" rx="8" fill="#241018" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="646" y="396" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">partition 2</text>
+  <text x="646" y="418" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">[i &#8211; p]</text>
+
+  <rect x="752" y="360" width="180" height="84" rx="8" fill="#241018" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="842" y="396" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">partition 3</text>
+  <text x="842" y="418" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">[q &#8211; z]</text>
+
+  <text x="960" y="392" fill="#9aa6b2" font-family="sans-serif" font-size="12">splits into more</text>
+  <text x="960" y="410" fill="#9aa6b2" font-family="sans-serif" font-size="12">as it grows / heats</text>
+
+  <text x="64" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ff8bd2" font-weight="bold">One bucket &#8594; many partitions.</tspan>&#160;&#160;Each partition owns a contiguous key range <tspan font-style="italic">inside that one bucket</tspan>.</text>
+
+  <!-- ===== The rule: allowed vs forbidden ===== -->
+  <!-- allowed -->
+  <rect x="60" y="510" width="520" height="156" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="80" y="538" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">&#10003; A partition lives inside ONE bucket</text>
+  <rect x="90" y="552" width="460" height="96" rx="8" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="104" y="572" fill="#ffff99" font-family="monospace" font-size="13">ride-history/</text>
+  <rect x="110" y="580" width="130" height="52" rx="6" fill="#241018" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="175" y="611" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">partition 1</text>
+  <rect x="250" y="580" width="130" height="52" rx="6" fill="#241018" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="315" y="611" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">partition 2</text>
+  <rect x="390" y="580" width="130" height="52" rx="6" fill="#241018" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="455" y="611" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">partition 3</text>
+
+  <!-- forbidden -->
+  <rect x="600" y="510" width="520" height="156" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="620" y="538" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">&#10007; A partition can NOT span two buckets</text>
+  <rect x="650" y="554" width="150" height="44" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="725" y="581" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">driver-pay/</text>
+  <rect x="920" y="554" width="150" height="44" rx="6" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <text x="995" y="581" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="13">rider-pay/</text>
+  <!-- straddling partition -->
+  <rect x="700" y="606" width="320" height="38" rx="6" fill="#241018" stroke="#ff8bd2" stroke-width="1.8" stroke-dasharray="7,5"/>
+  <text x="860" y="630" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">one partition across both buckets</text>
+  <!-- red X over it -->
+  <line x1="704" y1="608" x2="1016" y2="642" stroke="#ff5555" stroke-width="3"/>
+  <line x1="704" y1="642" x2="1016" y2="608" stroke="#ff5555" stroke-width="3"/>
+  <text x="860" y="660" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="11.5" font-style="italic">a bucket boundary is always a split point</text>
+
+  <!-- ===== Takeaway ===== -->
+  <rect x="44" y="686" width="1092" height="58" rx="10" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="64" y="712" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">TAKEAWAY</text>
+  <text x="64" y="734" fill="#ffffff" font-family="sans-serif" font-size="15">Tenant = who owns it (Lyft). Bucket = the named dataset (one owner). Partition = a key-range slice of one bucket. So: 1 tenant&#8594;many buckets, 1 bucket&#8594;many partitions, 1 partition&#8594;exactly 1 bucket.</text>
+</svg>
