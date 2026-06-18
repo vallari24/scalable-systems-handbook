@@ -91,15 +91,15 @@ And this is where an <span style="color:#ffff99"><strong>SLA</strong></span> ent
 
 **Question: the buffer is full and we're flushing it to disk. Do we append it to one big growing file, or write a brand-new file each time? It sounds like a minor implementation detail — it isn't.**
 
-Consider appending to a single, ever-growing data file. Two problems show up fast. First, files have a <span style="color:#ff8a8a"><strong>maximum size</strong></span> — every filesystem caps it (an inode tracks a finite block list; old FAT32 capped a single file at 2³² bytes ≈ 4 GB). A forever-growing file eventually hits that wall. Second, appending to the *end* of a huge open file means seeking to that end and doing a long, in-place extension every flush — exactly the kind of work we've been trying to avoid.
+Appending to one open log file is technically viable. Operating systems support append mode, so the file's current size does **not** make each append require a progressively longer seek. Filesystem limits exist, but avoiding one eventual giant file is not the main reason an LSM creates a new file for every flush.
 
-<img src="../assets/lsm-trees/flush-target.svg" alt="Where should a flush be written — two options compared. Option 1 (red, rejected): append every flush to one existing, ever-growing file. Two problems listed: 'file gets too long' — every filesystem caps a single file's size (an inode tracks a finite block list; FAT32 capped a file at 2^32 bytes ≈ 4 GB), so it eventually hits a hard wall; and 'flush gets too slow' — appending to the end of a huge open file is awkward and not a clean one-shot write. Option 2 (green, chosen): write a brand-new file for every flush. Benefits: it's a single one-shot sequential write of a small file (fast and efficient — you flush the whole buffer at once, you don't open-and-extend an existing file), and each file is naturally bounded. Bottom: the result — a row of small immutable files on disk, named 001.sst, 002.sst, 003.sst, 004.sst, 005.sst, each one the frozen contents of one memtable flush, never modified again. A label points at them: 'each file is an SSTable; every flush creates a new one. Data now lives in two places: in-memory (memtable) and on-disk (many SSTables).'" width="1000">
+<img src="../assets/lsm-trees/flush-target.svg" alt="Why an LSM writes a new immutable file for every flush instead of appending every flush to one shared data file. Appending is viable and does not become slower merely because the file is large. The problem is structure: one shared file mixes generations, couples indexing and cleanup to the whole file, and cannot be replaced in small independent units. A fresh SSTable gives every flush a bounded sorted key range, its own index and metadata, and an immutable unit that compaction can safely replace. Bottom: a row of immutable files named 001.sst through 005.sst, each representing one frozen memtable flush." width="1000">
 
-So we choose the other option: **every flush writes a brand-new file.** That file is the frozen snapshot of one memtable, written in a single <span style="color:#8aff8a"><strong>one-shot sequential write</strong></span> — the cheapest possible disk operation, and small enough to never hit a size limit. Once written, the file is <span style="color:#93c5fd"><strong>immutable</strong></span>: never modified again, only read (and later compacted). This is the same active-vs-immutable insight from Bitcask, but now the immutable units are *whole flushed buffers*, not rotated log segments.
+So we choose the other option: **every flush writes a brand-new file.** Not because appending to a large file is inherently slow, but because each flush should become an independently <span style="color:#8aff8a"><strong>indexable, bounded sorted run</strong></span>. Once written, the file is <span style="color:#93c5fd"><strong>immutable</strong></span>: readers can use it without coordinating with writers, metadata can describe its key range, and compaction can replace a selected set of complete files atomically. This is the same active-vs-immutable insight from Bitcask, but now the immutable units are *whole flushed buffers*, not rotated log segments.
 
 Each of these files is an <span style="color:#ffff99"><strong>SSTable</strong></span> (Sorted String Table). They pile up over time — `001.sst`, `002.sst`, `003.sst`, … — one per flush. Our data now genuinely lives in two places: the live <span style="color:#ff8bd2"><strong>memtable</strong></span> in RAM, and a growing stack of immutable <span style="color:#ffff99"><strong>SSTables</strong></span> on disk. The next question is what's *inside* one of those files, because that's what makes the on-disk read fast.
 
-> **Memory hook:** *one new immutable file per flush, not one growing file — a flush is a cheap one-shot sequential write, and each file dodges the filesystem's max-file-size wall. Each file is an SSTable.*
+> **Memory hook:** *one new immutable file per flush, not because large-file append gets slower, but because each flush needs its own sorted, indexable, replaceable unit. Each file is an SSTable.*
 
 ---
 
@@ -234,6 +234,8 @@ Be precise about what we did and didn't gain. With a fully-durable WAL, the per-
 
 That also answers "why not just use Redis?" Redis keeps **everything in RAM**, so it hits the *same* memory wall — and worse, a key with a TTL <span style="color:#ff8a8a"><strong>expires and the data is gone</strong></span>. An LSM tree keeps the hot, recent data in RAM (the memtable) *and* everything else durably on disk — some data in memory, some on disk — so it persists far beyond RAM size and never silently drops a key at a TTL.
 
+> **Redis persistence side note:** Redis Open Source can persist its in-memory dataset with **RDB snapshots**, an **append-only file (AOF)**, or both. That improves restart durability, but the active dataset is still memory-resident; persistence does not turn it into an LSM-style dataset that can grow beyond RAM. A TTL is also an explicit application choice: when configured, expiration is intentional deletion, not a failure of Redis persistence. See the [official Redis persistence guide](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/).
+
 Where does this shine? The canonical case is <span style="color:#ff8bd2"><strong>ad-tech / real-time bidding</strong></span>. A bid is written, lives hot for ~4 minutes while the auction runs, and is then read back — but it *also* must persist for billing and audit. In Redis you'd set a TTL and the data would simply vanish; an LSM serves that hot recent bid fast from the memtable **and** keeps it durably on disk. The general pattern is <span style="color:#8aff8a"><strong>read-after-write on recent data that must also survive</strong></span>, at a scale too large to hold every key in RAM. And it's not theoretical — this exact engine is <span style="color:#93c5fd"><strong>RocksDB, LevelDB, BadgerDB, Cassandra, and HBase.</strong></span>
 
 > **Memory hook:** *the LSM win over Bitcask isn't write speed — it's that keys are disk-bound, not RAM-bound, so you store far more per machine. Beats Redis because hot data sits in RAM while everything persists on disk (no TTL data loss). Ideal for read-after-write on recent data at scale — e.g. ad-tech bidding.*
@@ -251,3 +253,377 @@ One last real-world note the diagram hints at: production LSM engines are usuall
 The whole engine is one idea followed honestly to its conclusions: **keep a small sorted buffer in RAM, flush it to immutable sorted files on disk, merge those files in the background, and use a Bloom filter and a write-ahead log to make reads cheap and writes durable.** That shape — the log-structured merge tree — is how a modern key-value store holds more keys than memory could ever fit, while still absorbing writes at the speed of RAM.
 
 > **Memory hook:** *an LSM tree = memtable (RAM, sorted) + WAL (durability) → flush to immutable sorted SSTables (each with a Bloom filter) → background compaction keeps files few. Reads check RAM then Bloom-guarded files newest-first. Disk-bound keys, RAM-speed writes — that's RocksDB/LevelDB/Cassandra.*
+
+---
+
+## LevelDB internals: the complete path and why each part exists
+
+**Question: what does the deliberately small LevelDB implementation add around the basic LSM idea so writes, reads, recovery, and file replacement all remain correct?**
+
+<img src="../assets/lsm-trees/leveldb-architecture.svg" alt="LevelDB end-to-end architecture. The write path appends an atomic WriteBatch to the current log, then inserts its records into the active sorted memtable. When the memtable fills, LevelDB rotates to a new log and memtable while the old immutable memtable flushes in the background to an overlapping Level-0 SSTable. Compaction merges overlapping Level-0 files with Level 1, then moves bounded key ranges through non-overlapping Level 1 through Level 6 files. The read path checks the active memtable, immutable memtable, Level-0 files newest-first, and then at most one candidate file per higher level; optional Bloom filters, the table cache, and block cache avoid unnecessary file and block reads. CURRENT points to the MANIFEST, which records the live files, levels, and key ranges so recovery can reconstruct the serving state. Each component includes a short explanation of why it exists." width="1180">
+
+The write path is intentionally short. A `WriteBatch` first enters the current append-only log, then the same ordered mutations enter the active memtable. The log exists so recovery can replay acknowledged updates; the sorted memtable exists so current reads see the newest state and a later flush can produce an ordered table efficiently. A synchronous write can request durable storage before returning, while the default asynchronous mode trades machine-crash durability for throughput.
+
+When the active memtable reaches its configured size, LevelDB makes it immutable and immediately installs a new log plus a new active memtable. The old memtable then flushes in the background. This <span style="color:#93c5fd"><strong>rotation separates foreground writes from flush I/O</strong></span>: new writes continue while the frozen state becomes one Level-0 SSTable.
+
+Level 0 is special because independently flushed files may cover overlapping key ranges. Reads may therefore need to check several L0 files, newest first. Levels 1 and above enforce non-overlapping ranges within each level, so range metadata identifies at most one candidate file per level. Inside an SSTable, the index points to sorted data blocks; optional filters reject absent keys, the table cache avoids reopening files, and the block cache keeps hot blocks in memory.
+
+Compaction chooses files from one level plus overlapping files from the next, merges their sorted streams, and writes a sequence of bounded output files. It removes versions that are no longer visible and advances data toward larger levels. The reason is not merely cleanup: compaction converts overlapping write-optimized runs into a read-efficient hierarchy while bounding file count and reclaiming obsolete space.
+
+Finally, `CURRENT` identifies the active `MANIFEST`, and the MANIFEST records the live SSTables, levels, key ranges, and file-set changes. On restart, LevelDB reconstructs that versioned file map and replays remaining log records. This metadata layer is what makes replacing immutable files safe: readers use a consistent version while a compaction prepares and atomically installs the next one.
+
+Implementation references: [LevelDB implementation notes](https://github.com/google/leveldb/blob/main/doc/impl.md), [SSTable format](https://github.com/google/leveldb/blob/main/doc/table_format.md), and [API, synchronous writes, snapshots, and caching](https://github.com/google/leveldb/blob/main/doc/index.md).
+
+> **Memory hook:** *LevelDB is the compact reference design: log + sorted memtable on write, immutable tables arranged into one overlapping level and several non-overlapping levels, caches and filters on read, and a MANIFEST that atomically names the live file set.*
+
+---
+
+## RocksDB at a high level: LevelDB's shape engineered for production workloads
+
+**Question: RocksDB began from LevelDB's design. What did it add so the same LSM shape can handle concurrent server workloads, multiple logical datasets, fast SSDs, and sustained ingestion?**
+
+<img src="../assets/lsm-trees/rocksdb-architecture.svg" alt="High-level RocksDB architecture. Concurrent writes enter a write coordinator that can combine compatible writes into one WAL append and fsync. One database can contain multiple column families; they share the WAL for ordered crash recovery while each column family has its own mutable and immutable memtables, options, and LSM tree. Full memtables enter a flush pipeline served by background flush workers. SSTables are arranged using configurable leveled, universal, or FIFO compaction, with parallel compaction workers and optional subcompactions. Reads check mutable and immutable memtables, then use file metadata, Bloom filters, indexes, table cache, and block cache to reach candidate SSTable blocks. The MANIFEST records file-set changes. Backpressure slows or stops writes when immutable memtables, Level-0 files, or compaction debt exceed configured limits. Callouts explain why each production feature exists." width="1180">
+
+RocksDB keeps the same three foundations—WAL, memtables, and immutable SSTables—but makes the paths independently tunable. Concurrent compatible writes can be grouped into one WAL write and one `fsync`, amortizing durability cost. Column families share the database WAL so cross-column-family batches and recovery preserve ordering, while each column family owns its memtables, options, and LSM file hierarchy. That gives logical isolation without requiring a separate database process or durability stream for every dataset.
+
+A full memtable becomes immutable, a new mutable memtable takes over, and background flush workers drain the immutable pipeline. RocksDB can retain several immutable memtables and reserve threads specifically for flushing. The reason is sustained concurrency: foreground writers should not wait for each individual flush, and flush work should not be starved by long compactions.
+
+On disk, leveled compaction remains the default, but RocksDB also offers universal and FIFO styles because no one write/read/space tradeoff fits every workload. Multiple compactions can run in parallel, and selected compactions can use subcompactions. These features exist because on fast storage the compaction pipeline—not the initial memtable insert—often determines sustainable write throughput.
+
+The read path combines mutable and immutable memtables with SSTable metadata, indexes, Bloom filters, a table cache, and a block cache. Index and filter blocks can be cached or partitioned, and data blocks compete for a bounded cache budget. RocksDB exposes these choices because memory should be spent differently for point-lookups, scans, large databases, and different storage devices.
+
+Production throughput also requires a brake. If flush or compaction falls behind, RocksDB deliberately delays or stops writes based on immutable-memtable count, Level-0 file count, or pending compaction bytes. <span style="color:#ff8a8a"><strong>Backpressure protects the database</strong></span> from unbounded read amplification, space amplification, and eventual disk exhaustion. The MANIFEST records every installed file-set change, while the WAL protects updates not yet represented in SSTables.
+
+Architecture references: [RocksDB overview](https://github.com/facebook/rocksdb/wiki/RocksDB-Overview), [memtables and flush triggers](https://github.com/facebook/rocksdb/wiki/MemTable), [leveled compaction](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction), [WAL group commit](https://github.com/facebook/rocksdb/wiki/WAL-Performance), [block cache](https://github.com/facebook/rocksdb/wiki/Block-Cache), and [write stalls](https://github.com/facebook/rocksdb/wiki/Write-Stalls).
+
+> **Memory hook:** *RocksDB keeps LevelDB's LSM core, then adds production controls around it: group commit, column families, pipelined memtables, parallel and selectable compaction, explicit cache management, and backpressure when background work cannot keep up.*
+
+---
+
+## Questions that complete the mental model
+
+### How does `GET` choose the newest value across multiple files?
+
+**Question: the same user key may appear in the active memtable, an immutable memtable, and several SSTables. How does the engine know which copy is newest without trusting only the file name or level?**
+
+Every mutation receives a monotonically increasing <span style="color:#ffff99"><strong>sequence number</strong></span>. The engine stores an internal key shaped like:
+
+```text
+(user key, sequence number, record type)
+```
+
+Records sort first by user key and then by sequence number in descending order. For one user key, the newest mutation therefore appears before its older versions:
+
+```text
+k @ 105 -> PUT v3
+k @ 101 -> DELETE
+k @ 92  -> PUT v2
+k @ 40  -> PUT v1
+```
+
+A normal `GET(k)` reads at the database's latest sequence number. A snapshot read uses the sequence number captured when that snapshot was created. The lookup asks for the newest record whose sequence number is less than or equal to that read sequence:
+
+```text
+latest read at sequence 110  -> k @ 105 -> v3
+snapshot at sequence 103     -> k @ 101 -> not-found
+snapshot at sequence 95      -> k @ 92  -> v2
+```
+
+The physical search still starts with the mutable memtable, then the immutable memtable, then candidate SSTables. But correctness comes from <span style="color:#8aff8a"><strong>sequence-number visibility</strong></span>, not merely “the newest file wins.” A matching deletion record is also a result: it means the key is logically absent at that read sequence, so the engine must not expose an older value.
+
+LevelDB's internal-key comparator orders equal user keys by decreasing sequence number, and its lookup key includes the read's sequence number. See the official [internal-key comparator and lookup-key construction](https://github.com/google/leveldb/blob/main/db/dbformat.cc) and [snapshot API](https://github.com/google/leveldb/blob/main/doc/index.md#snapshots).
+
+> **Memory hook:** *every mutation carries a sequence number. `GET` returns the newest value—or tombstone—visible at the read's sequence number, wherever that record physically lives.*
+
+### Does `GET` use the same Bloom filter after a key is deleted?
+
+**Question: an older SSTable may still contain `k → v1`, while a newer memtable or SSTable contains `k → tombstone`. Could the Bloom filter say the key exists even though `GET(k)` must return not-found?**
+
+Yes—and that is correct. A Bloom filter answers a <span style="color:#ffff99"><strong>physical membership question</strong></span>: “could this SSTable contain a record for user key `k`?” It does not answer the logical question: “does `k` currently have a live value?”
+
+`DELETE(k)` follows the write path rather than consulting a separate delete filter:
+
+```text
+DELETE(k)
+  -> append a deletion record to the WAL
+  -> insert that deletion record into the memtable
+```
+
+Suppose the physical state is:
+
+```text
+new memtable:  k -> TOMBSTONE
+old SSTable:   k -> v1
+```
+
+A `GET(k)` checks newer state first. It finds the tombstone and returns <span style="color:#93c5fd"><strong>not-found</strong></span>; it must not continue to the older value. After the tombstone is flushed, the new SSTable's filter may answer **MAYBE** for `k`, because that file really does contain a record for `k`. The subsequent lookup reads that record, discovers that it is a deletion marker, and returns not-found.
+
+Bloom filters are not edited after every delete. SSTables are immutable. A flush creates a new SSTable and a new filter; compaction creates replacement SSTables and replacement filters; only after the new files are installed can the old files and filters be retired. Compaction can eventually remove both the old value and tombstone, but only when no snapshot or unexamined lower level still needs the deletion marker.
+
+LevelDB's internal records distinguish values from deletion markers, while its filter policy derives membership from the user-key portion of those records. See the official [internal-key format](https://github.com/google/leveldb/blob/main/db/dbformat.h), [memtable lookup behavior](https://github.com/google/leveldb/blob/main/db/memtable.cc), and [filter-block implementation](https://github.com/google/leveldb/blob/main/table/filter_block.cc).
+
+> **Memory hook:** *a Bloom filter says “this file may contain a record for `k`,” not “`k` is logically alive.” The tombstone decides the result; compaction cleans up the physical history later.*
+
+### What does “embedded database” mean?
+
+**Question: if RocksDB and LevelDB are not database servers, where do they execute, where does their data live, and how do they scale?**
+
+An <span style="color:#ffff99"><strong>embedded database</strong></span> is a library linked into the application. The storage engine runs inside the application's process and thread context:
+
+```text
+application process
+  -> business logic
+  -> RocksDB / LevelDB library
+       -> memtables and caches in process memory
+       -> flush and compaction background threads
+
+local data directory
+  -> WAL files
+  -> SSTables
+  -> MANIFEST and supporting metadata
+```
+
+`db.Put()` and `db.Get()` are ordinary in-process function calls, not network requests to a separate database service. The engine is still persistent: its WAL, SSTables, and metadata live in a configured filesystem directory, normally on local SSD. They survive process restarts. Whether an acknowledged recent write survives a full machine crash depends on the selected WAL and synchronization settings.
+
+Scaling happens at different boundaries:
+
+- **Inside one process:** concurrent application threads, caches, column families, and background flush/compaction workers.
+- **Inside one machine:** more CPU, RAM, storage bandwidth, larger disks, or multiple embedded database instances.
+- **Across machines:** the surrounding system must add sharding, replication, routing, failover, or consensus.
+
+RocksDB does not become distributed merely because the application runs on several servers. Each instance owns local state; the application or a higher-level database coordinates those instances. RocksDB explicitly documents that replication belongs above the engine, while multiple local databases can share process-level thread pools, block caches, and rate limiters. See the official [RocksDB overview](https://github.com/facebook/rocksdb/wiki/RocksDB-Overview).
+
+> **Memory hook:** *embedded means “the database engine lives inside your process.” Its files are durable locally; distribution, replication, and cross-machine scaling belong to the surrounding system.*
+
+### Why keep keys sorted—and when is the sorting work paid?
+
+**Question: sorting improves reads and compaction, but does maintaining sorted keys make every write slow? Is the memtable a hash table that gets sorted only during flush?**
+
+For LevelDB and default RocksDB, the memtable is <span style="color:#ff8bd2"><strong>not a hash table</strong></span>. It is a sorted skip list. Each write performs an in-memory ordered insertion, typically expected `O(log n)`, after the WAL append:
+
+```text
+PUT(k, v)
+  -> append to WAL
+  -> insert into sorted skip-list memtable
+```
+
+That costs more CPU than an expected `O(1)` hash-table insertion, but it happens in RAM and buys several properties at once:
+
+- `GET` can search the memtable efficiently.
+- Range scans can iterate keys in order.
+- Flush can walk the memtable directly in sorted order instead of sorting the entire buffer.
+- SSTable indexes can address ordered data blocks.
+- Compaction can merge sorted inputs in one linear pass.
+
+The engine therefore pays a small ordering cost on each default memtable write so that flush and merge remain predictable:
+
+```text
+sorted memtable
+  -> sequentially write sorted SSTable
+
+sorted SSTable A + sorted SSTable B
+  -> linear merge into sorted output
+```
+
+RocksDB also provides alternative memtables for specialized workloads. A vector memtable appends cheaply and sorts when it flushes. Hash-based memtables optimize selected prefix lookups, but fully ordered scans and flushing become more expensive. The choice is a tradeoff about <span style="color:#ffff99"><strong>when to pay for order</strong></span>, not whether sorted SSTables are useful.
+
+See the official RocksDB documentation for the [default skip-list and alternative memtables](https://github.com/facebook/rocksdb/wiki/MemTable), and LevelDB's table builder, which writes entries by iterating its already ordered input: [LevelDB table construction](https://github.com/google/leveldb/blob/main/db/builder.cc).
+
+> **Memory hook:** *sorted keys move work from random disk operations into cheap in-memory comparisons. The default skip list maintains order during writes; other memtables may defer sorting until flush.*
+
+### Why can't a tombstone be removed immediately?
+
+**Question: once `DELETE(k)` has hidden every older value, why not erase the tombstone during the next compaction?**
+
+Because the compaction may not include every physical copy of `k`. Consider:
+
+```text
+Level 1 input:  k -> TOMBSTONE
+Level 4 file:   k -> old value
+```
+
+If compaction removes the tombstone while the older value remains in Level 4, a later `GET(k)` can expose that value again. The deleted key has been <span style="color:#ff8a8a"><strong>resurrected</strong></span>.
+
+Snapshots add a second constraint. A snapshot created before the delete may still need to read the old value:
+
+```text
+sequence 80:  PUT k, v1
+snapshot:     sequence 90
+sequence 100: DELETE k
+```
+
+The latest view should return not-found, while the snapshot at sequence 90 should still return `v1`. Compaction must retain enough history to satisfy both views.
+
+LevelDB drops a tombstone only when it is older than the oldest active snapshot and the engine knows no copy of that key exists in lower, unexamined levels. Until both conditions hold, the tombstone is a <span style="color:#ffff99"><strong>correctness record</strong></span>, not disposable garbage. See LevelDB's official [compaction drop conditions](https://github.com/google/leveldb/blob/main/db/db_impl.cc).
+
+> **Memory hook:** *remove a tombstone too early and an older value can reappear. Keep it until no snapshot needs the old history and no lower level can contain a hidden copy.*
+
+### What happens if the process crashes halfway through flush or compaction?
+
+**Question: compaction creates new SSTables and removes old ones. What prevents a crash halfway through from leaving the database with half the old state and half the new state?**
+
+The engine separates <span style="color:#93c5fd"><strong>building files</strong></span> from <span style="color:#ffff99"><strong>installing files</strong></span>.
+
+During flush or compaction, it first writes new SSTables under new file numbers. LevelDB finishes each table, synchronizes and closes it, and verifies that the table can be opened. The old SSTables still remain part of the current database version during this work.
+
+Only after all required outputs are ready does the engine append one version edit to the MANIFEST. That edit says, conceptually:
+
+```text
+add:     new-output-1.sst, new-output-2.sst
+remove:  old-input-a.sst, old-input-b.sst
+```
+
+The MANIFEST transition makes the new file set visible as one consistent version. If the process crashes before that installation, recovery continues to use the old version; incomplete or unreferenced outputs can be cleaned up. If it crashes after installation, recovery uses the new version, and obsolete input files can be removed later.
+
+A flush crash is also protected by the WAL. If the new SSTable was never successfully installed, recovery replays the relevant log records and rebuilds the memtable. `CURRENT` points to the active MANIFEST, whose version edits reconstruct the last known consistent file set.
+
+See LevelDB's [table building and synchronization](https://github.com/google/leveldb/blob/main/db/builder.cc), [compaction installation](https://github.com/google/leveldb/blob/main/db/db_impl.cc), and RocksDB's official [MANIFEST description](https://github.com/facebook/rocksdb/wiki/MANIFEST).
+
+> **Memory hook:** *write and verify new files first; publish one MANIFEST edit second; delete old files later. A crash sees either the old installed version or the new installed version—not a half-installed merge.*
+
+### What happens when compaction cannot keep up with writes?
+
+**Question: foreground writes can arrive faster than flush and compaction can reorganize them. Why not keep accepting writes and let the background work catch up later?**
+
+The debt accumulates physically:
+
+- Immutable memtables queue up waiting to flush.
+- Level-0 files accumulate and increase read amplification.
+- Pending compaction bytes consume disk space.
+- Future compactions need progressively more I/O to recover.
+
+Continuing indefinitely risks severe read latency and eventually a full disk. RocksDB therefore applies <span style="color:#ff8a8a"><strong>write backpressure</strong></span>. It first delays writes, reducing ingestion toward the rate the storage device can sustain. At harder limits it stops writes until flush or compaction makes progress.
+
+The main triggers are too many immutable memtables, too many Level-0 SSTables, and too many estimated pending compaction bytes. Normal application writes can block during a stall. Callers that set `no_slowdown` can instead receive an incomplete status rather than waiting.
+
+The real sustainable write rate is therefore not “how fast can RAM accept inserts?” It is approximately “how fast can the whole system flush and compact those inserts over time?” See the official RocksDB [write-stall documentation](https://github.com/facebook/rocksdb/wiki/Write-Stalls).
+
+> **Memory hook:** *RAM absorbs bursts; compaction determines sustained throughput. When background work falls behind, backpressure protects read latency and disk space by slowing or stopping writers.*
+
+### What does “durable” mean: `write()`, page cache, or `fsync()`?
+
+**Question: if the WAL append succeeded, is the write already safe from every kind of crash?**
+
+Not necessarily. There are several durability boundaries:
+
+```text
+application / RocksDB buffer
+  -> operating-system page cache
+  -> storage device
+  -> persistent media
+```
+
+A successful `write()` commonly means the kernel accepted the bytes into its page cache. That usually survives an application-process crash, because the kernel is still running. It may not survive a machine crash or power loss.
+
+An `fsync()` asks the operating system and storage stack to persist the file's pending data before returning. In RocksDB, `WriteOptions.sync = true` synchronizes the WAL before acknowledging the write. With the default non-sync mode, the WAL is not crash-safe against a machine failure even though it can still recover from a process restart after the kernel writes those pages.
+
+Durability does not require one separate `fsync()` for every operation. <span style="color:#ff8bd2"><strong>Group commit</strong></span> combines compatible concurrent writes into one WAL write and one synchronization, then acknowledges the whole group. This preserves the durability boundary while amortizing expensive I/O.
+
+Hardware, filesystems, and storage configuration still matter: the guarantee is only as strong as the lower layers' implementation of flush and ordering commands. See RocksDB's official [WAL performance and sync-mode documentation](https://github.com/facebook/rocksdb/wiki/WAL-Performance).
+
+> **Memory hook:** *`write()` usually reaches the OS; `fsync()` requests persistence before acknowledgement. Group commit lets many durable writes share one synchronization.*
+
+### How do range scans work across several sorted sources?
+
+**Question: `GET(k)` looks for one key, but a scan such as `[k100, k200)` may cross the memtables and many SSTables. How does the engine return one ordered, duplicate-free view?**
+
+Each source exposes a sorted iterator:
+
+```text
+active memtable iterator
+immutable memtable iterator
+SSTable iterator A
+SSTable iterator B
+...
+```
+
+A merging iterator keeps the current key from each child in a heap and repeatedly emits the smallest internal key. This produces one globally sorted stream without materializing the complete result first.
+
+That internal stream can contain several versions and tombstones for the same user key. A database iterator applies the read's snapshot sequence, returns the newest visible value, suppresses older versions, and skips keys whose newest visible record is a tombstone:
+
+```text
+internal stream:
+  k1 @ 9 -> PUT v2
+  k1 @ 4 -> PUT v1
+  k2 @ 8 -> DELETE
+  k2 @ 3 -> PUT old
+
+user-visible scan:
+  k1 -> v2
+```
+
+Sorted keys make this streaming merge possible, but scans can still have read amplification: the iterator may need children from multiple levels, and long-lived iterators can pin the file version and blocks they reference. See RocksDB's official [iterator implementation](https://github.com/facebook/rocksdb/wiki/Iterator-Implementation) and LevelDB's [version-filtering database iterator](https://github.com/google/leveldb/blob/main/db/db_iter.cc).
+
+> **Memory hook:** *a range scan heap-merges every relevant sorted source, then filters the internal stream by snapshot, version, and tombstone to expose one ordered user view.*
+
+### What are read, write, and space amplification?
+
+**Question: LSM tuning repeatedly mentions “amplification.” What is being amplified, and why can't one configuration minimize all three dimensions?**
+
+Amplification compares physical work or storage with the application's logical request:
+
+| Amplification | Meaning | Typical LSM cause |
+| --- | --- | --- |
+| **Read amplification** | Physical files, blocks, or bytes examined per logical read. | The key may have candidates in several runs or levels. |
+| **Write amplification** | Total bytes written by WAL, flush, and compaction per byte written by the application. | Compaction rewrites existing data while merging new data downward. |
+| **Space amplification** | Physical storage occupied relative to the current logical dataset. | Old versions, tombstones, overlapping runs, and temporary compaction outputs coexist. |
+
+The compaction strategy moves cost among these dimensions. Leveled compaction maintains fewer overlapping runs, usually improving reads and steady-state space, but it can rewrite data many times. Tiered or universal compaction delays those rewrites and lowers write amplification, but permits more sorted runs and greater temporary space usage.
+
+There is no universal best setting because workload goals conflict:
+
+```text
+fewer runs        -> cheaper reads, more merge rewriting
+more runs         -> cheaper writes, more read and space overhead
+larger fanout     -> fewer levels, larger individual compactions
+smaller fanout    -> more levels, more frequent transitions
+```
+
+Measure amplification in production alongside latency and throughput; ratios without workload context can mislead. See RocksDB's official [compaction tradeoff overview](https://github.com/facebook/rocksdb/wiki/Compaction) and [leveled compaction documentation](https://github.com/facebook/rocksdb/wiki/Leveled-Compaction).
+
+> **Memory hook:** *an LSM does not eliminate work—it moves it. Compaction policy decides whether you pay more in reads, rewritten bytes, or temporary disk space.*
+
+### When does a Bloom filter become ineffective or too expensive?
+
+**Question: if Bloom filters avoid unnecessary SSTable reads, why not allocate an enormous filter for every file and use it for every query?**
+
+Bloom filters help most when the workload performs point lookups for keys that are absent from many candidate SSTables. A definite **NO** avoids the data lookup. They help less when:
+
+- Most queried keys actually exist, because a positive result still requires the real lookup.
+- The workload is dominated by broad range scans; whole-key filters do not prove that a range is empty.
+- Too few bits per key produce enough false positives that many unnecessary reads remain.
+- Filters and indexes consume memory that would have produced more value as cached data blocks.
+- Constructing very large filters adds flush or compaction CPU and temporary memory pressure.
+
+More bits reduce false positives, but returns diminish. RocksDB's documented example is roughly 9.9 bits per key for a 1% false-positive rate and 15.5 bits per key for 0.1%. The extra memory should be justified by the I/O it saves.
+
+RocksDB can skip filters on the last level for workloads dominated by successful lookups, cache index and filter blocks, partition large filters, or use prefix filters for selected iterator seeks. The right filter policy therefore depends on hit rate, query shape, cache budget, and storage latency. See the official [RocksDB Bloom filter guide](https://github.com/facebook/rocksdb/wiki/RocksDB-Bloom-Filter).
+
+> **Memory hook:** *Bloom filters buy fewer negative probes with RAM. They are valuable for absent-key point reads, less valuable for hits and broad scans, and oversized filters can steal memory from the data cache.*
+
+### Why does compaction produce multiple output files instead of one?
+
+**Question: compaction already merges several inputs into one sorted stream. Why not write that entire stream into one enormous SSTable?**
+
+The merged stream is logically one sorted run, but the engine splits it into multiple physical SSTables:
+
+```text
+sorted merged stream
+  -> output-1.sst  [a ... f]
+  -> output-2.sst  [g ... m]
+  -> output-3.sst  [n ... z]
+```
+
+Bounded output files provide several practical benefits:
+
+- File metadata can route a read to a narrow key range.
+- Indexes and filters remain independently cacheable.
+- Later compactions can rewrite only overlapping ranges instead of one enormous file.
+- File creation, verification, movement, and deletion remain manageable units.
+- Different files can participate in parallel reads or later background work.
+
+LevelDB also cuts an output when it reaches the configured maximum output size or when continuing would create too much overlap with “grandparent” files in the next level. Limiting that overlap prevents one new file from forcing an excessively large future compaction.
+
+All output files from the compaction are prepared first and then installed together through one version edit. They are multiple physical files but one logical state transition. See LevelDB's official [`MaxOutputFileSize` and `ShouldStopBefore` contract](https://github.com/google/leveldb/blob/main/db/version_set.h) and [compaction output installation](https://github.com/google/leveldb/blob/main/db/db_impl.cc).
+
+> **Memory hook:** *compaction creates one sorted run but several bounded files. Smaller physical units improve routing, caching, and future range-local compaction while the MANIFEST installs them as one logical result.*

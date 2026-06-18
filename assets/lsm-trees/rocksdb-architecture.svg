@@ -1,0 +1,175 @@
+<svg width="1280" height="940" viewBox="0 0 1280 940" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="rdb-p" markerWidth="10" markerHeight="10" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/>
+    </marker>
+    <marker id="rdb-g" markerWidth="10" markerHeight="10" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="rdb-b" markerWidth="10" markerHeight="10" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="rdb-y" markerWidth="10" markerHeight="10" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="940" fill="#111317"/>
+  <text x="640" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="31" font-weight="bold">RocksDB: High-Level Production Architecture</text>
+  <text x="640" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">LevelDB's WAL + memtable + SSTable core, extended for concurrency, isolation, tunability, and sustained throughput</text>
+
+  <!-- API and write coordination -->
+  <rect x="38" y="116" width="1204" height="202" rx="14" fill="#211522" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="62" y="144" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">CONCURRENT WRITE PATH</text>
+
+  <rect x="62" y="174" width="144" height="94" rx="10" fill="#16191e" stroke="#ff8bd2" stroke-width="2.2"/>
+  <text x="134" y="204" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">client writes</text>
+  <text x="134" y="229" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">Put / Delete</text>
+  <text x="134" y="249" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">WriteBatch</text>
+
+  <path d="M206 221 L248 221" fill="none" stroke="#ff8bd2" stroke-width="2.8" marker-end="url(#rdb-p)"/>
+
+  <rect x="258" y="160" width="194" height="122" rx="11" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.2"/>
+  <text x="355" y="190" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">write coordinator</text>
+  <text x="355" y="216" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">sequence + atomic batch</text>
+  <text x="355" y="239" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">combine compatible writers</text>
+  <text x="355" y="263" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: group commit</text>
+
+  <path d="M452 205 L494 205" fill="none" stroke="#ff8bd2" stroke-width="2.8" marker-end="url(#rdb-p)"/>
+  <path d="M452 241 C 478 270, 492 276, 520 280" fill="none" stroke="#ff8bd2" stroke-width="2.4" marker-end="url(#rdb-p)"/>
+
+  <path d="M504 164 a86 14 0 0 0 172 0 v68 a86 14 0 0 1 -172 0 z" fill="#211f10" stroke="#ffff99" stroke-width="2.2"/>
+  <ellipse cx="590" cy="164" rx="86" ry="14" fill="#211f10" stroke="#ffff99" stroke-width="2.2"/>
+  <text x="590" y="194" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">shared WAL</text>
+  <text x="590" y="218" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">ordered recovery</text>
+  <text x="590" y="238" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">one fsync can commit many</text>
+  <text x="590" y="260" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: amortize durability I/O</text>
+
+  <!-- column family fanout -->
+  <rect x="720" y="148" width="492" height="146" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="966" y="176" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">column-family routing</text>
+
+  <rect x="742" y="194" width="136" height="72" rx="8" fill="#2a1622" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="810" y="218" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">CF: users</text>
+  <text x="810" y="241" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">own memtables</text>
+  <text x="810" y="258" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">own options</text>
+
+  <rect x="898" y="194" width="136" height="72" rx="8" fill="#2a1622" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="966" y="218" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">CF: events</text>
+  <text x="966" y="241" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">own memtables</text>
+  <text x="966" y="258" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">own options</text>
+
+  <rect x="1054" y="194" width="136" height="72" rx="8" fill="#2a1622" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="1122" y="218" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">CF: index</text>
+  <text x="1122" y="241" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">own memtables</text>
+  <text x="1122" y="258" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">own options</text>
+
+  <path d="M676 205 L716 205" fill="none" stroke="#ff8bd2" stroke-width="2.8" marker-end="url(#rdb-p)"/>
+  <text x="966" y="286" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: logical isolation + ordered cross-CF recovery</text>
+
+  <!-- memory/flush pipeline -->
+  <rect x="38" y="338" width="1204" height="236" rx="14" fill="#101d2b" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="62" y="366" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">PER-COLUMN-FAMILY MEMORY + FLUSH PIPELINE</text>
+
+  <rect x="62" y="406" width="202" height="116" rx="11" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.2"/>
+  <text x="163" y="436" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">mutable memtable</text>
+  <text x="163" y="461" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">skip list by default</text>
+  <text x="163" y="483" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">pluggable alternatives</text>
+  <text x="163" y="507" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: tune write/scan shape</text>
+
+  <path d="M264 464 L306 464" fill="none" stroke="#93c5fd" stroke-width="2.8" marker-end="url(#rdb-b)"/>
+  <text x="285" y="449" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11.5">full</text>
+
+  <rect x="316" y="396" width="250" height="136" rx="11" fill="#10243a" stroke="#93c5fd" stroke-width="2.2"/>
+  <text x="441" y="426" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">immutable memtable queue</text>
+  <rect x="340" y="446" width="60" height="42" rx="6" fill="#172b3d" stroke="#93c5fd" stroke-width="1.4"/>
+  <rect x="410" y="446" width="60" height="42" rx="6" fill="#172b3d" stroke="#93c5fd" stroke-width="1.4"/>
+  <rect x="480" y="446" width="60" height="42" rx="6" fill="#172b3d" stroke="#93c5fd" stroke-width="1.4"/>
+  <text x="370" y="472" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12">imm</text>
+  <text x="440" y="472" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12">imm</text>
+  <text x="510" y="472" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12">imm</text>
+  <text x="441" y="516" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: absorb write bursts</text>
+
+  <path d="M566 464 L608 464" fill="none" stroke="#93c5fd" stroke-width="2.8" marker-end="url(#rdb-b)"/>
+
+  <rect x="618" y="406" width="198" height="116" rx="11" fill="#10243a" stroke="#93c5fd" stroke-width="2.2"/>
+  <text x="717" y="436" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">flush workers</text>
+  <text x="717" y="461" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">reserved background pool</text>
+  <text x="717" y="483" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">write L0 SSTables</text>
+  <text x="717" y="507" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: flush cannot be starved</text>
+
+  <path d="M816 464 L858 464" fill="none" stroke="#93c5fd" stroke-width="2.8" marker-end="url(#rdb-b)"/>
+
+  <rect x="868" y="390" width="344" height="152" rx="11" fill="#1d1d12" stroke="#ffff99" stroke-width="2.2"/>
+  <text x="1040" y="420" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">one LSM tree per column family</text>
+  <text x="890" y="452" fill="#ff8a8a" font-family="sans-serif" font-size="13">L0</text>
+  <rect x="930" y="438" width="70" height="28" rx="5" fill="#292812" stroke="#ffff99" stroke-width="1.4"/>
+  <rect x="986" y="446" width="70" height="28" rx="5" fill="#292812" stroke="#ffff99" stroke-width="1.4"/>
+  <rect x="1048" y="436" width="70" height="28" rx="5" fill="#292812" stroke="#ffff99" stroke-width="1.4"/>
+  <text x="890" y="494" fill="#8aff8a" font-family="sans-serif" font-size="13">L1+</text>
+  <rect x="930" y="480" width="248" height="24" rx="5" fill="#292812" stroke="#ffff99" stroke-width="1.4"/>
+  <rect x="930" y="512" width="248" height="18" rx="5" fill="#292812" stroke="#ffff99" stroke-width="1.4"/>
+  <text x="1040" y="560" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12.5" font-weight="bold">leveled default · universal / FIFO optional</text>
+
+  <!-- read and cache -->
+  <rect x="38" y="594" width="1204" height="180" rx="14" fill="#102018" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="62" y="622" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">READ PATH + CACHE BUDGET</text>
+
+  <rect x="62" y="654" width="124" height="78" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="124" y="685" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="17" font-weight="bold">GET / scan</text>
+  <text x="124" y="710" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">snapshot view</text>
+
+  <path d="M186 693 L228 693" fill="none" stroke="#8aff8a" stroke-width="2.8" marker-end="url(#rdb-g)"/>
+
+  <rect x="238" y="642" width="218" height="102" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="347" y="672" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">mutable + immutable</text>
+  <text x="347" y="697" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">check newest memory first</text>
+  <text x="347" y="720" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: recent reads avoid storage</text>
+
+  <path d="M456 693 L498 693" fill="none" stroke="#8aff8a" stroke-width="2.8" marker-end="url(#rdb-g)"/>
+
+  <rect x="508" y="632" width="282" height="122" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="649" y="662" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">file metadata + filters + indexes</text>
+  <text x="649" y="687" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">select candidate SSTs and data blocks</text>
+  <text x="649" y="710" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">full or partitioned Bloom/index blocks</text>
+  <text x="649" y="735" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: reduce read amplification</text>
+
+  <path d="M790 693 L832 693" fill="none" stroke="#8aff8a" stroke-width="2.8" marker-end="url(#rdb-g)"/>
+
+  <rect x="842" y="632" width="370" height="122" rx="11" fill="#10243a" stroke="#93c5fd" stroke-width="2.2"/>
+  <text x="1027" y="662" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">table cache + block cache</text>
+  <text x="1027" y="687" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">open file readers · data/index/filter blocks</text>
+  <text x="1027" y="710" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">shared or isolated; bounded and prioritized</text>
+  <text x="1027" y="735" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">WHY: spend RAM where each workload benefits</text>
+
+  <!-- maintenance/backpressure/metadata -->
+  <rect x="38" y="794" width="1204" height="108" rx="14" fill="#16191e" stroke="#7c8694" stroke-width="1.8"/>
+
+  <rect x="62" y="812" width="344" height="72" rx="9" fill="#10243a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="234" y="838" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">parallel compaction workers</text>
+  <text x="234" y="861" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">multiple jobs + optional subcompactions</text>
+  <text x="234" y="879" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11.8">WHY: compaction sets sustained write rate</text>
+
+  <rect x="434" y="812" width="374" height="72" rx="9" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="621" y="838" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">write stall / slowdown controller</text>
+  <text x="621" y="861" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">imm count · L0 files · pending compaction bytes</text>
+  <text x="621" y="879" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="11.8">WHY: prevent runaway read/space amplification</text>
+
+  <rect x="836" y="812" width="376" height="72" rx="9" fill="#211f10" stroke="#ffff99" stroke-width="2"/>
+  <text x="1024" y="838" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">MANIFEST + installed file versions</text>
+  <text x="1024" y="861" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">persist file additions, deletions, levels, metadata</text>
+  <text x="1024" y="879" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="11.8">WHY: atomically recover the current serving state</text>
+
+  <!-- footer legend -->
+  <g font-family="sans-serif" font-size="12">
+    <line x1="62" y1="920" x2="96" y2="920" stroke="#ff8bd2" stroke-width="3" marker-end="url(#rdb-p)"/>
+    <text x="106" y="925" fill="#cbd5e1">write</text>
+    <line x1="180" y1="920" x2="214" y2="920" stroke="#8aff8a" stroke-width="3" marker-end="url(#rdb-g)"/>
+    <text x="224" y="925" fill="#cbd5e1">read</text>
+    <line x1="298" y1="920" x2="332" y2="920" stroke="#93c5fd" stroke-width="3" marker-end="url(#rdb-b)"/>
+    <text x="342" y="925" fill="#cbd5e1">background / cache</text>
+    <line x1="488" y1="920" x2="522" y2="920" stroke="#ffff99" stroke-width="3" marker-end="url(#rdb-y)"/>
+    <text x="532" y="925" fill="#cbd5e1">durable state</text>
+  </g>
+  <text x="1212" y="925" text-anchor="end" fill="#9aa6b2" font-family="sans-serif" font-size="12">RocksDB is an embedded engine; replication and sharding belong to the surrounding system.</text>
+</svg>

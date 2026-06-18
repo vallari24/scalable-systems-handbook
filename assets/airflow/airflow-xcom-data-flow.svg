@@ -3,52 +3,49 @@
     <marker id="xd-p" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/>
     </marker>
-    <marker id="xd-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
-      <path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/>
-    </marker>
     <marker id="xd-b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
     </marker>
   </defs>
   <rect width="1180" height="620" fill="#111317"/>
-  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="700">Pass Pointers Through XCom, Bytes Through Object Storage</text>
-  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">tasks may run on different machines, so durable systems carry both the data and the handoff</text>
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="700">Pass Pointers Through XCom, Payloads Through Object Storage</text>
+  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">tasks may run on different machines, so the data and the handoff travel on separate paths</text>
 
   <text x="52" y="128" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="700">DATA PATH · large payload</text>
   <rect x="70" y="166" width="236" height="108" rx="13" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
-  <text x="188" y="201" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="700">transcode_360 task</text>
-  <text x="188" y="228" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">creates the rendition</text>
+  <text x="188" y="201" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="700">extract task</text>
+  <text x="188" y="228" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">stages yesterday's rows</text>
   <text x="188" y="250" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">worker A</text>
 
   <path d="M354 176 q 110 -26 220 0 v 112 q -110 26 -220 0 z" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
   <path d="M354 176 q 110 26 220 0" fill="none" stroke="#ffff99" stroke-width="3"/>
   <text x="464" y="220" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="700">Object storage</text>
-  <text x="464" y="246" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">video bytes</text>
-  <text x="464" y="268" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">s3://renditions/vid123/360.mp4</text>
+  <text x="464" y="246" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">the actual rows</text>
+  <text x="464" y="268" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">s3://staging/2026-06-16/orders.parquet</text>
 
   <rect x="854" y="166" width="256" height="108" rx="13" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
-  <text x="982" y="201" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="700">copyright task</text>
-  <text x="982" y="228" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">reads and checks the rendition</text>
+  <text x="982" y="201" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="700">transform task</text>
+  <text x="982" y="228" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">reads and aggregates the rows</text>
   <text x="982" y="250" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">worker B</text>
 
   <line x1="306" y1="220" x2="350" y2="220" stroke="#ff8bd2" stroke-width="3" marker-end="url(#xd-p)"/>
   <text x="328" y="204" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">PUT bytes</text>
   <line x1="578" y1="220" x2="850" y2="220" stroke="#ff8bd2" stroke-width="3" marker-end="url(#xd-p)"/>
-  <text x="714" y="204" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">GET bytes using URI</text>
+  <text x="714" y="204" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">GET bytes using the path</text>
 
   <text x="52" y="358" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="700">CONTROL PATH · small metadata</text>
   <path d="M398 394 q 120 -26 240 0 v 100 q -120 26 -240 0 z" fill="#16202e" stroke="#93c5fd" stroke-width="3"/>
   <path d="M398 394 q 120 26 240 0" fill="none" stroke="#93c5fd" stroke-width="3"/>
   <text x="518" y="434" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="700">XCom backend</text>
-  <text x="518" y="458" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">stores the URI, ID, flag, or count</text>
-  <text x="518" y="480" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">default: metadata DB; object backend is configurable</text>
+  <text x="518" y="458" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">stores the path, ID, count, or flag</text>
+  <text x="518" y="480" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">default: the metadata DB; object backend is configurable</text>
 
   <path d="M188 274 C 188 410, 306 440, 394 440" fill="none" stroke="#93c5fd" stroke-width="3" marker-end="url(#xd-b)"/>
-  <text x="236" y="390" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="700">return URI → XCom push</text>
+  <text x="226" y="390" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="700">return path → XCom push</text>
   <path d="M642 440 C 760 440, 982 410, 982 278" fill="none" stroke="#93c5fd" stroke-width="3" marker-end="url(#xd-b)"/>
-  <text x="800" y="418" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="700">XCom pull → receive URI</text>
+  <text x="800" y="418" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="700">XCom pull → receive path</text>
 
   <rect x="72" y="530" width="1036" height="54" rx="11" fill="#181b20" stroke="#3a3f47" stroke-width="1.5"/>
-  <text x="590" y="553" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">Good XCom: “s3://…/360.mp4”, video_id=123, passed=true</text>
-  <text x="590" y="574" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">Bad XCom: the MP4 bytes themselves — that bloats the orchestration store and slows every scheduler query</text>
+  <text x="590" y="553" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">Good XCom: "s3://…/orders.parquet", date="2026-06-16", rows=1240120</text>
+  <text x="590" y="574" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">Bad XCom: the file bytes themselves — that bloats the metadata DB and slows every scheduler query</text>
 </svg>
