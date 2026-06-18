@@ -1,0 +1,106 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="tl-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="tl-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1280" height="760" fill="#111317"/>
+
+  <text x="640" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Transcoding: One Arbitrary Upload Becomes a Playable Ladder</text>
+  <text x="640" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">normalize the container and codecs, then generate segmented renditions for different devices and networks</text>
+
+  <!-- source upload -->
+  <rect x="40" y="126" width="250" height="246" rx="14" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="165" y="160" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="18" font-weight="bold">creator upload</text>
+  <text x="165" y="185" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">clip.mov (container)</text>
+
+  <rect x="66" y="210" width="198" height="48" rx="9" fill="#1f151d" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="165" y="230" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">video stream</text>
+  <text x="165" y="248" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">HEVC · 4K · high bitrate</text>
+
+  <rect x="66" y="270" width="198" height="40" rx="9" fill="#1f151d" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="165" y="295" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">audio stream · AAC</text>
+
+  <rect x="66" y="322" width="198" height="32" rx="9" fill="#1f151d" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="165" y="343" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">subtitle / metadata</text>
+
+  <!-- transcode worker -->
+  <line x1="292" y1="249" x2="358" y2="249" stroke="#93c5fd" stroke-width="3" marker-end="url(#tl-b)"/>
+  <text x="325" y="233" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12">input file</text>
+
+  <rect x="362" y="146" width="258" height="206" rx="14" fill="#16202e" stroke="#93c5fd" stroke-width="3"/>
+  <text x="491" y="181" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">FFmpeg worker</text>
+  <text x="491" y="211" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">1 · decode source streams</text>
+  <text x="491" y="241" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">2 · scale resolution</text>
+  <text x="491" y="271" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">3 · encode target bitrate + codec</text>
+  <text x="491" y="301" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">4 · package + split into segments</text>
+  <text x="491" y="329" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">CPU/GPU-heavy async processing</text>
+
+  <!-- rendition storage -->
+  <line x1="622" y1="249" x2="688" y2="249" stroke="#93c5fd" stroke-width="3" marker-end="url(#tl-b)"/>
+  <text x="655" y="233" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12">renditions</text>
+
+  <rect x="692" y="112" width="386" height="326" rx="14" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="885" y="146" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">S3 · video-123/</text>
+
+  <rect x="718" y="164" width="334" height="42" rx="9" fill="#242311" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="885" y="190" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">master.m3u8 · lists available renditions</text>
+
+  <g font-family="sans-serif">
+    <rect x="718" y="220" width="334" height="58" rx="9" fill="#0f1a28" stroke="#93c5fd" stroke-width="1.8"/>
+    <text x="738" y="244" fill="#93c5fd" font-size="14" font-weight="bold">360p/ · low bitrate</text>
+    <text x="738" y="264" fill="#9aa6b2" font-size="12">index.m3u8 · 0001.m4s · 0002.m4s · …</text>
+
+    <rect x="718" y="290" width="334" height="58" rx="9" fill="#0f1a28" stroke="#93c5fd" stroke-width="1.8"/>
+    <text x="738" y="314" fill="#93c5fd" font-size="14" font-weight="bold">720p/ · medium bitrate</text>
+    <text x="738" y="334" fill="#9aa6b2" font-size="12">index.m3u8 · 0001.m4s · 0002.m4s · …</text>
+
+    <rect x="718" y="360" width="334" height="58" rx="9" fill="#0f1a28" stroke="#93c5fd" stroke-width="1.8"/>
+    <text x="738" y="384" fill="#93c5fd" font-size="14" font-weight="bold">1080p/ · high bitrate</text>
+    <text x="738" y="404" fill="#9aa6b2" font-size="12">index.m3u8 · 0001.m4s · 0002.m4s · …</text>
+  </g>
+
+  <!-- player -->
+  <line x1="1078" y1="275" x2="1134" y2="275" stroke="#8aff8a" stroke-width="3" marker-end="url(#tl-g)"/>
+  <text x="1106" y="258" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">HTTP GET</text>
+
+  <rect x="1138" y="190" width="108" height="170" rx="14" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <rect x="1154" y="212" width="76" height="48" rx="5" fill="#17211a" stroke="#8aff8a" stroke-width="1.5"/>
+  <polygon points="1183,225 1183,247 1203,236" fill="#8aff8a"/>
+  <text x="1192" y="290" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">player</text>
+  <text x="1192" y="314" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">chooses the</text>
+  <text x="1192" y="330" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">next segment</text>
+  <text x="1192" y="346" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">by bandwidth</text>
+
+  <!-- adaptive playback explanation -->
+  <rect x="40" y="482" width="1206" height="210" rx="14" fill="#181b20" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="640" y="518" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Adaptive playback happens one segment at a time</text>
+
+  <rect x="78" y="548" width="240" height="70" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="198" y="575" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">1 · fetch manifest</text>
+  <text x="198" y="598" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">see codecs, bitrates, and URLs</text>
+
+  <line x1="320" y1="583" x2="370" y2="583" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#tl-g)"/>
+
+  <rect x="374" y="548" width="240" height="70" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="494" y="575" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">2 · estimate conditions</text>
+  <text x="494" y="598" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">throughput, buffer, and device</text>
+
+  <line x1="616" y1="583" x2="666" y2="583" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#tl-g)"/>
+
+  <rect x="670" y="548" width="240" height="70" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="790" y="575" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">3 · request next chunk</text>
+  <text x="790" y="598" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">1080p when the network is fast</text>
+
+  <line x1="912" y1="583" x2="962" y2="583" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#tl-g)"/>
+
+  <rect x="966" y="548" width="240" height="70" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="1086" y="575" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">4 · switch if needed</text>
+  <text x="1086" y="598" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">drop to 360p before the buffer empties</text>
+
+  <text x="640" y="658" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">The player prefers continuous playback at lower quality over pausing at higher quality.</text>
+  <text x="640" y="724" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Container packages streams · codecs compress them · transcoding creates the compatibility and bitrate ladder.</text>
+</svg>

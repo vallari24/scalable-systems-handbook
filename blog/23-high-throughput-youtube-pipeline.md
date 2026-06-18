@@ -42,7 +42,84 @@ The one new wrinkle is **what happens the instant the raw file lands.** For a ph
 
 ---
 
-## Section 2 — What "processing" actually means: a fan-out of jobs
+## Section 2 — Transcoding: make one arbitrary upload playable everywhere
+
+**Question: the creator's original file already plays on their phone. Why can't we store it and serve that same file to every viewer?**
+
+Suppose an iPhone uploads `clip.mov`: a 4K HEVC video stream, an AAC audio stream, and some metadata packaged together. The creator's phone can decode that exact combination. A browser, an older Android phone, or a low-power TV may not. Even a compatible device may be on a 3 Mbps cellular connection that cannot keep up with the source file's bitrate.
+
+So the platform cannot make the uploader's recording choices every viewer's minimum requirements. It must turn one arbitrary source into a small, controlled set of outputs that cover different devices and network conditions. That conversion is <span style="color:#93c5fd"><strong>transcoding</strong></span>.
+
+### Container, codec, resolution, and bitrate are different knobs
+
+A video file is not one undifferentiated blob. Its container can carry a video stream, one or more audio streams, subtitles, timing information, and metadata.
+
+| Term | What it controls | Examples |
+| --- | --- | --- |
+| **Container** | Packages the streams and keeps them synchronized | MOV, MP4, WebM, AVI |
+| **Video codec** | Compresses and decodes the video stream | H.264/AVC, HEVC/H.265, VP9, AV1 |
+| **Audio codec** | Compresses and decodes the audio stream | AAC, Opus |
+| **Resolution** | Number of pixels in each frame | 360p, 480p, 720p, 1080p, 4K |
+| **Bitrate** | Approximate number of bits delivered per second | 800 Kbps, 2.5 Mbps, 8 Mbps |
+
+The `.mov` or `.mp4` extension names the **container**, not the video codec inside it. MOV is not universally unplayable on Android, and MP4 is not automatically compatible everywhere. Playback depends on whether the client supports the complete container–codec combination, often with a hardware decoder.
+
+Resolution and bitrate are related, but they are not the same thing. Two 720p files can use different bitrates and look very different. Raising bitrate usually preserves more detail, but it also consumes more storage, network bandwidth, and mobile-radio energy. Resolution, frame rate, codec complexity, and hardware support drive most of the decoding CPU and battery cost. High-quality renditions tend to raise several of those costs together.
+
+### FFmpeg turns the source into a rendition ladder
+
+A transcoding worker reads the source container, decodes its audio and video streams, scales the video, and encodes new outputs with combinations the platform has chosen to support. [FFmpeg](https://ffmpeg.org/) is a widely used open-source tool for doing this work on a server.
+
+For example, a worker can create a 360p H.264/AAC rendition with a command shaped like this:
+
+```bash
+ffmpeg -i upload.mov \
+  -vf "scale=-2:360" \
+  -c:v libx264 -b:v 800k \
+  -c:a aac -b:a 96k \
+  output/360p/video.mp4
+```
+
+FFmpeg can also select individual streams: `-vn` creates an audio-only output, while `-an` creates a video-only output. If we only move already-encoded streams into a different container with `-c copy`, that cheaper operation is **remuxing**. Transcoding means decoding and re-encoding at least one stream.
+
+The real pipeline runs several encode jobs and produces a <span style="color:#93c5fd"><strong>rendition ladder</strong></span>: perhaps 360p at a low bitrate, 720p at a medium bitrate, and 1080p at a high bitrate. It does not blindly create every resolution. There is no value in upscaling a 480p upload to 4K, and every extra rung costs compute and storage.
+
+<img src="../assets/youtube-pipeline/transcoding-ladder.svg" alt="How one arbitrary video upload becomes an adaptive streaming ladder. A creator uploads a MOV container holding a 4K HEVC video stream, AAC audio, and subtitle or metadata streams. An FFmpeg worker decodes the source, scales it, re-encodes target codec and bitrate combinations, and packages the outputs into segments. S3 stores a master manifest plus separate 360p, 720p, and 1080p folders, each with a rendition manifest and sequential media segments. A player fetches the manifest, estimates network throughput, buffer, and device capability, then requests the next segment from the appropriate rendition. It can switch from 1080p to 360p at a segment boundary before its buffer empties." width="1280">
+
+### Segment the ladder so the player can adapt
+
+The platform does not usually serve each rendition as one giant file. It packages each rendition for **HLS or DASH**, splitting the timeline into short, aligned media segments:
+
+```text
+video-123/
+  master.m3u8
+  360p/
+    index.m3u8
+    0001.m4s
+    0002.m4s
+  720p/
+    index.m3u8
+    0001.m4s
+    0002.m4s
+  1080p/
+    index.m3u8
+    0001.m4s
+    0002.m4s
+```
+
+The **master manifest** tells the client which renditions, codecs, and bitrates exist. Each rendition manifest lists its ordered segments. The player downloads a few segments ahead into a buffer, measures throughput, and chooses the next segment from the highest rendition it believes can arrive before the buffer empties.
+
+If Wi-Fi becomes weak, the player can request segment `0042` from the 360p folder instead of the 1080p folder. When bandwidth recovers, it switches back up at a later segment boundary. This is <span style="color:#8aff8a"><strong>adaptive bitrate streaming</strong></span>: preserve continuous playback first, then maximize quality.
+
+For a deeper treatment of containers, codecs, manifests, HLS/DASH, and adaptive playback, [HowVideo.works](https://howvideo.works/) is an excellent visual resource.
+
+At scale, we still avoid unlimited work. We eagerly generate the low rendition needed for publishing, generate common HD renditions asynchronously, and may defer rare or unusually expensive outputs. CDN caching is naturally demand-driven too: edge locations cache only the manifests and segments viewers actually request.
+
+> **Memory hook:** *the container packages streams; codecs compress them; transcoding creates a controlled resolution-and-bitrate ladder; manifests and segments let the player switch rungs without stopping playback.*
+
+---
+
+## Section 3 — What "processing" actually means: a fan-out of jobs
 
 **Question: the raw file is in S3. What has to happen to it before it's a real YouTube video — and are these one job or many?**
 
@@ -50,7 +127,7 @@ Many. The single raw upload fans out into a handful of *different kinds* of work
 
 <img src="../assets/youtube-pipeline/processing-fanout.svg" alt="The fan-out of processing jobs from one raw uploaded video. Center-left: a pink box 'raw video in S3' is the single input. Five arrows fan out to five job groups. One, TRANSCODING (blue): generate multiple resolution renditions — 360p, 480p, 720p, 1080p — each a separate encode of the source; these are the playable files. Two, COPYRIGHT CHECK (yellow, marked 'expensive'): fingerprint the audio/video and match against a rights database (Content ID) — flagged as the most compute-heavy and slowest job. Three, NUDITY / SAFETY CHECK (yellow): an ML classifier scans frames for disallowed content. Four, AUTO-CAPTIONING (blue): speech-to-text generates subtitle tracks. Five, THUMBNAIL (blue): either extract candidate frames from the video, or accept a custom image the creator uploaded. A caption: one upload becomes many artifacts produced by many jobs — and crucially, these jobs are not independent and are not equally urgent, which is what the next sections untangle." width="1120">
 
-- <span style="color:#93c5fd"><strong>Transcoding</strong></span> — the source is one codec/resolution; viewers need many. We re-encode it into a ladder of resolutions: <span style="color:#93c5fd"><strong>360p, 480p, 720p, 1080p</strong></span> (and up). Each rendition is its own encode job, and higher resolutions take dramatically longer.
+- <span style="color:#93c5fd"><strong>Transcoding</strong></span> — the source has one container, codec, resolution, and bitrate combination; viewers need a controlled compatibility ladder. We generate renditions such as <span style="color:#93c5fd"><strong>360p, 480p, 720p, 1080p</strong></span> (and up). Each rendition is its own encode job, and higher resolutions take dramatically longer.
 - <span style="color:#ffff99"><strong>Copyright check</strong></span> — fingerprint the audio and video and match it against a rights database (this is YouTube's *Content ID*). This is the **most expensive** job: heavy compute, slow, and it can block monetization or publishing entirely.
 - <span style="color:#ffff99"><strong>Nudity / safety check</strong></span> — an ML classifier scans frames for disallowed content. Also gating: you cannot publish unsafe content.
 - <span style="color:#93c5fd"><strong>Auto-captioning</strong></span> — speech-to-text produces subtitle tracks. Nice to have, not safety-critical.
@@ -67,7 +144,7 @@ The naïve instinct is "run all five in parallel, wait for all of them, then pub
 
 ---
 
-## Section 3 — The publish decision: what blocks, what doesn't
+## Section 4 — The publish decision: what blocks, what doesn't
 
 **Question: the creator hits "publish." What is the *minimum* set of jobs that must be finished before the video can legally and safely go live — and what should we let finish in the background afterward?**
 
@@ -93,7 +170,7 @@ So the rule is: **publish the moment there is one safe, playable rendition; let 
 
 ---
 
-## Section 4 — Ordering for speed: check the 360p, not the 4K
+## Section 5 — Ordering for speed: check the 360p, not the 4K
 
 **Question: copyright and nudity checks are expensive, and they gate publishing — so they sit on the critical path to "live." How do we make the creator's wait as short as possible without skipping the checks?**
 
@@ -116,7 +193,7 @@ Notice the *shape* this creates. From the raw file we **fan out** (the checks de
 
 ---
 
-## Section 5 — Two ways to run a graph of jobs: events vs orchestration
+## Section 6 — Two ways to run a graph of jobs: events vs orchestration
 
 **Question: we have a graph of dependent jobs. Broadly, what are our two architectural options for executing it — and which family does each tool belong to?**
 
@@ -141,7 +218,7 @@ Our pipeline is full of "do this only after those finish" — publish only after
 
 ---
 
-## Section 6 — Why Kafka doesn't work here: the fan-in problem
+## Section 7 — Why Kafka doesn't work here: the fan-in problem
 
 **Question: we already know Kafka. Why not just push the video to a topic, have a consumer transcode it, push a "done" event, have the next consumer react, and chain it all together? Where does that actually break?**
 
@@ -165,7 +242,7 @@ The lesson isn't that Kafka is bad — it's *excellent* at what it's for (high-v
 
 ---
 
-## Section 7 — The workflow management tool and the DAG
+## Section 8 — The workflow management tool and the DAG
 
 **Question: what does a workflow tool give us that the queue couldn't — and what is the one data structure at its heart?**
 
@@ -173,7 +250,7 @@ The heart of every workflow tool is the <span style="color:#ffff99"><strong>DAG 
 
 <img src="../assets/youtube-pipeline/workflow-dag.svg" alt="The video processing pipeline expressed as a DAG in a workflow tool, in two parts. TOP — the abstract fan-in rule that motivates everything: a small DAG with a root, branching to nodes C and D, which both point into node E, with a highlighted key callout 'Do E only when both C and D are done.' This is the dependency the orchestrator enforces natively. BOTTOM — the real video-processing DAG drawn top-down: root node 'video processing' → 'validation' (check the upload is a real, intact video) → fans out to four branches: (1) 'transcoding', which itself fans out to 'generate 360', 'generate 720', 'generate 1080'; (2) 'copyright'; (3) 'thumbnail'; (4) 'captioning'. Edges show that copyright depends on a rendition existing (generate 360 → copyright), and a final 'publish' node depends on the gating tasks (generate 360 + copyright + nudity) — the fan-in — while the non-gating branches (1080, captioning, auto-thumbnail) point to publish with a dashed 'non-blocking' edge meaning they may finish after. A caption: the DAG declares the whole graph once; the orchestrator tracks each task's state and fires downstream tasks exactly when their upstream dependencies succeed — no hand-built joins, no side tables." width="1180">
 
-Compare this directly to the Kafka nightmare. The fan-in that forced us to build an external join table is now **one line of dependency declaration**: `publish` depends on `[generate_360, copyright, nudity]`, and the orchestrator *natively* waits for all three. Everything we hand-rolled in Section 6 is built in:
+Compare this directly to the Kafka nightmare. The fan-in that forced us to build an external join table is now **one line of dependency declaration**: `publish` depends on `[generate_360, copyright, nudity]`, and the orchestrator *natively* waits for all three. Everything we hand-rolled in Section 7 is built in:
 
 - **Dependencies & fan-in** — declared as edges; "run E after C and D" is the tool's native vocabulary.
 - **Who polls / who tracks state** — the orchestrator's scheduler does, continuously, in its own metadata database. There is one authoritative place that knows every task's state.
@@ -187,7 +264,7 @@ This is what the user-facing pipeline becomes: `video processing → validation 
 
 ---
 
-## Section 8 — Orchestrating the pipeline with Apache Airflow
+## Section 9 — Orchestrating the pipeline with Apache Airflow
 
 **Question: we've chosen a workflow orchestrator. Concretely, what does our pipeline look like in the most common one — Apache Airflow — and how does it express the fan-in that broke Kafka?**
 
@@ -226,7 +303,7 @@ with DAG(
     validate >> [gen_720, gen_1080, captions]
 ```
 
-Read the dependency lines and the whole design from Section 4 is right there: `validate >> gen_360 >> [copyright, nudity] >> publish` says *validate first, then transcode 360p, then run copyright and nudity in parallel on it, then — once both succeed — publish.* The `[gen_720, gen_1080, captions]` branch hangs off `validate` and runs independently, never blocking `publish`.
+Read the dependency lines and the whole design from Section 5 is right there: `validate >> gen_360 >> [copyright, nudity] >> publish` says *validate first, then transcode 360p, then run copyright and nudity in parallel on it, then — once both succeed — publish.* The `[gen_720, gen_1080, captions]` branch hangs off `validate` and runs independently, never blocking `publish`.
 
 ### Trigger rules: the knob behind fan-in
 
