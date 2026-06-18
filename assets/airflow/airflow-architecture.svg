@@ -1,0 +1,91 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ar-b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="ar-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="ar-p" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="ar-g" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+  </defs>
+  <rect width="1180" height="760" fill="#111317"/>
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="700">From Python File to Running Process</text>
+  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">Airflow separates definition, orchestration, execution, durable state, and observation</text>
+
+  <rect x="38" y="108" width="1104" height="570" rx="18" fill="#15191f" stroke="#3a3f47" stroke-width="1.5"/>
+
+  <!-- definition -->
+  <text x="66" y="142" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="700">1 · DEFINE</text>
+  <rect x="66" y="164" width="188" height="82" rx="11" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="160" y="197" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="700">DAG bundle</text>
+  <text x="160" y="222" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">Python files + packages</text>
+
+  <rect x="66" y="292" width="188" height="92" rx="11" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="160" y="325" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="700">DAG Processor</text>
+  <text x="160" y="350" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">imports and validates</text>
+  <text x="160" y="370" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">serializes graph structure</text>
+  <line x1="160" y1="246" x2="160" y2="288" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+
+  <!-- durable state -->
+  <text x="400" y="142" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="700">2 · REMEMBER</text>
+  <path d="M344 180 q 130 -30 260 0 v 150 q -130 30 -260 0 z" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
+  <path d="M344 180 q 130 30 260 0" fill="none" stroke="#ffff99" stroke-width="3"/>
+  <text x="474" y="232" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="700">Metadata database</text>
+  <text x="474" y="258" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">serialized DAGs · DagRuns</text>
+  <text x="474" y="280" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">TaskInstances · states · XCom</text>
+  <text x="474" y="304" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">source of truth for orchestration state</text>
+  <line x1="254" y1="338" x2="340" y2="286" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+  <text x="290" y="294" fill="#93c5fd" font-family="sans-serif" font-size="12">write serialized DAG</text>
+
+  <!-- scheduler/executor -->
+  <text x="718" y="142" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="700">3 · DECIDE</text>
+  <rect x="660" y="164" width="236" height="180" rx="13" fill="#16202e" stroke="#93c5fd" stroke-width="3"/>
+  <text x="778" y="198" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="700">Scheduler</text>
+  <text x="778" y="224" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">finds eligible TaskInstances</text>
+  <rect x="692" y="252" width="172" height="64" rx="9" fill="#111923" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="778" y="278" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="700">Executor interface</text>
+  <text x="778" y="299" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">configured inside scheduler</text>
+
+  <line x1="604" y1="222" x2="656" y2="222" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+  <line x1="656" y1="274" x2="606" y2="274" stroke="#ffff99" stroke-width="2.5" marker-end="url(#ar-y)"/>
+  <text x="630" y="208" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11">read</text>
+  <text x="630" y="294" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="11">write state</text>
+
+  <!-- workers -->
+  <text x="966" y="142" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="700">4 · EXECUTE</text>
+  <rect x="948" y="184" width="154" height="64" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="958" y="174" width="154" height="64" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="968" y="164" width="154" height="64" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="1045" y="192" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="700">Workers</text>
+  <text x="1045" y="214" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">run task code</text>
+  <path d="M896 284 C 934 284, 928 216, 964 204" fill="none" stroke="#ff8bd2" stroke-width="3" marker-end="url(#ar-p)"/>
+  <text x="922" y="264" fill="#ff8bd2" font-family="sans-serif" font-size="12">dispatch workload</text>
+
+  <!-- report path -->
+  <path d="M1045 248 C 1045 380, 622 390, 548 338" fill="none" stroke="#ffff99" stroke-width="2.5" marker-end="url(#ar-y)"/>
+  <text x="826" y="382" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12">report running / success / failed through Airflow control services</text>
+
+  <!-- optional triggerer -->
+  <rect x="690" y="438" width="208" height="88" rx="11" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="794" y="470" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="700">Triggerer · optional</text>
+  <text x="794" y="494" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">waits for deferred events</text>
+  <text x="794" y="512" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">without holding a worker slot</text>
+  <line x1="604" y1="452" x2="686" y2="474" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+  <line x1="690" y1="502" x2="606" y2="488" stroke="#ffff99" stroke-width="2.5" marker-end="url(#ar-y)"/>
+
+  <!-- UI -->
+  <text x="90" y="456" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="700">5 · OBSERVE / OPERATE</text>
+  <rect x="66" y="478" width="230" height="92" rx="11" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="181" y="510" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="700">Web / UI service</text>
+  <text x="181" y="535" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">graph · state · logs · trigger</text>
+  <text x="181" y="554" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">human control surface</text>
+  <line x1="340" y1="448" x2="300" y2="500" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="318" y="466" fill="#8aff8a" font-family="sans-serif" font-size="11">read state</text>
+
+  <rect x="344" y="430" width="260" height="126" rx="12" fill="#181b20" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="474" y="458" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="700">What the database does not hold</text>
+  <text x="370" y="486" fill="#ff8bd2" font-family="sans-serif" font-size="12">• video bytes → object storage</text>
+  <text x="370" y="510" fill="#93c5fd" font-family="sans-serif" font-size="12">• production logs → remote log store</text>
+  <text x="370" y="534" fill="#cbd5e1" font-family="sans-serif" font-size="12">• source code → DAG bundle / repository</text>
+
+  <rect x="66" y="606" width="1056" height="44" rx="10" fill="#181b20"/>
+  <text x="594" y="634" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">The invariant: orchestration state is durable; schedulers decide; executors dispatch; workers perform side effects.</text>
+  <text x="590" y="716" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">Deployment details vary by executor and Airflow version, but these responsibilities stay separate.</text>
+</svg>

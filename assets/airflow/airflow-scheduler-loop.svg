@@ -1,0 +1,82 @@
+<svg width="1180" height="680" viewBox="0 0 1180 680" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="sl-w" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="sl-b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="sl-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="sl-p" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+  </defs>
+  <rect width="1180" height="680" fill="#111317"/>
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="700">One Scheduler Iteration</text>
+  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">read a batch of state, calculate eligibility, reserve capacity, enqueue work, repeat</text>
+
+  <path d="M1042 178 C 1068 98, 130 96, 130 158" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#sl-b)"/>
+  <text x="590" y="108" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="700">continuous batched loop</text>
+
+  <g font-family="sans-serif">
+    <rect x="44" y="160" width="178" height="108" rx="12" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+    <text x="133" y="188" text-anchor="middle" fill="#93c5fd" font-size="14" font-weight="700">1 · Create DagRuns</text>
+    <text x="133" y="216" text-anchor="middle" fill="#cbd5e1" font-size="12">schedule interval ended</text>
+    <text x="133" y="237" text-anchor="middle" fill="#cbd5e1" font-size="12">or external trigger arrived</text>
+    <text x="133" y="257" text-anchor="middle" fill="#9aa6b2" font-size="11">each run is independent</text>
+
+    <rect x="272" y="160" width="178" height="108" rx="12" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+    <text x="361" y="188" text-anchor="middle" fill="#93c5fd" font-size="14" font-weight="700">2 · Find candidates</text>
+    <text x="361" y="216" text-anchor="middle" fill="#cbd5e1" font-size="12">TaskInstances with</text>
+    <text x="361" y="237" text-anchor="middle" fill="#cbd5e1" font-size="12">state none / retry-ready</text>
+    <text x="361" y="257" text-anchor="middle" fill="#9aa6b2" font-size="11">process a bounded batch</text>
+
+    <rect x="500" y="148" width="210" height="132" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
+    <text x="605" y="178" text-anchor="middle" fill="#ffff99" font-size="14" font-weight="700">3 · Check eligibility</text>
+    <text x="605" y="206" text-anchor="middle" fill="#cbd5e1" font-size="12">trigger rule satisfied?</text>
+    <text x="605" y="227" text-anchor="middle" fill="#cbd5e1" font-size="12">pool slot available?</text>
+    <text x="605" y="248" text-anchor="middle" fill="#cbd5e1" font-size="12">under DAG / task limits?</text>
+    <text x="605" y="269" text-anchor="middle" fill="#9aa6b2" font-size="11">all checks must pass</text>
+
+    <rect x="760" y="160" width="178" height="108" rx="12" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+    <text x="849" y="188" text-anchor="middle" fill="#93c5fd" font-size="14" font-weight="700">4 · Reserve + queue</text>
+    <text x="849" y="216" text-anchor="middle" fill="#cbd5e1" font-size="12">state: scheduled</text>
+    <text x="849" y="237" text-anchor="middle" fill="#cbd5e1" font-size="12">executor accepts workload</text>
+    <text x="849" y="257" text-anchor="middle" fill="#9aa6b2" font-size="11">state: queued</text>
+
+    <rect x="988" y="160" width="148" height="108" rx="12" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+    <text x="1062" y="188" text-anchor="middle" fill="#ff8bd2" font-size="14" font-weight="700">5 · Run</text>
+    <text x="1062" y="216" text-anchor="middle" fill="#cbd5e1" font-size="12">worker receives task</text>
+    <text x="1062" y="237" text-anchor="middle" fill="#cbd5e1" font-size="12">running → outcome</text>
+    <text x="1062" y="257" text-anchor="middle" fill="#9aa6b2" font-size="11">report result</text>
+  </g>
+
+  <line x1="222" y1="214" x2="268" y2="214" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#sl-w)"/>
+  <line x1="450" y1="214" x2="496" y2="214" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#sl-w)"/>
+  <line x1="710" y1="214" x2="756" y2="214" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#sl-w)"/>
+  <line x1="938" y1="214" x2="984" y2="214" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#sl-p)"/>
+
+  <path d="M396 380 q 194 -34 388 0 v 128 q -194 34 -388 0 z" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
+  <path d="M396 380 q 194 34 388 0" fill="none" stroke="#ffff99" stroke-width="3"/>
+  <text x="590" y="424" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="700">Metadata database</text>
+  <text x="590" y="450" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">serialized DAG · DagRun rows · TaskInstance rows · pools · concurrency state</text>
+  <text x="590" y="474" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">every loop starts from durable state and commits its decisions back</text>
+
+  <path d="M360 272 C 390 326, 448 338, 482 378" fill="none" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#sl-b)"/>
+  <text x="388" y="326" fill="#93c5fd" font-family="sans-serif" font-size="12">read candidates + state</text>
+  <path d="M820 272 C 792 326, 728 338, 690 378" fill="none" stroke="#ffff99" stroke-width="2.5" marker-end="url(#sl-y)"/>
+  <text x="760" y="326" fill="#ffff99" font-family="sans-serif" font-size="12">commit state + capacity</text>
+  <path d="M1048 272 C 1010 430, 842 458, 790 458" fill="none" stroke="#ffff99" stroke-width="2.5" marker-end="url(#sl-y)"/>
+  <text x="928" y="410" fill="#ffff99" font-family="sans-serif" font-size="12">persist outcome</text>
+
+  <rect x="62" y="382" width="276" height="128" rx="12" fill="#181b20" stroke="#8aff8a" stroke-width="2"/>
+  <text x="200" y="412" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="700">Why publish waits</text>
+  <text x="84" y="442" fill="#cbd5e1" font-family="sans-serif" font-size="12">copyright = success</text>
+  <text x="84" y="466" fill="#cbd5e1" font-family="sans-serif" font-size="12">nudity = running</text>
+  <text x="84" y="492" fill="#ff8a8a" font-family="sans-serif" font-size="12">publish fails all_success → stays none</text>
+
+  <rect x="842" y="382" width="276" height="128" rx="12" fill="#181b20" stroke="#8aff8a" stroke-width="2"/>
+  <text x="980" y="412" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="700">Next iteration</text>
+  <text x="864" y="442" fill="#cbd5e1" font-family="sans-serif" font-size="12">copyright = success</text>
+  <text x="864" y="466" fill="#cbd5e1" font-family="sans-serif" font-size="12">nudity = success</text>
+  <text x="864" y="492" fill="#8aff8a" font-family="sans-serif" font-size="12">publish passes all_success → queued</text>
+
+  <rect x="62" y="560" width="1056" height="70" rx="11" fill="#181b20" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="590" y="586" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">Multiple schedulers do not elect a leader.</text>
+  <text x="590" y="610" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">Database row locks protect the critical enqueue section and pool limits, so schedulers can run active-active.</text>
+  <text x="590" y="660" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">The scheduler never runs video code; it changes orchestration state and asks the configured executor to dispatch work.</text>
+</svg>

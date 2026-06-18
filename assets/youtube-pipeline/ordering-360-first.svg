@@ -1,0 +1,88 @@
+<svg width="1180" height="620" viewBox="0 0 1180 620" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="o-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="o-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="o-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="o-gray" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#5a6068"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="620" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Ordering for Speed: Check the 360p, Not the 4K</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">do the cheapest thing that satisfies the gate first; let HD catch up asynchronously</text>
+
+  <!-- SLOW PATH (grayed, for contrast) -->
+  <text x="60" y="128" fill="#7a828c" font-family="sans-serif" font-size="14" font-weight="bold">Slow path (what we avoid):</text>
+  <rect x="300" y="108" width="150" height="40" rx="9" fill="#1a1c20" stroke="#5a6068" stroke-width="2"/>
+  <text x="375" y="133" text-anchor="middle" fill="#7a828c" font-family="sans-serif" font-size="13">transcode 4K</text>
+  <line x1="452" y1="128" x2="520" y2="128" stroke="#5a6068" stroke-width="2" marker-end="url(#o-gray)"/>
+  <rect x="524" y="108" width="170" height="40" rx="9" fill="#1a1c20" stroke="#5a6068" stroke-width="2"/>
+  <text x="609" y="133" text-anchor="middle" fill="#7a828c" font-family="sans-serif" font-size="13">check the 4K file</text>
+  <line x1="696" y1="128" x2="764" y2="128" stroke="#5a6068" stroke-width="2" marker-end="url(#o-gray)"/>
+  <rect x="768" y="108" width="180" height="40" rx="9" fill="#1a1c20" stroke="#5a6068" stroke-width="2"/>
+  <text x="858" y="133" text-anchor="middle" fill="#7a828c" font-family="sans-serif" font-size="13">publish much later</text>
+
+  <line x1="40" y1="172" x2="1140" y2="172" stroke="#3a3f47" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+  <!-- FAST PATH -->
+  <!-- raw -->
+  <rect x="40" y="250" width="130" height="76" rx="12" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="105" y="284" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">raw video</text>
+  <text x="105" y="306" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">in S3</text>
+
+  <!-- step 1: 360p -->
+  <line x1="172" y1="288" x2="226" y2="288" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#o-b)"/>
+  <rect x="230" y="248" width="170" height="80" rx="12" fill="#16202e" stroke="#93c5fd" stroke-width="3"/>
+  <text x="315" y="272" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">STEP 1 (fast)</text>
+  <text x="315" y="294" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">transcode 360p</text>
+  <text x="315" y="314" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">cheapest, smallest file</text>
+
+  <!-- step 2: checks on 360p -->
+  <line x1="402" y1="268" x2="456" y2="232" stroke="#ffff99" stroke-width="2.5" marker-end="url(#o-y)"/>
+  <line x1="402" y1="308" x2="456" y2="344" stroke="#ffff99" stroke-width="2.5" marker-end="url(#o-y)"/>
+  <rect x="460" y="200" width="180" height="56" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="550" y="224" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">copyright check</text>
+  <text x="550" y="244" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">on the 360p</text>
+  <rect x="460" y="320" width="180" height="56" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="550" y="344" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">nudity check</text>
+  <text x="550" y="364" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">on the 360p</text>
+  <text x="550" y="290" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">STEP 2 &#183; parallel</text>
+
+  <!-- step 3: gate -->
+  <line x1="642" y1="224" x2="700" y2="268" stroke="#ffff99" stroke-width="2.5" marker-end="url(#o-y)"/>
+  <line x1="642" y1="350" x2="700" y2="304" stroke="#ffff99" stroke-width="2.5" marker-end="url(#o-y)"/>
+  <polygon points="768,232 836,288 768,344 700,288" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
+  <text x="768" y="282" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">both pass</text>
+  <text x="768" y="302" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">on 360p?</text>
+
+  <!-- LIVE -->
+  <line x1="836" y1="288" x2="900" y2="288" stroke="#8aff8a" stroke-width="3" marker-end="url(#o-g)"/>
+  <rect x="904" y="248" width="200" height="80" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="3"/>
+  <text x="1004" y="276" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">STEP 3</text>
+  <text x="1004" y="298" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">LIVE (360p)</text>
+  <text x="1004" y="318" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">gate opens, publish</text>
+
+  <!-- step 4: async tail -->
+  <text x="315" y="420" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">STEP 4 &#183; runs in the background AFTER publish</text>
+  <line x1="315" y1="328" x2="315" y2="442" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="5 5"/>
+  <line x1="315" y1="442" x2="360" y2="442" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#o-b)"/>
+  <rect x="364" y="438" width="150" height="44" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="439" y="465" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">720p / 1080p / 4K</text>
+  <rect x="528" y="438" width="130" height="44" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="593" y="465" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">captions</text>
+  <rect x="672" y="438" width="150" height="44" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="747" y="465" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">auto-thumbnail</text>
+  <text x="850" y="466" fill="#9aa6b2" font-family="sans-serif" font-size="13">&#8230; each attaches to the now-live video</text>
+
+  <!-- shape note -->
+  <rect x="40" y="520" width="1100" height="64" rx="12" fill="#181b20" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="590" y="548" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">The shape: fan-out (checks depend on 360p) &#8594; fan-in (publish needs copyright AND nudity AND 360p) &#8594; async tail</text>
+  <text x="590" y="572" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">That fan-in &#8212; "do the publish step only when all of these succeed" &#8212; is exactly what breaks a naive queue.</text>
+</svg>

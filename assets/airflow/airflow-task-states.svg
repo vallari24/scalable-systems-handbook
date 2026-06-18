@@ -1,0 +1,93 @@
+<svg width="1180" height="720" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="tl-b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="tl-p" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="tl-g" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="tl-r" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/></marker>
+    <marker id="tl-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="tl-n" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#9aa6b2"/></marker>
+  </defs>
+  <rect width="1180" height="720" fill="#111317"/>
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="700">The TaskInstance Lifecycle</text>
+  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">the happy path is short; control flow, retry, and waiting add explicit side loops</text>
+
+  <text x="48" y="124" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="700">HAPPY PATH</text>
+  <g font-family="sans-serif" font-size="15" font-weight="700">
+    <rect x="48" y="148" width="130" height="62" rx="10" fill="#1a1c20" stroke="#7a828c" stroke-width="2.5"/><text x="113" y="186" text-anchor="middle" fill="#9aa6b2">none</text>
+    <rect x="250" y="148" width="148" height="62" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/><text x="324" y="186" text-anchor="middle" fill="#93c5fd">scheduled</text>
+    <rect x="470" y="148" width="138" height="62" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/><text x="539" y="186" text-anchor="middle" fill="#93c5fd">queued</text>
+    <rect x="680" y="148" width="138" height="62" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/><text x="749" y="186" text-anchor="middle" fill="#ff8bd2">running</text>
+    <rect x="944" y="108" width="160" height="58" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/><text x="1024" y="143" text-anchor="middle" fill="#8aff8a">success</text>
+    <rect x="944" y="214" width="160" height="58" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/><text x="1024" y="249" text-anchor="middle" fill="#ff8a8a">failed</text>
+  </g>
+  <line x1="178" y1="179" x2="246" y2="179" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#tl-b)"/>
+  <line x1="398" y1="179" x2="466" y2="179" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#tl-b)"/>
+  <line x1="608" y1="179" x2="676" y2="179" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#tl-p)"/>
+  <line x1="818" y1="168" x2="940" y2="140" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#tl-g)"/>
+  <line x1="818" y1="192" x2="940" y2="240" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#tl-r)"/>
+  <text x="212" y="166" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11">deps pass</text>
+  <text x="434" y="166" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11">accepted</text>
+  <text x="644" y="166" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="11">worker starts</text>
+
+  <!-- dependency outcomes panel -->
+  <rect x="48" y="316" width="304" height="200" rx="13" fill="#15191f" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="68" y="346" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="700">DEPENDENCY OUTCOMES</text>
+  <rect x="130" y="366" width="140" height="48" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="200" y="396" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="700">dependency check</text>
+  <rect x="72" y="448" width="126" height="46" rx="9" fill="#1a1c20" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="135" y="477" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="700">skipped</text>
+  <rect x="216" y="448" width="116" height="46" rx="9" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="274" y="468" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="11.5" font-weight="700">upstream_</text>
+  <text x="274" y="483" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="11.5" font-weight="700">failed</text>
+  <line x1="178" y1="414" x2="144" y2="444" stroke="#9aa6b2" stroke-width="2" marker-end="url(#tl-n)"/>
+  <line x1="222" y1="414" x2="264" y2="444" stroke="#ff8a8a" stroke-width="2" marker-end="url(#tl-r)"/>
+  <text x="102" y="432" fill="#9aa6b2" font-family="sans-serif" font-size="10">branch not taken</text>
+  <text x="238" y="432" fill="#ff8a8a" font-family="sans-serif" font-size="10">required input failed</text>
+
+  <!-- retry panel -->
+  <rect x="382" y="316" width="304" height="200" rx="13" fill="#15191f" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="402" y="346" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="700">RETRY LOOP</text>
+  <rect x="414" y="374" width="108" height="48" rx="9" fill="#2a1622" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="468" y="404" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="700">running</text>
+  <rect x="548" y="374" width="116" height="48" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="606" y="404" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12.5" font-weight="700">up_for_retry</text>
+  <rect x="472" y="456" width="126" height="42" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="535" y="482" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="700">scheduled</text>
+  <line x1="522" y1="398" x2="544" y2="398" stroke="#ffff99" stroke-width="2" marker-end="url(#tl-y)"/>
+  <path d="M606 422 C 606 442, 580 452, 562 454" fill="none" stroke="#ffff99" stroke-width="2" marker-end="url(#tl-y)"/>
+  <path d="M472 477 C 430 468, 430 430, 456 424" fill="none" stroke="#93c5fd" stroke-width="2" marker-end="url(#tl-b)"/>
+  <text x="586" y="444" fill="#ffff99" font-family="sans-serif" font-size="10">retry_delay</text>
+  <text x="412" y="452" fill="#cbd5e1" font-family="sans-serif" font-size="10">new attempt</text>
+
+  <!-- waiting panel -->
+  <rect x="716" y="316" width="416" height="200" rx="13" fill="#15191f" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="736" y="346" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="700">WAIT WITHOUT HOLDING A WORKER</text>
+  <rect x="742" y="372" width="112" height="46" rx="9" fill="#2a1622" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="798" y="400" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="700">running</text>
+  <rect x="884" y="358" width="184" height="46" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="976" y="386" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="700">up_for_reschedule</text>
+  <rect x="884" y="430" width="126" height="46" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="947" y="458" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="700">deferred</text>
+  <rect x="1026" y="430" width="86" height="46" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="1069" y="450" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="700">triggerer</text>
+  <text x="1069" y="465" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="9.5">waits async</text>
+  <line x1="854" y1="388" x2="880" y2="382" stroke="#93c5fd" stroke-width="2" marker-end="url(#tl-b)"/>
+  <line x1="836" y1="418" x2="892" y2="428" stroke="#93c5fd" stroke-width="2" marker-end="url(#tl-b)"/>
+  <line x1="1010" y1="453" x2="1022" y2="453" stroke="#93c5fd" stroke-width="2" marker-end="url(#tl-b)"/>
+  <text x="858" y="370" fill="#93c5fd" font-family="sans-serif" font-size="10">sensor mode</text>
+  <text x="830" y="450" fill="#93c5fd" font-family="sans-serif" font-size="10">defers</text>
+  <text x="976" y="497" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">when the condition/event is ready, the task returns to scheduling</text>
+
+  <rect x="48" y="554" width="1084" height="112" rx="12" fill="#181b20" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="72" y="582" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="700">Fast UI diagnosis</text>
+  <text x="72" y="612" fill="#93c5fd" font-family="sans-serif" font-size="12">scheduled / queued</text>
+  <text x="232" y="612" fill="#cbd5e1" font-family="sans-serif" font-size="12">check pools, executor, broker, pod launch, and worker capacity</text>
+  <text x="72" y="638" fill="#ff8bd2" font-family="sans-serif" font-size="12">running</text>
+  <text x="232" y="638" fill="#cbd5e1" font-family="sans-serif" font-size="12">check heartbeat, task process, external dependency, and logs</text>
+  <text x="650" y="612" fill="#ffff99" font-family="sans-serif" font-size="12">up_for_retry</text>
+  <text x="774" y="612" fill="#cbd5e1" font-family="sans-serif" font-size="12">inspect the original failure and retry policy</text>
+  <text x="650" y="638" fill="#93c5fd" font-family="sans-serif" font-size="12">deferred</text>
+  <text x="774" y="638" fill="#cbd5e1" font-family="sans-serif" font-size="12">check triggerer health and the external event</text>
+
+  <text x="590" y="700" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">A stale running heartbeat is cleaned up and failed or retried; older Airflow material calls this a zombie task.</text>
+</svg>

@@ -1,0 +1,110 @@
+<svg width="1320" height="760" viewBox="0 0 1320 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="f-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="f-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+    <marker id="f-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="f-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="f-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1320" height="760" fill="#111317"/>
+
+  <text x="660" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="31" font-weight="bold">The Complete YouTube Video Pipeline</text>
+  <text x="660" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">one upload &#8594; an orchestrated DAG with a gate and an async tail &#8594; CDN distribution</text>
+
+  <!-- STAGE 1 UPLOAD -->
+  <text x="170" y="120" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">1 &#183; UPLOAD</text>
+  <circle cx="70" cy="190" r="17" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <path d="M46 238 q 24 -34 48 0 z" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="70" y="266" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12" font-weight="bold">creator</text>
+  <line x1="98" y1="200" x2="146" y2="200" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#f-p)"/>
+  <text x="122" y="188" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="11">PUT</text>
+  <path d="M150 168 q 45 -12 90 0 v 64 q -45 12 -90 0 z" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <path d="M150 168 q 45 12 90 0" fill="none" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="195" y="202" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">S3</text>
+  <text x="195" y="222" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">raw video</text>
+
+  <!-- trigger arrow into orchestration -->
+  <line x1="242" y1="200" x2="300" y2="200" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#f-b)"/>
+  <text x="271" y="188" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">triggers</text>
+
+  <!-- STAGE 2: ORCHESTRATION BOX -->
+  <rect x="300" y="108" width="720" height="540" rx="16" fill="#10151c" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="660" y="134" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">2 &#183; PROCESSING &#8212; orchestrated by Airflow (scheduler + metadata DB + workers run this DAG)</text>
+
+  <!-- sensor -> validate -> gen360 -->
+  <rect x="324" y="168" width="120" height="48" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="384" y="190" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">S3 sensor</text>
+  <text x="384" y="208" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">wait for object</text>
+  <line x1="446" y1="192" x2="486" y2="192" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#f-b)"/>
+  <rect x="490" y="168" width="110" height="48" rx="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="545" y="196" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">validate</text>
+  <line x1="602" y1="192" x2="642" y2="192" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#f-b)"/>
+  <rect x="646" y="168" width="120" height="48" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="706" y="190" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">gen_360</text>
+  <text x="706" y="208" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">cheap, fast</text>
+
+  <!-- gen360 -> checks -->
+  <line x1="730" y1="216" x2="700" y2="256" stroke="#ffff99" stroke-width="2.5" marker-end="url(#f-y)"/>
+  <line x1="760" y1="216" x2="810" y2="256" stroke="#ffff99" stroke-width="2.5" marker-end="url(#f-y)"/>
+  <rect x="600" y="258" width="150" height="46" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="675" y="286" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">copyright (on 360p)</text>
+  <rect x="770" y="258" width="150" height="46" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="845" y="286" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">nudity (on 360p)</text>
+
+  <!-- checks -> gate -->
+  <line x1="690" y1="304" x2="720" y2="346" stroke="#ffff99" stroke-width="2.5" marker-end="url(#f-y)"/>
+  <line x1="840" y1="304" x2="780" y2="346" stroke="#ffff99" stroke-width="2.5" marker-end="url(#f-y)"/>
+  <polygon points="750,346 818,398 750,450 682,398" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
+  <text x="750" y="392" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">publish</text>
+  <text x="750" y="412" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">gate?</text>
+
+  <!-- fail -->
+  <line x1="700" y1="428" x2="474" y2="456" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#f-r)"/>
+  <text x="600" y="430" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="11">any fails</text>
+  <rect x="336" y="438" width="134" height="44" rx="9" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="403" y="465" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">reject / hold</text>
+
+  <!-- pass -> publish -->
+  <line x1="818" y1="398" x2="876" y2="398" stroke="#8aff8a" stroke-width="3" marker-end="url(#f-g)"/>
+  <text x="847" y="386" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11">pass</text>
+  <rect x="880" y="372" width="124" height="52" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="3"/>
+  <text x="942" y="394" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">PUBLISH</text>
+  <text x="942" y="413" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">live at 360p</text>
+
+  <!-- async tail -->
+  <text x="660" y="500" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">async tail &#8212; runs after publish, attaches as it finishes</text>
+  <line x1="942" y1="424" x2="942" y2="520" stroke="#93c5fd" stroke-width="2" stroke-dasharray="5 5"/>
+  <rect x="340" y="528" width="150" height="44" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="5 5"/>
+  <text x="415" y="555" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">gen_720</text>
+  <rect x="506" y="528" width="150" height="44" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="5 5"/>
+  <text x="581" y="555" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">gen_1080</text>
+  <rect x="672" y="528" width="150" height="44" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="5 5"/>
+  <text x="747" y="555" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">captions</text>
+  <rect x="838" y="528" width="158" height="44" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="5 5"/>
+  <text x="917" y="555" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">auto-thumbnail</text>
+  <text x="660" y="600" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">renditions written back to S3; the player offers HD as each appears</text>
+  <line x1="660" y1="608" x2="660" y2="628" stroke="#93c5fd" stroke-width="2" marker-end="url(#f-b)"/>
+  <path d="M600 628 q 60 -10 120 0" fill="none" stroke="#ffff99" stroke-width="2"/>
+  <text x="660" y="644" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12">S3 renditions</text>
+
+  <!-- STAGE 3 DISTRIBUTION -->
+  <text x="1170" y="120" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">3 &#183; DISTRIBUTION</text>
+  <line x1="1004" y1="398" x2="1056" y2="398" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#f-g)"/>
+  <rect x="1060" y="360" width="100" height="76" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="1110" y="394" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">CDN</text>
+  <text x="1110" y="414" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">edge cache</text>
+  <line x1="1162" y1="398" x2="1206" y2="398" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#f-g)"/>
+  <circle cx="1240" cy="382" r="16" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <path d="M1217 428 q 23 -32 46 0 z" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="1240" y="456" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12" font-weight="bold">viewers</text>
+
+  <!-- LEGEND -->
+  <rect x="40" y="676" width="1240" height="64" rx="12" fill="#181b20" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="60" y="700" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">Legend:</text>
+  <rect x="130" y="690" width="16" height="16" rx="3" fill="#ff8bd2"/><text x="154" y="703" fill="#cbd5e1" font-family="sans-serif" font-size="13">upload / write</text>
+  <rect x="290" y="690" width="16" height="16" rx="3" fill="#ffff99"/><text x="314" y="703" fill="#cbd5e1" font-family="sans-serif" font-size="13">storage + gate</text>
+  <rect x="460" y="690" width="16" height="16" rx="3" fill="#93c5fd"/><text x="484" y="703" fill="#cbd5e1" font-family="sans-serif" font-size="13">async processing / control</text>
+  <rect x="710" y="690" width="16" height="16" rx="3" fill="#8aff8a"/><text x="734" y="703" fill="#cbd5e1" font-family="sans-serif" font-size="13">serve path</text>
+  <rect x="850" y="690" width="16" height="16" rx="3" fill="#ff8a8a"/><text x="874" y="703" fill="#cbd5e1" font-family="sans-serif" font-size="13">failure</text>
+  <text x="660" y="730" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">A dependency graph is a DAG; a DAG wants an orchestrator, not a queue &#8212; Airflow makes the gate fan-in, retries, and the "where is it stuck?" view built-in.</text>
+</svg>

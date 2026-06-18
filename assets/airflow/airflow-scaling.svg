@@ -1,0 +1,109 @@
+<svg width="1480" height="900" viewBox="0 0 1480 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="fm-b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="fm-y" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="fm-p" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="fm-g" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+  </defs>
+  <rect width="1480" height="900" fill="#111317"/>
+  <text x="740" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="31" font-weight="700">Production Airflow: Complete System Map</text>
+  <text x="740" y="77" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">scale stateless control and execution components; protect the stateful database and external systems</text>
+
+  <!-- authoring lane -->
+  <rect x="40" y="112" width="1400" height="128" rx="15" fill="#15191f" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="64" y="142" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="700">AUTHORING / DEFINITION</text>
+  <rect x="86" y="166" width="194" height="52" rx="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="183" y="198" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="700">Git / DAG bundle</text>
+  <rect x="390" y="158" width="220" height="68" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="500" y="185" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="700">DAG Processor ×N</text>
+  <text x="500" y="207" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">parse · validate · serialize</text>
+  <line x1="280" y1="192" x2="386" y2="192" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#fm-b)"/>
+  <text x="333" y="178" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11">sync code</text>
+  <rect x="1110" y="158" width="250" height="68" rx="10" fill="#181b20" stroke="#ffff99" stroke-width="2"/>
+  <text x="1235" y="185" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="700">Secrets backend</text>
+  <text x="1235" y="207" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">Connections resolve credentials</text>
+
+  <!-- control lane -->
+  <rect x="40" y="276" width="1400" height="210" rx="15" fill="#0e1722" stroke="#93c5fd" stroke-width="2"/>
+  <text x="64" y="306" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="700">CONTROL PLANE</text>
+  <rect x="90" y="334" width="142" height="62" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="100" y="324" width="142" height="62" rx="9" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="171" y="352" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="700">Web / UI ×N</text>
+  <text x="171" y="373" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">behind load balancer</text>
+
+  <rect x="330" y="326" width="162" height="68" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="411" y="354" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="700">Scheduler 1</text>
+  <text x="411" y="375" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">active</text>
+  <rect x="514" y="326" width="162" height="68" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="595" y="354" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="700">Scheduler 2</text>
+  <text x="595" y="375" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">active</text>
+  <text x="504" y="418" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">DB row locks protect enqueue + pool limits · no leader election</text>
+
+  <rect x="746" y="326" width="194" height="68" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="843" y="354" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="700">Triggerer ×N</text>
+  <text x="843" y="375" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">deferred event loops</text>
+
+  <rect x="1020" y="326" width="174" height="68" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="1107" y="354" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="700">Executor</text>
+  <text x="1107" y="375" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">dispatch strategy</text>
+  <rect x="1248" y="326" width="150" height="68" rx="26" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="1323" y="354" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="700">Broker / K8s API</text>
+  <text x="1323" y="375" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">work transport</text>
+  <line x1="1194" y1="360" x2="1244" y2="360" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#fm-b)"/>
+  <path d="M595 394 V450 H970 V360 H1016" fill="none" stroke="#93c5fd" stroke-width="2.3" marker-end="url(#fm-b)"/>
+  <text x="824" y="447" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11">eligible TaskInstances → executor</text>
+
+  <!-- storage lane -->
+  <rect x="40" y="522" width="1400" height="166" rx="15" fill="#1b1b10" stroke="#ffff99" stroke-width="2"/>
+  <text x="64" y="552" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="700">DURABLE STATE / OBSERVABILITY</text>
+  <path d="M182 572 q 96 -22 192 0 v 82 q -96 22 -192 0 z" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
+  <path d="M182 572 q 96 22 192 0" fill="none" stroke="#ffff99" stroke-width="3"/>
+  <text x="278" y="610" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="700">Metadata DB primary</text>
+  <text x="278" y="632" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">orchestration source of truth</text>
+
+  <path d="M432 578 q 78 -18 156 0 v 70 q -78 18 -156 0 z" fill="#17170e" stroke="#ffff99" stroke-width="2" stroke-dasharray="6 4"/>
+  <path d="M432 578 q 78 18 156 0" fill="none" stroke="#ffff99" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="510" y="614" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">DB standby</text>
+  <line x1="376" y1="612" x2="428" y2="612" stroke="#ffff99" stroke-width="2.5" marker-end="url(#fm-y)"/>
+  <text x="402" y="594" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="10">replicate</text>
+
+  <path d="M720 578 q 86 -18 172 0 v 70 q -86 18 -172 0 z" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <path d="M720 578 q 86 18 172 0" fill="none" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="806" y="610" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="700">Remote logs</text>
+  <text x="806" y="631" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">S3 / GCS / log service</text>
+
+  <path d="M1010 578 q 92 -18 184 0 v 70 q -92 18 -184 0 z" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <path d="M1010 578 q 92 18 184 0" fill="none" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="1102" y="610" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">Object storage</text>
+  <text x="1102" y="631" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">pipeline payloads / large XCom</text>
+
+  <!-- data plane -->
+  <rect x="40" y="724" width="1400" height="126" rx="15" fill="#1f0f18" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="64" y="754" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="700">DATA PLANE</text>
+  <rect x="190" y="780" width="170" height="46" rx="9" fill="#2a1622" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="200" y="770" width="170" height="46" rx="9" fill="#2a1622" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="210" y="760" width="170" height="46" rx="9" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="295" y="788" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="700">Worker fleet</text>
+
+  <rect x="520" y="764" width="256" height="62" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="648" y="789" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">Pool: gpu_transcode = 8</text>
+  <text x="648" y="811" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">backpressure protects scarce capacity</text>
+
+  <rect x="934" y="764" width="350" height="62" rx="10" fill="#181b20" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="1109" y="789" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="700">At-least-once effects</text>
+  <text x="1109" y="811" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">tasks must be idempotent across retries and crash recovery</text>
+
+  <!-- cross-lane connections -->
+  <line x1="500" y1="226" x2="300" y2="568" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#fm-b)"/>
+  <line x1="171" y1="396" x2="238" y2="568" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#fm-g)"/>
+  <line x1="411" y1="394" x2="278" y2="568" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#fm-b)"/>
+  <line x1="595" y1="394" x2="320" y2="568" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#fm-b)"/>
+  <line x1="843" y1="394" x2="358" y2="568" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#fm-b)"/>
+  <path d="M1323 394 V840 H400 V784 H384" fill="none" stroke="#ff8bd2" stroke-width="2.8" marker-end="url(#fm-p)"/>
+  <text x="840" y="834" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="11">dispatch workload to an available worker</text>
+  <line x1="380" y1="790" x2="1006" y2="632" stroke="#ff8bd2" stroke-width="2.2" marker-end="url(#fm-p)"/>
+  <line x1="344" y1="760" x2="720" y2="632" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#fm-b)"/>
+  <line x1="294" y1="760" x2="294" y2="658" stroke="#ffff99" stroke-width="2.5" marker-end="url(#fm-y)"/>
+
+  <text x="740" y="878" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="700">Scale workers for task throughput and schedulers for decision throughput; the metadata database remains the coordination ceiling.</text>
+</svg>

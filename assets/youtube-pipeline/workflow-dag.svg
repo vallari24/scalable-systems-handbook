@@ -1,0 +1,98 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="d-w" markerWidth="10" markerHeight="10" refX="7.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/>
+    </marker>
+    <marker id="d-y" markerWidth="10" markerHeight="10" refX="7.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="d-b" markerWidth="10" markerHeight="10" refX="7.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Workflow Tool's Heart: The DAG</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">declare jobs as nodes and dependencies as edges; run a task only when its upstreams all succeed</text>
+
+  <!-- TOP: abstract fan-in -->
+  <text x="60" y="124" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">The rule that motivates everything:</text>
+  <circle cx="220" cy="158" r="11" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <line x1="212" y1="166" x2="158" y2="190" stroke="#cbd5e1" stroke-width="2" marker-end="url(#d-w)"/>
+  <line x1="228" y1="166" x2="282" y2="190" stroke="#cbd5e1" stroke-width="2" marker-end="url(#d-w)"/>
+  <rect x="120" y="194" width="80" height="42" rx="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="160" y="221" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">C</text>
+  <rect x="244" y="194" width="80" height="42" rx="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="284" y="221" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">D</text>
+  <line x1="170" y1="236" x2="208" y2="270" stroke="#ffff99" stroke-width="2.5" marker-end="url(#d-y)"/>
+  <line x1="274" y1="236" x2="236" y2="270" stroke="#ffff99" stroke-width="2.5" marker-end="url(#d-y)"/>
+  <rect x="182" y="274" width="80" height="42" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="222" y="301" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">E</text>
+
+  <rect x="380" y="158" width="380" height="120" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="570" y="192" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Key highlight</text>
+  <text x="570" y="224" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">Do E only when both C and D are done.</text>
+  <text x="570" y="256" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">In Kafka this needed a side table; here it is one edge.</text>
+
+  <line x1="60" y1="338" x2="1120" y2="338" stroke="#3a3f47" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+  <!-- BOTTOM: real video DAG -->
+  <text x="590" y="372" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">The real video-processing DAG</text>
+
+  <!-- video processing -->
+  <rect x="490" y="390" width="200" height="42" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="590" y="417" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">video processing</text>
+  <line x1="590" y1="432" x2="590" y2="452" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#d-w)"/>
+
+  <!-- validation -->
+  <rect x="500" y="454" width="180" height="42" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="590" y="481" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">validation</text>
+
+  <!-- fan out to 4 branches -->
+  <line x1="540" y1="496" x2="200" y2="532" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#d-b)"/>
+  <line x1="565" y1="496" x2="440" y2="532" stroke="#ffff99" stroke-width="2.5" marker-end="url(#d-y)"/>
+  <line x1="615" y1="496" x2="700" y2="532" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#d-b)"/>
+  <line x1="640" y1="496" x2="930" y2="532" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#d-b)"/>
+
+  <!-- transcoding branch -->
+  <rect x="80" y="534" width="160" height="42" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="160" y="561" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">transcoding</text>
+  <line x1="110" y1="576" x2="70" y2="608" stroke="#93c5fd" stroke-width="2" marker-end="url(#d-b)"/>
+  <line x1="160" y1="576" x2="190" y2="608" stroke="#93c5fd" stroke-width="2" marker-end="url(#d-b)"/>
+  <line x1="210" y1="576" x2="320" y2="608" stroke="#93c5fd" stroke-width="2" marker-end="url(#d-b)"/>
+  <rect x="20" y="610" width="100" height="40" rx="8" fill="#0f1a28" stroke="#93c5fd" stroke-width="2"/>
+  <text x="70" y="635" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">gen 360</text>
+  <rect x="140" y="610" width="100" height="40" rx="8" fill="#0f1a28" stroke="#93c5fd" stroke-width="2"/>
+  <text x="190" y="635" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">gen 720</text>
+  <rect x="280" y="610" width="100" height="40" rx="8" fill="#0f1a28" stroke="#93c5fd" stroke-width="2"/>
+  <text x="330" y="635" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">gen 1080</text>
+
+  <!-- copyright branch -->
+  <rect x="350" y="534" width="160" height="42" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="430" y="561" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">copyright</text>
+
+  <!-- thumbnail branch -->
+  <rect x="620" y="534" width="160" height="42" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="700" y="561" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">thumbnail</text>
+
+  <!-- captioning branch -->
+  <rect x="850" y="534" width="160" height="42" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="930" y="561" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">captioning</text>
+
+  <!-- publish fan-in sink (centered, below the gen row) -->
+  <rect x="466" y="688" width="248" height="48" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="3"/>
+  <text x="590" y="710" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">publish gate</text>
+  <text x="590" y="728" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">needs gen 360 + copyright + nudity</text>
+
+  <!-- gating edges (solid) routed below the gen row -->
+  <line x1="70" y1="650" x2="470" y2="704" stroke="#ffff99" stroke-width="2.2" marker-end="url(#d-y)"/>
+  <line x1="430" y1="576" x2="540" y2="684" stroke="#ffff99" stroke-width="2.2" marker-end="url(#d-y)"/>
+  <!-- non-blocking edges (dashed) -->
+  <line x1="330" y1="650" x2="500" y2="686" stroke="#93c5fd" stroke-width="1.8" stroke-dasharray="5 5" marker-end="url(#d-b)"/>
+  <line x1="930" y1="576" x2="700" y2="688" stroke="#93c5fd" stroke-width="1.8" stroke-dasharray="5 5" marker-end="url(#d-b)"/>
+
+  <text x="930" y="664" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">solid = gating edge</text>
+  <text x="930" y="682" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">dashed = non-blocking (finishes after)</text>
+
+  <text x="590" y="754" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">The DAG is declared once; the orchestrator fires each task exactly when its upstream dependencies succeed.</text>
+</svg>

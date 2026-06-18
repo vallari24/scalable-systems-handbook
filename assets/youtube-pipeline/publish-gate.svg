@@ -1,0 +1,88 @@
+<svg width="1180" height="640" viewBox="0 0 1180 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="pg-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/>
+    </marker>
+    <marker id="pg-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="pg-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/>
+    </marker>
+    <marker id="pg-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="640" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Publish Decision: What Blocks, What Doesn't</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">publish on a safe, playable rendition; let quality and extras stream in afterward</text>
+
+  <!-- raw -->
+  <rect x="40" y="270" width="150" height="84" rx="12" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="115" y="306" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">raw video</text>
+  <text x="115" y="330" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">in S3</text>
+
+  <!-- TOP LANE: BLOCKING -->
+  <text x="250" y="138" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">BLOCKING gate &#8212; must finish before publish</text>
+  <line x1="192" y1="290" x2="244" y2="190" stroke="#ffff99" stroke-width="2.5" marker-end="url(#pg-y)"/>
+  <rect x="248" y="160" width="160" height="58" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="328" y="184" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">360p rendition</text>
+  <text x="328" y="205" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">something playable</text>
+  <rect x="248" y="228" width="160" height="50" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="328" y="258" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">copyright check</text>
+  <rect x="248" y="288" width="160" height="50" rx="10" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="328" y="318" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">nudity check</text>
+
+  <!-- fan-in arrows to gate -->
+  <line x1="410" y1="189" x2="492" y2="240" stroke="#ffff99" stroke-width="2.5" marker-end="url(#pg-y)"/>
+  <line x1="410" y1="253" x2="492" y2="255" stroke="#ffff99" stroke-width="2.5" marker-end="url(#pg-y)"/>
+  <line x1="410" y1="313" x2="492" y2="272" stroke="#ffff99" stroke-width="2.5" marker-end="url(#pg-y)"/>
+
+  <!-- GATE diamond -->
+  <polygon points="560,200 632,256 560,312 488,256" fill="#1d1d12" stroke="#ffff99" stroke-width="3"/>
+  <text x="560" y="250" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">allow to</text>
+  <text x="560" y="270" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">publish?</text>
+
+  <!-- pass -> PUBLISH -->
+  <line x1="632" y1="240" x2="724" y2="200" stroke="#8aff8a" stroke-width="3" marker-end="url(#pg-g)"/>
+  <text x="688" y="206" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">all pass</text>
+  <rect x="728" y="168" width="180" height="64" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="3"/>
+  <text x="818" y="196" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">PUBLISH</text>
+  <text x="818" y="218" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">video goes live (360p)</text>
+
+  <!-- fail -> reject -->
+  <line x1="588" y1="296" x2="724" y2="316" stroke="#ff8a8a" stroke-width="3" marker-end="url(#pg-r)"/>
+  <text x="654" y="330" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">any fails</text>
+  <rect x="728" y="292" width="180" height="58" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="818" y="320" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">reject / hold</text>
+  <text x="818" y="340" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">never goes public</text>
+
+  <!-- divider -->
+  <line x1="40" y1="408" x2="1140" y2="408" stroke="#3a3f47" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+  <!-- BOTTOM LANE: ASYNC -->
+  <text x="250" y="448" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">NON-BLOCKING async tail &#8212; attaches after publish</text>
+  <line x1="155" y1="356" x2="155" y2="490" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="5 5"/>
+  <line x1="155" y1="490" x2="244" y2="490" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#pg-b)"/>
+
+  <rect x="248" y="468" width="190" height="46" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="343" y="496" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">720p / 1080p / 4K</text>
+  <rect x="248" y="524" width="190" height="46" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="343" y="552" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">auto-captioning</text>
+  <rect x="468" y="468" width="210" height="46" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="573" y="496" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">auto-extract thumbnail</text>
+  <rect x="468" y="524" width="210" height="46" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="573" y="546" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">custom thumbnail</text>
+  <text x="573" y="563" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">no processing &#8212; apply instantly</text>
+
+  <!-- key insight box -->
+  <rect x="936" y="430" width="208" height="150" rx="12" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="1040" y="460" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Key insight</text>
+  <text x="952" y="492" fill="#cbd5e1" font-family="sans-serif" font-size="13">You pick a small set of</text>
+  <text x="952" y="512" fill="#cbd5e1" font-family="sans-serif" font-size="13">resolutions as the publish</text>
+  <text x="952" y="532" fill="#cbd5e1" font-family="sans-serif" font-size="13">bar (e.g. 360p, then 720p)</text>
+  <text x="952" y="556" fill="#9aa6b2" font-family="sans-serif" font-size="13">&#8212; never the full ladder.</text>
+
+  <text x="500" y="616" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">Gate = one playable rendition + copyright + nudity. Tail = HD/4K, captions, auto-thumbnails. Same instinct as progressive image load.</text>
+</svg>
