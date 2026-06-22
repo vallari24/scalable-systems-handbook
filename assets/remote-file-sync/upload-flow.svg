@@ -1,0 +1,65 @@
+<svg width="1180" height="640" viewBox="0 0 1180 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="uf-a" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="640" fill="#111317"/>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">How an Upload Works</text>
+  <text x="590" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">commit first &#8594; server says which blocks it&#8217;s missing &#8594; upload only those &#8594; commit again</text>
+
+  <!-- lifelines -->
+  <g font-family="sans-serif">
+    <rect x="110" y="96" width="160" height="40" rx="9" fill="#1a1018" stroke="#ff8bd2" stroke-width="2.5"/>
+    <text x="190" y="122" text-anchor="middle" fill="#ff8bd2" font-size="16" font-weight="bold">client</text>
+    <line x1="190" y1="136" x2="190" y2="600" stroke="#3a4a5e" stroke-width="2"/>
+
+    <rect x="480" y="96" width="180" height="40" rx="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+    <text x="570" y="122" text-anchor="middle" fill="#93c5fd" font-size="16" font-weight="bold">meta server</text>
+    <line x1="570" y1="136" x2="570" y2="600" stroke="#3a4a5e" stroke-width="2"/>
+
+    <rect x="880" y="96" width="180" height="40" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+    <text x="970" y="122" text-anchor="middle" fill="#ffff99" font-size="16" font-weight="bold">blocks server</text>
+    <line x1="970" y1="136" x2="970" y2="600" stroke="#3a4a5e" stroke-width="2"/>
+  </g>
+
+  <g font-family="monospace" font-size="14">
+    <!-- 1 commit -->
+    <line x1="190" y1="186" x2="566" y2="186" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="378" y="176" text-anchor="middle" fill="#ff8bd2">commit /video.avi  [h1, h2, h3, h4]</text>
+    <text x="700" y="190" fill="#9aa6b2" font-family="sans-serif">checks Blocks DB &#8594; none exist</text>
+
+    <!-- 2 need -->
+    <line x1="570" y1="232" x2="194" y2="232" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="378" y="222" text-anchor="middle" fill="#93c5fd">need h1, h2, h3, h4</text>
+
+    <!-- 3 store first pair -->
+    <line x1="190" y1="296" x2="966" y2="296" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="540" y="286" text-anchor="middle" fill="#ff8bd2">store  (h1,b1)  (h2,b2)</text>
+    <text x="1000" y="300" fill="#9aa6b2" font-family="sans-serif" text-anchor="end" dx="60">2 blocks at a time</text>
+
+    <!-- 4 ok -->
+    <line x1="970" y1="334" x2="194" y2="334" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="540" y="324" text-anchor="middle" fill="#8aff8a">OK</text>
+
+    <!-- 5 store second pair -->
+    <line x1="190" y1="392" x2="966" y2="392" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="540" y="382" text-anchor="middle" fill="#ff8bd2">store  (h3,b3)  (h4,b4)</text>
+
+    <!-- 6 ok -->
+    <line x1="970" y1="430" x2="194" y2="430" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="540" y="420" text-anchor="middle" fill="#8aff8a">OK</text>
+
+    <!-- 7 recommit -->
+    <line x1="190" y1="494" x2="566" y2="494" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="378" y="484" text-anchor="middle" fill="#ff8bd2">commit /video.avi  [h1, h2, h3, h4]</text>
+    <text x="700" y="498" fill="#9aa6b2" font-family="sans-serif">all blocks present &#8594; save</text>
+
+    <!-- 8 ok saved -->
+    <line x1="570" y1="540" x2="194" y2="540" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#uf-a)"/>
+    <text x="378" y="530" text-anchor="middle" fill="#8aff8a">OK &#8212; file saved (version 1)</text>
+  </g>
+
+  <text x="590" y="592" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13" font-style="italic">If the connection dies after the first OK, the retried commit re-asks &#8220;which blocks?&#8221; &#8212; already-stored blocks are never re-sent.</text>
+</svg>

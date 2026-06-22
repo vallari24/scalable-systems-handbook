@@ -1,0 +1,77 @@
+<svg width="1180" height="520" viewBox="0 0 1180 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="vl-a" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="520" fill="#111317"/>
+
+  <text x="590" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">The Version Log: one monotonic counter per namespace</text>
+  <text x="590" y="68" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">every update to <tspan font-style="italic">any</tspan> file appends a row &#8212; version_id is the offset, exactly like a Kafka log</text>
+
+  <!-- Kafka callout -->
+  <rect x="788" y="92" width="352" height="58" rx="10" fill="#1b2735" stroke="#93c5fd" stroke-width="2"/>
+  <text x="804" y="116" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">Looks oddly like Kafka.</text>
+  <text x="804" y="136" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">A consumer keeps an offset; here each device keeps a version cursor.</text>
+
+  <!-- table header -->
+  <g font-family="monospace" font-size="14">
+    <rect x="50" y="104" width="80" height="34" fill="#2a2a16" stroke="#5e5a2f" stroke-width="1.5"/><text x="90" y="126" text-anchor="middle" fill="#cbd5e1" font-weight="bold">version</text>
+    <rect x="130" y="104" width="170" height="34" fill="#2a2a16" stroke="#5e5a2f" stroke-width="1.5"/><text x="215" y="126" text-anchor="middle" fill="#cbd5e1" font-weight="bold">namespace</text>
+    <rect x="300" y="104" width="180" height="34" fill="#2a2a16" stroke="#5e5a2f" stroke-width="1.5"/><text x="390" y="126" text-anchor="middle" fill="#cbd5e1" font-weight="bold">relative_path</text>
+    <rect x="480" y="104" width="250" height="34" fill="#2a2a16" stroke="#5e5a2f" stroke-width="1.5"/><text x="605" y="126" text-anchor="middle" fill="#cbd5e1" font-weight="bold">blocklist</text>
+  </g>
+
+  <!-- rows -->
+  <g font-family="monospace" font-size="14">
+    <!-- v1 -->
+    <rect x="50" y="138" width="80" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="90" y="163" text-anchor="middle" fill="#8aff8a">1</text>
+    <rect x="130" y="138" width="170" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="215" y="163" text-anchor="middle" fill="#ffff99">vallari_mehta</text>
+    <rect x="300" y="138" width="180" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="390" y="163" text-anchor="middle" fill="#ff8bd2">/video.avi</text>
+    <rect x="480" y="138" width="250" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="605" y="163" text-anchor="middle" fill="#93c5fd">[h1, h2, h3, h4]</text>
+    <!-- v2 -->
+    <rect x="50" y="176" width="80" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="90" y="201" text-anchor="middle" fill="#8aff8a">2</text>
+    <rect x="130" y="176" width="170" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="215" y="201" text-anchor="middle" fill="#ffff99">vallari_mehta</text>
+    <rect x="300" y="176" width="180" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="390" y="201" text-anchor="middle" fill="#ff8bd2">/video.avi</text>
+    <rect x="480" y="176" width="250" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="605" y="201" text-anchor="middle" fill="#93c5fd">[h1, h2, <tspan fill="#ff6b6b">h3'</tspan>, h4]</text>
+    <!-- v3 -->
+    <rect x="50" y="214" width="80" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="90" y="239" text-anchor="middle" fill="#8aff8a">3</text>
+    <rect x="130" y="214" width="170" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="215" y="239" text-anchor="middle" fill="#ffff99">vallari_mehta</text>
+    <rect x="300" y="214" width="180" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="390" y="239" text-anchor="middle" fill="#ff8bd2">/photo.jpg</text>
+    <rect x="480" y="214" width="250" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="605" y="239" text-anchor="middle" fill="#93c5fd">[h6]</text>
+    <!-- v4 -->
+    <rect x="50" y="252" width="80" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="90" y="277" text-anchor="middle" fill="#8aff8a">4</text>
+    <rect x="130" y="252" width="170" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="215" y="277" text-anchor="middle" fill="#ffff99">vallari_mehta</text>
+    <rect x="300" y="252" width="180" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="390" y="277" text-anchor="middle" fill="#ff8bd2">/notes.txt</text>
+    <rect x="480" y="252" width="250" height="38" fill="#152015" stroke="#5e5a2f" stroke-width="1.5"/><text x="605" y="277" text-anchor="middle" fill="#93c5fd">[h2, h8]</text>
+    <!-- v5 -->
+    <rect x="50" y="290" width="80" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="90" y="315" text-anchor="middle" fill="#8aff8a">5</text>
+    <rect x="130" y="290" width="170" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="215" y="315" text-anchor="middle" fill="#ffff99">vallari_mehta</text>
+    <rect x="300" y="290" width="180" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="390" y="315" text-anchor="middle" fill="#ff8bd2">/photo.jpg</text>
+    <rect x="480" y="290" width="250" height="38" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/><text x="605" y="315" text-anchor="middle" fill="#93c5fd">[<tspan fill="#ff6b6b">h6'</tspan>]</text>
+    <!-- v6 revert -->
+    <rect x="50" y="328" width="80" height="38" fill="#1a1018" stroke="#ff8bd2" stroke-width="2"/><text x="90" y="353" text-anchor="middle" fill="#8aff8a">6</text>
+    <rect x="130" y="328" width="170" height="38" fill="#1a1018" stroke="#ff8bd2" stroke-width="2"/><text x="215" y="353" text-anchor="middle" fill="#ffff99">vallari_mehta</text>
+    <rect x="300" y="328" width="180" height="38" fill="#1a1018" stroke="#ff8bd2" stroke-width="2"/><text x="390" y="353" text-anchor="middle" fill="#ff8bd2">/video.avi</text>
+    <rect x="480" y="328" width="250" height="38" fill="#1a1018" stroke="#ff8bd2" stroke-width="2"/><text x="605" y="353" text-anchor="middle" fill="#93c5fd">[h1, h2, h3, h4]</text>
+  </g>
+  <text x="745" y="345" fill="#ff8bd2" font-family="sans-serif" font-size="12.5">&#8617; revert: same blocklist as v1</text>
+  <text x="745" y="361" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">restoring is just another commit</text>
+
+  <!-- device cursors -->
+  <line x1="730" y1="195" x2="855" y2="195" stroke="#ff8bd2" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <rect x="855" y="176" width="210" height="38" rx="9" fill="#1a1018" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="960" y="200" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">mobile &#183; cursor at v2</text>
+
+  <line x1="730" y1="309" x2="855" y2="309" stroke="#8aff8a" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <rect x="855" y="290" width="210" height="38" rx="9" fill="#152015" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="960" y="314" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">mac &#183; cursor at v5</text>
+
+  <!-- bottom notes -->
+  <rect x="50" y="392" width="1080" height="44" rx="10" fill="#16202e" stroke="#3a4a5e" stroke-width="1.5"/>
+  <text x="68" y="412" fill="#cbd5e1" font-family="sans-serif" font-size="13.5"><tspan fill="#ff8bd2" font-weight="bold">mobile:</tspan> &#8220;namespace vallari_mehta, I&#8217;m at version 2 &#8212; anything after?&#8221;  &#8594;  <tspan fill="#8aff8a" font-weight="bold">server returns rows 3, 4, 5, 6</tspan></text>
+  <text x="68" y="430" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">The device replays the log forward from its cursor, exactly like a Kafka consumer reading from its committed offset.</text>
+
+  <text x="50" y="468" fill="#ffb86b" font-family="sans-serif" font-size="13.5" font-weight="bold">Why a version number and not a timestamp?</text>
+  <text x="50" y="490" fill="#cbd5e1" font-family="sans-serif" font-size="13">Clocks drift, jump on NTP sync, and can be changed by the client &#8212; a server-assigned <tspan fill="#8aff8a" font-weight="bold">monotonic version</tspan> is the single, tamper-proof ordering truth.</text>
+</svg>

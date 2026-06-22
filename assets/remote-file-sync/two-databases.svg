@@ -1,0 +1,65 @@
+<svg width="1180" height="560" viewBox="0 0 1180 560" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="db-a" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="560" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Two Tables: Blocks and File Metadata</text>
+  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">one answers &#8220;does this block already exist?&#8221;, the other reconstructs a file from its blocklist</text>
+
+  <!-- BLOCKS DB -->
+  <rect x="50" y="110" width="500" height="280" rx="14" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="300" y="146" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">Blocks DB</text>
+  <text x="300" y="172" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">&#8220;does this block exist in this account? if yes, fetch it.&#8221;</text>
+
+  <!-- columns -->
+  <g font-family="monospace" font-size="15">
+    <rect x="80" y="196" width="440" height="40" fill="#1b2735" stroke="#3a4a5e" stroke-width="1.5"/>
+    <text x="100" y="221" fill="#cbd5e1" font-weight="bold">namespace_id</text>
+    <text x="320" y="221" fill="#ffff99">account_id</text>
+
+    <rect x="80" y="236" width="440" height="40" fill="#16202e" stroke="#3a4a5e" stroke-width="1.5"/>
+    <text x="100" y="261" fill="#cbd5e1" font-weight="bold">hash</text>
+    <text x="320" y="261" fill="#93c5fd">block hash</text>
+
+    <rect x="80" y="276" width="440" height="40" fill="#1b2735" stroke="#3a4a5e" stroke-width="1.5"/>
+    <text x="100" y="301" fill="#cbd5e1" font-weight="bold">block</text>
+    <text x="320" y="301" fill="#8aff8a">the actual 4 MB bytes (in S3)</text>
+  </g>
+  <text x="300" y="358" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">bytes sit in S3; the row is the index pointing at them</text>
+
+  <!-- FILE METADATA DB -->
+  <rect x="630" y="110" width="500" height="340" rx="14" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="880" y="146" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">File Metadata DB</text>
+  <text x="880" y="172" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">the logical view: a file is a list of block hashes</text>
+
+  <g font-family="monospace" font-size="15">
+    <rect x="660" y="196" width="440" height="40" fill="#2a2a16" stroke="#5e5a2f" stroke-width="1.5"/>
+    <text x="680" y="221" fill="#cbd5e1" font-weight="bold">namespace_id</text>
+    <text x="900" y="221" fill="#ffff99">account_id</text>
+
+    <rect x="660" y="236" width="440" height="40" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/>
+    <text x="680" y="261" fill="#cbd5e1" font-weight="bold">relative_path</text>
+    <text x="900" y="261" fill="#ff8bd2">/video.avi</text>
+
+    <rect x="660" y="276" width="440" height="40" fill="#2a2a16" stroke="#5e5a2f" stroke-width="1.5"/>
+    <text x="680" y="301" fill="#cbd5e1" font-weight="bold">blocklist</text>
+    <text x="900" y="301" fill="#93c5fd">[h1, h2, h3, h4]</text>
+
+    <rect x="660" y="316" width="440" height="40" fill="#1d1d12" stroke="#5e5a2f" stroke-width="1.5"/>
+    <text x="680" y="341" fill="#cbd5e1" font-weight="bold">version_id</text>
+    <text x="900" y="341" fill="#8aff8a">monotonically increasing</text>
+  </g>
+  <text x="880" y="392" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">read the blocklist &#8594; fetch each block from Blocks DB &#8594; rebuild the file</text>
+  <text x="880" y="416" text-anchor="middle" fill="#ffb86b" font-family="sans-serif" font-size="13" font-style="italic">version_id earns its own section &#8212; it is what makes sync safe</text>
+
+  <!-- link -->
+  <line x1="660" y1="296" x2="522" y2="256" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#db-a)"/>
+  <text x="590" y="262" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">each hash</text>
+  <text x="590" y="278" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">resolves here</text>
+
+  <text x="590" y="500" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">The metadata DB is the <tspan fill="#ffff99" font-weight="bold">source of truth</tspan> for what a file <tspan font-style="italic">is</tspan>; the Blocks DB is the source of truth for what bytes <tspan font-style="italic">exist</tspan>.</text>
+  <text x="590" y="526" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">To render the UI &#8220;here are your files&#8221;, you only read File Metadata DB &#8212; no bytes touched.</text>
+</svg>

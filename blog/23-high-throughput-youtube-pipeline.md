@@ -329,6 +329,90 @@ Everything we hand-rolled on Kafka is built in. Passing one task's output to the
 
 ---
 
+## Section 10 — The full architecture: services, orchestration, and distribution
+
+So far we've reasoned about the pipeline as an *abstraction* — a DAG with a gate and a tail. Now let's draw the **real system**: the actual services, databases, queues, and event buses you'd deploy, and how a video flows through all of them from "upload" to "trending on a viewer's homepage." Three things turn the abstraction into an architecture: **two services** split the video into its two faces, **Airflow as a distributed system** runs the processing, and **one publish event** fans out to every downstream consumer. We'll take them in the order a video lives them — upload, processing, distribution — then assemble the single map.
+
+### 10.1 — Upload: two services for the two faces of a video
+
+**Question: why isn't there just one "Video Service"? Why split it into a Video Service *and* a Channel Service?**
+
+Because a video has **two faces that change at completely different rates and for completely different reasons**, and conflating them couples things that should scale and evolve independently.
+
+- <span style="color:#cbd5e1"><strong>Video Service</strong></span> owns the <span style="color:#cbd5e1"><strong>raw, physical video</strong></span> — the bytes and everything technical about them. Its <span style="color:#ffff99"><strong>Raw Video Meta DB</strong></span> holds `{ id, thumbnails: [], encoding, bitrate }`: the rendition ladder, the encodings produced, the auto-extracted thumbnail candidates. This data is written **once, by the processing pipeline**, and rarely touched again.
+- <span style="color:#ffff99"><strong>Channel Service</strong></span> owns the <span style="color:#ffff99"><strong>published, public video</strong></span> — what a viewer and the creator actually see on YouTube. Its <span style="color:#ffff99"><strong>Channel DB</strong></span> holds `{ title, description, tags, video_id, status }`: the editable, discovery-facing metadata. This data is written **constantly** — every time the creator tweaks a title, edits a description, adds tags, or the status flips `DRAFT → PUBLISHED`.
+
+Two faces, two write patterns, two sets of consumers (the player reads raw video meta; search and discovery read channel meta). Splitting them lets each scale and be owned independently — and, crucially, it lets the **draft exist before the video is processed**.
+
+Here's the upload handshake in full:
+
+<img src="../assets/youtube-pipeline/architecture-upload-handshake.svg" alt="A sequence diagram of the upload handshake across six participants: Creator, Video Service, Raw Video DB, S3, Channel Service, Channel DB. Step 1: the creator tells the Video Service 'I want to upload a video.' Step 2: the Video Service registers a row in the Raw Video DB, which step 3 returns a video_id. Step 4: the Video Service reserves an S3 key for that video_id and requests a pre-signed PUT URL; step 5, S3 returns the pre-signed URL. Step 6: the Video Service returns { video_id, upload_url } to the creator. Step 7 (bold, the only heavy transfer): the creator PUTs the raw bytes directly to S3, never through our servers. Step 8: the creator tells the Video Service 'done uploading' with the video_id. Step 9: the Video Service asks the Channel Service to create a channel entry for the video_id. Step 10: the Channel Service inserts { video_id, status: DRAFT } into the Channel DB. A note box highlights that the DRAFT row exists immediately, so the creator can edit title/description/tags while transcoding runs. Step 11: the Video Service triggers the Airflow processing DAG for the video_id. Caption: steps 1 to 6 are a lightweight metadata round-trip, step 7 is the only heavy transfer and bypasses our tier, and steps 9 to 11 set up the editable draft and kick off processing." width="1280">
+
+Walk the steps:
+
+1. The creator tells the **Video Service** "I want to upload." The service **registers the video in the Raw Video Meta DB**, which mints a `video_id`.
+2. Using that id, the Video Service **reserves an S3 location and gets a pre-signed PUT URL**, then hands `{ video_id, upload_url }` back to the client. (Same pre-signed-URL move as [Section 1](#section-1--upload-its-just-the-instagram-flow) — the bytes never touch our servers.)
+3. The client **PUTs the raw bytes straight to S3**. When it finishes, it tells the Video Service **"done uploading."**
+4. The Video Service then tells the **Channel Service to create a draft entry** for this `video_id` in the Channel DB, with `status: DRAFT`.
+
+That last step is the subtle one. **The Channel DB row exists the moment the upload finishes — before processing even starts.** That's deliberate: the creator can sit in the studio editing the title, description, and tags *while* the transcode and safety checks grind away in the background. When everything passes, the status flips to `PUBLISHED` and the already-edited metadata goes live with it. The draft is the join point between the slow processing pipeline and the creator's fast, interactive editing.
+
+> **Memory hook:** *split the video into two services: Video Service owns the raw bytes (Raw Video DB: id, encoding, bitrate, thumbnails — written once by processing); Channel Service owns the public face (Channel DB: title, description, tags, status — edited constantly). Upload: register → get id → presign → client PUTs to S3 → "done" → create a DRAFT channel row so the creator edits metadata while processing runs.*
+
+### 10.2 — Processing: Airflow as a distributed system
+
+**Question: we said "trigger Airflow." But Airflow isn't one process — it's a distributed system. What are its parts, and how does a job actually get from "ready" to "running on a worker"?**
+
+When the upload finishes, the Video Service **triggers the processing DAG** — it hands Airflow a `video_id` and the name of the workflow to run for it. From there, four cooperating pieces (the same four from Section 9, now drawn as the distributed system they are) take over:
+
+<img src="../assets/youtube-pipeline/architecture-airflow-distributed.svg" alt="A diagram of Airflow as a distributed system. On the left, the Video Service sends a trigger (video_id, dag) to the Master. The Master is the scheduler: it reads the DAG and decides what is ready. Below the Master sits the metadata DB, holding every task's state and serving as the 'where is video X stuck?' view; arrows show the Master reading state and creating runs there. To the right of the Master is a vertical task queue. The Master enqueues ready tasks onto the queue. A large worker-pool box on the right contains six stateless workers labeled gen_360, copyright, nudity, gen_720, gen_1080, captions, noted as scaling horizontally. An arrow shows a worker pulling a task from the queue. Workers read raw video and write renditions to an S3 cloud in the middle, and workers write task state back to the metadata DB. When the final task runs, a green 'final task: publish, status -> PUBLISHED' box fires, and a Kafka box receives an ON-PUBLISH event via CDC or API. A caption at the bottom lists the scheduler loop: trigger creates a DAG run, master finds tasks whose upstreams are done, enqueues them, a free worker pulls one, runs the stage reading and writing S3, records success in the metadata DB, and loops until the DAG completes and emits ON-PUBLISH." width="1280">
+
+- The <span style="color:#ff8bd2"><strong>Master (scheduler)</strong></span> is the brain. It continuously watches every running workflow, reads the DAG, and figures out which tasks are **ready** — i.e. all their upstream dependencies have succeeded.
+- The <span style="color:#ffff99"><strong>metadata DB</strong></span> is the single source of truth: which workflows are running, every task's state, what to schedule next. It's what makes "where is video X stuck?" a query rather than a forensic investigation.
+- The <span style="color:#ffff99"><strong>task queue</strong></span> is how work reaches workers. **As soon as a stage is ready, the master enqueues it.** A free worker pulls the next task off the queue and starts executing.
+- The <span style="color:#93c5fd"><strong>worker pool</strong></span> is a fleet of stateless workers that run the actual task code (transcode, copyright scan, …). They read the raw file from S3, write renditions back, and **update the metadata DB as each task completes**.
+
+So the loop is: **trigger** creates a DAG run → the **master** spots a ready task → **enqueues** it → a **worker** pulls it and runs the stage → the worker **records success in the metadata DB** → the master sees that completion and enqueues whatever just became ready → repeat until the DAG finishes. The master only ever *orchestrates*; the workers do the heavy lifting and report back. Because workers are stateless and pull from a shared queue, you scale throughput by simply adding workers.
+
+When the **final task runs, it sets the channel status to `PUBLISHED`** — and that status change is the signal the rest of the world has been waiting for. You emit a publish event onto Kafka one of two ways: **CDC** on the Channel DB (the status flip is captured as a change event automatically), or an **API server** that explicitly publishes the event. Either way, `ON-PUBLISH` lands on Kafka, and that's the doorway to distribution.
+
+> **Memory hook:** *Airflow is distributed: Master (scheduler) decides what's ready from the DAG, metadata DB is the source of truth for every task's state, a queue carries ready tasks, a stateless worker pool executes and reports back. Loop: master enqueues ready task → worker runs it → worker updates metadata DB → master enqueues next. Final task sets status=PUBLISHED, which emits ON-PUBLISH to Kafka (via CDC or an API).*
+
+### 10.3 — Distribution: one publish event, many consumers
+
+**Question: the video is published. How does it become *findable*, *trending*, and *fast to play* — and what makes one event power all three?**
+
+This is where the [event-driven](16-storage-engine-etl-cdc.md) paradigm we *rejected* for orchestration becomes exactly right. Orchestration is about dependencies and fan-in; distribution is about **fan-out with no join** — "this thing happened, everybody who cares react however you like." That's Kafka's home turf. The single `ON-PUBLISH` event (and a steady stream of `ON-VIEW` events) is consumed independently by a fleet of services:
+
+- <span style="color:#ffff99"><strong>Search Service.</strong></span> On `ON-PUBLISH`, its workers pick up the event and **index the video's title, description, and tags into Elasticsearch**, so the video becomes searchable. This is the [indexing path](16-storage-engine-etl-cdc.md) — Kafka in, Elasticsearch out.
+- <span style="color:#ffd27f"><strong>Trending Service.</strong></span> Consumes both publish and view events, keeping popularity counts in its own DB and cache. It decides what's hot right now.
+- <span style="color:#93c5fd"><strong>Watchtime Service.</strong></span> Every time a viewer watches, views are **periodically captured** and pushed down to Kafka as `ON-VIEW` events — the raw demand signal that feeds trending and caching decisions.
+- <span style="color:#93c5fd"><strong>CDN Decider.</strong></span> A **rule engine** that decides whether a given video should be cached at the edge. It consumes `ON-VIEW` (is this video getting watched?) and listens to the Trending Service ("this is hot — cache it"), then **calls the CDN's API to cache** the renditions. It does *not* blindly cache everything; caching is demand-driven, exactly like the edge behavior in [Section 2](#section-2--transcoding-make-one-arbitrary-upload-playable-everywhere).
+
+The design principle threaded through distribution: **prioritize the bytes that play the video.** Getting the renditions cached and playing fast matters more than instantly propagating a title edit or a tag change — so the CDN Decider optimizes for the watch path, while metadata changes ride the slower, eventually-consistent event flow.
+
+> **Memory hook:** *distribution is fan-out, no join — Kafka's strength. ON-PUBLISH → Search indexes title/description/tags into Elasticsearch; Trending counts popularity in its own DB/cache. ON-VIEW (from Watchtime, captured periodically) → CDN Decider, a rule engine that — also nudged by Trending — calls the CDN API to cache hot renditions. Prioritize the bytes that play, not metadata propagation.*
+
+### 10.4 — One view: how it all fits together
+
+**Question: put the whole thing on one page — where does a video go from the instant a creator hits upload to the moment it's trending, searchable, and playing from the edge?**
+
+<img src="../assets/youtube-pipeline/system-architecture.svg" alt="The complete YouTube pipeline architecture on one map. Top left: an S3 cloud holding raw video and renditions. Left: a creator/viewer stick figure. Center: a Video Service box connected to a Raw Video Meta DB cylinder annotated { id, thumbnails: [], encoding, bitrate }; below it a Channel Service box connected to a Channel DB cylinder annotated { title, description, tags, video_id, status }. Top right: an Airflow box containing seven Worker boxes, a Master, a metadata DB, and a task queue. The creator sends an upload request to the Video Service and PUTs bytes directly to S3. The Video Service registers with the Raw Video DB, creates a draft entry in the Channel Service, and triggers processing on the Airflow Master. Airflow workers read raw and write renditions to S3, write encoding/bitrate/thumbnails to the Raw Video DB, and on publish set status in the Channel DB. The Channel DB emits an ON-PUBLISH event via CDC down into a horizontal Kafka event bus in the middle. The creator's views flow into a Watchtime service, which emits ON-VIEW into Kafka. From Kafka: ON-PUBLISH goes up into a Search box with two workers that index into an Elastic Search cylinder; ON-VIEW goes to a Trending Service (with its own DB and Cache) and to a CDN Decider rule engine. The Trending Service tells the CDN Decider to cache hot videos; the CDN Decider calls a cache API on a CDN cloud. S3 serves renditions to the CDN along a green path. A legend maps colors: pink for upload/write/event, yellow for storage/published meta, blue for service/control plane, green for serve path, orange for trending/popularity. The whole picture: two services for the two faces of a video, Airflow orchestrates processing, and one publish event fans out to every consumer." width="1400">
+
+Trace one video end to end:
+
+1. **Upload (pink).** Creator → Video Service registers a `video_id` and presigns an S3 URL → client PUTs raw bytes straight to S3 → Video Service creates a `DRAFT` row via the Channel Service so metadata is editable immediately.
+2. **Orchestrate (pink → blue).** Video Service triggers the Airflow DAG. The Master schedules tasks; workers transcode (reading raw from S3, writing renditions back), run copyright and nudity on the cheap 360p, write encoding/bitrate/thumbnails to the Raw Video DB, and report state to the metadata DB.
+3. **Publish (pink event).** The final task sets `status = PUBLISHED` on the Channel DB; CDC (or an API) emits `ON-PUBLISH` onto Kafka.
+4. **Fan-out (yellow / orange / blue).** Search workers index title/description/tags into Elasticsearch; Trending updates popularity; meanwhile viewers generate `ON-VIEW` events through Watchtime.
+5. **Serve (green).** The CDN Decider — driven by views and trending signals — calls the CDN to cache hot renditions, and the CDN serves the bytes straight from S3 to viewers at the edge.
+
+The shape of the whole system is three planes layered cleanly: a **control plane** (the services and Airflow deciding *what* should happen), a **data plane** (S3 and the CDN moving the heavy bytes, which never flow through our services), and an **event plane** (Kafka decoupling everything that reacts to a publish or a view). Upload is Instagram, distribution is a CDN with a smart caching brain, and the orchestrated processing in the middle — the genuinely hard part — is the DAG we spent the whole post earning.
+
+> **Memory hook:** *one map, three planes — control (Video/Channel services + Airflow decide what happens), data (S3 + CDN move bytes, bypassing services), event (Kafka decouples reactors). Upload → trigger DAG → workers transcode/check + write meta → status=PUBLISHED emits ON-PUBLISH → Search/Trending fan out, Watchtime emits ON-VIEW → CDN Decider caches hot renditions → CDN serves from S3.*
+
+---
+
 ## Where this leaves us: the complete pipeline
 
 We started from one raw file in S3 and a deceptively simple request — "process this video" — and discovered it was a **graph of dependent jobs**, not a stream. We split the jobs into a blocking gate (one safe playable rendition + copyright + nudity, all checked on the cheap 360p) and an async tail (HD, captions, thumbnails). We tried to run the graph on Kafka and watched fan-in force us to hand-build a join, retries, timeouts, and a status view — a workflow engine reinvented badly. So we used the right tool: a workflow orchestrator whose native vocabulary is the **DAG** — Apache Airflow, whose scheduler, metadata DB, and workers run our graph with built-in dependencies, retries, data-passing, and visibility. (How Airflow does that internally — its scheduler loop, executor, state machine, and scaling — is its [own post](24-high-throughput-airflow.md).)

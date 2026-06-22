@@ -1,0 +1,77 @@
+<svg width="1280" height="660" viewBox="0 0 1280 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="u-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="u-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="u-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="u-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1280" height="660" fill="#111317"/>
+
+  <text x="640" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="27" font-weight="bold">The upload handshake</text>
+  <text x="640" y="66" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">the API reserves an id and a pre-signed URL; the bytes go straight to S3; a DRAFT row is created so metadata can be edited while processing runs</text>
+
+  <!-- lanes -->
+  <!-- Creator 110 / Video Service 330 / Raw Video DB 545 / S3 740 / Channel Service 945 / Channel DB 1160 -->
+  <g font-family="sans-serif" font-size="13" font-weight="bold">
+    <rect x="50" y="92" width="120" height="40" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="2.5"/><text x="110" y="117" text-anchor="middle" fill="#cbd5e1">Creator</text>
+    <rect x="262" y="92" width="136" height="40" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/><text x="330" y="117" text-anchor="middle" fill="#93c5fd">Video Service</text>
+    <rect x="478" y="92" width="134" height="40" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/><text x="545" y="117" text-anchor="middle" fill="#ffff99" font-size="12">Raw Video DB</text>
+    <rect x="690" y="92" width="100" height="40" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/><text x="740" y="117" text-anchor="middle" fill="#ffff99">S3</text>
+    <rect x="865" y="92" width="160" height="40" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/><text x="945" y="117" text-anchor="middle" fill="#93c5fd" font-size="12">Channel Service</text>
+    <rect x="1095" y="92" width="130" height="40" rx="8" fill="#1d1d12" stroke="#ffff99" stroke-width="2.5"/><text x="1160" y="117" text-anchor="middle" fill="#ffff99" font-size="12">Channel DB</text>
+  </g>
+  <!-- lifelines -->
+  <g stroke="#3a3f47" stroke-width="1.5" stroke-dasharray="4 5">
+    <line x1="110" y1="132" x2="110" y2="628"/>
+    <line x1="330" y1="132" x2="330" y2="628"/>
+    <line x1="545" y1="132" x2="545" y2="628"/>
+    <line x1="740" y1="132" x2="740" y2="628"/>
+    <line x1="945" y1="132" x2="945" y2="628"/>
+    <line x1="1160" y1="132" x2="1160" y2="628"/>
+  </g>
+
+  <g font-family="sans-serif" font-size="12.5">
+    <!-- 1 creator -> video service -->
+    <line x1="110" y1="166" x2="326" y2="166" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#u-b)"/>
+    <text x="218" y="158" text-anchor="middle" fill="#93c5fd">1. &#8220;I want to upload a video&#8221;</text>
+    <!-- 2 video -> raw db -->
+    <line x1="330" y1="200" x2="541" y2="200" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#u-w)"/>
+    <text x="436" y="192" text-anchor="middle" fill="#cbd5e1">2. register raw video</text>
+    <!-- 3 raw db -> video (id) -->
+    <line x1="545" y1="234" x2="334" y2="234" stroke="#ffff99" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#u-y)"/>
+    <text x="436" y="226" text-anchor="middle" fill="#ffff99">3. video_id</text>
+    <!-- 4 video -> s3 presign -->
+    <line x1="330" y1="268" x2="736" y2="268" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#u-b)"/>
+    <text x="540" y="260" text-anchor="middle" fill="#93c5fd">4. reserve S3 key for video_id, request pre-signed PUT URL</text>
+    <!-- 5 s3 -> video -->
+    <line x1="740" y1="302" x2="334" y2="302" stroke="#ffff99" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#u-y)"/>
+    <text x="540" y="294" text-anchor="middle" fill="#ffff99">5. pre-signed URL</text>
+    <!-- 6 video -> creator -->
+    <line x1="330" y1="336" x2="114" y2="336" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#u-b)"/>
+    <text x="222" y="328" text-anchor="middle" fill="#93c5fd">6. { video_id, upload_url }</text>
+    <!-- 7 creator -> s3 PUT -->
+    <line x1="110" y1="378" x2="736" y2="378" stroke="#ff8bd2" stroke-width="3.5" marker-end="url(#u-p)"/>
+    <text x="420" y="370" text-anchor="middle" fill="#ff8bd2" font-weight="bold">7. PUT raw bytes &#8212; client uploads DIRECTLY to S3 (never through our servers)</text>
+    <!-- 8 creator -> video done -->
+    <line x1="110" y1="416" x2="326" y2="416" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#u-b)"/>
+    <text x="218" y="408" text-anchor="middle" fill="#93c5fd">8. &#8220;done uploading&#8221; (video_id)</text>
+    <!-- 9 video -> channel service -->
+    <line x1="330" y1="450" x2="861" y2="450" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#u-b)"/>
+    <text x="600" y="442" text-anchor="middle" fill="#93c5fd">9. create channel entry for video_id</text>
+    <!-- 10 channel -> channel db -->
+    <line x1="945" y1="484" x2="1156" y2="484" stroke="#ffff99" stroke-width="2.5" marker-end="url(#u-y)"/>
+    <text x="1050" y="476" text-anchor="middle" fill="#ffff99" font-size="11.5">10. insert { video_id, status: DRAFT }</text>
+  </g>
+
+  <!-- note: edit while draft -->
+  <rect x="430" y="510" width="500" height="48" rx="10" fill="#181b20" stroke="#8aff8a" stroke-width="2"/>
+  <text x="680" y="531" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">the DRAFT row exists immediately &#8212;</text>
+  <text x="680" y="550" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">creator can edit title / description / tags while transcoding runs in the background</text>
+
+  <!-- trigger off-lane -->
+  <line x1="330" y1="586" x2="1130" y2="586" stroke="#ff8bd2" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#u-p)"/>
+  <text x="720" y="578" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12.5">11. Video Service triggers the Airflow processing DAG for video_id &#8594;</text>
+  <text x="1180" y="590" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12.5" font-weight="bold">Airflow</text>
+
+  <text x="640" y="630" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">Steps 1&#8211;6 are a metadata round-trip; step 7 is the only heavy transfer and it bypasses our tier entirely; steps 9&#8211;11 set up the editable draft and kick off processing.</text>
+</svg>
