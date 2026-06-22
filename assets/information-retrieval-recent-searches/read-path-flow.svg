@@ -1,0 +1,211 @@
+<svg width="1080" height="720" viewBox="0 0 1080 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ar-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="ar-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="ar-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+    <marker id="ar-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="720" fill="#111317"/>
+
+  <!-- Title -->
+  <text x="540" y="34" text-anchor="middle" font-family="sans-serif" font-size="27" font-weight="bold" fill="#ffff99">The read path &#8212; how <tspan font-family="monospace" fill="#8aff8a">/search/recent</tspan> got fast</text>
+  <text x="540" y="59" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#9aa6b2">same endpoint, three stages: naive scan &#8594; write-through cache &#8594; preloaded</text>
+
+  <!-- ============================ STAGE 1 (RED) ============================ -->
+  <rect x="24" y="74" width="1032" height="166" rx="10" fill="#1a1210" stroke="#ff8a8a" stroke-width="2"/>
+  <rect x="24" y="74" width="6" height="166" rx="3" fill="#ff8a8a"/>
+  <text x="44" y="100" font-family="sans-serif" font-size="15" font-weight="bold" fill="#ff8a8a">v0 &#183; NAIVE</text>
+  <text x="44" y="120" font-family="sans-serif" font-size="12" fill="#ff8a8a">&#10007;</text>
+
+  <!-- User (stick figure) -->
+  <g stroke="#ffffff" stroke-width="2" fill="none">
+    <circle cx="118" cy="138" r="9"/>
+    <line x1="118" y1="147" x2="118" y2="172"/>
+    <line x1="118" y1="153" x2="106" y2="166"/>
+    <line x1="118" y1="153" x2="130" y2="166"/>
+    <line x1="118" y1="172" x2="108" y2="188"/>
+    <line x1="118" y1="172" x2="128" y2="188"/>
+  </g>
+  <text x="118" y="206" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">User</text>
+
+  <!-- Search API -->
+  <rect x="288" y="132" width="124" height="58" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="350" y="158" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#ffffff">Search API</text>
+  <text x="350" y="176" text-anchor="middle" font-family="monospace" font-size="11" fill="#9aa6b2">/search/recent</text>
+
+  <!-- NoSQL cylinder -->
+  <path d="M596 128 a44 10 0 0 0 88 0 v52 a44 10 0 0 1 -88 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <ellipse cx="640" cy="128" rx="44" ry="10" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="640" y="160" text-anchor="middle" font-family="monospace" font-size="12" fill="#ffff99">Sharded</text>
+  <text x="640" y="176" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#9aa6b2">NoSQL</text>
+
+  <!-- User -> API -->
+  <line x1="142" y1="150" x2="285" y2="150" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="213" y="142" text-anchor="middle" font-family="monospace" font-size="11" fill="#8aff8a">/search/recent</text>
+
+  <!-- API -> NoSQL -->
+  <line x1="412" y1="145" x2="592" y2="145" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#ar-r)"/>
+  <text x="502" y="137" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#ff8a8a">scan + filter + SORT the user's scattered records</text>
+
+  <!-- NoSQL -> API return (curved back) -->
+  <path d="M598 184 C 530 218, 430 216, 412 184" fill="none" stroke="#ff8a8a" stroke-width="2.2" marker-end="url(#ar-r)"/>
+  <!-- API -> User return -->
+  <path d="M286 178 C 230 210, 175 210, 130 192" fill="none" stroke="#ff8a8a" stroke-width="2.2" marker-end="url(#ar-r)"/>
+  <text x="356" y="227" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#9aa6b2">return to user</text>
+
+  <!-- Red verdict tag -->
+  <rect x="724" y="116" width="312" height="76" rx="8" fill="#160d0c" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="740" y="140" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#ff8a8a">&#10007; slow + hot</text>
+  <text x="740" y="162" font-family="sans-serif" font-size="12" fill="#cbd5e1">runs on EVERY tap</text>
+  <text x="740" y="181" font-family="sans-serif" font-size="12" fill="#cbd5e1">(50% within 5s)</text>
+
+  <!-- ============================ STAGE 2 (AMBER) ============================ -->
+  <rect x="24" y="252" width="1032" height="186" rx="10" fill="#1a1710" stroke="#ffff99" stroke-width="2"/>
+  <rect x="24" y="252" width="6" height="186" rx="3" fill="#ffff99"/>
+  <text x="44" y="278" font-family="sans-serif" font-size="15" font-weight="bold" fill="#ffff99">v1 &#183; WRITE-THROUGH CACHE</text>
+
+  <!-- User -->
+  <g stroke="#ffffff" stroke-width="2" fill="none">
+    <circle cx="118" cy="320" r="9"/>
+    <line x1="118" y1="329" x2="118" y2="354"/>
+    <line x1="118" y1="335" x2="106" y2="348"/>
+    <line x1="118" y1="335" x2="130" y2="348"/>
+    <line x1="118" y1="354" x2="108" y2="370"/>
+    <line x1="118" y1="354" x2="128" y2="370"/>
+  </g>
+  <text x="118" y="388" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">User</text>
+
+  <!-- Search API -->
+  <rect x="252" y="314" width="116" height="56" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="310" y="346" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#ffffff">Search API</text>
+
+  <!-- Redis cylinder -->
+  <path d="M448 308 a44 10 0 0 0 88 0 v52 a44 10 0 0 1 -88 0 z" fill="#16191e" stroke="#b79bff" stroke-width="2.5"/>
+  <ellipse cx="492" cy="308" rx="44" ry="10" fill="#1b1f25" stroke="#b79bff" stroke-width="2.5"/>
+  <text x="492" y="338" text-anchor="middle" font-family="monospace" font-size="12" fill="#b79bff">Redis</text>
+  <text x="492" y="354" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#9aa6b2">GET recent:u1</text>
+
+  <!-- NoSQL cylinder -->
+  <path d="M716 350 a44 10 0 0 0 88 0 v52 a44 10 0 0 1 -88 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <ellipse cx="760" cy="350" rx="44" ry="10" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="760" y="382" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffff99">NoSQL</text>
+
+  <!-- User -> API -->
+  <line x1="142" y1="338" x2="249" y2="338" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="195" y="330" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#8aff8a">/search/recent</text>
+
+  <!-- API -> Redis -->
+  <line x1="368" y1="332" x2="444" y2="332" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+
+  <!-- HIT path (green) -->
+  <path d="M536 318 C 600 296, 660 296, 700 312" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="618" y="294" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#8aff8a">&#10003; HIT &#8594; return 10 (O(1), in RAM, fresh)</text>
+
+  <!-- MISS path (red dashed) -->
+  <line x1="536" y1="346" x2="713" y2="362" stroke="#ff8a8a" stroke-width="2.2" stroke-dasharray="5,4" marker-end="url(#ar-r)"/>
+  <text x="624" y="358" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#ff8a8a">MISS &#8594; scan NoSQL</text>
+
+  <!-- populate back to Redis (blue dashed) -->
+  <path d="M740 350 C 660 408, 540 408, 500 364" fill="none" stroke="#93c5fd" stroke-width="2.2" stroke-dasharray="5,4" marker-end="url(#ar-b)"/>
+  <text x="624" y="424" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#93c5fd">populate recent:u1 &#8594; return</text>
+  <text x="828" y="386" font-family="sans-serif" font-size="10.5" fill="#ff8a8a">cold start still slow</text>
+
+  <!-- Amber tag -->
+  <rect x="852" y="296" width="184" height="58" rx="8" fill="#161207" stroke="#ffff99" stroke-width="1.6"/>
+  <text x="868" y="320" font-family="sans-serif" font-size="12" fill="#cbd5e1">fast on hit, but a cold</text>
+  <text x="868" y="340" font-family="sans-serif" font-size="12" fill="#cbd5e1">key still falls to the DB</text>
+
+  <!-- ============================ STAGE 3 (GREEN) ============================ -->
+  <rect x="24" y="450" width="1032" height="200" rx="10" fill="#101a12" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="24" y="450" width="6" height="200" rx="3" fill="#8aff8a"/>
+  <text x="44" y="476" font-family="sans-serif" font-size="15" font-weight="bold" fill="#8aff8a">v2 &#183; PRELOADED</text>
+  <text x="118" y="476" font-family="sans-serif" font-size="13" font-weight="bold" fill="#8aff8a">&#10003;&#10003;</text>
+
+  <!-- divider between (a) and (b) -->
+  <line x1="664" y1="486" x2="664" y2="638" stroke="#274029" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <text x="344" y="498" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#93c5fd">(a) BEFORE the tap &#8212; runs before the user taps</text>
+  <text x="862" y="498" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#8aff8a">(b) THE TAP</text>
+
+  <!-- (a) app open event -->
+  <text x="76" y="540" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#cbd5e1">app open</text>
+  <rect x="48" y="552" width="92" height="40" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="94" y="576" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">Events tap</text>
+
+  <!-- Queue pill -->
+  <rect x="170" y="552" width="120" height="40" rx="20" fill="#0d1320" stroke="#93c5fd" stroke-width="2"/>
+  <line x1="200" y1="554" x2="200" y2="590" stroke="#93c5fd" stroke-width="1.5"/>
+  <line x1="218" y1="554" x2="218" y2="590" stroke="#93c5fd" stroke-width="1.5"/>
+  <line x1="236" y1="554" x2="236" y2="590" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="230" y="546" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#93c5fd">ON-LOGIN / APP_OPEN</text>
+
+  <!-- Events -> queue -->
+  <line x1="140" y1="572" x2="167" y2="572" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+
+  <!-- Cache Warmer -->
+  <rect x="320" y="548" width="116" height="48" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="378" y="568" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">Cache</text>
+  <text x="378" y="584" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">Warmer</text>
+
+  <!-- queue -> warmer -->
+  <line x1="290" y1="572" x2="317" y2="572" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+
+  <!-- NoSQL cylinder (a) -->
+  <path d="M492 562 a40 9 0 0 0 80 0 v46 a40 9 0 0 1 -80 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <ellipse cx="532" cy="562" rx="40" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="532" y="592" text-anchor="middle" font-family="monospace" font-size="11" fill="#ffff99">NoSQL</text>
+
+  <!-- warmer -> NoSQL -->
+  <line x1="436" y1="572" x2="490" y2="572" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#ar-b)"/>
+  <text x="463" y="564" text-anchor="middle" font-family="sans-serif" font-size="9.5" fill="#93c5fd">scan once</text>
+
+  <!-- Redis cylinder (a) -->
+  <path d="M576 502 a40 9 0 0 0 80 0 v40 a40 9 0 0 1 -80 0 z" fill="#16191e" stroke="#b79bff" stroke-width="2.5"/>
+  <ellipse cx="616" cy="502" rx="40" ry="9" fill="#1b1f25" stroke="#b79bff" stroke-width="2.5"/>
+  <text x="616" y="528" text-anchor="middle" font-family="monospace" font-size="11" fill="#b79bff">Redis</text>
+
+  <!-- NoSQL -> Redis populate -->
+  <path d="M560 556 C 590 540, 600 540, 612 522" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="600" y="614" text-anchor="middle" font-family="monospace" font-size="10" fill="#8aff8a">populate recent:u1</text>
+
+  <!-- (b) THE TAP -->
+  <!-- User -->
+  <g stroke="#ffffff" stroke-width="2" fill="none">
+    <circle cx="712" cy="540" r="8"/>
+    <line x1="712" y1="548" x2="712" y2="570"/>
+    <line x1="712" y1="553" x2="702" y2="564"/>
+    <line x1="712" y1="553" x2="722" y2="564"/>
+    <line x1="712" y1="570" x2="703" y2="584"/>
+    <line x1="712" y1="570" x2="721" y2="584"/>
+  </g>
+  <text x="712" y="600" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#ffffff">User</text>
+
+  <!-- Search API (b) -->
+  <rect x="780" y="540" width="100" height="46" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="830" y="568" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">Search API</text>
+
+  <!-- Redis cylinder (b) -->
+  <path d="M928 538 a40 9 0 0 0 80 0 v44 a40 9 0 0 1 -80 0 z" fill="#16191e" stroke="#b79bff" stroke-width="2.5"/>
+  <ellipse cx="968" cy="538" rx="40" ry="9" fill="#1b1f25" stroke="#b79bff" stroke-width="2.5"/>
+  <text x="968" y="566" text-anchor="middle" font-family="monospace" font-size="11" fill="#b79bff">Redis</text>
+  <text x="968" y="580" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#9aa6b2">GET recent:u1</text>
+
+  <!-- User -> API (b) -->
+  <line x1="730" y1="562" x2="777" y2="562" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="752" y="540" text-anchor="middle" font-family="monospace" font-size="9" fill="#8aff8a">/search/recent</text>
+
+  <!-- API -> Redis (b) -->
+  <line x1="880" y1="558" x2="926" y2="558" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+
+  <!-- HIT return (b) -->
+  <text x="888" y="606" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#8aff8a">&#10003; HIT &#8594; return</text>
+
+  <!-- green tag (b) -->
+  <rect x="688" y="616" width="348" height="26" rx="6" fill="#0c160d" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="700" y="634" font-family="sans-serif" font-size="11.5" fill="#cbd5e1">no DB on the tap &#8212; the warmer already filled it</text>
+
+  <!-- ============================ BOTTOM TAKEAWAY ============================ -->
+  <rect x="24" y="662" width="1032" height="46" rx="10" fill="#161a13" stroke="#ffff99" stroke-width="2"/>
+  <text x="44" y="690" font-family="sans-serif" font-size="13.5" fill="#ffff99" font-weight="bold">TAKEAWAY:</text>
+  <text x="132" y="690" font-family="sans-serif" font-size="13" fill="#cbd5e1">moved the unavoidable DB scan OFF the tap (critical path) ONTO app-open (a predictable earlier signal).</text>
+</svg>

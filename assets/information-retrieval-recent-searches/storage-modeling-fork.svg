@@ -1,0 +1,86 @@
+<svg width="1080" height="660" viewBox="0 0 1080 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ar-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="ar-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="ar-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="ar-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1080" height="660" fill="#111317"/>
+
+  <!-- title + subtitle -->
+  <text x="540" y="42" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="bold" fill="#ffff99">Storing every search query: one doc per user, or one record per query?</text>
+  <text x="540" y="70" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#9aa6b2">the document-shape decision falls out of one question &#8212; is the data bounded?</text>
+
+  <!-- ============ LEFT PANEL : Option A (rejected, red) ============ -->
+  <rect x="36" y="96" width="492" height="444" rx="12" fill="#15120f" stroke="#ff8a8a" stroke-width="1.5"/>
+  <text x="60" y="128" font-family="sans-serif" font-size="19" font-weight="bold" fill="#ff8a8a">Option A &#183; one document per user</text>
+
+  <!-- rejected mark -->
+  <circle cx="494" cy="120" r="16" fill="#16191e" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="494" y="127" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold" fill="#ff8a8a">&#10007;</text>
+
+  <!-- the document -->
+  <rect x="60" y="148" width="444" height="78" rx="11" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="78" y="180" font-family="monospace" font-size="15" fill="#ffffff">{ uid: <tspan fill="#ffff99">u1</tspan>, queries: [ q1, q2, q3,</text>
+  <text x="78" y="204" font-family="monospace" font-size="15" fill="#ffffff">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; ... <tspan fill="#ff8a8a">q100000</tspan> ... ] }</text>
+
+  <!-- brace + unbounded label -->
+  <path d="M70 234 q-8 0 -8 8 v6 q0 8 -8 8 q8 0 8 8 v6 q0 8 8 8" fill="none" stroke="#ff8a8a" stroke-width="2"/>
+  <path d="M494 234 q8 0 8 8 v6 q0 8 8 8 q-8 0 -8 8 v6 q0 8 -8 8" fill="none" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="282" y="252" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#ff8a8a">UNBOUNDED</text>
+  <text x="282" y="274" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#cbd5e1">a heavy user fires 100k+ queries;</text>
+  <text x="282" y="294" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#cbd5e1">the doc grows forever.</text>
+
+  <!-- cost callout box -->
+  <rect x="60" y="312" width="444" height="208" rx="11" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="78" y="340" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ff8a8a">cost</text>
+  <text x="78" y="368" font-family="sans-serif" font-size="14" fill="#ffffff">&#8226; every append rewrites a huge doc</text>
+  <text x="78" y="396" font-family="sans-serif" font-size="14" fill="#ffffff">&#8226; read &#8216;last 10&#8217; = load the WHOLE doc into</text>
+  <text x="94" y="416" font-family="sans-serif" font-size="14" fill="#ffffff">memory, sort, slice</text>
+  <text x="94" y="438" font-family="sans-serif" font-size="14" fill="#ff8a8a">&#8594; heavy disk + network I/O</text>
+  <text x="78" y="468" font-family="sans-serif" font-size="14" fill="#ffffff">&#8226; doc-size limit eventually hit</text>
+
+  <!-- ============ RIGHT PANEL : Option B (chosen, green) ============ -->
+  <rect x="552" y="96" width="492" height="444" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="576" y="128" font-family="sans-serif" font-size="19" font-weight="bold" fill="#8aff8a">Option B &#183; one record per query</text>
+
+  <!-- chosen mark -->
+  <circle cx="1010" cy="120" r="16" fill="#16191e" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="1010" y="128" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold" fill="#8aff8a">&#10003;</text>
+
+  <!-- tiny record rows -->
+  <rect x="576" y="148" width="444" height="34" rx="8" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="594" y="170" font-family="monospace" font-size="14" fill="#ffffff">{ uid: <tspan fill="#ffff99">u1</tspan>, q: "sachin", ts }</text>
+
+  <rect x="576" y="190" width="444" height="34" rx="8" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="594" y="212" font-family="monospace" font-size="14" fill="#ffffff">{ uid: <tspan fill="#ffff99">u2</tspan>, q: "sehwag", ts }</text>
+
+  <rect x="576" y="232" width="444" height="34" rx="8" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="594" y="254" font-family="monospace" font-size="14" fill="#ffffff">{ uid: <tspan fill="#ffff99">u1</tspan>, q: "laxman", ts }</text>
+
+  <rect x="576" y="274" width="444" height="34" rx="8" fill="#16191e" stroke="#7c8694" stroke-width="2"/>
+  <text x="594" y="296" font-family="monospace" font-size="14" fill="#ffffff">{ uid: <tspan fill="#ffff99">u2</tspan>, q: "dravid", ts }</text>
+
+  <!-- green bounded label -->
+  <text x="576" y="338" font-family="sans-serif" font-size="14" font-weight="bold" fill="#8aff8a">each record bounded &#38; tiny &#8212;</text>
+  <text x="576" y="358" font-family="sans-serif" font-size="14" fill="#cbd5e1">an append never touches old records.</text>
+
+  <!-- honest amber/red note -->
+  <rect x="576" y="384" width="444" height="136" rx="11" fill="#15120f" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="594" y="412" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ff8a8a">cost</text>
+  <text x="594" y="438" font-family="sans-serif" font-size="14" fill="#ffffff">a user&#8217;s records now scatter across the</text>
+  <text x="594" y="458" font-family="sans-serif" font-size="14" fill="#ffffff">partition &#8594; &#8216;give me the last 10&#8217; becomes</text>
+  <text x="594" y="478" font-family="sans-serif" font-size="14" fill="#ffffff">a scan + sort.</text>
+  <text x="594" y="502" font-family="sans-serif" font-size="13" fill="#9aa6b2">(We fix this read cost with a cache later.)</text>
+
+  <!-- ============ BOTTOM VERDICT BAR ============ -->
+  <rect x="36" y="560" width="1008" height="80" rx="12" fill="#16191e" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="60" y="592" font-family="sans-serif" font-size="16" font-weight="bold" fill="#ffff99">RULE: decide the document shape from whether it is BOUNDED.</text>
+  <text x="60" y="618" font-family="sans-serif" font-size="15" fill="#ffffff">Unbounded history (search log) &#8594; one record per query, never one fat doc per user.</text>
+
+  <!-- green arrow from rule to Option B -->
+  <path d="M880 600 H980" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#ar-g)"/>
+  <text x="930" y="592" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#8aff8a">choose B</text>
+</svg>

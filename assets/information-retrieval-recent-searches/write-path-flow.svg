@@ -1,0 +1,59 @@
+<svg width="1080" height="612" viewBox="0 0 1080 612" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1080" height="612" fill="#111317"/>
+
+  <text x="540" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="27" font-weight="bold">The write path &#8212; what /search does</text>
+  <text x="540" y="74" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">one action runs the search AND keeps the recent list warm (write-through)</text>
+
+  <!-- sequence connector behind the badges -->
+  <line x1="95" y1="144" x2="95" y2="480" stroke="#3a3f47" stroke-width="2" stroke-dasharray="3 6"/>
+
+  <!-- ROW 1 -->
+  <rect x="60" y="108" width="960" height="72" rx="12" fill="#16191e" stroke="#2a2f37" stroke-width="1.5"/>
+  <circle cx="95" cy="144" r="21" fill="#ff8bd2"/>
+  <text x="95" y="151" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="20" font-weight="bold">1</text>
+  <text x="142" y="139" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">User  &#8594;  Search API</text>
+  <text x="142" y="164" fill="#ff8bd2" font-family="monospace" font-size="16">/search "sachin"</text>
+
+  <!-- ROW 2 -->
+  <rect x="60" y="192" width="960" height="72" rx="12" fill="#16191e" stroke="#2a2f37" stroke-width="1.5"/>
+  <circle cx="95" cy="228" r="21" fill="#93c5fd"/>
+  <text x="95" y="235" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="20" font-weight="bold">2</text>
+  <text x="142" y="223" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Search API  &#8644;  Elasticsearch</text>
+  <text x="142" y="248" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">fetch matching documents (relevance)</text>
+  <path d="M889 218 a26 6 0 0 0 52 0 v28 a26 6 0 0 1 -52 0 z" fill="#1b1f25" stroke="#7c8694" stroke-width="2"/>
+  <ellipse cx="915" cy="218" rx="26" ry="6" fill="#20252c" stroke="#7c8694" stroke-width="2"/>
+  <text x="915" y="262" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Elasticsearch</text>
+
+  <!-- ROW 3 -->
+  <rect x="60" y="276" width="960" height="72" rx="12" fill="#16191e" stroke="#2a2f37" stroke-width="1.5"/>
+  <circle cx="95" cy="312" r="21" fill="#ff8bd2"/>
+  <text x="95" y="319" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="20" font-weight="bold">3</text>
+  <text x="142" y="307" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Search API  &#8594;  Redis</text>
+  <rect x="305" y="292" width="132" height="26" rx="6" fill="#1d1d12" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="371" y="310" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">CACHE-FIRST</text>
+  <text x="142" y="332" fill="#b79bff" font-family="monospace" font-size="16">LPUSH recent:u1 "sachin"  &#183;  LTRIM recent:u1 0 9</text>
+  <path d="M889 302 a26 6 0 0 0 52 0 v28 a26 6 0 0 1 -52 0 z" fill="#1b1f25" stroke="#b79bff" stroke-width="2"/>
+  <ellipse cx="915" cy="302" rx="26" ry="6" fill="#20252c" stroke="#b79bff" stroke-width="2"/>
+  <text x="915" y="346" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Redis</text>
+
+  <!-- ROW 4 -->
+  <rect x="60" y="360" width="960" height="72" rx="12" fill="#16191e" stroke="#2a2f37" stroke-width="1.5"/>
+  <circle cx="95" cy="396" r="21" fill="#ff8bd2"/>
+  <text x="95" y="403" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="20" font-weight="bold">4</text>
+  <text x="142" y="391" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Search API  &#8594;  MongoDB <tspan fill="#9aa6b2" font-weight="normal" font-size="15.5">(sharded NoSQL)</tspan></text>
+  <text x="142" y="416" fill="#cbd5e1" font-family="monospace" font-size="16">persist {u1,"sachin",ts}<tspan fill="#9aa6b2" font-family="sans-serif" font-size="14">   sync &#183; async-able</tspan></text>
+  <path d="M889 386 a26 6 0 0 0 52 0 v28 a26 6 0 0 1 -52 0 z" fill="#1b1f25" stroke="#7c8694" stroke-width="2"/>
+  <ellipse cx="915" cy="386" rx="26" ry="6" fill="#20252c" stroke="#7c8694" stroke-width="2"/>
+  <text x="915" y="430" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">MongoDB</text>
+
+  <!-- ROW 5 -->
+  <rect x="60" y="444" width="960" height="72" rx="12" fill="#16191e" stroke="#2a2f37" stroke-width="1.5"/>
+  <circle cx="95" cy="480" r="21" fill="#8aff8a"/>
+  <text x="95" y="487" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="20" font-weight="bold">5</text>
+  <text x="142" y="475" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Search API  &#8594;  User</text>
+  <text x="142" y="500" fill="#8aff8a" font-family="sans-serif" font-size="15.5">return results</text>
+
+  <!-- INSIGHT BAR -->
+  <rect x="60" y="536" width="960" height="56" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="540" y="570" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="16.5"><tspan fill="#8aff8a" font-weight="bold">&#9733; key:</tspan>  the write that would <tspan fill="#ff8a8a" font-weight="bold">STALE</tspan> the cache now <tspan fill="#8aff8a" font-weight="bold">REFRESHES</tspan> it  &#8594;  never stale</text>
+</svg>
