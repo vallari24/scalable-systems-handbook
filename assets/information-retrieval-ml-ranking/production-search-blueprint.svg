@@ -1,0 +1,275 @@
+<svg width="1280" height="980" viewBox="0 0 1280 980" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Production search architecture</title>
+  <desc id="desc">Detailed production search architecture with online read path, indexing write path, offline learning path, storage systems, sharding, replicas, caching, and model serving.</desc>
+  <defs>
+    <marker id="ar-g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6 Z" fill="#8aff8a"/></marker>
+    <marker id="ar-p" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6 Z" fill="#ff8bd2"/></marker>
+    <marker id="ar-b" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6 Z" fill="#93c5fd"/></marker>
+    <marker id="ar-y" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6 Z" fill="#ffff99"/></marker>
+    <marker id="ar-o" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6 Z" fill="#ffd27f"/></marker>
+    <style>
+      .bg { fill: #111317; }
+      .lane { fill: #141922; stroke: #344155; stroke-width: 1.8; }
+      .box { fill: #191f2a; stroke-width: 2; }
+      .stack { fill: #191f2a; stroke-width: 2; }
+      .store { fill: #191f2a; stroke-width: 2; }
+      .green { stroke: #8aff8a; }
+      .pink { stroke: #ff8bd2; }
+      .blue { stroke: #93c5fd; }
+      .purple { stroke: #b79bff; }
+      .yellow { stroke: #ffff99; }
+      .orange { stroke: #ffd27f; }
+      .gray { stroke: #7c8694; }
+      .title { fill: #ffff99; font: 700 30px sans-serif; }
+      .subtitle { fill: #9aa6b2; font: 500 15px sans-serif; }
+      .laneTitle { fill: #ffffff; font: 700 17px sans-serif; }
+      .label { fill: #ffffff; font: 700 16px sans-serif; }
+      .small { fill: #cbd5e1; font: 500 12px sans-serif; }
+      .tiny { fill: #9aa6b2; font: 500 11px sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .note { fill: #ffff99; font: 700 12.5px sans-serif; }
+      .flowG { stroke: #8aff8a; stroke-width: 1.8; fill: none; marker-end: url(#ar-g); }
+      .flowP { stroke: #ff8bd2; stroke-width: 1.8; fill: none; marker-end: url(#ar-p); }
+      .flowB { stroke: #93c5fd; stroke-width: 1.8; fill: none; marker-end: url(#ar-b); }
+      .flowY { stroke: #ffff99; stroke-width: 1.8; fill: none; marker-end: url(#ar-y); }
+      .flowO { stroke: #ffd27f; stroke-width: 1.8; fill: none; marker-end: url(#ar-o); }
+      .dash { stroke-dasharray: 6 5; opacity: 0.42; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="980"/>
+
+  <text x="640" y="42" text-anchor="middle" class="title">Production search architecture</text>
+  <text x="640" y="68" text-anchor="middle" class="subtitle">online read path · async indexing/write path · offline learning loop · storage/index shards · replicas, caches, and model serving</text>
+
+  <!-- Lanes -->
+  <rect x="34" y="95" width="1212" height="315" rx="12" class="lane"/>
+  <rect x="34" y="435" width="1212" height="255" rx="12" class="lane"/>
+  <rect x="34" y="715" width="1212" height="195" rx="12" class="lane"/>
+
+  <text x="58" y="126" class="laneTitle">ONLINE READ PATH: query -> shard fanout -> fusion -> shortlist rerank</text>
+  <text x="58" y="466" class="laneTitle">WRITE / INDEXING PATH: ingest -> parse/chunk -> postings + vectors + stores</text>
+  <text x="58" y="746" class="laneTitle">OFFLINE LEARNING PATH: behavior logs and judgments train the next retrievers, rankers, spell/entity/intent models</text>
+
+  <!-- Online read path -->
+  <g>
+    <!-- user icon -->
+    <g stroke="#cbd5e1" stroke-width="2.2" fill="none">
+      <circle cx="72" cy="220" r="13"/>
+      <line x1="72" y1="233" x2="72" y2="268"/>
+      <line x1="72" y1="244" x2="54" y2="260"/>
+      <line x1="72" y1="244" x2="90" y2="260"/>
+      <line x1="72" y1="268" x2="56" y2="292"/>
+      <line x1="72" y1="268" x2="88" y2="292"/>
+    </g>
+    <text x="72" y="315" text-anchor="middle" class="small">User</text>
+  </g>
+
+  <rect x="120" y="176" width="118" height="82" rx="10" class="box blue"/>
+  <text x="179" y="208" text-anchor="middle" class="label">API / edge</text>
+  <text x="179" y="232" text-anchor="middle" class="small">auth, tenant</text>
+  <text x="179" y="249" text-anchor="middle" class="small">rate limits</text>
+
+  <rect x="280" y="150" width="158" height="122" rx="10" class="box blue"/>
+  <text x="359" y="181" text-anchor="middle" class="label">Query service</text>
+  <text x="359" y="207" text-anchor="middle" class="small">normalize · spell</text>
+  <text x="359" y="225" text-anchor="middle" class="small">intent · entities</text>
+  <text x="359" y="243" text-anchor="middle" class="small">rewrite · fan-out</text>
+  <text x="359" y="260" text-anchor="middle" class="tiny">cache key + ACL context</text>
+
+  <rect x="285" y="306" width="148" height="55" rx="10" class="box purple"/>
+  <text x="359" y="331" text-anchor="middle" class="label">Result cache</text>
+  <text x="359" y="350" text-anchor="middle" class="small">hot queries / top pages</text>
+
+  <rect x="484" y="150" width="150" height="122" rx="10" class="box green"/>
+  <text x="559" y="181" text-anchor="middle" class="label">Coordinator</text>
+  <text x="559" y="207" text-anchor="middle" class="small">route to shards</text>
+  <text x="559" y="225" text-anchor="middle" class="small">top-k per shard</text>
+  <text x="559" y="243" text-anchor="middle" class="small">timeout + degrade</text>
+  <text x="559" y="260" text-anchor="middle" class="tiny">merge partial results</text>
+
+  <rect x="686" y="116" width="185" height="82" rx="10" class="box green"/>
+  <text x="779" y="147" text-anchor="middle" class="label">Lexical retrievers</text>
+  <text x="779" y="171" text-anchor="middle" class="small">BM25 over inverted index</text>
+  <text x="779" y="189" text-anchor="middle" class="tiny">replicated Lucene segments</text>
+
+  <rect x="686" y="222" width="185" height="82" rx="10" class="box purple"/>
+  <text x="779" y="253" text-anchor="middle" class="label">Dense retrievers</text>
+  <text x="779" y="277" text-anchor="middle" class="small">query embedding + ANN</text>
+  <text x="779" y="295" text-anchor="middle" class="tiny">HNSW / IVF / vector shards</text>
+
+  <rect x="686" y="328" width="185" height="58" rx="10" class="box gray"/>
+  <text x="779" y="351" text-anchor="middle" class="label">Metadata filters</text>
+  <text x="779" y="371" text-anchor="middle" class="small">ACL, tenant, type, time</text>
+
+  <rect x="920" y="179" width="128" height="92" rx="10" class="box yellow"/>
+  <text x="984" y="209" text-anchor="middle" class="label">Fusion</text>
+  <text x="984" y="233" text-anchor="middle" class="small">RRF or learned</text>
+  <text x="984" y="251" text-anchor="middle" class="small">candidate pool</text>
+
+  <rect x="919" y="302" width="130" height="70" rx="10" class="box orange"/>
+  <text x="984" y="330" text-anchor="middle" class="label">Feature fetch</text>
+  <text x="984" y="352" text-anchor="middle" class="small">freshness, trust,</text>
+  <text x="984" y="367" text-anchor="middle" class="small">popularity, spam</text>
+
+  <rect x="1087" y="138" width="126" height="118" rx="10" class="box purple"/>
+  <text x="1150" y="168" text-anchor="middle" class="label">Rerank</text>
+  <text x="1150" y="193" text-anchor="middle" class="small">LambdaMART</text>
+  <text x="1150" y="211" text-anchor="middle" class="small">+ cross-encoder</text>
+  <text x="1150" y="229" text-anchor="middle" class="tiny">top 100-1000 only</text>
+
+  <rect x="1087" y="286" width="126" height="82" rx="10" class="box pink"/>
+  <text x="1150" y="316" text-anchor="middle" class="label">Answer layer</text>
+  <text x="1150" y="340" text-anchor="middle" class="small">optional LLM</text>
+  <text x="1150" y="358" text-anchor="middle" class="tiny">grounded citations</text>
+
+  <line x1="92" y1="236" x2="120" y2="218" class="flowG"/>
+  <text x="126" y="162" class="mono tiny" fill="#8aff8a">GET /search?q=...</text>
+  <line x1="238" y1="217" x2="280" y2="211" class="flowG"/>
+  <path d="M 359 272 L 359 306" class="flowG"/>
+  <path d="M 438 211 L 484 211" class="flowG"/>
+  <path d="M 634 194 C 655 172, 665 157, 686 157" class="flowG"/>
+  <path d="M 634 220 C 657 242, 664 263, 686 263" class="flowP"/>
+  <path d="M 634 246 C 662 304, 656 357, 686 357" class="flowB"/>
+  <path d="M 871 157 C 896 166, 905 199, 920 214" class="flowG"/>
+  <path d="M 871 263 C 899 256, 904 238, 920 230" class="flowP"/>
+  <path d="M 871 357 C 899 352, 904 339, 919 337" class="flowB"/>
+  <path d="M 1048 225 L 1087 198" class="flowY"/>
+  <path d="M 984 271 L 984 302" class="flowO"/>
+  <path d="M 1049 337 C 1070 320, 1075 270, 1087 231" class="flowO"/>
+  <path d="M 1150 256 L 1150 286" class="flowP"/>
+  <path d="M 1213 197 C 1233 205, 1235 244, 1217 264" class="flowG"/>
+  <text x="1227" y="279" text-anchor="middle" class="small">ranked UI</text>
+
+  <!-- Online notes -->
+  <rect x="464" y="315" width="168" height="58" rx="8" fill="#16191e" stroke="#3a4049" stroke-width="1.2"/>
+  <text x="548" y="338" text-anchor="middle" class="note">scale knobs</text>
+  <text x="548" y="357" text-anchor="middle" class="tiny">shard fanout · replicas · cache</text>
+  <text x="548" y="373" text-anchor="middle" class="tiny">top-k windows · timeouts</text>
+
+  <!-- Write path -->
+  <rect x="70" y="508" width="138" height="70" rx="10" class="box orange"/>
+  <text x="139" y="535" text-anchor="middle" class="label">Sources</text>
+  <text x="139" y="557" text-anchor="middle" class="small">crawler, CDC,</text>
+  <text x="139" y="573" text-anchor="middle" class="small">uploads, products</text>
+
+  <rect x="248" y="508" width="134" height="70" rx="10" class="box blue"/>
+  <text x="315" y="535" text-anchor="middle" class="label">Ingest log</text>
+  <text x="315" y="557" text-anchor="middle" class="small">Kafka / PubSub</text>
+  <text x="315" y="573" text-anchor="middle" class="tiny">retry + backpressure</text>
+
+  <rect x="422" y="486" width="154" height="114" rx="10" class="box blue"/>
+  <text x="499" y="515" text-anchor="middle" class="label">Document pipeline</text>
+  <text x="499" y="540" text-anchor="middle" class="small">parse · clean · dedup</text>
+  <text x="499" y="558" text-anchor="middle" class="small">language · chunk</text>
+  <text x="499" y="576" text-anchor="middle" class="small">tokenize · normalize</text>
+
+  <rect x="628" y="488" width="152" height="72" rx="10" class="box green"/>
+  <text x="704" y="516" text-anchor="middle" class="label">Lexical indexer</text>
+  <text x="704" y="540" text-anchor="middle" class="small">term dictionary</text>
+  <text x="704" y="556" text-anchor="middle" class="small">postings + positions</text>
+
+  <rect x="628" y="584" width="152" height="72" rx="10" class="box purple"/>
+  <text x="704" y="612" text-anchor="middle" class="label">Embedding workers</text>
+  <text x="704" y="636" text-anchor="middle" class="small">doc/chunk vectors</text>
+  <text x="704" y="652" text-anchor="middle" class="small">batch GPU jobs</text>
+
+  <path d="M860 500 a46 11 0 0 0 92 0 v50 a46 11 0 0 1 -92 0 z" class="store green"/>
+  <ellipse cx="906" cy="500" rx="46" ry="11" fill="#1b1f25" stroke="#8aff8a" stroke-width="2"/>
+  <text x="906" y="524" text-anchor="middle" class="label">Inverted</text>
+  <text x="906" y="544" text-anchor="middle" class="label">index</text>
+  <text x="906" y="573" text-anchor="middle" class="tiny">segments · merges · replicas</text>
+
+  <path d="M860 610 a46 11 0 0 0 92 0 v50 a46 11 0 0 1 -92 0 z" class="store purple"/>
+  <ellipse cx="906" cy="610" rx="46" ry="11" fill="#1b1f25" stroke="#b79bff" stroke-width="2"/>
+  <text x="906" y="634" text-anchor="middle" class="label">Vector</text>
+  <text x="906" y="654" text-anchor="middle" class="label">index</text>
+  <text x="906" y="681" text-anchor="middle" class="tiny">HNSW / IVF · replicas</text>
+
+  <path d="M1035 500 a42 10 0 0 0 84 0 v52 a42 10 0 0 1 -84 0 z" class="store gray"/>
+  <ellipse cx="1077" cy="500" rx="42" ry="10" fill="#1b1f25" stroke="#7c8694" stroke-width="2"/>
+  <text x="1077" y="525" text-anchor="middle" class="label">Doc store</text>
+  <text x="1077" y="548" text-anchor="middle" class="small">metadata, ACLs</text>
+  <text x="1077" y="571" text-anchor="middle" class="tiny">source text / payloads</text>
+
+  <path d="M1040 606 a42 10 0 0 0 84 0 v52 a42 10 0 0 1 -84 0 z" class="store orange"/>
+  <ellipse cx="1082" cy="606" rx="42" ry="10" fill="#1b1f25" stroke="#ffd27f" stroke-width="2"/>
+  <text x="1082" y="631" text-anchor="middle" class="label">Feature</text>
+  <text x="1082" y="651" text-anchor="middle" class="label">store</text>
+  <text x="1082" y="675" text-anchor="middle" class="tiny">PageRank, freshness, quality</text>
+
+  <line x1="208" y1="543" x2="248" y2="543" class="flowP"/>
+  <line x1="382" y1="543" x2="422" y2="543" class="flowP"/>
+  <path d="M 576 526 C 604 522, 606 524, 628 524" class="flowP"/>
+  <path d="M 576 560 C 603 590, 605 620, 628 620" class="flowP"/>
+  <path d="M 576 543 C 725 544, 900 524, 1035 526" class="flowP"/>
+  <line x1="780" y1="524" x2="860" y2="524" class="flowP"/>
+  <line x1="780" y1="620" x2="860" y2="635" class="flowP"/>
+  <path d="M 1077 572 L 1081 606" class="flowO"/>
+
+  <!-- Connections from storage to online path -->
+  <path d="M 906 500 C 888 394, 842 240, 810 198" class="flowG dash"/>
+  <path d="M 906 610 C 888 484, 842 330, 810 304" class="flowP dash"/>
+  <path d="M 1077 500 C 1050 433, 1012 386, 984 372" class="flowO dash"/>
+  <path d="M 1082 606 C 1060 486, 1014 382, 984 372" class="flowO dash"/>
+
+  <rect x="70" y="606" width="418" height="50" rx="8" fill="#16191e" stroke="#3a4049" stroke-width="1.2"/>
+  <text x="279" y="627" text-anchor="middle" class="note">write path is asynchronous</text>
+  <text x="279" y="646" text-anchor="middle" class="tiny">new docs land in small segments; background merge/replication makes them fast and durable</text>
+
+  <!-- Offline learning path -->
+  <path d="M98 780 a40 10 0 0 0 80 0 v48 a40 10 0 0 1 -80 0 z" class="store blue"/>
+  <ellipse cx="138" cy="780" rx="40" ry="10" fill="#1b1f25" stroke="#93c5fd" stroke-width="2"/>
+  <text x="138" y="806" text-anchor="middle" class="label">Logs</text>
+  <text x="138" y="829" text-anchor="middle" class="small">queries, clicks, dwell</text>
+  <text x="138" y="849" text-anchor="middle" class="tiny">served candidates + positions</text>
+
+  <rect x="254" y="774" width="138" height="72" rx="10" class="box yellow"/>
+  <text x="323" y="802" text-anchor="middle" class="label">Labels</text>
+  <text x="323" y="825" text-anchor="middle" class="small">human judgments</text>
+  <text x="323" y="842" text-anchor="middle" class="tiny">click debiasing</text>
+
+  <rect x="450" y="766" width="156" height="88" rx="10" class="box purple"/>
+  <text x="528" y="795" text-anchor="middle" class="label">Training jobs</text>
+  <text x="528" y="820" text-anchor="middle" class="small">retriever fine-tune</text>
+  <text x="528" y="838" text-anchor="middle" class="small">LTR / cross-encoder</text>
+
+  <rect x="670" y="766" width="150" height="88" rx="10" class="box blue"/>
+  <text x="745" y="795" text-anchor="middle" class="label">Evaluation</text>
+  <text x="745" y="820" text-anchor="middle" class="small">NDCG, recall@k</text>
+  <text x="745" y="838" text-anchor="middle" class="small">latency, A/B tests</text>
+
+  <path d="M890 778 a44 10 0 0 0 88 0 v50 a44 10 0 0 1 -88 0 z" class="store purple"/>
+  <ellipse cx="934" cy="778" rx="44" ry="10" fill="#1b1f25" stroke="#b79bff" stroke-width="2"/>
+  <text x="934" y="803" text-anchor="middle" class="label">Model</text>
+  <text x="934" y="823" text-anchor="middle" class="label">registry</text>
+  <text x="934" y="851" text-anchor="middle" class="tiny">versioned rollouts</text>
+
+  <rect x="1062" y="774" width="124" height="72" rx="10" class="box purple"/>
+  <text x="1124" y="801" text-anchor="middle" class="label">Serving</text>
+  <text x="1124" y="824" text-anchor="middle" class="small">ranker, spell,</text>
+  <text x="1124" y="841" text-anchor="middle" class="small">entity, embedding</text>
+
+  <line x1="178" y1="806" x2="254" y2="810" class="flowB"/>
+  <line x1="392" y1="810" x2="450" y2="810" class="flowY"/>
+  <line x1="606" y1="810" x2="670" y2="810" class="flowP"/>
+  <line x1="820" y1="810" x2="890" y2="810" class="flowB"/>
+  <line x1="978" y1="810" x2="1062" y2="810" class="flowP"/>
+  <path d="M 1124 774 C 1114 600, 1132 386, 1150 256" class="flowP dash"/>
+  <path d="M 1124 774 C 1020 640, 758 610, 704 644" class="flowP dash"/>
+  <path d="M 138 780 C 125 660, 120 450, 120 258" class="flowB dash"/>
+
+  <!-- Legend -->
+  <rect x="44" y="925" width="1188" height="38" rx="8" fill="#16191e" stroke="#3a4049" stroke-width="1.2"/>
+  <line x1="68" y1="944" x2="103" y2="944" class="flowG"/>
+  <text x="114" y="948" class="small">read / retrieval</text>
+  <line x1="224" y1="944" x2="259" y2="944" class="flowP"/>
+  <text x="270" y="948" class="small">write / model update</text>
+  <line x1="428" y1="944" x2="463" y2="944" class="flowB"/>
+  <text x="474" y="948" class="small">async / logs / eval</text>
+  <line x1="628" y1="944" x2="663" y2="944" class="flowO"/>
+  <text x="674" y="948" class="small">feature / metadata</text>
+  <line x1="822" y1="944" x2="857" y2="944" class="flowY"/>
+  <text x="868" y="948" class="small">fusion / labels</text>
+  <text x="958" y="948" class="note">Rule: index broad · fanout cheap · rerank narrow · cite.</text>
+</svg>
