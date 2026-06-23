@@ -25,6 +25,19 @@ The candidate-set size N is the **dial that trades latency for quality**: bigger
 
 > **Memory hook:** *search is a funnel because you can't run a heavy model on a billion docs per query. Stage 1 = cheap recall-oriented retrieval (BM25 or dense) narrows to a few hundred candidates; Stage 2 = expensive precision-oriented re-ranking (learning-to-rank, cross-encoder) re-scores only those. Candidate-set size N is the latency↔quality dial. Every ML method sits at one tier.*
 
+One way to keep the names straight is to remember the **job**, not the acronym:
+
+| Job in the engine | Mental picture | Concepts that live there |
+| --- | --- | --- |
+| Represent meaning | turn text into coordinates on a map of meaning | embeddings, word2vec, Sentence-BERT, transformer encoders |
+| Find candidates fast | use an index so you do not compare against everything | bi-encoder, dense retrieval, DPR, ANN, HNSW, IVF+PQ |
+| Judge candidates carefully | spend more compute on the short list | learning to rank, LambdaMART, BERT cross-encoder |
+| Combine weak retrievers | let exact-match and meaning-match vote together | hybrid search, Reciprocal Rank Fusion |
+
+That is the root idea. If a technique can be precomputed or indexed, it belongs near Stage 1. If it must read the query and document together, it belongs near Stage 2.
+
+<img src="../assets/information-retrieval-ml-ranking/neural-search-concept-map.svg" alt="Concept map for neural search. The top row shows four jobs in order: represent text as vectors with word2vec or Sentence-BERT, retrieve candidates with a bi-encoder and ANN index such as DPR, HNSW, or IVF plus PQ, fuse BM25 and dense results with Reciprocal Rank Fusion, then rerank the survivors with a cross-encoder or learning-to-rank model such as BERT or LambdaMART. A note marks the left side as cheap enough for the whole corpus and the right side as expensive but only after narrowing. The bottom compares mental pictures: a bi-encoder has separate query and document towers whose vectors are compared by distance, while a cross-encoder reads '[CLS] query [SEP] document [SEP]' together and emits one relevance score. Footer rule: precomputable equals Stage 1 retrieval; query and document together equals Stage 2 reranking; rank-only voting equals fusion." width="1280">
+
 ---
 
 ## Learning to rank: when the ranking function is trained, not written
@@ -41,11 +54,17 @@ A **trained model**. Learning to rank (LTR) treats ranking as a supervised ML pr
 
 The interesting design question is *what you train the model to optimize*, and there are three families.
 
+Think of learning to rank as a trained sorting judge. The model is not memorizing one perfect formula for every query. It learns how signals should interact: a fresh page may deserve a boost for a news query, exact title match may matter for a navigational query, PageRank may matter more for broad informational queries, and spam signals may push a result down even when its BM25 score is high.
+
+That is why tree-based rankers became so useful. A boosted tree can ask many simple questions, such as "is BM25 high?", "is the query in the title?", "is the page fresh?", "is the site trusted?", then combine those checks into a score. It is less magical than it sounds: the model is learning a large set of conditional ranking rules from examples, then applying them quickly at serving time.
+
 ### Pointwise, pairwise, listwise
 
 - <span style="color:#93c5fd"><strong>Pointwise.</strong></span> Treat each document independently: predict an absolute relevance score (regression) or class, then sort by it. Simple — it's just regression/classification — but it learns nothing about *order*; it never sees two documents side by side, so it can't directly learn "this one should come *above* that one."
 - <span style="color:#ffd27f"><strong>Pairwise.</strong></span> Look at *pairs*: given two documents for a query where one is more relevant, learn to score the better one higher. The classic is **RankNet** — model `P(dᵢ ranks above dⱼ) = sigmoid(sᵢ − sⱼ)` and minimize cross-entropy against the true pair order. This optimizes *relative* order, which is what ranking actually is, and it's a big step up from pointwise. Its flaw: it treats every mis-ordered pair as equally bad, when in truth swapping the #1 and #2 results matters far more than swapping #500 and #501.
 - <span style="color:#8aff8a"><strong>Listwise / metric-aware.</strong></span> Optimize the quality of the *whole ranked list*, or use pairwise gradients weighted by the change in a list metric such as NDCG. The long-running workhorse is [**LambdaMART**](https://www.microsoft.com/en-us/research/publication/from-ranknet-to-lambdarank-to-lambdamart-an-overview/): it scales each pairwise gradient (the "lambda") by **how much NDCG would change if you swapped that pair**, so the model spends its effort where it moves the metric — the top of the list. LambdaMART = these lambda-gradients on top of **MART** (gradient-boosted regression trees); an ensemble of LambdaMART rankers won Track 1 of the 2010 Yahoo Learning-to-Rank Challenge. (ListNet/ListMLE are neural listwise cousins that model a probability distribution over orderings.)
+
+The name LambdaMART is easier to remember if you split it: **Lambda** means "push harder on the swaps that would improve the ranking metric most"; **MART** means "many boosted regression trees." So LambdaMART is not a neural language model. It is a fast tabular ranker that works well when you have many engineered features and relevance labels. It belongs in Stage 2 because it scores a candidate list, but it is usually much cheaper than a transformer cross-encoder.
 
 The progression is a clean story: **pointwise ignores order, pairwise learns relative order, listwise or metric-aware methods optimize closer to the thing you actually measure** — each fixes the previous one's blind spot. In practice, strong production systems usually combine this ranking objective with feature engineering, fast serving constraints, and online experiments.
 
@@ -61,8 +80,14 @@ The progression is a clean story: **pointwise ignores order, pairwise learns rel
 
 Represent words (and sentences, and documents) as **dense vectors of real numbers — embeddings — positioned so that things with similar *meaning* sit close together in the vector space.** Meaning becomes geometry, and "close in meaning" becomes "close in cosine distance," whether or not the words share any letters.
 
+Dense here means "most dimensions have some value," not "hard to understand." The opposite is a sparse lexical vector where each dimension is a word in the vocabulary and most entries are zero. A dense embedding is more like a learned coordinate system: one direction may loosely encode topic, another style, another entity type, another sentiment, and so on. You usually cannot name each dimension cleanly, but distance in the space becomes useful.
+
 - <span style="color:#b79bff"><strong>Word embeddings (word2vec, GloVe).</strong></span> Train a model on a huge text corpus on a self-supervised task: [**word2vec**](https://arxiv.org/abs/1301.3781) slides a window over text and either predicts a word from its neighbors (CBOW) or the neighbors from the word (skip-gram). Words that appear in similar contexts get similar vectors — so "car", "automobile", and "vehicle" tend to cluster together because they're used in related contexts. [**GloVe**](https://nlp.stanford.edu/projects/glove/) reaches a similar place by factorizing a global word co-occurrence matrix. The classic `vec("king") − vec("man") + vec("woman") ≈ vec("queen")` example is an intuition pump, not a guarantee: embedding spaces encode many relationships, but the exact arithmetic depends on the model and corpus.
 - <span style="color:#93c5fd"><strong>Sentence and document embeddings.</strong></span> The same idea scales up: encode a whole query or document into a single vector. Modern encoders are often transformer-based, such as [Sentence-BERT](https://arxiv.org/abs/1908.10084). Now "cheap flights to the big apple" and "inexpensive airfare to NYC" — barely any shared words — can land *near each other* in the space, and a nearest-neighbor lookup can find one from the other.
+
+The word2vec sliding window is the seed intuition. In a sentence like "the driver parked the car near the curb," the model sees "driver", "parked", "near", and "curb" around "car." Across billions of examples, "automobile" appears in similar neighborhoods. The model never gets a hand-written rule saying car = automobile; it learns that words used in similar neighborhoods should occupy nearby coordinates.
+
+Sentence-BERT is the same memory trick applied to whole sentences. A normal BERT model is good at reading text, but it was not originally optimized to make one sentence vector whose distance is meaningful. Sentence-BERT fine-tunes a BERT-style encoder so that similar sentence pairs land close together and unrelated pairs land farther apart. That makes it useful for semantic search, clustering, deduping, and "find me text like this" workflows.
 
 This is the principled cure for vocabulary mismatch: instead of enumerating synonyms by hand, you *learn* a geometry where synonyms, paraphrases, and related concepts are automatically neighbors. It's what makes **semantic search** possible — searching by meaning rather than by string.
 
@@ -78,8 +103,34 @@ This is the principled cure for vocabulary mismatch: instead of enumerating syno
 
 Exactly two, and the difference between them *is* the architecture of modern neural search.
 
+First, what is the transformer doing? A transformer encoder reads tokens in context. Through attention, each token representation can look at the other tokens and update itself. That is why "apple" can mean fruit in one sentence and company in another: the vector for the token is contextual, not just a dictionary entry. BERT is a pretrained transformer encoder; it learned general language patterns from large text corpora, then can be fine-tuned for search tasks.
+
 - <span style="color:#8aff8a"><strong>Bi-encoder (dual encoder) — for retrieval.</strong></span> Encode the query and each document **separately**, into independent vectors, and score by their cosine/dot-product similarity. The crucial property: because the encoders are independent, you can **embed every document offline, ahead of time**, and store the vectors in an index. At query time you embed only the query (once) and find its nearest document vectors. This is **dense retrieval** — [DPR (Dense Passage Retrieval)](https://arxiv.org/abs/2004.04906) is a canonical example. It's fast and can scale to very large corpora because the expensive document encoding is precomputed; it's trained with a contrastive loss that pulls a query toward its relevant documents and pushes it from irrelevant ones.
 - <span style="color:#b79bff"><strong>Cross-encoder — for re-ranking.</strong></span> Feed the query and the document **together** into one transformer, such as [BERT](https://arxiv.org/abs/1810.04805) — `[CLS] query [SEP] document [SEP]` — and let every query token attend to every document token, then read a relevance score off the top. This *joint* attention is usually more accurate for fine relevance judgments, because the model sees how the query and document interact term by term. But there's no shortcut: the document's representation depends on the query, so **nothing can be precomputed** — you must run the full transformer for *every* (query, document) pair at query time. That's affordable on a few hundred candidates, but not viable across a billion-document corpus per query.
+
+The bi-encoder mental picture is two machines making two coordinates: one coordinate for the query, one coordinate for each document. Once both coordinates exist, scoring is cheap. DPR is just this idea trained for passages: a question encoder and a passage encoder learn a shared vector space where the question sits near passages that answer it. Use this when you need broad semantic recall over many documents. Do not reach for it first when exact keywords, IDs, or a small corpus are enough; BM25 may be simpler, cheaper, and more predictable.
+
+The cross-encoder mental picture is one careful reader with both pages open. `[CLS] query [SEP] document [SEP]` is BERT's input format: `[CLS]` is a special summary token whose final vector is often used for classification or scoring, and `[SEP]` marks the boundary between the query and document. Because the query tokens and document tokens see each other inside the model, the cross-encoder can notice fine interactions: "jaguar speed" as animal speed, "jaguar lease" as car shopping, or whether a passage actually answers the question. The cost is that it must reread every candidate document for every query.
+
+In shape, a neural cross-encoder looks like this:
+
+```text
+query:    "cheap flights to the big apple"
+document: "Discount airfare guide for New York City..."
+
+one input sequence:
+[CLS] cheap flights to the big apple [SEP] Discount airfare guide for New York City ... [SEP]
+   \_________________________________________________________________________________/
+                                  one BERT / transformer encoder
+                                                |
+                                         [CLS] output vector
+                                                |
+                                      small scoring layer
+                                                |
+                                  relevance score: 0.93
+```
+
+The word **cross** means the query tokens and document tokens cross-attend inside the same model. The model can line up "big apple" with "New York City" while also checking whether the document is actually about flights. A bi-encoder only compares two finished vectors; a cross-encoder lets the query and document inspect each other before scoring.
 
 And now the two-stage funnel snaps into focus: <span style="color:#ffff99"><strong>retrieve with the bi-encoder (fast, over everything), re-rank with the cross-encoder (accurate, over the survivors).</strong></span> The bi-encoder's precomputability buys recall over the whole corpus; the cross-encoder's joint attention buys precision over the short list. Google publicly described [BERT in Search](https://blog.google/products-and-platforms/products/search/search-language-understanding-bert/) in 2019 as a language-understanding improvement for ranking and featured snippets, and later said BERT was used in almost every English query. [**ColBERT**](https://arxiv.org/abs/2004.12832) is a notable middle ground — it stores *per-token* embeddings and does a cheap "late interaction" max-similarity at query time, recovering much of the cross-encoder's token-level interaction while keeping most of the bi-encoder's precomputability.
 
@@ -95,8 +146,10 @@ And now the two-stage funnel snaps into focus: <span style="color:#ffff99"><stro
 
 You give up *exactness* for speed — **approximate nearest neighbor (ANN)** search, which tries to find near-enough neighbors while avoiding most vector comparisons. The recall/latency tradeoff is tunable, and different indexes make different tradeoffs. Two widely used families:
 
-- <span style="color:#93c5fd"><strong>Graph-based — HNSW.</strong></span> [Hierarchical Navigable Small World](https://arxiv.org/abs/1603.09320) graphs connect each vector to its near neighbors in a multi-layer graph; a search greedily "walks" toward the query, dropping through layers from coarse to fine. HNSW is widely used because it gives strong recall/latency behavior in many practical workloads.
-- <span style="color:#ffd27f"><strong>Partition-based — IVF (+ PQ).</strong></span> Inverted File clusters the vectors and, at query time, only searches the few nearest clusters (an *inverted index for vectors* — the same idea, one level up). **Product Quantization** compresses each vector into a few bytes so billions fit in RAM, trading a little accuracy for a huge memory saving.
+An **ANN index** is the vector-search equivalent of an inverted index. The inverted index says "if the query has this word, jump to the posting list for that word." The ANN index says "if the query vector lands in this part of space, jump to the vectors likely to be nearby." In both cases, the point is the same: avoid comparing the query with every document.
+
+- <span style="color:#93c5fd"><strong>Graph-based — HNSW.</strong></span> [Hierarchical Navigable Small World](https://arxiv.org/abs/1603.09320) graphs connect each vector to its near neighbors in a multi-layer graph; a search greedily "walks" toward the query, dropping through layers from coarse to fine. Imagine a map with highways and local roads. The top layer has long-range links that move you quickly into the right region; lower layers have denser local links that refine the answer. "Small world" means you can reach far-away regions in a few hops because some links skip across the space. HNSW is widely used because it gives strong recall/latency behavior in many practical workloads, but it uses memory for graph edges and can be more complex to update than a simple flat list.
+- <span style="color:#ffd27f"><strong>Partition-based — IVF (+ PQ).</strong></span> Inverted File clusters the vectors and, at query time, only searches the few nearest clusters (an *inverted index for vectors* — the same idea, one level up). Think of IVF as shelving books by neighborhood: first choose the few shelves closest to the query, then scan only those shelves. **Product Quantization** compresses each vector into short codes. The mental picture is splitting a long vector into chunks and replacing each chunk with the ID of its nearest prototype. You store a compact recipe instead of all the original numbers, so billions of vectors can fit in memory or cache, at the cost of approximate distances.
 
 These live in **vector databases / libraries** — [FAISS](https://arxiv.org/abs/1702.08734), HNSWlib, Milvus, Weaviate, pgvector — which are to dense retrieval what the inverted index is to lexical search: the structure that lets Stage-1 retrieval avoid a full scan. The conceptual parallel is exact: *both* the inverted index and the ANN index exist so that Stage-1 retrieval does less work than "compare the query with everything."
 
@@ -114,6 +167,8 @@ You can, and you usually should — **hybrid search** runs both retrievers and *
 - <span style="color:#b79bff"><strong>Dense (bi-encoder)</strong></span> is strongest on paraphrase and concept — the "cheap flights to the big apple" case — where the words differ but the meaning is identical.
 
 They fail in *opposite* situations, which is exactly why combining them often beats either alone. A simple fusion method is <span style="color:#ffff99"><strong>Reciprocal Rank Fusion (RRF)</strong></span>: score each document by `Σ 1 / (k + rankᵢ)` across the two result lists (`k = 60` in the original [SIGIR 2009 paper](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)), rewarding documents that rank highly in *either* retriever. It needs no score calibration between the two systems — it uses only ranks — which is why it's a common baseline/default. The fused candidate set then goes to the cross-encoder re-ranker.
+
+RRF is worth remembering because it solves a practical annoyance: BM25 scores and dense-vector scores are not naturally comparable. BM25 may output 18.7, the dense retriever may output 0.74, and those numbers do not mean the same thing. RRF ignores the raw scores and asks only, "did this document rank near the top of either list?" A document ranked #1 by dense retrieval but #80 by BM25 can still survive; a document ranked #5 by both gets a strong consensus boost. It is simple, robust, and often a strong first fusion method before building a trained fusion model.
 
 <img src="../assets/information-retrieval-ml-ranking/hybrid-vector-architecture.svg" alt="Hybrid search architecture. A query splits into two parallel retrieval paths. Top path (green), Lexical: query analysis → inverted index → BM25 → a ranked candidate list; labelled 'wins on exact/rare tokens: IDs, names, codes, exact phrases.' Bottom path (purple), Dense: query encoded by a bi-encoder into a vector → ANN index (HNSW / IVF+PQ over precomputed document vectors in a vector DB) → a ranked candidate list; labelled 'wins on meaning/paraphrase: car=automobile, big apple=NYC.' The two candidate lists meet at a Fusion box (yellow): Reciprocal Rank Fusion, score = Σ 1/(k+rank), k≈60, 'rewards docs ranking high in EITHER list, needs no score calibration.' The fused candidate set flows into a Cross-encoder re-ranker (the Stage-2 box) → final ranked top results. A side note: the two retrievers fail in opposite situations, so fusing them beats either alone. Legend ties back to the funnel: green+purple = Stage-1 retrieval (run in parallel), fusion + cross-encoder = the bridge into Stage-2." width="1180">
 
@@ -192,6 +247,41 @@ retrieve evidence -> rank evidence -> synthesize an answer -> expose sources -> 
 But the old engineering constraint did not disappear. The generated answer is only as good as the retrieval and grounding underneath it. If Stage 1 misses the right evidence, the LLM cannot reliably invent it back. If the source selection is weak, the answer may sound fluent and still be wrong. So current ML research in search is headed toward better retrievers, cheaper interaction models, grounded generation, multimodal inputs, and agentic workflows — while still depending on the same staged retrieval architecture.
 
 > **Memory hook:** *current ML search is not one giant model scanning everything. It is the funnel made deeper: lexical+dense retrieval, fusion, late interaction, cross-encoder/ranker, then RAG-style synthesis or agents. Transformers power language understanding and generation; retrieval keeps the system grounded. Public Google Search has moved in the same direction: BERT/RankBrain/passage ranking for classic results, and AI Mode/AI Overviews using query fan-out, Gemini, links, follow-ups, multimodal input, and agents.*
+
+---
+
+## Concept handles: how to remember the hard names
+
+This is the appendix version of the post. When a term feels abstract, attach it to a job, a picture, and a cost.
+
+| Concept | Imagine it as | How it works at a high level | Use it when | Cost / tradeoff |
+| --- | --- | --- | --- | --- |
+| **Transformer encoder** | a contextual reader | tokens repeatedly attend to other tokens, so each token vector is shaped by surrounding words | you need language understanding, not just word counts | heavier than lexical features |
+| **BERT** | a pretrained transformer reader | reads text bidirectionally; can be fine-tuned for classification, ranking, snippets, or relevance | you need strong query/document understanding | accurate but expensive if run per pair |
+| **`[CLS] query [SEP] doc [SEP]`** | one worksheet with a divider | `[CLS]` collects the final score signal; `[SEP]` separates query from document | cross-encoder reranking | cannot precompute the document alone |
+| **word2vec** | context neighborhoods become coordinates | sliding windows teach the model that words used near similar words should have nearby vectors | basic word meaning and semantic intuition | word-level; weak on full sentence meaning |
+| **Sentence-BERT** | one vector per sentence | fine-tunes BERT-style encoders so similar sentences have nearby vectors | semantic search, clustering, dedupe | loses some token-level interaction |
+| **Bi-encoder** | two separate towers | encode query once, encode docs offline, compare vectors | Stage-1 semantic retrieval over many docs | fast, but less precise |
+| **DPR** | bi-encoder for question-answer passages | trains query and passage encoders so questions land near answer passages | passage retrieval for QA/RAG | needs training data or good negatives |
+| **Cross-encoder** | one careful reader with both pages open | query and document tokens attend to each other before one relevance score is emitted | Stage-2 reranking of a short list | accurate, but per-pair expensive |
+| **ANN index** | a vector shortcut map | avoids scanning every vector by graph walking, clustering, compression, or similar tricks | vector search at scale | approximate; tune recall vs latency |
+| **HNSW** | highways plus local roads | multi-layer neighbor graph jumps coarsely first, then refines locally | low-latency nearest-neighbor search | memory for graph links |
+| **IVF+PQ** | shelves plus compressed labels | cluster vectors into shelves; search nearby shelves; store compressed vector codes | very large vector collections | saves memory, loses some precision |
+| **RRF** | rank-only voting | combine result lists using rank positions, not raw scores | hybrid BM25 + dense fusion | simple, not query-adaptive |
+| **LambdaMART** | boosted trees that care about top swaps | tree ranker whose gradients are weighted by how much NDCG would improve | feature-rich reranking with labels/clicks | needs features and labels; less language-aware than BERT |
+| **ColBERT** | token vectors with late interaction | stores token embeddings and matches query tokens against document tokens cheaply | middle ground between bi-encoder and cross-encoder | larger index than one-vector bi-encoder |
+
+The decision rule is simple:
+
+```text
+Need exact strings, IDs, rare names?       -> BM25 / lexical retrieval
+Need broad meaning over many documents?   -> bi-encoder + ANN
+Need both exact and semantic recall?      -> hybrid retrieval + RRF
+Need careful final ordering?              -> LambdaMART or cross-encoder
+Need generated answers with sources?      -> retrieval + rerank + LLM synthesis
+```
+
+The trap is using the expensive reader too early. A cross-encoder is good because it reads the query and document together. That is also why it is expensive. A bi-encoder is weaker because the query and document do not interact until the final vector similarity. That is also why it scales. Most search architecture is this tradeoff repeated: **precompute what you can, index what you precompute, and spend deep understanding only on the short list.**
 
 ---
 

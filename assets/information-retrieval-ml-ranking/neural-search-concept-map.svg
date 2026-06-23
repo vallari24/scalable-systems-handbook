@@ -1,0 +1,91 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e5e7eb"/>
+    </marker>
+    <style>
+      .bg { fill: #0b1020; }
+      .title { fill: #f8fafc; font: 700 34px Inter, Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 18px Inter, Arial, sans-serif; }
+      .section { fill: #f8fafc; font: 700 22px Inter, Arial, sans-serif; }
+      .label { fill: #f8fafc; font: 700 19px Inter, Arial, sans-serif; }
+      .small { fill: #dbeafe; font: 16px Inter, Arial, sans-serif; }
+      .muted { fill: #cbd5e1; font: 15px Inter, Arial, sans-serif; }
+      .tiny { fill: #cbd5e1; font: 14px Inter, Arial, sans-serif; }
+      .box { fill: #111827; stroke: #64748b; stroke-width: 2; rx: 12; }
+      .blue { fill: #10213f; stroke: #93c5fd; }
+      .green { fill: #12351e; stroke: #8aff8a; }
+      .yellow { fill: #372f13; stroke: #ffff99; }
+      .purple { fill: #251a45; stroke: #b79bff; }
+      .pink { fill: #3b1730; stroke: #ff8bd2; }
+      .line { stroke: #e5e7eb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #94a3b8; stroke-width: 2.5; fill: none; stroke-dasharray: 8 8; marker-end: url(#arrow); }
+      .chipText { fill: #f8fafc; font: 700 15px Inter, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="760"/>
+  <text class="title" x="42" y="58">Neural search concepts: remember the job, then the cost</text>
+  <text class="subtitle" x="42" y="88">The same query flows through cheap indexed work first, then expensive careful reading only on the survivors.</text>
+
+  <rect class="box blue" x="44" y="135" width="245" height="178"/>
+  <text class="section" x="66" y="172">1. Represent</text>
+  <text class="label" x="66" y="205">text -> vectors</text>
+  <text class="small" x="66" y="236">word2vec / SBERT</text>
+  <text class="muted" x="66" y="262">similar meaning lands</text>
+  <text class="muted" x="66" y="284">nearby in vector space</text>
+
+  <rect class="box green" x="342" y="135" width="245" height="178"/>
+  <text class="section" x="364" y="172">2. Retrieve</text>
+  <text class="label" x="364" y="205">bi-encoder + ANN</text>
+  <text class="small" x="364" y="236">DPR, HNSW, IVF+PQ</text>
+  <text class="muted" x="364" y="262">docs precomputed;</text>
+  <text class="muted" x="364" y="284">query searches index</text>
+
+  <rect class="box yellow" x="640" y="135" width="245" height="178"/>
+  <text class="section" x="662" y="172">3. Fuse</text>
+  <text class="label" x="662" y="205">BM25 + dense</text>
+  <text class="small" x="662" y="236">RRF combines ranks</text>
+  <text class="muted" x="662" y="262">exact-match and meaning</text>
+  <text class="muted" x="662" y="284">vote into one list</text>
+
+  <rect class="box purple" x="938" y="135" width="245" height="178"/>
+  <text class="section" x="960" y="172">4. Rerank</text>
+  <text class="label" x="960" y="205">cross-encoder / LTR</text>
+  <text class="small" x="960" y="236">BERT, LambdaMART</text>
+  <text class="muted" x="960" y="262">expensive judgment on</text>
+  <text class="muted" x="960" y="284">a few hundred results</text>
+
+  <path class="line" d="M 289 224 L 334 224"/>
+  <path class="line" d="M 587 224 L 632 224"/>
+  <path class="line" d="M 885 224 L 930 224"/>
+
+  <text class="tiny" x="357" y="344">cheap enough for the whole corpus</text>
+  <path class="dash" d="M 462 365 C 520 389 700 389 762 365"/>
+  <text class="tiny" x="918" y="344">expensive, but only after narrowing</text>
+
+  <rect class="box" x="73" y="395" width="522" height="245"/>
+  <text class="section" x="98" y="432">Bi-encoder mental picture</text>
+  <rect class="box green" x="100" y="462" width="180" height="70"/>
+  <text class="label" x="126" y="494">query tower</text>
+  <text class="muted" x="126" y="516">one query vector</text>
+  <rect class="box green" x="385" y="462" width="180" height="70"/>
+  <text class="label" x="409" y="494">doc tower</text>
+  <text class="muted" x="409" y="516">precomputed docs</text>
+  <path class="line" d="M 280 497 L 376 497"/>
+  <text class="small" x="213" y="570">Score = distance between two coordinates.</text>
+  <text class="muted" x="137" y="600">Great for retrieval because document vectors are reusable.</text>
+
+  <rect class="box" x="685" y="395" width="522" height="245"/>
+  <text class="section" x="710" y="432">Cross-encoder mental picture</text>
+  <rect class="box purple" x="725" y="462" width="445" height="70"/>
+  <text class="label" x="763" y="494">[CLS] query [SEP] document [SEP]</text>
+  <text class="muted" x="763" y="516">one careful transformer reader</text>
+  <path class="line" d="M 947 532 L 947 548"/>
+  <rect class="box purple" x="823" y="548" width="250" height="48"/>
+  <text class="label" x="877" y="579">relevance score</text>
+  <text class="small" x="790" y="626">More accurate, but must run per query-document pair.</text>
+
+  <rect x="53" y="682" width="1168" height="44" rx="10" fill="#111827" stroke="#64748b" stroke-width="2"/>
+  <text class="chipText" x="80" y="710">Rule of thumb: precomputable = Stage 1 retrieval; query+document together = Stage 2 reranking; rank-only voting = fusion.</text>
+</svg>
