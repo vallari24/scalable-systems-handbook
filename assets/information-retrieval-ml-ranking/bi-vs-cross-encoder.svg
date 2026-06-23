@@ -1,0 +1,106 @@
+<svg width="1180" height="740" viewBox="0 0 1180 740" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="bce-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="bce-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b79bff"/></marker>
+    <marker id="bce-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="740" fill="#111317"/>
+
+  <text x="590" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Bi-encoder vs Cross-encoder &#8212; retrieve cheap, re-rank accurate</text>
+  <text x="590" y="70" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">the same transformer split two ways &#8212; and why each sits where it does in the funnel</text>
+
+  <!-- ===== LEFT: BI-ENCODER ===== -->
+  <rect x="36" y="96" width="520" height="516" rx="14" fill="#101a12" stroke="#8aff8a" stroke-width="2"/>
+  <text x="296" y="128" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">Bi-encoder &#183; for RETRIEVAL</text>
+
+  <!-- inputs -->
+  <rect x="70" y="158" width="170" height="42" rx="9" fill="#1a1f26" stroke="#6f7a86" stroke-width="1.6"/>
+  <text x="155" y="184" text-anchor="middle" fill="#e8ffe8" font-family="monospace" font-size="14">query: "big apple"</text>
+  <rect x="352" y="158" width="170" height="42" rx="9" fill="#1a1f26" stroke="#6f7a86" stroke-width="1.6"/>
+  <text x="437" y="184" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="14">document</text>
+
+  <!-- towers -->
+  <rect x="98" y="232" width="114" height="120" rx="9" fill="#15211a" stroke="#8aff8a" stroke-width="2"/>
+  <text x="155" y="286" text-anchor="middle" fill="#cbeecb" font-family="sans-serif" font-size="14" font-weight="bold">Query</text>
+  <text x="155" y="306" text-anchor="middle" fill="#cbeecb" font-family="sans-serif" font-size="14" font-weight="bold">Encoder</text>
+  <rect x="380" y="232" width="114" height="120" rx="9" fill="#15211a" stroke="#8aff8a" stroke-width="2"/>
+  <text x="437" y="286" text-anchor="middle" fill="#cbeecb" font-family="sans-serif" font-size="14" font-weight="bold">Doc</text>
+  <text x="437" y="306" text-anchor="middle" fill="#cbeecb" font-family="sans-serif" font-size="14" font-weight="bold">Encoder</text>
+  <text x="296" y="298" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">separate</text>
+  <text x="296" y="314" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">&amp; independent</text>
+
+  <line x1="155" y1="200" x2="155" y2="230" stroke="#8aff8a" stroke-width="2" marker-end="url(#bce-g)"/>
+  <line x1="437" y1="200" x2="437" y2="230" stroke="#8aff8a" stroke-width="2" marker-end="url(#bce-g)"/>
+
+  <!-- vectors -->
+  <rect x="100" y="372" width="110" height="34" rx="7" fill="#1a1f26" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="155" y="394" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="13">[ .2 &#8722;.7 &#8230; ]</text>
+  <rect x="382" y="372" width="110" height="34" rx="7" fill="#1a1f26" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="437" y="394" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="13">[ .3 &#8722;.6 &#8230; ]</text>
+  <line x1="155" y1="352" x2="155" y2="370" stroke="#8aff8a" stroke-width="2" marker-end="url(#bce-g)"/>
+  <line x1="437" y1="352" x2="437" y2="370" stroke="#8aff8a" stroke-width="2" marker-end="url(#bce-g)"/>
+
+  <!-- similarity -->
+  <rect x="221" y="430" width="150" height="44" rx="10" fill="#14201a" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="296" y="450" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">similarity</text>
+  <text x="296" y="467" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="12.5">cosine &#183; dot product</text>
+  <line x1="170" y1="406" x2="255" y2="430" stroke="#8aff8a" stroke-width="1.8" marker-end="url(#bce-g)"/>
+  <line x1="422" y1="406" x2="337" y2="430" stroke="#8aff8a" stroke-width="1.8" marker-end="url(#bce-g)"/>
+
+  <!-- precompute note -->
+  <text x="296" y="502" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="13.5">&#9201; doc vectors precomputed OFFLINE &amp; ANN-indexed</text>
+  <text x="296" y="521" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">at query time: encode the query once, then nearest-neighbor search</text>
+
+  <!-- tags -->
+  <rect x="58" y="540" width="476" height="56" rx="10" fill="#0e160f" stroke="#3a544a" stroke-width="1.4"/>
+  <text x="296" y="562" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">fast &#183; can scale very large (docs precomputed)</text>
+  <text x="296" y="582" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">less accurate (query &amp; doc never interact) &#183; <tspan fill="#ffff99">DPR</tspan></text>
+
+  <!-- ===== center link ===== -->
+  <line x1="560" y1="360" x2="620" y2="360" stroke="#ffff99" stroke-width="2.5" marker-end="url(#bce-y)"/>
+
+  <!-- ===== RIGHT: CROSS-ENCODER ===== -->
+  <rect x="624" y="96" width="520" height="516" rx="14" fill="#16131f" stroke="#b79bff" stroke-width="2"/>
+  <text x="884" y="128" text-anchor="middle" fill="#b79bff" font-family="sans-serif" font-size="19" font-weight="bold">Cross-encoder &#183; for RE-RANKING</text>
+
+  <!-- joint input -->
+  <rect x="676" y="158" width="416" height="42" rx="9" fill="#1a1f26" stroke="#6f7a86" stroke-width="1.6"/>
+  <text x="884" y="184" text-anchor="middle" fill="#e6dcff" font-family="monospace" font-size="13.5">[CLS] query [SEP] document [SEP]</text>
+  <text x="884" y="218" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">query &amp; doc fed in TOGETHER</text>
+
+  <!-- attention cross-lines -->
+  <g stroke="#b79bff" stroke-width="1.2" opacity="0.8">
+    <line x1="792" y1="236" x2="892" y2="236"/>
+    <line x1="792" y1="236" x2="976" y2="236"/>
+    <line x1="892" y1="236" x2="792" y2="236"/>
+    <line x1="976" y1="236" x2="892" y2="236"/>
+  </g>
+  <circle cx="792" cy="236" r="4" fill="#b79bff"/>
+  <circle cx="892" cy="236" r="4" fill="#b79bff"/>
+  <circle cx="976" cy="236" r="4" fill="#b79bff"/>
+  <text x="884" y="258" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">every query token attends to every doc token</text>
+
+  <!-- single tower -->
+  <rect x="772" y="276" width="224" height="128" rx="10" fill="#1c1729" stroke="#b79bff" stroke-width="2.5"/>
+  <text x="884" y="332" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="17" font-weight="bold">Cross-Encoder</text>
+  <text x="884" y="356" text-anchor="middle" fill="#cbb8ff" font-family="sans-serif" font-size="14">one transformer (BERT)</text>
+
+  <!-- output score -->
+  <rect x="804" y="430" width="160" height="42" rx="9" fill="#1a1f26" stroke="#b79bff" stroke-width="1.6"/>
+  <text x="884" y="456" text-anchor="middle" fill="#b79bff" font-family="sans-serif" font-size="14" font-weight="bold">relevance score</text>
+  <line x1="884" y1="404" x2="884" y2="428" stroke="#b79bff" stroke-width="2" marker-end="url(#bce-p)"/>
+
+  <text x="884" y="502" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13.5">&#10007; nothing can be precomputed</text>
+  <text x="884" y="521" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">doc&#8217;s representation depends on the query &#8594; run per (query, doc) pair</text>
+
+  <!-- tags -->
+  <rect x="646" y="540" width="476" height="56" rx="10" fill="#140f1c" stroke="#4a3f63" stroke-width="1.4"/>
+  <text x="884" y="562" text-anchor="middle" fill="#b79bff" font-family="sans-serif" font-size="13" font-weight="bold">high accuracy (full joint interaction)</text>
+  <text x="884" y="582" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">per-pair at query time &#8594; only affordable on a few hundred &#183; <tspan fill="#ffff99">BERT</tspan></text>
+
+  <!-- ===== bottom insight strip ===== -->
+  <rect x="36" y="630" width="1108" height="86" rx="12" fill="#15171c" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="590" y="662" text-anchor="middle" fill="#ffffe0" font-family="sans-serif" font-size="15"><tspan fill="#ffff99" font-weight="bold">&#9733; the funnel:</tspan>  retrieve with the bi-encoder over <tspan fill="#8aff8a" font-weight="bold">EVERYTHING</tspan> (fast)  &#8594;  re-rank with the cross-encoder over the <tspan fill="#b79bff" font-weight="bold">SURVIVORS</tspan> (accurate)</text>
+  <text x="590" y="692" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5"><tspan fill="#ffd27f" font-weight="bold">ColBERT</tspan> = late-interaction middle ground: per-token embeddings + MaxSim &#8212; most of the bi-encoder&#8217;s speed, much of the cross-encoder&#8217;s accuracy</text>
+</svg>

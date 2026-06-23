@@ -1,0 +1,72 @@
+<svg width="1180" height="700" viewBox="0 0 1180 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="e-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="e-gs" markerWidth="11" markerHeight="11" refX="2" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M9,0 L0,4.5 L9,9 Z" fill="#8aff8a"/></marker>
+    <marker id="e-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b79bff"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="700" fill="#111317"/>
+
+  <text x="590" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="27" font-weight="bold">Embeddings: search by meaning, not by string</text>
+  <text x="590" y="70" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">map words and documents to dense vectors positioned by meaning &#8212; similar meaning lands nearby</text>
+
+  <!-- ===== LEFT: the problem ===== -->
+  <text x="300" y="112" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15.5" font-weight="bold">THE PROBLEM &#183; vocabulary mismatch</text>
+
+  <rect x="90" y="150" width="130" height="48" rx="9" fill="#0f1521" stroke="#93c5fd" stroke-width="2"/>
+  <text x="155" y="180" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="16">car</text>
+  <rect x="380" y="150" width="170" height="48" rx="9" fill="#0f1521" stroke="#93c5fd" stroke-width="2"/>
+  <text x="465" y="180" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="16">automobile</text>
+
+  <line x1="222" y1="174" x2="378" y2="174" stroke="#ff8a8a" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="300" y="166" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">&#10007;</text>
+  <text x="300" y="222" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">0 shared characters &#8594; to BM25 they are unrelated tokens</text>
+
+  <rect x="90" y="248" width="460" height="120" rx="11" fill="#14171c" stroke="#ffd27f" stroke-width="2"/>
+  <text x="320" y="274" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="13.5" font-weight="bold">synonym list (written by hand)</text>
+  <text x="320" y="300" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12.5">car = automobile = vehicle</text>
+  <text x="320" y="320" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12.5">NYC = New York = the big apple</text>
+  <text x="320" y="352" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5">patches a few cases &#8212; doesn&#8217;t scale to every paraphrase</text>
+
+  <text x="300" y="418" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">the principled fix &#8594;&#160;&#160;learn a geometry where synonyms are neighbors</text>
+
+  <!-- ===== RIGHT: the embedding space ===== -->
+  <text x="855" y="112" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15.5" font-weight="bold">THE FIX &#183; embedding space</text>
+  <rect x="590" y="130" width="540" height="392" rx="12" fill="#0d130d" stroke="#8aff8a" stroke-width="2"/>
+  <text x="606" y="510" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">each axis = a latent dimension of meaning</text>
+
+  <!-- cluster: car / automobile / vehicle -->
+  <circle cx="690" cy="200" r="6" fill="#8aff8a"/>
+  <text x="700" y="196" fill="#8aff8a" font-family="monospace" font-size="12.5">car</text>
+  <circle cx="724" cy="222" r="6" fill="#8aff8a"/>
+  <text x="734" y="226" fill="#8aff8a" font-family="monospace" font-size="12.5">automobile</text>
+  <circle cx="694" cy="238" r="6" fill="#8aff8a"/>
+  <text x="704" y="254" fill="#8aff8a" font-family="monospace" font-size="12.5">vehicle</text>
+  <text x="680" y="280" fill="#9aa6b2" font-family="sans-serif" font-size="11">close = same meaning</text>
+
+  <!-- paraphrase points -->
+  <circle cx="960" cy="200" r="6" fill="#93c5fd"/>
+  <text x="868" y="186" fill="#93c5fd" font-family="sans-serif" font-size="11.5">&#8220;cheap flights to the big apple&#8221;</text>
+  <circle cx="1000" cy="246" r="6" fill="#93c5fd"/>
+  <text x="912" y="270" fill="#93c5fd" font-family="sans-serif" font-size="11.5">&#8220;inexpensive airfare to NYC&#8221;</text>
+  <line x1="966" y1="204" x2="996" y2="242" stroke="#8aff8a" stroke-width="2" marker-end="url(#e-g)" marker-start="url(#e-gs)"/>
+  <text x="1010" y="224" fill="#8aff8a" font-family="sans-serif" font-size="11">near in cosine, no shared words</text>
+
+  <!-- distant cluster -->
+  <circle cx="700" cy="430" r="6" fill="#ffd27f"/>
+  <text x="710" y="434" fill="#ffd27f" font-family="monospace" font-size="12.5">banana</text>
+  <circle cx="734" cy="452" r="6" fill="#ffd27f"/>
+  <text x="744" y="468" fill="#ffd27f" font-family="monospace" font-size="12.5">fruit</text>
+  <text x="690" y="408" fill="#9aa6b2" font-family="sans-serif" font-size="11">unrelated &#8594; far away</text>
+
+  <!-- analogy inset -->
+  <rect x="852" y="408" width="262" height="96" rx="10" fill="#16111f" stroke="#b79bff" stroke-width="1.8"/>
+  <text x="983" y="432" text-anchor="middle" fill="#b79bff" font-family="sans-serif" font-size="12.5" font-weight="bold">the space encodes relationships</text>
+  <text x="983" y="462" text-anchor="middle" fill="#e6dcff" font-family="monospace" font-size="13">vec(king) &#8722; vec(man)</text>
+  <text x="983" y="484" text-anchor="middle" fill="#e6dcff" font-family="monospace" font-size="13">+ vec(woman) &#8776; vec(queen)</text>
+
+  <!-- ===== CAPTION STRIP ===== -->
+  <rect x="80" y="540" width="1020" height="62" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="590" y="568" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="15"><tspan fill="#8aff8a" font-weight="bold">&#9733; key:</tspan>  train word2vec (skip-gram / CBOW) or GloVe on a huge corpus &#8212; words used in similar contexts get similar vectors.</text>
+  <text x="590" y="590" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">meaning becomes geometry, so &#8220;close in meaning&#8221; = &#8220;close in the space&#8221; even with zero shared letters. This is semantic search.</text>
+</svg>

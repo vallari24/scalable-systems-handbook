@@ -1,0 +1,130 @@
+<svg width="1200" height="810" viewBox="0 0 1200 810" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ms-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="ms-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="ms-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b79bff"/></marker>
+    <marker id="ms-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+    <marker id="ms-o" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffd27f"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="810" fill="#111317"/>
+
+  <text x="600" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The ML-in-IR Stack &#8212; end to end</text>
+  <text x="600" y="68" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">understand the query &#8594; retrieve cheaply &#8594; re-rank precisely &#8594; learn from clicks &#8212; the same blocks that power RAG</text>
+
+  <!-- ===== MAIN PIPELINE ===== -->
+  <!-- query -->
+  <circle cx="70" cy="186" r="12" fill="none" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="70" y1="198" x2="70" y2="226" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="52" y1="211" x2="88" y2="211" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="70" y1="226" x2="57" y2="246" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="70" y1="226" x2="83" y2="246" stroke="#cbd5e1" stroke-width="2.4"/>
+  <text x="70" y="268" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">query</text>
+
+  <!-- query understanding -->
+  <rect x="120" y="142" width="172" height="128" rx="11" fill="#101722" stroke="#93c5fd" stroke-width="2"/>
+  <text x="206" y="168" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">Query Understanding</text>
+  <text x="136" y="194" fill="#cfe0f5" font-family="sans-serif" font-size="12.5">&#8226; intent classification</text>
+  <text x="136" y="214" fill="#cfe0f5" font-family="sans-serif" font-size="12.5">&#8226; entity tagging</text>
+  <text x="136" y="234" fill="#cfe0f5" font-family="sans-serif" font-size="12.5">&#8226; neural spell-correct</text>
+  <text x="136" y="254" fill="#cfe0f5" font-family="sans-serif" font-size="12.5">&#8226; query expansion</text>
+  <line x1="92" y1="206" x2="118" y2="206" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#ms-b)"/>
+
+  <!-- stage 1 group -->
+  <rect x="316" y="110" width="340" height="196" rx="13" fill="#0e140f" stroke="#8aff8a" stroke-width="1.8" stroke-dasharray="6 4"/>
+  <text x="334" y="132" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">STAGE 1 &#183; Retrieval</text>
+  <text x="486" y="132" fill="#9aa6b2" font-family="sans-serif" font-size="12">cheap, high recall</text>
+
+  <rect x="334" y="146" width="156" height="48" rx="9" fill="#15211a" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="412" y="167" text-anchor="middle" fill="#cbeecb" font-family="sans-serif" font-size="12.5" font-weight="bold">lexical</text>
+  <text x="412" y="184" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">BM25 &#183; inverted index</text>
+
+  <rect x="334" y="212" width="156" height="48" rx="9" fill="#1c1729" stroke="#b79bff" stroke-width="1.8"/>
+  <text x="412" y="233" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="12.5" font-weight="bold">dense</text>
+  <text x="412" y="250" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">bi-encoder &#183; ANN index</text>
+
+  <rect x="510" y="178" width="62" height="50" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="2"/>
+  <text x="541" y="200" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">RRF</text>
+  <text x="541" y="217" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">fuse</text>
+  <line x1="490" y1="170" x2="508" y2="190" stroke="#8aff8a" stroke-width="1.8" marker-end="url(#ms-y)"/>
+  <line x1="490" y1="236" x2="508" y2="216" stroke="#b79bff" stroke-width="1.8" marker-end="url(#ms-y)"/>
+
+  <rect x="586" y="166" width="58" height="74" rx="8" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.4"/>
+  <text x="615" y="196" text-anchor="middle" fill="#e8edf2" font-family="sans-serif" font-size="10.5">~few</text>
+  <text x="615" y="210" text-anchor="middle" fill="#e8edf2" font-family="sans-serif" font-size="10.5">hundred</text>
+  <text x="615" y="224" text-anchor="middle" fill="#e8edf2" font-family="sans-serif" font-size="10.5">cands</text>
+  <line x1="572" y1="203" x2="584" y2="203" stroke="#ffff99" stroke-width="1.8" marker-end="url(#ms-y)"/>
+
+  <line x1="292" y1="206" x2="314" y2="206" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#ms-g)"/>
+
+  <!-- stage 2 -->
+  <rect x="678" y="146" width="216" height="124" rx="12" fill="#16131f" stroke="#b79bff" stroke-width="2.2"/>
+  <text x="786" y="170" text-anchor="middle" fill="#b79bff" font-family="sans-serif" font-size="14" font-weight="bold">STAGE 2 &#183; Re-ranking</text>
+  <text x="786" y="188" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">expensive, high precision</text>
+  <text x="786" y="214" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="12.5">LambdaMART  +  cross-encoder</text>
+  <text x="786" y="232" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="12.5">(BERT)</text>
+  <text x="786" y="254" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="11.5">hundreds of features &#183; optimize NDCG</text>
+  <line x1="656" y1="208" x2="676" y2="208" stroke="#ffff99" stroke-width="2.2" marker-end="url(#ms-p)"/>
+
+  <!-- results -->
+  <rect x="916" y="180" width="108" height="56" rx="10" fill="#101a12" stroke="#8aff8a" stroke-width="2"/>
+  <text x="970" y="205" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">ranked</text>
+  <text x="970" y="223" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">results</text>
+  <line x1="894" y1="208" x2="914" y2="208" stroke="#b79bff" stroke-width="2.2" marker-end="url(#ms-p)"/>
+
+  <!-- ===== FEEDBACK FLYWHEEL ===== -->
+  <text x="600" y="324" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">the relevance flywheel</text>
+
+  <rect x="916" y="346" width="108" height="44" rx="9" fill="#1c1606" stroke="#ffd27f" stroke-width="1.8"/>
+  <text x="970" y="373" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="12.5">served results</text>
+  <line x1="970" y1="236" x2="970" y2="344" stroke="#ffd27f" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ms-o)"/>
+
+  <rect x="612" y="404" width="252" height="52" rx="9" fill="#1c1606" stroke="#ffd27f" stroke-width="1.8"/>
+  <text x="738" y="426" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">log clicks / dwell / skips</text>
+  <text x="738" y="444" text-anchor="middle" fill="#e8d9b8" font-family="sans-serif" font-size="11.5">(correct for position bias)</text>
+  <path d="M916 380 Q864 420 866 428" fill="none" stroke="#ffd27f" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ms-o)"/>
+
+  <rect x="430" y="346" width="156" height="44" rx="9" fill="#1c1606" stroke="#ffd27f" stroke-width="1.8"/>
+  <text x="508" y="373" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="12.5">retrain rankers</text>
+  <path d="M612 426 Q560 392 584 380" fill="none" stroke="#ffd27f" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ms-o)"/>
+  <path d="M508 346 Q508 300 678 252" fill="none" stroke="#ffd27f" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ms-o)"/>
+
+  <!-- ===== RAG PANEL ===== -->
+  <rect x="36" y="498" width="1128" height="188" rx="13" fill="#15131c" stroke="#b79bff" stroke-width="1.8"/>
+  <text x="600" y="528" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Same building blocks power RAG / LLM search</text>
+
+  <rect x="60" y="568" width="104" height="50" rx="9" fill="#1a1f26" stroke="#cbd5e1" stroke-width="1.6"/>
+  <text x="112" y="598" text-anchor="middle" fill="#e8edf2" font-family="sans-serif" font-size="13">question</text>
+
+  <rect x="198" y="556" width="186" height="74" rx="10" fill="#13261a" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="291" y="582" text-anchor="middle" fill="#cbeecb" font-family="sans-serif" font-size="13" font-weight="bold">bi-encoder + ANN</text>
+  <text x="291" y="600" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">(+ BM25 hybrid)</text>
+  <text x="291" y="618" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">retrieve</text>
+  <line x1="164" y1="593" x2="196" y2="593" stroke="#8aff8a" stroke-width="2" marker-end="url(#ms-g)"/>
+
+  <rect x="418" y="568" width="150" height="50" rx="9" fill="#1c1729" stroke="#b79bff" stroke-width="1.8"/>
+  <text x="493" y="591" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="12.5" font-weight="bold">cross-encoder</text>
+  <text x="493" y="608" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">re-rank</text>
+  <line x1="384" y1="593" x2="416" y2="593" stroke="#b79bff" stroke-width="2" marker-end="url(#ms-p)"/>
+
+  <rect x="602" y="568" width="146" height="50" rx="9" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="675" y="591" text-anchor="middle" fill="#e8edf2" font-family="sans-serif" font-size="12.5">retrieved</text>
+  <text x="675" y="608" text-anchor="middle" fill="#e8edf2" font-family="sans-serif" font-size="12.5">passages</text>
+  <line x1="568" y1="593" x2="600" y2="593" stroke="#b79bff" stroke-width="2" marker-end="url(#ms-p)"/>
+
+  <rect x="782" y="556" width="134" height="74" rx="10" fill="#241226" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="849" y="588" text-anchor="middle" fill="#ffc4e8" font-family="sans-serif" font-size="13" font-weight="bold">LLM</text>
+  <text x="849" y="608" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">writes the answer</text>
+  <line x1="748" y1="593" x2="780" y2="593" stroke="#cbd5e1" stroke-width="2" marker-end="url(#ms-g)"/>
+
+  <rect x="950" y="568" width="110" height="50" rx="9" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="1005" y="598" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">answer</text>
+  <line x1="916" y1="593" x2="948" y2="593" stroke="#ff8bd2" stroke-width="2" marker-end="url(#ms-g)"/>
+
+  <text x="600" y="664" text-anchor="middle" fill="#cbb8ff" font-family="sans-serif" font-size="13.5">IR became the <tspan fill="#ffff99" font-weight="bold">retrieval foundation</tspan> of the LLM stack &#8212; the same retrieve-then-rerank funnel, with an LLM on the end</text>
+
+  <!-- ===== insight strip ===== -->
+  <rect x="36" y="704" width="1128" height="86" rx="12" fill="#15171c" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="600" y="736" text-anchor="middle" fill="#ffffe0" font-family="sans-serif" font-size="15"><tspan fill="#ffff99" font-weight="bold">&#9733; one shape powers all of it:</tspan>  cheap recall-oriented <tspan fill="#8aff8a" font-weight="bold">retrieval</tspan>  &#8594;  expensive precision-oriented <tspan fill="#b79bff" font-weight="bold">re-ranking</tspan></text>
+  <text x="600" y="766" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">query understanding feeds it, the <tspan fill="#ffd27f">click flywheel</tspan> keeps improving it, and RAG / LLMs are built on the very same funnel</text>
+</svg>
