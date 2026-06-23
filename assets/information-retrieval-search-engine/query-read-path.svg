@@ -1,0 +1,107 @@
+<svg width="1180" height="790" viewBox="0 0 1180 790" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="qr-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="qr-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="qr-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="790" fill="#111317"/>
+
+  <text x="590" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The query read path &#8212; merge sorted lists, never scan documents</text>
+  <text x="590" y="66" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">query: <tspan fill="#cbd5e1" font-family="monospace">scalable AND search</tspan></text>
+
+  <!-- STEP 1: analyze query -->
+  <circle cx="56" cy="118" r="13" fill="#93c5fd"/><text x="56" y="123" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">1</text>
+  <rect x="80" y="92" width="330" height="92" rx="10" fill="#14171c" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="96" y="116" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Analyze the query (same pipeline)</text>
+  <text x="96" y="139" fill="#cbd5e1" font-family="monospace" font-size="13">"Scalable Searching" &#8594; [scalable, search]</text>
+  <text x="96" y="160" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">normalize &#183; stem &#183; spell-correct &#183; expand</text>
+  <text x="96" y="178" fill="#cbd5e1" font-family="monospace" font-size="12.5">tree:  scalable AND search</text>
+
+  <!-- STEP 2: fan out -->
+  <circle cx="446" cy="118" r="13" fill="#93c5fd"/><text x="446" y="123" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">2</text>
+  <rect x="470" y="92" width="200" height="92" rx="10" fill="#14171c" stroke="#3a414b" stroke-width="1.8"/>
+  <text x="570" y="124" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14.5" font-weight="bold">fan out to shards</text>
+  <text x="570" y="146" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">each shard runs locally,</text>
+  <text x="570" y="164" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">a coordinator merges</text>
+  <line x1="410" y1="138" x2="466" y2="138" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#qr-b)"/>
+
+  <!-- STEP 3: dictionary lookup -->
+  <circle cx="706" cy="118" r="13" fill="#8aff8a"/><text x="706" y="123" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">3</text>
+  <rect x="730" y="92" width="410" height="92" rx="10" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="746" y="116" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Dictionary lookup &#8594; sorted posting lists</text>
+  <text x="746" y="139" fill="#cbd5e1" font-family="monospace" font-size="12.5">scalable &#8594; [d1, d2, d4, d9, d15, &#8230;]</text>
+  <text x="746" y="159" fill="#cbd5e1" font-family="monospace" font-size="12.5">search   &#8594; [d1, d4, d7, d9, d11, &#8230;]</text>
+  <text x="746" y="178" fill="#9aa6b2" font-family="sans-serif" font-size="12" font-style="italic">no documents touched yet</text>
+  <line x1="670" y1="138" x2="726" y2="138" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#qr-g)"/>
+
+  <!-- STEP 4: two-pointer intersection (centerpiece) -->
+  <circle cx="56" cy="250" r="13" fill="#ffff99"/><text x="56" y="255" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">4</text>
+  <rect x="80" y="214" width="1060" height="296" rx="12" fill="#16140f" stroke="#ffff99" stroke-width="2"/>
+  <text x="610" y="242" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">Merge the posting lists &#8212; two-pointer intersection (AND)</text>
+
+  <!-- list A -->
+  <text x="120" y="296" fill="#93c5fd" font-family="monospace" font-size="13.5">scalable</text>
+  <g font-family="monospace" font-size="14" fill="#cbd5e1">
+    <rect x="210" y="278" width="56" height="34" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="238" y="300" text-anchor="middle" fill="#8aff8a">d1</text>
+    <rect x="276" y="278" width="56" height="34" rx="5" fill="#14171c" stroke="#3a414b"/><text x="304" y="300" text-anchor="middle">d2</text>
+    <rect x="342" y="278" width="56" height="34" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="370" y="300" text-anchor="middle" fill="#8aff8a">d4</text>
+    <rect x="408" y="278" width="56" height="34" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="436" y="300" text-anchor="middle" fill="#8aff8a">d9</text>
+    <rect x="474" y="278" width="56" height="34" rx="5" fill="#14171c" stroke="#3a414b"/><text x="502" y="300" text-anchor="middle">d15</text>
+    <rect x="540" y="278" width="44" height="34" rx="5" fill="#14171c" stroke="#3a414b"/><text x="562" y="300" text-anchor="middle">&#8230;</text>
+  </g>
+  <!-- list B -->
+  <text x="120" y="356" fill="#93c5fd" font-family="monospace" font-size="13.5">search</text>
+  <g font-family="monospace" font-size="14" fill="#cbd5e1">
+    <rect x="210" y="338" width="56" height="34" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="238" y="360" text-anchor="middle" fill="#8aff8a">d1</text>
+    <rect x="276" y="338" width="56" height="34" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="304" y="360" text-anchor="middle" fill="#8aff8a">d4</text>
+    <rect x="342" y="338" width="56" height="34" rx="5" fill="#14171c" stroke="#3a414b"/><text x="370" y="360" text-anchor="middle">d7</text>
+    <rect x="408" y="338" width="56" height="34" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="436" y="360" text-anchor="middle" fill="#8aff8a">d9</text>
+    <rect x="474" y="338" width="56" height="34" rx="5" fill="#14171c" stroke="#3a414b"/><text x="502" y="360" text-anchor="middle">d11</text>
+    <rect x="540" y="338" width="44" height="34" rx="5" fill="#14171c" stroke="#3a414b"/><text x="562" y="360" text-anchor="middle">&#8230;</text>
+  </g>
+  <!-- pointers -->
+  <text x="238" y="332" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">&#9650;</text>
+  <text x="238" y="392" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">&#9650;</text>
+  <text x="610" y="296" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">both sorted by docID &#8594;</text>
+  <text x="610" y="314" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">walk two pointers, advance the</text>
+  <text x="610" y="332" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">smaller; emit when equal &#183; <tspan fill="#8aff8a">O(m+n)</tspan></text>
+  <text x="610" y="358" fill="#ffd27f" font-family="sans-serif" font-size="12.5">start with the SHORTEST list</text>
+
+  <!-- output -->
+  <line x1="400" y1="408" x2="400" y2="438" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#qr-g)"/>
+  <text x="210" y="462" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">intersection &#8594;</text>
+  <g font-family="monospace" font-size="14">
+    <rect x="350" y="446" width="50" height="32" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="375" y="467" text-anchor="middle" fill="#8aff8a">d1</text>
+    <rect x="410" y="446" width="50" height="32" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="435" y="467" text-anchor="middle" fill="#8aff8a">d4</text>
+    <rect x="470" y="446" width="50" height="32" rx="5" fill="#11240f" stroke="#8aff8a" stroke-width="1.8"/><text x="495" y="467" text-anchor="middle" fill="#8aff8a">d9</text>
+  </g>
+
+  <!-- skip pointers callout -->
+  <rect x="640" y="392" width="476" height="98" rx="10" fill="#101521" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="658" y="416" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">Skip pointers</text>
+  <text x="658" y="439" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">posting lists embed forward jumps &#8212; the merge</text>
+  <text x="658" y="458" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">leaps over runs that can't match.</text>
+  <text x="658" y="480" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">O(n) &#8594; ~O(&#8730;n)  &#183;  &#8776;&#8730;n hops on a 50M-doc list</text>
+
+  <!-- STEP 5: score top-k -->
+  <circle cx="56" cy="566" r="13" fill="#ffd27f"/><text x="56" y="571" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">5</text>
+  <rect x="80" y="538" width="500" height="92" rx="10" fill="#16140f" stroke="#ffd27f" stroke-width="1.8"/>
+  <text x="96" y="562" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">Score survivors &#8594; top-k heap</text>
+  <text x="96" y="585" fill="#cbd5e1" font-family="sans-serif" font-size="13">only the matched docs are scored (BM25 &#8230;)</text>
+  <text x="96" y="606" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">a small heap keeps the best k, not a full sort of millions</text>
+  <line x1="495" y1="478" x2="495" y2="534" stroke="#ffd27f" stroke-width="2.2" marker-end="url(#qr-y)"/>
+
+  <!-- STEP 6: merge shards / paginate -->
+  <circle cx="616" cy="566" r="13" fill="#8aff8a"/><text x="616" y="571" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">6</text>
+  <rect x="640" y="538" width="500" height="92" rx="10" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="656" y="562" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Coordinator: merge shards &#183; paginate</text>
+  <text x="656" y="585" fill="#cbd5e1" font-family="sans-serif" font-size="13">merge each shard's top-k into a global top-k</text>
+  <text x="656" y="606" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">page 1 = top-k; deeper pages continue from a cursor</text>
+  <line x1="580" y1="584" x2="636" y2="584" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#qr-g)"/>
+
+  <!-- bottom strip -->
+  <rect x="80" y="660" width="1060" height="108" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="610" y="696" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="17"><tspan fill="#8aff8a" font-weight="bold">&#9733; raw documents are NEVER re-scanned at query time</tspan></text>
+  <text x="610" y="726" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">latency = dictionary lookup  +  merge of sorted lists  +  score the survivors</text>
+  <text x="610" y="752" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">everything expensive (parse, link graph, term frequencies) was precomputed at index time</text>
+</svg>

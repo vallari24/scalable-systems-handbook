@@ -1,0 +1,139 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="fa-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="fa-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="fa-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+    <marker id="fa-gr" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8a95a3"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="800" fill="#111317"/>
+
+  <text x="475" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The full text search engine &#8212; two loops meeting at the index</text>
+  <text x="475" y="68" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14.5">an async write path and a sub-second read path that share data but not code paths</text>
+
+  <!-- ============ WRITE / INGEST LOOP ============ -->
+  <text x="52" y="104" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">INGEST / WRITE LOOP &#183; asynchronous</text>
+
+  <!-- seed -->
+  <rect x="52" y="128" width="86" height="52" rx="9" fill="#1a1f26" stroke="#8a95a3" stroke-width="2"/>
+  <text x="95" y="151" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Seed</text>
+  <text x="95" y="168" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">URLs</text>
+  <!-- frontier -->
+  <rect x="158" y="128" width="128" height="52" rx="9" fill="#221520" stroke="#ff8bd2" stroke-width="2.2"/>
+  <text x="222" y="150" text-anchor="middle" fill="#ffb3df" font-family="sans-serif" font-size="13.5" font-weight="bold">URL Frontier</text>
+  <text x="222" y="169" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">priority + politeness</text>
+  <!-- crawler -->
+  <rect x="306" y="128" width="158" height="52" rx="9" fill="#221520" stroke="#ff8bd2" stroke-width="2.2"/>
+  <text x="385" y="150" text-anchor="middle" fill="#ffb3df" font-family="sans-serif" font-size="13.5" font-weight="bold">Crawler / Renderer</text>
+  <text x="385" y="169" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">robots.txt &#183; dedup Bloom+SimHash</text>
+  <!-- indexer -->
+  <rect x="484" y="128" width="178" height="52" rx="9" fill="#221520" stroke="#ff8bd2" stroke-width="2.2"/>
+  <text x="573" y="150" text-anchor="middle" fill="#ffb3df" font-family="sans-serif" font-size="13.5" font-weight="bold">Indexer</text>
+  <text x="573" y="169" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">parse&#8594;tokenize&#8594;normalize&#8594;stem</text>
+
+  <!-- write arrows -->
+  <line x1="138" y1="154" x2="156" y2="154" stroke="#ff8bd2" stroke-width="2.4" marker-end="url(#fa-p)"/>
+  <line x1="286" y1="154" x2="304" y2="154" stroke="#ff8bd2" stroke-width="2.4" marker-end="url(#fa-p)"/>
+  <line x1="464" y1="154" x2="482" y2="154" stroke="#ff8bd2" stroke-width="2.4" marker-end="url(#fa-p)"/>
+  <!-- loop back: crawler -> frontier (new links) -->
+  <path d="M340 128 C 320 96, 250 96, 232 126" fill="none" stroke="#8a95a3" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fa-gr)"/>
+  <text x="286" y="92" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">new links loop back</text>
+  <!-- indexer -> index (down) -->
+  <line x1="573" y1="180" x2="573" y2="248" stroke="#ff8bd2" stroke-width="2.4" marker-end="url(#fa-p)"/>
+  <text x="582" y="220" fill="#ff8bd2" font-family="sans-serif" font-size="11.5">append postings</text>
+
+  <!-- ============ INVERTED INDEX (the seam) ============ -->
+  <rect x="52" y="252" width="846" height="104" rx="13" fill="#1c1d12" stroke="#ffff99" stroke-width="2.4"/>
+  <!-- segment hints -->
+  <rect x="70" y="296" width="40" height="48" rx="4" fill="#26270f" stroke="#bcb95a" stroke-width="1.4"/>
+  <rect x="116" y="296" width="40" height="48" rx="4" fill="#26270f" stroke="#bcb95a" stroke-width="1.4"/>
+  <rect x="162" y="296" width="40" height="48" rx="4" fill="#26270f" stroke="#bcb95a" stroke-width="1.4"/>
+  <text x="136" y="356" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">segments</text>
+  <text x="475" y="284" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">INVERTED INDEX &#183; sharded immutable segments</text>
+  <text x="475" y="308" text-anchor="middle" fill="#e8e8c0" font-family="sans-serif" font-size="13">term dictionary &#8594; sorted posting lists (docID + tf + positions) &#183; delta-encoded &#183; background merge</text>
+  <text x="475" y="334" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5" font-style="italic">the CQRS seam &#8212; writes append segments, reads query them; the two never block each other</text>
+
+  <!-- ============ QUERY / READ LOOP ============ -->
+  <text x="52" y="404" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">QUERY / READ LOOP &#183; sub-second</text>
+
+  <!-- user -->
+  <circle cx="80" cy="452" r="12" fill="none" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="80" y1="464" x2="80" y2="494" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="62" y1="476" x2="98" y2="476" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="80" y1="494" x2="68" y2="514" stroke="#cbd5e1" stroke-width="2.4"/>
+  <line x1="80" y1="494" x2="92" y2="514" stroke="#cbd5e1" stroke-width="2.4"/>
+  <text x="80" y="532" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">user</text>
+
+  <!-- query service -->
+  <rect x="116" y="430" width="150" height="56" rx="9" fill="#13241a" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="191" y="452" text-anchor="middle" fill="#a8ffb0" font-family="sans-serif" font-size="13" font-weight="bold">Query Service</text>
+  <text x="191" y="469" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="9.5">same pipeline + spell /</text>
+  <text x="191" y="481" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="9.5">synonym / segment / phonetic</text>
+  <!-- fan out -->
+  <rect x="286" y="430" width="96" height="56" rx="9" fill="#13241a" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="334" y="455" text-anchor="middle" fill="#a8ffb0" font-family="sans-serif" font-size="12.5" font-weight="bold">fan out</text>
+  <text x="334" y="472" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">to shards</text>
+  <!-- lookup + merge -->
+  <rect x="402" y="430" width="138" height="56" rx="9" fill="#13241a" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="471" y="452" text-anchor="middle" fill="#a8ffb0" font-family="sans-serif" font-size="12.5" font-weight="bold">lookup + merge</text>
+  <text x="471" y="470" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="9.5">two-pointer AND &#183; skip ptrs</text>
+  <!-- stage A -->
+  <rect x="560" y="430" width="128" height="56" rx="9" fill="#13241a" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="624" y="452" text-anchor="middle" fill="#a8ffb0" font-family="sans-serif" font-size="12.5" font-weight="bold">Stage A: BM25</text>
+  <text x="624" y="470" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">retrieve &#8594; top-k</text>
+  <!-- stage B -->
+  <rect x="708" y="430" width="150" height="56" rx="9" fill="#1a1430" stroke="#b79bff" stroke-width="2.2"/>
+  <text x="783" y="452" text-anchor="middle" fill="#cdbcff" font-family="sans-serif" font-size="12.5" font-weight="bold">Stage B: re-rank</text>
+  <text x="783" y="470" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="9.5">PageRank/field/freshness</text>
+
+  <!-- read arrows left to right -->
+  <line x1="100" y1="458" x2="114" y2="458" stroke="#8aff8a" stroke-width="2.4" marker-end="url(#fa-g)"/>
+  <line x1="266" y1="458" x2="284" y2="458" stroke="#8aff8a" stroke-width="2.4" marker-end="url(#fa-g)"/>
+  <line x1="382" y1="458" x2="400" y2="458" stroke="#8aff8a" stroke-width="2.4" marker-end="url(#fa-g)"/>
+  <line x1="540" y1="458" x2="558" y2="458" stroke="#8aff8a" stroke-width="2.4" marker-end="url(#fa-g)"/>
+  <line x1="688" y1="458" x2="706" y2="458" stroke="#8aff8a" stroke-width="2.4" marker-end="url(#fa-g)"/>
+  <!-- lookup/stageA pull from index (up) -->
+  <line x1="471" y1="428" x2="471" y2="360" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#fa-g)"/>
+  <text x="480" y="392" fill="#8aff8a" font-family="sans-serif" font-size="11">read postings</text>
+
+  <!-- results return to user -->
+  <path d="M783 486 C 783 560, 120 560, 86 522" fill="none" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#fa-g)"/>
+  <text x="430" y="556" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">coordinator merges per-shard top-k &#8594; paginate &#8594; ranked results</text>
+
+  <!-- ============ RIGHT STRIP: concern -> mechanism ============ -->
+  <rect x="918" y="92" width="262" height="510" rx="13" fill="#14171c" stroke="#3a414b" stroke-width="2"/>
+  <text x="1049" y="120" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">concern &#8594; mechanism</text>
+
+  <rect x="934" y="134" width="230" height="78" rx="9" fill="#13241a" stroke="#8aff8a" stroke-width="1.6"/>
+  <text x="946" y="156" fill="#8aff8a" font-family="sans-serif" font-size="13.5" font-weight="bold">SPEED</text>
+  <text x="946" y="176" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">inverted index + sorted-list</text>
+  <text x="946" y="192" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">merge + skip pointers</text>
+
+  <rect x="934" y="220" width="230" height="78" rx="9" fill="#26200f" stroke="#ffd27f" stroke-width="1.6"/>
+  <text x="946" y="242" fill="#ffd27f" font-family="sans-serif" font-size="13.5" font-weight="bold">FORGIVENESS</text>
+  <text x="946" y="262" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">spell &#183; fuzzy &#183; synonym</text>
+  <text x="946" y="278" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">phonetic &#183; segmentation</text>
+
+  <rect x="934" y="306" width="230" height="78" rx="9" fill="#1a1430" stroke="#b79bff" stroke-width="1.6"/>
+  <text x="946" y="328" fill="#cdbcff" font-family="sans-serif" font-size="13.5" font-weight="bold">RELEVANCE</text>
+  <text x="946" y="348" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">TF-IDF &#8594; cosine &#8594; BM25,</text>
+  <text x="946" y="364" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">then learned re-rank</text>
+
+  <rect x="934" y="392" width="230" height="78" rx="9" fill="#0f1620" stroke="#93c5fd" stroke-width="1.6"/>
+  <text x="946" y="414" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">QUALITY MEASURED BY</text>
+  <text x="946" y="434" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">precision / recall, MAP,</text>
+  <text x="946" y="450" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">MRR, NDCG</text>
+
+  <rect x="934" y="478" width="230" height="78" rx="9" fill="#221520" stroke="#ff8bd2" stroke-width="1.6"/>
+  <text x="946" y="500" fill="#ffb3df" font-family="sans-serif" font-size="13.5" font-weight="bold">SCALE</text>
+  <text x="946" y="520" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">sharded immutable segments</text>
+  <text x="946" y="536" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">+ crawl budget</text>
+
+  <!-- legend -->
+  <text x="934" y="582" fill="#9aa6b2" font-family="sans-serif" font-size="11.5"><tspan fill="#ff8bd2" font-weight="bold">&#9632; write</tspan>   <tspan fill="#8aff8a" font-weight="bold">&#9632; read</tspan>   <tspan fill="#ffff99" font-weight="bold">&#9632; index</tspan></text>
+
+  <!-- ============ BOTTOM INSIGHT STRIP ============ -->
+  <rect x="52" y="600" width="846" height="76" rx="12" fill="#1c1d12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="475" y="630" text-anchor="middle" fill="#ffffe0" font-family="sans-serif" font-size="15"><tspan fill="#ffff99" font-weight="bold">&#9733; one idea:</tspan> search a structure built from the documents, not the documents themselves.</text>
+  <text x="475" y="656" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">Spend the cleverness at index time &#8212; so every query stays cheap: lookup, merge, score the top-k.</text>
+</svg>

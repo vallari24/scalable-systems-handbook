@@ -1,0 +1,126 @@
+<svg width="1180" height="720" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="cl-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="cl-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="cl-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffd27f"/></marker>
+    <marker id="cl-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="720" fill="#111317"/>
+  <text x="590" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The ingest loop &#8212; crawling &amp; indexing (the CQRS write side)</text>
+
+  <!-- ===== dashed container: write/ingest loop ===== -->
+  <rect x="34" y="70" width="740" height="612" rx="14" fill="#170f14" stroke="#ff8bd2" stroke-width="1.6" stroke-dasharray="8 6"/>
+  <text x="52" y="96" fill="#ff8bd2" font-family="sans-serif" font-size="14.5" font-weight="bold">ASYNCHRONOUS WRITE / INGEST LOOP &#8212; nobody waits on it</text>
+
+  <!-- seed URLs -->
+  <rect x="96" y="116" width="180" height="44" rx="8" fill="#1a1f26" stroke="#7c8694" stroke-width="1.5"/>
+  <text x="186" y="143" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">seed URLs</text>
+  <line x1="186" y1="160" x2="186" y2="186" stroke="#ff8bd2" stroke-width="2.2" marker-end="url(#cl-p)"/>
+
+  <!-- URL Frontier -->
+  <rect x="66" y="190" width="240" height="76" rx="10" fill="#22161e" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="186" y="216" text-anchor="middle" fill="#ffb3df" font-family="sans-serif" font-size="15.5" font-weight="bold">URL Frontier</text>
+  <text x="186" y="236" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">prioritized to-do queue</text>
+  <text x="186" y="253" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">which URL next  +  politeness</text>
+  <line x1="186" y1="266" x2="186" y2="298" stroke="#ff8bd2" stroke-width="2.2" marker-end="url(#cl-p)"/>
+  <text x="198" y="287" fill="#ffb3df" font-family="sans-serif" font-size="11.5">next URL</text>
+
+  <!-- Crawler / Renderer -->
+  <rect x="66" y="302" width="240" height="80" rx="10" fill="#1a1f26" stroke="#ff8bd2" stroke-width="1.6"/>
+  <text x="186" y="326" text-anchor="middle" fill="#ffb3df" font-family="sans-serif" font-size="15" font-weight="bold">Crawler / Renderer</text>
+  <text x="186" y="346" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">fetch page, render JS,</text>
+  <text x="186" y="363" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">extract text + outbound links</text>
+  <text x="186" y="377" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="10.5">checks robots.txt (cached per host)</text>
+  <line x1="186" y1="382" x2="186" y2="414" stroke="#ff8bd2" stroke-width="2.2" marker-end="url(#cl-p)"/>
+  <text x="198" y="403" fill="#ffb3df" font-family="sans-serif" font-size="11.5">new links</text>
+
+  <!-- dedup gate -->
+  <rect x="66" y="418" width="240" height="86" rx="10" fill="#1a1f26" stroke="#b79bff" stroke-width="1.6"/>
+  <text x="186" y="442" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="14.5" font-weight="bold">dedup gate</text>
+  <text x="80" y="464" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">URL dedup &#8594; Bloom filter</text>
+  <text x="80" y="482" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">content dedup &#8594; SimHash fingerprint</text>
+  <text x="80" y="498" fill="#9aa6b2" font-family="sans-serif" font-size="11">near-dup if Hamming distance &#8804; 3</text>
+
+  <!-- loop-back arrow: dedup -> frontier -->
+  <path d="M66 461 H44 V228 H64" fill="none" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#cl-g)"/>
+  <text x="50" y="350" fill="#8aff8a" font-family="sans-serif" font-size="11" font-weight="bold" transform="rotate(-90 50 350)">fresh links loop back</text>
+
+  <!-- freshness note -->
+  <rect x="66" y="520" width="240" height="60" rx="9" fill="#14171c" stroke="#3a414b" stroke-width="1.3"/>
+  <text x="186" y="542" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="12" font-weight="bold">freshness / recrawl</text>
+  <text x="186" y="560" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">interval per page by how often it</text>
+  <text x="186" y="575" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">changes &#183; spend the crawl budget</text>
+
+  <!-- page content -> indexer -->
+  <line x1="306" y1="342" x2="484" y2="342" stroke="#ff8bd2" stroke-width="2.4" marker-end="url(#cl-p)"/>
+  <text x="396" y="332" text-anchor="middle" fill="#ffb3df" font-family="sans-serif" font-size="12">page content</text>
+
+  <!-- Indexer -->
+  <rect x="486" y="300" width="240" height="120" rx="11" fill="#1a1f26" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="606" y="326" text-anchor="middle" fill="#bcd6ff" font-family="sans-serif" font-size="15.5" font-weight="bold">Indexer</text>
+  <text x="606" y="345" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">runs the analysis pipeline</text>
+  <rect x="502" y="356" width="68" height="26" rx="6" fill="#14171c" stroke="#3a414b" stroke-width="1.2"/>
+  <text x="536" y="373" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">tokenize</text>
+  <rect x="574" y="356" width="74" height="26" rx="6" fill="#14171c" stroke="#3a414b" stroke-width="1.2"/>
+  <text x="611" y="373" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">normalize</text>
+  <rect x="652" y="356" width="58" height="26" rx="6" fill="#14171c" stroke="#3a414b" stroke-width="1.2"/>
+  <text x="681" y="373" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">stem</text>
+  <text x="606" y="404" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5">emit postings</text>
+
+  <!-- indexer -> index -->
+  <line x1="726" y1="360" x2="812" y2="360" stroke="#8aff8a" stroke-width="2.4" marker-end="url(#cl-g)"/>
+  <text x="769" y="350" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5">postings</text>
+
+  <!-- ===== INVERTED INDEX (seam) ===== -->
+  <text x="980" y="118" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">INVERTED INDEX</text>
+  <text x="980" y="138" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">immutable, sharded segments</text>
+
+  <!-- three shards, each with segment rects -->
+  <g font-family="sans-serif">
+    <rect x="824" y="160" width="100" height="150" rx="9" fill="#14171c" stroke="#8a95a3" stroke-width="1.6"/>
+    <text x="874" y="180" text-anchor="middle" fill="#cbd5e1" font-size="11.5" font-weight="bold">shard 1</text>
+    <rect x="836" y="190" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="874" y="207" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <rect x="836" y="222" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="874" y="239" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <rect x="836" y="254" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="874" y="271" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <text x="874" y="298" text-anchor="middle" fill="#7c8694" font-size="10">&#8230;</text>
+
+    <rect x="932" y="160" width="100" height="150" rx="9" fill="#14171c" stroke="#8a95a3" stroke-width="1.6"/>
+    <text x="982" y="180" text-anchor="middle" fill="#cbd5e1" font-size="11.5" font-weight="bold">shard 2</text>
+    <rect x="944" y="190" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="982" y="207" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <rect x="944" y="222" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="982" y="239" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <rect x="944" y="254" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="982" y="271" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <text x="982" y="298" text-anchor="middle" fill="#7c8694" font-size="10">&#8230;</text>
+
+    <rect x="1040" y="160" width="100" height="150" rx="9" fill="#14171c" stroke="#8a95a3" stroke-width="1.6"/>
+    <text x="1090" y="180" text-anchor="middle" fill="#cbd5e1" font-size="11.5" font-weight="bold">shard 3</text>
+    <rect x="1052" y="190" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="1090" y="207" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <rect x="1052" y="222" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="1090" y="239" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <rect x="1052" y="254" width="76" height="26" rx="4" fill="#1c2230" stroke="#ffff99" stroke-width="1.2"/>
+    <text x="1090" y="271" text-anchor="middle" fill="#fff7d6" font-size="10.5">segment</text>
+    <text x="1090" y="298" text-anchor="middle" fill="#7c8694" font-size="10">&#8230;</text>
+  </g>
+
+  <rect x="824" y="328" width="316" height="120" rx="10" fill="#14171c" stroke="#3a414b" stroke-width="1.4"/>
+  <text x="840" y="350" fill="#cbd5e1" font-family="sans-serif" font-size="12">&#8226; new docs &#8594; new segment (append-only)</text>
+  <text x="840" y="371" fill="#cbd5e1" font-family="sans-serif" font-size="12">&#8226; deletes = tombstones</text>
+  <text x="840" y="392" fill="#cbd5e1" font-family="sans-serif" font-size="12">&#8226; background <tspan fill="#ffd27f">merge</tspan> compacts &#8212; like LSM-trees</text>
+  <text x="840" y="413" fill="#cbd5e1" font-family="sans-serif" font-size="12">&#8226; delta-encoded posting lists</text>
+  <text x="840" y="434" fill="#cbd5e1" font-family="sans-serif" font-size="12">&#8226; sharded across many servers</text>
+
+  <!-- seam label -->
+  <rect x="784" y="468" width="356" height="60" rx="10" fill="#1c1a10" stroke="#ffff99" stroke-width="1.6"/>
+  <text x="962" y="492" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">the index is the seam (CQRS)</text>
+  <text x="962" y="512" text-anchor="middle" fill="#fff7d6" font-family="sans-serif" font-size="11.5">writes append segments &#183; reads query them</text>
+
+  <!-- bottom strip -->
+  <rect x="34" y="636" width="1112" height="50" rx="12" fill="#170f14" stroke="#ff8bd2" stroke-width="1.6"/>
+  <text x="590" y="667" text-anchor="middle" fill="#ffe3f3" font-family="sans-serif" font-size="15.5"><tspan fill="#ff8bd2" font-weight="bold">&#9733; key:</tspan>  the ingest loop is heavy and async &#8212; decoupling it from the query loop is why a giant indexing job <tspan fill="#ffff99" font-weight="bold">never slows a search</tspan></text>
+</svg>

@@ -1,0 +1,105 @@
+<svg width="1180" height="784" viewBox="0 0 1180 784" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="rt-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="rt-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+    <marker id="rt-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b79bff"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="784" fill="#111317"/>
+
+  <text x="590" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Making search forgiving &#8212; each technique repairs one query&#8596;index mismatch</text>
+  <text x="590" y="66" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">all of this happens in query analysis, BEFORE the brittle exact-match lookup</text>
+
+  <!-- ROW 1 -->
+  <!-- weighted fields -->
+  <rect x="36" y="86" width="362" height="156" rx="11" fill="#101a12" stroke="#8aff8a" stroke-width="1.7"/>
+  <text x="54" y="112" fill="#8aff8a" font-family="sans-serif" font-size="15.5" font-weight="bold">1 &#183; Weighted field scoring</text>
+  <text x="54" y="135" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">a title hit means more than a body hit</text>
+  <rect x="54" y="150" width="150" height="34" rx="6" fill="#16140f" stroke="#ffd27f" stroke-width="1.5"/>
+  <text x="129" y="172" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="13">title &#215;3</text>
+  <rect x="222" y="150" width="150" height="34" rx="6" fill="#14171c" stroke="#3a414b"/>
+  <text x="297" y="172" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">body &#215;1</text>
+  <text x="54" y="212" fill="#cbd5e1" font-family="sans-serif" font-size="12">postings carry field info &#8594; boost by field,</text>
+  <text x="54" y="230" fill="#cbd5e1" font-family="sans-serif" font-size="12">freshness, popularity</text>
+
+  <!-- fuzzy / BK-tree -->
+  <rect x="410" y="86" width="362" height="156" rx="11" fill="#16140f" stroke="#ffd27f" stroke-width="1.7"/>
+  <text x="428" y="112" fill="#ffd27f" font-family="sans-serif" font-size="15.5" font-weight="bold">2 &#183; Fuzzy search &#183; BK-tree</text>
+  <text x="428" y="135" fill="#cbd5e1" font-family="monospace" font-size="12.5">Levenshtein:  lat&#8594;cat = 1,  lat&#8594;late = 1</text>
+  <!-- mini BK-tree -->
+  <circle cx="470" cy="172" r="15" fill="#1a1f26" stroke="#93c5fd" stroke-width="1.6"/><text x="470" y="177" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="11">book</text>
+  <line x1="470" y1="187" x2="445" y2="206" stroke="#5a6470" stroke-width="1.3"/><line x1="470" y1="187" x2="500" y2="206" stroke="#5a6470" stroke-width="1.3"/>
+  <circle cx="438" cy="216" r="13" fill="#1a1f26" stroke="#93c5fd" stroke-width="1.4"/><text x="438" y="220" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="10">books</text>
+  <circle cx="506" cy="216" r="13" fill="#1a1f26" stroke="#93c5fd" stroke-width="1.4"/><text x="506" y="220" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="10">cook</text>
+  <text x="540" y="180" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">triangle inequality: at a node</text>
+  <text x="540" y="197" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">compute d, descend only into</text>
+  <text x="540" y="214" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">children with label in [d&#8722;k, d+k]</text>
+  <text x="540" y="231" fill="#8aff8a" font-family="sans-serif" font-size="11.5">&#8594; prunes the dictionary; did-you-mean</text>
+
+  <!-- spell correction -->
+  <rect x="784" y="86" width="360" height="156" rx="11" fill="#101521" stroke="#93c5fd" stroke-width="1.7"/>
+  <text x="802" y="112" fill="#93c5fd" font-family="sans-serif" font-size="15.5" font-weight="bold">3 &#183; Spell correction</text>
+  <rect x="802" y="128" width="120" height="34" rx="6" fill="#1b1416" stroke="#ff8a8a" stroke-width="1.4"/>
+  <text x="862" y="150" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="14">HOUPE</text>
+  <line x1="926" y1="145" x2="966" y2="145" stroke="#8aff8a" stroke-width="2" marker-end="url(#rt-g)"/>
+  <rect x="970" y="128" width="120" height="34" rx="6" fill="#101a12" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="1030" y="150" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="14">HOUSE</text>
+  <text x="802" y="186" fill="#cbd5e1" font-family="sans-serif" font-size="12">candidates within edit distance 1&#8211;2,</text>
+  <text x="802" y="204" fill="#cbd5e1" font-family="sans-serif" font-size="12">pick best by P(word) &#215; P(typo | word)</text>
+  <text x="802" y="230" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">corrected BEFORE lookup &#8212; user never sees the miss (Norvig)</text>
+
+  <!-- ROW 2 -->
+  <!-- synonyms -->
+  <rect x="36" y="258" width="553" height="120" rx="11" fill="#101a12" stroke="#8aff8a" stroke-width="1.7"/>
+  <text x="54" y="284" fill="#8aff8a" font-family="sans-serif" font-size="15.5" font-weight="bold">4 &#183; Synonyms / query expansion</text>
+  <text x="54" y="312" fill="#cbd5e1" font-family="monospace" font-size="14">HOME = HOUSE &#183; car = automobile</text>
+  <text x="54" y="338" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">expand the query so it matches docs with EITHER word</text>
+  <text x="54" y="362" fill="#9aa6b2" font-family="sans-serif" font-size="12">patches vocabulary mismatch lexically (embeddings solve it statistically)</text>
+
+  <!-- query segmentation -->
+  <rect x="601" y="258" width="543" height="120" rx="11" fill="#16140f" stroke="#ffd27f" stroke-width="1.7"/>
+  <text x="619" y="284" fill="#ffd27f" font-family="sans-serif" font-size="15.5" font-weight="bold">5 &#183; Query segmentation</text>
+  <text x="619" y="312" fill="#cbd5e1" font-family="monospace" font-size="14">"mcdonalds" &#8596; "mc donalds"</text>
+  <text x="619" y="338" fill="#cbd5e1" font-family="monospace" font-size="14">"newyork" &#8596; "new york"</text>
+  <text x="619" y="362" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">people forget spaces &#8212; re-split / join tokens so the lookup matches</text>
+
+  <!-- PHONETIC (LARGE) -->
+  <rect x="36" y="394" width="1108" height="296" rx="13" fill="#161122" stroke="#b79bff" stroke-width="2.2"/>
+  <text x="56" y="424" fill="#b79bff" font-family="sans-serif" font-size="19" font-weight="bold">6 &#183; Phonetic matching &#8212; Soundex / Metaphone</text>
+  <text x="1124" y="421" text-anchor="end" fill="#ff8a8a" font-family="sans-serif" font-size="13.5" font-weight="bold">the case fuzzy search CAN'T solve</text>
+
+  <rect x="56" y="438" width="556" height="62" rx="9" fill="#0f0d16" stroke="#5a4a78" stroke-width="1.5"/>
+  <text x="334" y="463" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="14.5" font-weight="bold">people don't know the spelling &#8212; they remember the SOUND</text>
+  <text x="334" y="486" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">so their typos resemble the sound, not the letters</text>
+
+  <!-- examples collapsing -->
+  <text x="56" y="532" fill="#cbd5e1" font-family="monospace" font-size="13.5">Swarzeneger</text>
+  <text x="56" y="556" fill="#cbd5e1" font-family="monospace" font-size="13.5">Swazeneger</text>
+  <text x="56" y="580" fill="#cbd5e1" font-family="monospace" font-size="13.5">Schwarzenegger</text>
+  <path d="M210 552 C 250 552, 250 552, 286 552" fill="none" stroke="#b79bff" stroke-width="2" marker-end="url(#rt-p)"/>
+  <rect x="292" y="536" width="150" height="34" rx="6" fill="#161122" stroke="#b79bff" stroke-width="1.6"/>
+  <text x="367" y="558" text-anchor="middle" fill="#b79bff" font-family="monospace" font-size="13">one code</text>
+  <text x="56" y="610" fill="#9aa6b2" font-family="monospace" font-size="12.5">vedio / video / vdio &#8594; same phonetic code</text>
+
+  <!-- soundex worked example -->
+  <rect x="632" y="438" width="490" height="116" rx="10" fill="#0f0d16" stroke="#5a4a78" stroke-width="1.5"/>
+  <text x="652" y="462" fill="#b79bff" font-family="sans-serif" font-size="13.5" font-weight="bold">Soundex: keep 1st letter, encode consonants, drop vowels</text>
+  <text x="652" y="490" fill="#cbd5e1" font-family="monospace" font-size="14">Robert &#8594; <tspan fill="#8aff8a" font-weight="bold">R163</tspan></text>
+  <text x="652" y="514" fill="#cbd5e1" font-family="monospace" font-size="14">Rupert &#8594; <tspan fill="#8aff8a" font-weight="bold">R163</tspan></text>
+  <rect x="900" y="476" width="200" height="44" rx="8" fill="#101a12" stroke="#8aff8a" stroke-width="1.6"/>
+  <text x="1000" y="503" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">codes match!</text>
+  <text x="652" y="540" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">index the code beside the term &#183; Metaphone models English pronunciation better</text>
+
+  <!-- why fuzzy fails -->
+  <rect x="632" y="566" width="490" height="106" rx="10" fill="#1b1416" stroke="#ff8a8a" stroke-width="1.7"/>
+  <text x="652" y="590" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">why edit-distance can't catch these</text>
+  <text x="652" y="615" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">the misspellings diverge too many characters from the</text>
+  <text x="652" y="633" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">correct spelling to sit within a small k &#8212; fuzzy solves for</text>
+  <text x="652" y="651" fill="#cbd5e1" font-family="sans-serif" font-size="12.5"><tspan fill="#ffd27f">spelling</tspan>, phonetic solves for <tspan fill="#b79bff">sound</tspan>. Different problem.</text>
+  <rect x="56" y="628" width="556" height="44" rx="8" fill="#101a12" stroke="#8aff8a" stroke-width="1.5"/>
+  <text x="334" y="655" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="13">map every word to a code so words that <tspan fill="#b79bff" font-weight="bold">sound alike collide</tspan></text>
+
+  <!-- bottom strip -->
+  <rect x="36" y="706" width="1108" height="58" rx="12" fill="#1a1a12" stroke="#ffff99" stroke-width="1.7"/>
+  <text x="590" y="732" text-anchor="middle" fill="#e8e8c0" font-family="sans-serif" font-size="15"><tspan fill="#ffff99" font-weight="bold">&#9733;</tspan>  every technique repairs a specific mismatch &#8212; wrong field, typo, misspelling, different word, phonetic guess, missing space &#8212;</text>
+  <text x="590" y="754" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">so the brittle exact-match core always receives a clean, normalized, forgiving query</text>
+</svg>

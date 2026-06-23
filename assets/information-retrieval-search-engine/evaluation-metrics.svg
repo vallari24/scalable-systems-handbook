@@ -1,0 +1,108 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="em-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="em-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="27" font-weight="bold">Evaluating search quality &#8212; right documents, in the right order?</text>
+  <text x="590" y="72" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">you need judged queries; two metric families &#8212; one ignores order, one lives on it</text>
+
+  <!-- ===================== LEFT GROUP: SET-BASED ===================== -->
+  <rect x="40" y="96" width="520" height="572" rx="14" fill="#14171c" stroke="#3a414b" stroke-width="2"/>
+  <text x="64" y="130" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">SET-BASED &#183; order-blind</text>
+  <text x="64" y="153" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">did we return the right set of documents?</text>
+
+  <!-- returned docs -->
+  <text x="64" y="190" fill="#cbd5e1" font-family="sans-serif" font-size="14">Returned (5):</text>
+  <rect x="64" y="200" width="62" height="46" rx="7" fill="#10220f" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="134" y="200" width="62" height="46" rx="7" fill="#10220f" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="204" y="200" width="62" height="46" rx="7" fill="#10220f" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="274" y="200" width="62" height="46" rx="7" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <rect x="344" y="200" width="62" height="46" rx="7" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="95" y="229" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">rel</text>
+  <text x="165" y="229" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">rel</text>
+  <text x="235" y="229" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">rel</text>
+  <text x="305" y="229" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">no</text>
+  <text x="375" y="229" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">no</text>
+  <text x="420" y="220" fill="#8aff8a" font-family="sans-serif" font-size="12.5">TP=3</text>
+  <text x="420" y="238" fill="#ff8a8a" font-family="sans-serif" font-size="12.5">FP=2</text>
+
+  <!-- missed docs -->
+  <text x="64" y="282" fill="#cbd5e1" font-family="sans-serif" font-size="14">Missed relevant:</text>
+  <rect x="64" y="292" width="62" height="46" rx="7" fill="#191b1f" stroke="#6b7480" stroke-width="2" stroke-dasharray="5 4"/>
+  <rect x="134" y="292" width="62" height="46" rx="7" fill="#191b1f" stroke="#6b7480" stroke-width="2" stroke-dasharray="5 4"/>
+  <rect x="204" y="292" width="62" height="46" rx="7" fill="#191b1f" stroke="#6b7480" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="235" y="320" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">missed</text>
+  <text x="300" y="320" fill="#ffd27f" font-family="sans-serif" font-size="12.5">FN=3</text>
+
+  <!-- formulas -->
+  <line x1="64" y1="362" x2="536" y2="362" stroke="#3a414b" stroke-width="1.5"/>
+  <text x="64" y="396" fill="#8aff8a" font-family="monospace" font-size="16" font-weight="bold">Precision = TP/(TP+FP) = 3/5 = 0.60</text>
+  <text x="64" y="420" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">of what we returned, how much was right</text>
+  <text x="64" y="456" fill="#ffd27f" font-family="monospace" font-size="16" font-weight="bold">Recall = TP/(TP+FN) = 3/6 = 0.50</text>
+  <text x="64" y="480" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">of all right answers, how many we found</text>
+  <text x="64" y="516" fill="#93c5fd" font-family="monospace" font-size="16" font-weight="bold">F1 = 2PR/(P+R) = 0.5455</text>
+  <text x="64" y="540" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">harmonic mean of precision and recall</text>
+
+  <rect x="64" y="566" width="472" height="78" rx="10" fill="#0f1620" stroke="#93c5fd" stroke-width="1.6"/>
+  <text x="84" y="598" fill="#93c5fd" font-family="sans-serif" font-size="14.5" font-weight="bold">Precision@k / Recall@k</text>
+  <text x="84" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">restrict the count to the top k &#8212; what's on page one.</text>
+
+  <!-- ===================== RIGHT GROUP: RANK-AWARE ===================== -->
+  <rect x="600" y="96" width="540" height="572" rx="14" fill="#14171c" stroke="#3a414b" stroke-width="2"/>
+  <text x="624" y="130" fill="#8aff8a" font-family="sans-serif" font-size="19" font-weight="bold">RANK-AWARE &#183; order matters</text>
+  <text x="624" y="153" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">did we put the best documents highest?</text>
+
+  <!-- MRR -->
+  <text x="624" y="186" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">MRR</text>
+  <text x="672" y="186" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">= 1 / rank of first relevant &#183; one-right-answer tasks</text>
+  <text x="672" y="206" fill="#9aa6b2" font-family="monospace" font-size="13">ranks 1,3,2 &#8594; (1 + &#8531; + &#189;)/3 = 0.611</text>
+
+  <!-- MAP -->
+  <text x="624" y="238" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">MAP</text>
+  <text x="672" y="238" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">= avg precision at the relevant ranks</text>
+  <text x="672" y="258" fill="#9aa6b2" font-family="monospace" font-size="13">[1,0,1,1,0,1] &#8594; 0.7708</text>
+
+  <!-- NDCG box -->
+  <rect x="620" y="276" width="500" height="372" rx="11" fill="#0f1a12" stroke="#8aff8a" stroke-width="2"/>
+  <text x="640" y="306" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">NDCG &#8212; graded relevance, position-discounted</text>
+  <text x="640" y="328" fill="#9aa6b2" font-family="sans-serif" font-size="13">the modern default; normalized to [0,1] so it compares across queries</text>
+
+  <!-- ranked grade cells -->
+  <text x="640" y="360" fill="#cbd5e1" font-family="sans-serif" font-size="13">ranking, by graded relevance:</text>
+  <!-- grades 3,2,3,0,1,2 colored -->
+  <g font-family="sans-serif" font-weight="bold" font-size="17" text-anchor="middle">
+    <rect x="640" y="372" width="66" height="40" rx="6" fill="#10220f" stroke="#8aff8a" stroke-width="2"/><text x="673" y="398" fill="#8aff8a">3</text>
+    <rect x="714" y="372" width="66" height="40" rx="6" fill="#0f1620" stroke="#93c5fd" stroke-width="2"/><text x="747" y="398" fill="#93c5fd">2</text>
+    <rect x="788" y="372" width="66" height="40" rx="6" fill="#10220f" stroke="#8aff8a" stroke-width="2"/><text x="821" y="398" fill="#8aff8a">3</text>
+    <rect x="862" y="372" width="66" height="40" rx="6" fill="#191b1f" stroke="#6b7480" stroke-width="2"/><text x="895" y="398" fill="#9aa6b2">0</text>
+    <rect x="936" y="372" width="66" height="40" rx="6" fill="#26200f" stroke="#ffd27f" stroke-width="2"/><text x="969" y="398" fill="#ffd27f">1</text>
+    <rect x="1010" y="372" width="66" height="40" rx="6" fill="#0f1620" stroke="#93c5fd" stroke-width="2"/><text x="1043" y="398" fill="#93c5fd">2</text>
+  </g>
+  <g font-family="sans-serif" font-size="11" text-anchor="middle" fill="#6b7480">
+    <text x="673" y="426">pos 1</text><text x="747" y="426">2</text><text x="821" y="426">3</text><text x="895" y="426">4</text><text x="969" y="426">5</text><text x="1043" y="426">6</text>
+  </g>
+
+  <!-- discount bar chart -->
+  <text x="640" y="456" fill="#9aa6b2" font-family="sans-serif" font-size="12">position discount 1/log&#8322;(i+1) shrinks with rank:</text>
+  <g>
+    <rect x="649" y="468" width="48" height="52" fill="#3a4a5e"/>
+    <rect x="723" y="481" width="48" height="39" fill="#3a4a5e"/>
+    <rect x="797" y="488" width="48" height="32" fill="#3a4a5e"/>
+    <rect x="871" y="492" width="48" height="28" fill="#3a4a5e"/>
+    <rect x="945" y="495" width="48" height="25" fill="#3a4a5e"/>
+    <rect x="1019" y="497" width="48" height="23" fill="#3a4a5e"/>
+  </g>
+
+  <line x1="640" y1="536" x2="1100" y2="536" stroke="#2c3540" stroke-width="1.4"/>
+  <text x="640" y="562" fill="#cbd5e1" font-family="monospace" font-size="14.5">DCG = 6.861   (your ranking)</text>
+  <text x="640" y="586" fill="#cbd5e1" font-family="monospace" font-size="14.5">IDCG = 7.141  (ideal [3,3,2,2,1,0])</text>
+  <text x="640" y="614" fill="#8aff8a" font-family="monospace" font-size="17" font-weight="bold">NDCG = 6.861/7.141 = 0.961</text>
+  <text x="640" y="636" fill="#ffd27f" font-family="sans-serif" font-size="11.5">caveat: two DCG conventions &#8212; linear rel&#7522; vs exponential 2^rel&#7522;&#8722;1; state which.</text>
+
+  <!-- ===================== BOTTOM STRIP ===================== -->
+  <rect x="40" y="688" width="1100" height="52" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="590" y="720" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="16"><tspan fill="#8aff8a" font-weight="bold">&#9733; key:</tspan>  set metrics ask <tspan fill="#93c5fd" font-weight="bold">&#8220;right documents?&#8221;</tspan>; rank-aware metrics ask <tspan fill="#8aff8a" font-weight="bold">&#8220;best documents highest?&#8221;</tspan> &#8212; search lives on the latter.</text>
+</svg>
