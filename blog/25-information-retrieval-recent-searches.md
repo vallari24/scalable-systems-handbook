@@ -611,46 +611,53 @@ So: don't reach for the cache *pattern*; fix the *interaction*. That's the next 
 
 **Question: the problem is that writes go around the cache and stale it. What if we made the write go *through* the cache instead — so the very action that would invalidate it is the action that updates it?**
 
-Invert the order. On **every search**, the Search service writes to **Redis first**, then to the durable DB:
+The fix is to **invert the order**. Right now a search updates the DB and the cache only finds out *later* (and wrongly). Instead, make updating the cache *part of* the search itself: on every search we touch **Redis first**, then the durable DB.
+
+But to read that write, you need the two tiny Redis commands it uses. They look cryptic; they're not.
+
+### The two Redis commands, in plain English
+
+A **Redis list** is just an ordered row of items with two ends — a **head** (the left end) and a **tail** (the right end). Recent searches wants *newest first*, so we always add at the head and keep the row short. Two commands do exactly that:
+
+- **`LPUSH key value`** — *"**L**eft **PUSH**."* Put `value` on the **head** (left end). The newest search becomes item #1; everything else slides one spot to the right. *(Redis also has `RPUSH`, which adds on the right — we don't use it, because we always want newest-on-the-left.)*
+- **`LTRIM key 0 9`** — *"keep only positions **0 through 9**"* (the first ten) and throw the rest away. Run it right after every `LPUSH`, and the list can **never** grow past 10.
+
+<img src="../assets/information-retrieval-recent-searches/lpush-ltrim.svg" alt="A two-row diagram showing how two Redis commands maintain the recent:u1 list. Row 1, LPUSH recent:u1 'sachin' — described as 'left push', putting the value on the HEAD (left end) so the newest becomes number 1 and the others shift right; a green 'sachin' box sits at the head of a row of grey boxes laxman, dravid, kohli, and an ellipsis. Row 2, LTRIM recent:u1 0 9 — keep positions 0 to 9 (the first ten), and anything past number 10 is dropped; a row of boxes ends with a red dashed '11th' box past a dashed 'cut after #10' line, labelled dropped. A bottom strip reads: result — a fixed-size list of the 10 newest searches, fetched whole, no scan, no sort." width="1040">
+
+That's the entire mechanism: `LPUSH` puts the newest search on top, `LTRIM` lops off anything past the tenth. **Newest-first and capped-at-ten, automatically, on every write.**
+
+### The write, cache-first
+
+Now the write-through itself. On each search the Search service runs, in order:
 
 ```text
-WRITE-THROUGH (cache-first)
-  on search(u1, "x"):
-    1. LPUSH recent:u1 "x"   ;  LTRIM recent:u1 0 9     ← Redis FIRST: prepend, cap to 10
-    2. persist (u1,"x") to the partitioned NoSQL store   ← durable log (sync now, async-able later)
-
-  read /recent(u1):  return recent:u1 straight from Redis   ← O(1), in RAM, always fresh
+on search(u1, "sachin"):
+  ① LPUSH recent:u1 "sachin"   # newest onto the head  (Redis)
+  ② LTRIM recent:u1 0 9        # keep only the 10 newest (Redis)
+  ③ persist (u1,"sachin",ts)   # durable history (NoSQL store)
 ```
 
-Now the staleness is gone *by construction*: the search that used to invalidate `recent:u1` is the search that refreshes it. There's no window where the cache disagrees with reality, because the cache is updated on the **write path**, not lazily rebuilt on the read path.
+Steps ① and ② hit **Redis first**; step ③ writes the durable log. Reading is now trivial: `/search/recent` returns `recent:u1` straight from Redis — O(1), in RAM, already newest-first.
 
-And notice what Redis holds — this is where the **bounded** half of Step 1 finally pays off:
+### Why the staleness is gone — by construction
 
-```text
-Redis:  recent:u1  →  [ "laxman", "sachin", … up to 10 ]      ← BOUNDED to 10, newest-first
-```
+The staleness is gone *by construction*: the search that used to **invalidate** `recent:u1` is now the search that **refreshes** it. There's no window where the cache disagrees with reality, because the cache is updated on the **write path**, not lazily rebuilt on the read path.
 
-A Redis **list per user, capped at 10** by `LTRIM`. This is the *bounded document the DB could never be* (Step 3): tiny, fixed-size, the same on every device, and read with zero processing — no scan, no sort, no "load 100k to return 10." It's a textbook key-value win (Recall 4): the value is a small structure fetched whole by a key you already hold (`user_id`).
+And notice what Redis holds — this is where the **bounded** half of Step 1 finally pays off. A Redis **list per user, capped at 10** by `LTRIM`, is the *bounded document the DB could never be* (Step 3): tiny, fixed-size, identical on every device, and read with zero processing — no scan, no sort, no "load 100k to return 10." It's a textbook key-value win (Recall 4): a small structure fetched whole by a key you already hold (`user_id`).
 
-The trade is honest and worth stating: **we now do two writes per search** (cache + DB) instead of one. We accept it, because the read side is the one under 50%-in-5-seconds pressure, and a dual write is cheap insurance against a perpetually-cold cache. (The DB write can still be made async later per Step 4; the *cache* write stays synchronous and first.)
+### The cost, and why we pay it
+
+The trade is honest and worth stating: **we now do two writes per search** (cache + DB) instead of one. We accept it, because the read side is the one under 50%-in-5-seconds pressure, and a second write is cheap insurance against a perpetually-cold cache. (The DB write can still be made async later per Step 4; the *cache* write stays synchronous and first.)
 
 This is the resolution of Recall 1's promise: the funnel said "key-value," and indeed the **serving** layer is key-value (Redis) — but it sits *in front of* a partitioned NoSQL **log** (durability + history) and *beside* Elasticsearch (the actual search). One feature, three stores, each doing the one thing it's best at.
 
-**The write path, complete.** With write-through in place, `/search` now does five ordered things — and step 3 (cache-first) is the whole trick:
+**The write path, complete.** With write-through in place, `/search` does five ordered things — and step 3 (cache-first) is the whole trick:
 
-<img src="../assets/information-retrieval-recent-searches/write-path-flow.svg" alt="The complete write path for the /search endpoint, as a numbered left-to-right flow. A stick-figure user fires /search 'sachin' (step 1, pink) into a stacked Search API box. The API calls Elasticsearch (step 2) to get matching documents and a return arrow brings them back. The API then writes to a Redis cylinder (step 3, pink, cache-first) running LPUSH recent:u1 'sachin' and LTRIM recent:u1 0 9, tagged 'CACHE FIRST, bounded to 10'. The API then persists to a cluster of three sharded NoSQL MongoDB cylinders (step 4, pink) with persist {u1,'sachin',ts}, noted sync now and async-able later. Finally a green return-results arrow (step 5) goes back to the user. A key callout near Redis reads: the same write that would STALE the cache now REFRESHES it, so it is never stale. A bottom legend lists the order: 1 /search, 2 Elasticsearch, 3 Redis cache-first, 4 NoSQL persist, 5 return." width="1080">
+<img src="../assets/information-retrieval-recent-searches/write-path-flow.svg" alt="The complete write path for the /search endpoint as an architecture diagram. A stick-figure user on the left fires /search 'sachin' (step 1, pink) into a stacked Search API box. The API calls Elasticsearch below it (step 2, blue, two-way) to get matching documents. The API then does a cache-first write to a Redis cylinder top-right (step 3, pink) running LPUSH plus LTRIM bounded to 10, holding recent:u1 as a list of max 10. The API also persists to a sharded NoSQL MongoDB cluster on the right (step 4, pink) with persist {u1,'sachin',ts}. A green arrow returns results to the user (step 5). A bottom strip reads: the write that would STALE the cache now REFRESHES it, so it is never stale." width="1080">
 
-```text
-Flow now — WRITE path (/search), write-through:
-  1 /search "sachin"  2 Elasticsearch → docs  3 Redis LPUSH+LTRIM (cache-first)
-  4 NoSQL persist     5 return results
-Flow now — READ path (/search/recent):
-  Redis GET recent:u1 →  HIT → return 10 (fast)   |   MISS → scan DB → populate → return (cold)
-```
+On a warm key the read is now instant — but a *cold* key (eviction, new device, first open of the session) still falls through to the slow DB scan from Step 3. That lingering cold path is exactly what the next step kills.
 
-The read is fast on a hit — but that lingering **MISS → scan DB** on a cold key is exactly what the next step kills.
-
-> **Memory hook:** *flip the order — write to Redis FIRST (`LPUSH` + `LTRIM` to 10), then the DB. The search that would stale the cache now refreshes it, so it's never stale. Redis holds a per-user list bounded to 10 — the bounded doc the DB couldn't be; reads are O(1), no processing, same across devices. Cost: two writes per search. Accept it.*
+> **Memory hook:** *flip the order — write to Redis FIRST (`LPUSH` puts the newest on the head, `LTRIM 0 9` caps it at 10), then the DB. The search that would stale the cache now refreshes it, so it's never stale. Redis holds a per-user list bounded to 10 — the bounded doc the DB couldn't be; reads are O(1), no processing, same across devices. Cost: two writes per search. Accept it.*
 
 ---
 
@@ -728,23 +735,44 @@ We started from "show the last 10 searches" and let the **data** force every dec
 
 <img src="../assets/information-retrieval-recent-searches/recent-searches-architecture.svg" alt="The complete recent-searches architecture. On the left, users send two requests to a central Search service: /search/recent (green, a read) and /search (pink, a write). Below the Search box sit two small attached cylinders: ES (Elasticsearch, the actual search documents) and Cache (Redis, precomputed search results for queries tapped from the recent list). Top center-right is a Redis Cluster cylinder (with a red dollar-sign cost marker) holding u1 → [q1, q2, ... q10], the recent-10 per user, bounded; the Search service write-throughs to it (pink) and reads recent from it (green/yellow). On the right, a cluster of MongoDB cylinders labelled Sharded NoSQL, all queries, unbounded (with a red dollar-sign); the Search service persists every query there (pink). Lower-left, the user path taps an Events box emitting yellow ON-LOGIN / APP_OPEN events into a queue pill, feeding a stacked Cache Warmer service; the Cache Warmer reads recent-10 from MongoDB and writes them up into the Redis Cluster to preload before the user taps. Bottom right, from MongoDB a blue ETL Jobs arrow labelled 'data older than 6 months' feeds three Spark boxes that write into an S3 cold-storage cloud. A legend maps pink to write, green to read, yellow to event/storage, blue to async/ETL, and red dollar-signs to cost." width="1180">
 
-And the two request flows we traced step by step, now in their final form:
+### The cast — each box, one job
 
-```text
-WRITE · /search "q" (user u)
-  1 Elasticsearch        → matching documents
-  2 Redis (recent list)  → LPUSH recent:u "q" ; LTRIM recent:u 0 9     (cache-first → never stale)
-  3 NoSQL (durable log)  → persist {u,"q",ts}                          (sync; async-able)
-  4 return results       (if "q" was tapped from recent: serve from results-cache, skip step 1)
+Before tracing a request, name every box in the diagram and the **single** job it owns. If a component is doing two jobs, that's usually a smell — here each does exactly one thing, and that's *why* the design is legible:
 
-READ · /search/recent (user u)
-  0 BEFORE the tap: app-open → ON-LOGIN/APP_OPEN event → Cache Warmer → preload recent:u into Redis
-  1 Redis GET recent:u   → HIT → return 10 (in-RAM, no DB)             ← the designed-for path
-                         → MISS (warmer not yet run) → scan NoSQL → populate → return
+| Component | What it holds | Its one job |
+| --- | --- | --- |
+| <span style="color:#cbd5e1"><strong>Search service</strong></span> | nothing (stateless) | the front door — fan each request out to the right store |
+| <span style="color:#93c5fd"><strong>Elasticsearch</strong></span> | the searchable documents | answer the *actual* search — relevance ranking for `/search` |
+| <span style="color:#b79bff"><strong>Redis · recent list</strong></span> | `recent:u → [q1…q10]` | serve `/search/recent` in O(1) — bounded to 10, write-through |
+| <span style="color:#b79bff"><strong>Redis · results cache</strong></span> | `results:"q" → page` | serve the predictable 30% re-runs without re-hitting ES |
+| <span style="color:#ffff99"><strong>Partitioned NoSQL</strong></span> | every query ever, sharded by `user_id` | the durable, **unbounded** log — source of truth & history |
+| <span style="color:#93c5fd"><strong>Cache Warmer</strong></span> | nothing (stateless) | on app-open, preload `recent:u` into Redis *before* the tap |
+| <span style="color:#93c5fd"><strong>ETL → S3</strong></span> | the cold archive | move >6-month data off the hot store to cut cost |
 
-BACKGROUND
-  NoSQL → ETL (Spark) → S3  for records older than 6 months           (shrink hot set, cut cost)
-```
+Notice Redis appears **twice** — keep them separate in your head: one is the *bounded recent-list* (write path), the other is the *results cache* (the 30% optimization). Same engine, two unrelated jobs.
+
+### Follow one write, end to end — `/search "sachin"` (user u1)
+
+The Search service does four things, in order. Step 2 (cache-first) is the load-bearing one:
+
+1. <span style="color:#93c5fd"><strong>Elasticsearch</strong></span> ranks documents for `"sachin"` → the result page the user actually sees.
+2. <span style="color:#b79bff"><strong>Redis recent-list, cache-first:</strong></span> `LPUSH recent:u1 "sachin"` then `LTRIM recent:u1 0 9`. The write that *would* have staled the list is the write that **refreshes** it — so the list is never stale.
+3. <span style="color:#ffff99"><strong>NoSQL log:</strong></span> persist `{u1,"sachin",ts}` — durable history (sync now, async-able under Step 4's rule).
+4. <span style="color:#8aff8a"><strong>Return</strong></span> the ranked page. *Shortcut:* if `"sachin"` was **tapped from the recent list** (not freshly typed), its page is already in the results cache — serve that and skip step 1 entirely.
+
+### Follow one read, end to end — `/search/recent` (user u1)
+
+The read is engineered to **never touch a database** on the happy path:
+
+- **Step 0 — before the tap (the whole trick):** app-open fires an <span style="color:#ffff99">`ON-LOGIN/APP_OPEN`</span> event → <span style="color:#93c5fd">Cache Warmer</span> scans NoSQL once → preloads `recent:u1` into Redis.
+- **Step 1 — the tap:** `GET recent:u1`
+  - <span style="color:#8aff8a"><strong>HIT</strong></span> (the designed-for path) → return the 10 straight from RAM, **no DB**.
+  - <span style="color:#ff8a8a"><strong>MISS</strong></span> (warmer hasn't run — new device, eviction) → scan NoSQL, populate Redis, return. Slow, but rare and self-healing.
+
+### What runs in the background
+
+- <span style="color:#93c5fd"><strong>Cache Warmer</strong></span> turns the one unavoidable scan into a *pre*-fetch on a predictable signal (open), lifted **off** the critical path (tap).
+- <span style="color:#93c5fd"><strong>ETL (Spark) → S3</strong></span> sweeps records older than 6 months out of the hot NoSQL store into cheap cold storage. Redis only ever holds the bounded 10, so every expensive tier stays small.
 
 The decision trail, top to bottom — and notice every row is settled by appealing to the data, not to taste:
 

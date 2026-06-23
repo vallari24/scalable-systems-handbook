@@ -12,67 +12,66 @@
   <text x="540" y="70" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">one action runs the search AND keeps the recent list warm (write-through)</text>
 
   <!-- ===== USER ===== -->
-  <circle cx="110" cy="280" r="13" fill="none" stroke="#cbd5e1" stroke-width="2.5"/>
-  <line x1="110" y1="293" x2="110" y2="330" stroke="#cbd5e1" stroke-width="2.5"/>
-  <line x1="88" y1="308" x2="132" y2="308" stroke="#cbd5e1" stroke-width="2.5"/>
-  <line x1="110" y1="330" x2="94" y2="355" stroke="#cbd5e1" stroke-width="2.5"/>
-  <line x1="110" y1="330" x2="126" y2="355" stroke="#cbd5e1" stroke-width="2.5"/>
-  <text x="110" y="382" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">User</text>
+  <circle cx="60" cy="278" r="13" fill="none" stroke="#cbd5e1" stroke-width="2.5"/>
+  <line x1="60" y1="291" x2="60" y2="326" stroke="#cbd5e1" stroke-width="2.5"/>
+  <line x1="38" y1="306" x2="82" y2="306" stroke="#cbd5e1" stroke-width="2.5"/>
+  <line x1="60" y1="326" x2="45" y2="350" stroke="#cbd5e1" stroke-width="2.5"/>
+  <line x1="60" y1="326" x2="75" y2="350" stroke="#cbd5e1" stroke-width="2.5"/>
+  <text x="60" y="376" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15">User</text>
 
   <!-- ===== SEARCH API (stacked) ===== -->
-  <rect x="244" y="252" width="160" height="96" rx="11" fill="#14171c" stroke="#3a414b" stroke-width="2"/>
-  <rect x="238" y="258" width="160" height="96" rx="11" fill="#161a20" stroke="#4a525d" stroke-width="2"/>
-  <rect x="232" y="264" width="160" height="96" rx="11" fill="#1a1f26" stroke="#8a95a3" stroke-width="2.5"/>
-  <text x="312" y="318" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Search API</text>
+  <rect x="312" y="228" width="158" height="104" rx="11" fill="#14171c" stroke="#3a414b" stroke-width="2"/>
+  <rect x="306" y="234" width="158" height="104" rx="11" fill="#161a20" stroke="#4a525d" stroke-width="2"/>
+  <rect x="300" y="240" width="158" height="104" rx="11" fill="#1a1f26" stroke="#8a95a3" stroke-width="2.5"/>
+  <text x="379" y="298" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Search API</text>
 
   <!-- arrow 1: user -> API -->
-  <line x1="138" y1="292" x2="226" y2="292" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#wp-p)"/>
-  <circle cx="182" cy="292" r="13" fill="#ff8bd2"/>
-  <text x="182" y="297" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">1</text>
-  <text x="150" y="272" fill="#ff8bd2" font-family="monospace" font-size="15">/search "sachin"</text>
+  <line x1="86" y1="278" x2="298" y2="278" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#wp-p)"/>
+  <circle cx="104" cy="262" r="11" fill="#ff8bd2"/>
+  <text x="104" y="267" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">1</text>
+  <text x="122" y="267" fill="#ff8bd2" font-family="monospace" font-size="15">/search "sachin"</text>
 
   <!-- arrow 5: API -> user -->
-  <line x1="226" y1="338" x2="138" y2="338" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#wp-g)"/>
-  <circle cx="182" cy="338" r="13" fill="#8aff8a"/>
-  <text x="182" y="343" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">5</text>
-  <text x="150" y="368" fill="#8aff8a" font-family="sans-serif" font-size="15">return results</text>
+  <line x1="298" y1="312" x2="86" y2="312" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#wp-g)"/>
+  <circle cx="104" cy="330" r="11" fill="#8aff8a"/>
+  <text x="104" y="335" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">5</text>
+  <text x="122" y="335" fill="#8aff8a" font-family="sans-serif" font-size="15">return results</text>
 
   <!-- ===== ELASTICSEARCH (below) ===== -->
-  <path d="M272 442 a40 9 0 0 0 80 0 v44 a40 9 0 0 1 -80 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
-  <ellipse cx="312" cy="442" rx="40" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
-  <text x="312" y="512" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">Elasticsearch</text>
-  <text x="312" y="468" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">search docs</text>
+  <path d="M339 445 a40 9 0 0 0 80 0 v44 a40 9 0 0 1 -80 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <ellipse cx="379" cy="445" rx="40" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="379" y="515" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">Elasticsearch</text>
+  <text x="379" y="471" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">search docs</text>
   <!-- arrow 2: API <-> ES -->
-  <line x1="312" y1="362" x2="312" y2="430" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#wp-b)" marker-start="url(#wp-bs)"/>
-  <circle cx="312" cy="398" r="13" fill="#93c5fd"/>
-  <text x="312" y="403" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">2</text>
-  <text x="338" y="402" fill="#cbd5e1" font-family="sans-serif" font-size="14">get matching documents (relevance)</text>
+  <line x1="379" y1="346" x2="379" y2="433" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#wp-b)" marker-start="url(#wp-bs)"/>
+  <circle cx="379" cy="392" r="11" fill="#93c5fd"/>
+  <text x="379" y="397" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">2</text>
+  <text x="400" y="396" fill="#cbd5e1" font-family="sans-serif" font-size="14">get matching documents (relevance)</text>
 
   <!-- ===== REDIS (top-right) ===== -->
-  <path d="M790 120 a46 11 0 0 0 92 0 v52 a46 11 0 0 1 -92 0 z" fill="#16191e" stroke="#b79bff" stroke-width="2.5"/>
-  <ellipse cx="836" cy="120" rx="46" ry="11" fill="#1b1f25" stroke="#b79bff" stroke-width="2.5"/>
-  <text x="836" y="152" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="15" font-weight="bold">Redis</text>
-  <text x="836" y="205" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">recent:u1 &#8594; [ &#8230; max 10 ]</text>
+  <path d="M774 116 a46 11 0 0 0 92 0 v52 a46 11 0 0 1 -92 0 z" fill="#16191e" stroke="#b79bff" stroke-width="2.5"/>
+  <ellipse cx="820" cy="116" rx="46" ry="11" fill="#1b1f25" stroke="#b79bff" stroke-width="2.5"/>
+  <text x="820" y="148" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="15" font-weight="bold">Redis</text>
+  <text x="820" y="201" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="13">recent:u1 &#8594; [ &#8230; max 10 ]</text>
   <!-- arrow 3: API -> Redis -->
-  <line x1="396" y1="276" x2="786" y2="168" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#wp-p)"/>
-  <!-- cache-first tag, sitting clear above arrow 4 -->
-  <rect x="430" y="158" width="320" height="40" rx="9" fill="#1d1d12" stroke="#ffff99" stroke-width="1.8"/>
-  <circle cx="455" cy="178" r="13" fill="#ff8bd2"/>
-  <text x="455" y="183" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">3</text>
-  <text x="478" y="183" fill="#ffff99" font-family="sans-serif" font-size="14.5"><tspan font-weight="bold">cache-first:</tspan>  LPUSH + LTRIM (bounded 10)</text>
+  <line x1="462" y1="258" x2="772" y2="150" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#wp-p)"/>
+  <circle cx="558" cy="222" r="11" fill="#ff8bd2"/>
+  <text x="558" y="227" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">3</text>
+  <text x="578" y="210" fill="#ffff99" font-family="sans-serif" font-size="14.5" font-weight="bold">cache-first write</text>
+  <text x="578" y="230" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">LPUSH + LTRIM (bounded 10)</text>
 
   <!-- ===== MONGODB (right) ===== -->
-  <path d="M898 300 a40 9 0 0 0 80 0 v46 a40 9 0 0 1 -80 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
-  <ellipse cx="938" cy="300" rx="40" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
-  <path d="M820 326 a38 9 0 0 0 76 0 v44 a38 9 0 0 1 -76 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
-  <ellipse cx="858" cy="326" rx="38" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
-  <text x="888" y="404" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">MongoDB &#183; sharded NoSQL</text>
-  <text x="888" y="424" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">durable log &#183; all queries</text>
+  <path d="M848 300 a38 9 0 0 0 76 0 v44 a38 9 0 0 1 -76 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <ellipse cx="886" cy="300" rx="38" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
+  <path d="M888 318 a38 9 0 0 0 76 0 v44 a38 9 0 0 1 -76 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.5"/>
+  <ellipse cx="926" cy="318" rx="38" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.5"/>
+  <text x="906" y="392" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">MongoDB &#183; sharded NoSQL</text>
+  <text x="906" y="412" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">durable log &#183; all queries</text>
   <!-- arrow 4: API -> Mongo -->
-  <line x1="396" y1="330" x2="812" y2="344" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#wp-p)"/>
-  <circle cx="600" cy="333" r="13" fill="#ff8bd2"/>
-  <text x="600" y="338" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="14" font-weight="bold">4</text>
-  <text x="624" y="338" fill="#cbd5e1" font-family="monospace" font-size="14">persist {u1,"sachin",ts}</text>
+  <line x1="462" y1="320" x2="846" y2="332" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#wp-p)"/>
+  <circle cx="566" cy="322" r="11" fill="#ff8bd2"/>
+  <text x="566" y="327" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="13" font-weight="bold">4</text>
+  <text x="586" y="327" fill="#cbd5e1" font-family="monospace" font-size="14">persist {u1,"sachin",ts}</text>
 
   <!-- ===== KEY INSIGHT STRIP ===== -->
   <rect x="60" y="536" width="960" height="50" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>

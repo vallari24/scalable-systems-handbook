@@ -1,0 +1,62 @@
+<svg width="1040" height="472" viewBox="0 0 1040 472" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ll-g" markerWidth="10" markerHeight="10" refX="5" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5,8 L10,0 Z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="472" fill="#111317"/>
+
+  <text x="520" y="34" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="24" font-weight="bold">Two Redis commands keep <tspan font-family="monospace" fill="#e6dcff">recent:u1</tspan> newest-first and capped at 10</text>
+  <text x="520" y="60" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">a Redis list is just an ordered row of items &#8212; the <tspan fill="#cbd5e1" font-weight="bold">head</tspan> (left end) is the newest</text>
+
+  <!-- ============ ROW 1: LPUSH ============ -->
+  <text x="40" y="106" fill="#ff8bd2" font-family="monospace" font-size="18" font-weight="bold">LPUSH recent:u1 "sachin"</text>
+  <text x="40" y="132" fill="#cbd5e1" font-family="sans-serif" font-size="14.5"><tspan fill="#9aa6b2">&#8220;left push&#8221; &#8212;</tspan> put it on the <tspan fill="#cbd5e1" font-weight="bold">HEAD</tspan> (left end)</text>
+  <text x="40" y="154" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">newest becomes #1; the others shift right</text>
+
+  <!-- "newest" cue above first box -->
+  <text x="509" y="86" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">newest</text>
+  <line x1="509" y1="91" x2="509" y2="105" stroke="#8aff8a" stroke-width="2" marker-end="url(#ll-g)"/>
+
+  <!-- row 1 boxes -->
+  <rect x="466" y="108" width="86" height="48" rx="8" fill="#14241a" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="509" y="138" text-anchor="middle" fill="#daffda" font-family="monospace" font-size="15" font-weight="bold">sachin</text>
+  <rect x="558" y="108" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="601" y="138" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15">laxman</text>
+  <rect x="650" y="108" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="693" y="138" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15">dravid</text>
+  <rect x="742" y="108" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="785" y="138" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15">kohli</text>
+  <rect x="834" y="108" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="877" y="138" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="17">&#8230;</text>
+
+  <!-- divider -->
+  <line x1="40" y1="218" x2="1000" y2="218" stroke="#2a313a" stroke-width="1.5"/>
+
+  <!-- ============ ROW 2: LTRIM ============ -->
+  <text x="40" y="296" fill="#ff8bd2" font-family="monospace" font-size="18" font-weight="bold">LTRIM recent:u1 0 9</text>
+  <text x="40" y="322" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">keep <tspan fill="#cbd5e1" font-weight="bold">positions 0&#8211;9</tspan> (the first ten)</text>
+  <text x="40" y="344" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">anything past #10 is dropped &#8594; never exceeds 10</text>
+
+  <!-- row 2 boxes -->
+  <rect x="466" y="298" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="509" y="328" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15">sachin</text>
+  <rect x="558" y="298" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="601" y="328" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15">laxman</text>
+  <rect x="650" y="298" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="693" y="328" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="15">dravid</text>
+  <rect x="742" y="298" width="86" height="48" rx="8" fill="#1a1f26" stroke="#5a636f" stroke-width="2"/>
+  <text x="785" y="328" text-anchor="middle" fill="#9aa6b2" font-family="monospace" font-size="17">&#8230;</text>
+
+  <!-- cut line after #10 -->
+  <line x1="828" y1="284" x2="828" y2="360" stroke="#ff8a8a" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="828" y="278" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5" font-weight="bold">cut after #10</text>
+
+  <!-- dropped box -->
+  <rect x="834" y="298" width="86" height="48" rx="8" fill="#241416" stroke="#ff8a8a" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="877" y="328" text-anchor="middle" fill="#ff8a8a" font-family="monospace" font-size="15">11th</text>
+  <text x="877" y="368" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5">dropped</text>
+
+  <!-- ============ TAKEAWAY ============ -->
+  <rect x="40" y="404" width="960" height="48" rx="11" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="520" y="434" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="16"><tspan fill="#8aff8a" font-weight="bold">&#9733; result:</tspan>  a fixed-size list of the 10 newest searches &#8212; fetched whole, <tspan fill="#8aff8a">no scan, no sort</tspan></text>
+</svg>
