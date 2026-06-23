@@ -1,0 +1,109 @@
+<svg width="1280" height="900" viewBox="0 0 1280 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e5e7eb"/>
+    </marker>
+    <style>
+      .bg { fill: #0b1020; }
+      .title { fill: #f8fafc; font: 700 34px Inter, Arial, sans-serif; }
+      .subtitle { fill: #cbd5e1; font: 18px Inter, Arial, sans-serif; }
+      .box { fill: #111827; stroke: #64748b; stroke-width: 2; rx: 14; }
+      .blue { fill: #10213f; stroke: #93c5fd; }
+      .green { fill: #12351e; stroke: #8aff8a; }
+      .yellow { fill: #372f13; stroke: #ffff99; }
+      .purple { fill: #251a45; stroke: #b79bff; }
+      .pink { fill: #3b1730; stroke: #ff8bd2; }
+      .section { fill: #f8fafc; font: 700 22px Inter, Arial, sans-serif; }
+      .label { fill: #f8fafc; font: 700 18px Inter, Arial, sans-serif; }
+      .small { fill: #dbeafe; font: 16px Inter, Arial, sans-serif; }
+      .muted { fill: #cbd5e1; font: 15px Inter, Arial, sans-serif; }
+      .tiny { fill: #cbd5e1; font: 13px Inter, Arial, sans-serif; }
+      .token { fill: #172554; stroke: #93c5fd; stroke-width: 2; rx: 8; }
+      .qtoken { fill: #12351e; stroke: #8aff8a; stroke-width: 2; rx: 8; }
+      .dtoken { fill: #251a45; stroke: #b79bff; stroke-width: 2; rx: 8; }
+      .special { fill: #372f13; stroke: #ffff99; stroke-width: 2; rx: 8; }
+      .line { stroke: #e5e7eb; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .thin { stroke: #94a3b8; stroke-width: 2; fill: none; opacity: 0.85; }
+      .dash { stroke: #94a3b8; stroke-width: 2; fill: none; stroke-dasharray: 7 7; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1280" height="900"/>
+  <text class="title" x="42" y="58">What BERT and a neural cross-encoder look like</text>
+  <text class="subtitle" x="42" y="88">A transformer is the reading machine; BERT is a pretrained version; a cross-encoder is how search uses it to score one query-document pair.</text>
+
+  <rect class="box blue" x="42" y="128" width="375" height="292"/>
+  <text class="section" x="70" y="166">1. Transformer encoder</text>
+  <text class="muted" x="70" y="194">Picture every token asking the other tokens:</text>
+  <text class="small" x="70" y="220">"what do you make me mean here?"</text>
+  <rect class="token" x="72" y="258" width="82" height="42"/><text class="label" x="93" y="285">apple</text>
+  <rect class="token" x="170" y="258" width="100" height="42"/><text class="label" x="191" y="285">earnings</text>
+  <rect class="token" x="286" y="258" width="90" height="42"/><text class="label" x="309" y="285">report</text>
+  <path class="thin" d="M113 258 C145 220 213 220 220 258"/>
+  <path class="thin" d="M220 300 C247 338 326 338 331 300"/>
+  <path class="thin" d="M113 300 C158 365 331 365 331 300"/>
+  <path class="line" d="M224 306 L224 344"/>
+  <rect class="box blue" x="82" y="344" width="284" height="48"/>
+  <text class="label" x="126" y="374">apple = company</text>
+
+  <rect class="box green" x="454" y="128" width="375" height="292"/>
+  <text class="section" x="482" y="166">2. BERT</text>
+  <text class="muted" x="482" y="194">BERT = a pretrained transformer encoder.</text>
+  <text class="small" x="482" y="220">Pretrain once, then add a small task head.</text>
+  <rect class="box green" x="492" y="252" width="112" height="46"/><text class="label" x="520" y="281">tokens</text>
+  <path class="line" d="M604 275 L634 275"/>
+  <rect class="box green" x="634" y="240" width="102" height="70"/><text class="label" x="657" y="270">BERT</text><text class="tiny" x="660" y="292">layers</text>
+  <path class="line" d="M736 275 L762 275"/>
+  <rect class="box green" x="762" y="252" width="58" height="46"/><text class="label" x="771" y="281">head</text>
+  <text class="muted" x="490" y="344">Heads: intent classifier, relevance scorer,</text>
+  <text class="muted" x="490" y="368">entity tagger, snippet selector.</text>
+
+  <rect class="box purple" x="866" y="128" width="372" height="292"/>
+  <text class="section" x="894" y="166">3. Cross-encoder</text>
+  <text class="muted" x="894" y="194">Put query and document in one sequence.</text>
+  <text class="small" x="894" y="220">Then one BERT reads both together.</text>
+  <rect class="special" x="898" y="252" width="66" height="40"/><text class="label" x="916" y="278">CLS</text>
+  <rect class="qtoken" x="974" y="252" width="82" height="40"/><text class="label" x="994" y="278">query</text>
+  <rect class="special" x="1066" y="252" width="66" height="40"/><text class="label" x="1084" y="278">SEP</text>
+  <rect class="dtoken" x="898" y="310" width="146" height="40"/><text class="label" x="920" y="336">document</text>
+  <rect class="special" x="1054" y="310" width="66" height="40"/><text class="label" x="1072" y="336">SEP</text>
+  <path class="line" d="M1120 331 L1168 331"/>
+  <rect class="box purple" x="1168" y="300" width="42" height="62"/>
+  <text class="label" x="1179" y="336">s</text>
+  <text class="tiny" x="890" y="386">s = relevance score from the CLS output</text>
+
+  <rect class="box" x="42" y="462" width="1196" height="330"/>
+  <text class="section" x="70" y="502">How to read the symbols</text>
+
+  <rect class="special" x="82" y="538" width="92" height="48"/><text class="label" x="107" y="568">[CLS]</text>
+  <text class="label" x="198" y="558">summary slot</text>
+  <text class="muted" x="198" y="582">Starts as a special token. After BERT reads everything,</text>
+  <text class="muted" x="198" y="604">its final vector summarizes the whole pair.</text>
+
+  <rect class="special" x="82" y="614" width="92" height="48"/><text class="label" x="107" y="644">[SEP]</text>
+  <text class="label" x="198" y="634">divider</text>
+  <text class="muted" x="198" y="658">Marks where the query ends and the document begins.</text>
+  <text class="muted" x="198" y="680">One sequence still has two parts.</text>
+
+  <rect class="qtoken" x="82" y="690" width="92" height="48"/><text class="label" x="107" y="720">query</text>
+  <text class="label" x="198" y="710">green segment</text>
+  <text class="muted" x="198" y="734">The user's need. Its tokens can inspect document tokens.</text>
+
+  <rect class="dtoken" x="670" y="538" width="122" height="48"/><text class="label" x="696" y="568">document</text>
+  <text class="label" x="816" y="558">purple segment</text>
+  <text class="muted" x="816" y="582">One candidate result, re-read for this query.</text>
+  <text class="muted" x="816" y="604">It cannot be fully precomputed.</text>
+
+  <rect class="box purple" x="670" y="614" width="122" height="48"/><text class="label" x="702" y="644">score</text>
+  <text class="label" x="816" y="634">final judgment</text>
+  <text class="muted" x="816" y="658">A small layer turns the CLS vector into</text>
+  <text class="muted" x="816" y="680">"how relevant is this candidate?"</text>
+
+  <rect class="box yellow" x="670" y="690" width="122" height="48"/><text class="label" x="696" y="720">cost</text>
+  <text class="label" x="816" y="710">why Stage 2 only</text>
+  <text class="muted" x="816" y="734">Every query-document pair gets its own read.</text>
+  <text class="muted" x="816" y="756">Great for reranking, too slow for all documents.</text>
+
+  <rect x="58" y="828" width="1164" height="44" rx="10" fill="#111827" stroke="#64748b" stroke-width="2"/>
+  <text class="label" x="85" y="856">Memory hook: BERT is the reader; [CLS] summarizes; [SEP] divides; cross-encoder reads both sides together.</text>
+</svg>

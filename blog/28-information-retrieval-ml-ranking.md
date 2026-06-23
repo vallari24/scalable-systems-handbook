@@ -250,28 +250,226 @@ But the old engineering constraint did not disappear. The generated answer is on
 
 ---
 
-## Concept handles: how to remember the hard names
+## Concept handles: pictures to keep in your head
 
-This is the appendix version of the post. When a term feels abstract, attach it to a job, a picture, and a cost.
+The hard names get easier when you stop treating them as names and start treating them as shapes. Each concept below has one picture, one job, and one cost.
 
-| Concept | Imagine it as | How it works at a high level | Use it when | Cost / tradeoff |
-| --- | --- | --- | --- | --- |
-| **Transformer encoder** | a contextual reader | tokens repeatedly attend to other tokens, so each token vector is shaped by surrounding words | you need language understanding, not just word counts | heavier than lexical features |
-| **BERT** | a pretrained transformer reader | reads text bidirectionally; can be fine-tuned for classification, ranking, snippets, or relevance | you need strong query/document understanding | accurate but expensive if run per pair |
-| **`[CLS] query [SEP] doc [SEP]`** | one worksheet with a divider | `[CLS]` collects the final score signal; `[SEP]` separates query from document | cross-encoder reranking | cannot precompute the document alone |
-| **word2vec** | context neighborhoods become coordinates | sliding windows teach the model that words used near similar words should have nearby vectors | basic word meaning and semantic intuition | word-level; weak on full sentence meaning |
-| **Sentence-BERT** | one vector per sentence | fine-tunes BERT-style encoders so similar sentences have nearby vectors | semantic search, clustering, dedupe | loses some token-level interaction |
-| **Bi-encoder** | two separate towers | encode query once, encode docs offline, compare vectors | Stage-1 semantic retrieval over many docs | fast, but less precise |
-| **DPR** | bi-encoder for question-answer passages | trains query and passage encoders so questions land near answer passages | passage retrieval for QA/RAG | needs training data or good negatives |
-| **Cross-encoder** | one careful reader with both pages open | query and document tokens attend to each other before one relevance score is emitted | Stage-2 reranking of a short list | accurate, but per-pair expensive |
-| **ANN index** | a vector shortcut map | avoids scanning every vector by graph walking, clustering, compression, or similar tricks | vector search at scale | approximate; tune recall vs latency |
-| **HNSW** | highways plus local roads | multi-layer neighbor graph jumps coarsely first, then refines locally | low-latency nearest-neighbor search | memory for graph links |
-| **IVF+PQ** | shelves plus compressed labels | cluster vectors into shelves; search nearby shelves; store compressed vector codes | very large vector collections | saves memory, loses some precision |
-| **RRF** | rank-only voting | combine result lists using rank positions, not raw scores | hybrid BM25 + dense fusion | simple, not query-adaptive |
-| **LambdaMART** | boosted trees that care about top swaps | tree ranker whose gradients are weighted by how much NDCG would improve | feature-rich reranking with labels/clicks | needs features and labels; less language-aware than BERT |
-| **ColBERT** | token vectors with late interaction | stores token embeddings and matches query tokens against document tokens cheaply | middle ground between bi-encoder and cross-encoder | larger index than one-vector bi-encoder |
+### Transformer encoder = contextual reader
 
-The decision rule is simple:
+Picture a sentence as tokens sitting in a row:
+
+```text
+apple   earnings   report
+```
+
+Without context, "apple" is ambiguous. It might be a fruit or a company. A transformer encoder lets each token look at the other tokens through **attention**. After several layers, the vector for "apple" has absorbed clues from "earnings" and "report", so it now behaves like **Apple the company**, not apple the fruit.
+
+The important mental model is:
+
+```text
+token starts with a rough meaning
+  -> looks at nearby and far-away tokens
+  -> updates its vector
+  -> repeats for many layers
+  -> becomes a contextual vector
+```
+
+So a transformer encoder is not "a search model" by itself. It is a powerful text reader. Search uses that reader for query understanding, reranking, semantic embeddings, snippets, and generated answers.
+
+### BERT = pretrained transformer reader
+
+[BERT](https://arxiv.org/abs/1810.04805) is a transformer encoder that was trained before your search task. The useful picture is **pretrained reader + small task head**.
+
+```text
+text
+  -> tokenize
+  -> BERT layers
+  -> contextual vectors
+  -> small head for the task
+       intent class
+       entity tag
+       relevance score
+       snippet score
+```
+
+BERT's pretraining teaches it general language patterns, mostly by hiding words and learning to predict them from context. Then you fine-tune it for your job. For search, the job might be: "does this document answer this query?", "is this query navigational?", or "which span is the entity?"
+
+The key cost: BERT is much heavier than BM25 or a tree ranker. You use it where language understanding is worth the compute. That usually means query understanding or Stage-2 reranking, not scanning every document.
+
+<img src="../assets/information-retrieval-ml-ranking/bert-cross-encoder-mental-model.svg" alt="Mental model diagram for BERT and neural cross-encoders. Panel 1 shows a transformer encoder as tokens 'apple', 'earnings', and 'report' attending to each other, producing contextual vectors where apple means the company. Panel 2 shows BERT as a pretrained transformer encoder: tokens flow into BERT layers, then a small task head for intent, relevance, entity tagging, or snippets. Panel 3 shows a cross-encoder sequence with special tokens: CLS, query, SEP, document, SEP, feeding one BERT reader and producing a relevance score. The lower panel explains CLS as the summary slot, SEP as the divider, query and document as the two segments, score as the final judgment, and cost as the reason cross-encoders belong in Stage 2." width="1280">
+
+### `[CLS] query [SEP] document [SEP]` = packaging two texts for BERT
+
+BERT reads one sequence of tokens. A search cross-encoder has two pieces of text: the query and one candidate document. The special tokens make those two pieces fit into one sequence.
+
+```text
+[CLS] cheap flights to the big apple [SEP] Discount airfare guide for New York City ... [SEP]
+  ^              query tokens          ^                 document tokens                  ^
+summary slot                         divider                                             divider
+```
+
+`[CLS]` is a summary slot. It starts as a special token at the front. After the transformer layers, its final vector is often used as the representation of the whole input pair. A small scoring layer turns that vector into a relevance score.
+
+`[SEP]` is a divider. It tells the model where one segment ends and the next begins. In this case, the first segment is the query and the second segment is the candidate document.
+
+This is why a cross-encoder can be sharp: the query and document are inside the same read. "big apple" can directly interact with "New York City", "flights" can interact with "airfare", and the model can decide whether the candidate really answers the need.
+
+### Bi-encoder = two reusable coordinates
+
+A bi-encoder does **not** let the query and document inspect each other deeply. It does something cheaper:
+
+```text
+query -> query encoder -> query vector
+
+document -> document encoder -> document vector
+
+score = distance(query vector, document vector)
+```
+
+The reason this matters is precomputation. Document vectors can be built offline and stored. At query time, the system embeds the query once, then asks an ANN index for nearby document vectors.
+
+Use a bi-encoder when you need semantic retrieval over many documents. It is the right shape for "find me candidates that mean the same thing." It is not the right shape for final judgment when tiny wording differences matter, because the query and document only meet as two finished vectors.
+
+### DPR = bi-encoder trained for answer passages
+
+DPR, Dense Passage Retrieval, is not a different mental object. It is a bi-encoder specialized for question-answer retrieval.
+
+```text
+question encoder: "why does my phone overheat?" -> vector Q
+passage encoder:  "phones overheat when..."     -> vector P
+
+training goal: Q should be near answer passages and far from wrong passages
+```
+
+Use DPR-style retrieval when your corpus is chunks or passages and the user asks questions. This is why it appears in RAG systems: the retriever's job is to pull answer-bearing passages before the LLM writes anything.
+
+### Cross-encoder = one careful read of one pair
+
+A cross-encoder is the expensive opposite of a bi-encoder.
+
+```text
+query + document together
+  -> one transformer read
+  -> one relevance score
+```
+
+The document representation is different for every query because the document tokens attend to the query tokens. That is great for precision and bad for scale. You cannot precompute one universal document vector and reuse it for every query.
+
+Use a cross-encoder after retrieval, when there are only a few hundred candidates left. The easiest rule: **bi-encoder retrieves; cross-encoder judges.**
+
+### ANN index = shortcut map for vectors
+
+ANN means **approximate nearest neighbor**. It answers: "which stored vectors are near this query vector?" The approximate part means it may skip some exact comparisons to go much faster.
+
+The mental picture is a shortcut map:
+
+```text
+without ANN:
+query vector -> compare with every document vector
+
+with ANN:
+query vector -> use shortcuts -> inspect likely neighborhoods only
+```
+
+An ANN index is to vectors what an inverted index is to words. Both exist to avoid a full scan.
+
+### HNSW = highways plus local roads
+
+HNSW, Hierarchical Navigable Small World, is an ANN index built as a layered graph.
+
+Picture a map with two kinds of roads:
+
+```text
+top layer:    long jumps across the map
+middle layer: regional jumps
+bottom layer: dense local roads between neighbors
+```
+
+Search starts on the sparse top layer and greedily moves closer to the query. Then it drops to lower layers and refines locally. That is what "hierarchical" means. "Small world" means the graph has enough long-range links that far-away regions can be reached in surprisingly few hops.
+
+The cost is memory and maintenance: those graph edges take space, and updates are more involved than appending to a flat list.
+
+### IVF+PQ = shelves plus compression
+
+IVF, Inverted File, clusters vectors into coarse neighborhoods. Picture a library where books are first placed on rough topic shelves.
+
+```text
+query vector
+  -> find nearest shelves
+  -> scan only vectors on those shelves
+```
+
+PQ, Product Quantization, compresses the vectors on those shelves. Picture splitting a long vector into chunks and replacing each chunk with the ID of a nearby prototype.
+
+```text
+full vector: [0.12, 0.98, 0.44, 0.07, ...]
+split into chunks
+store compact code IDs instead of all raw numbers
+```
+
+Use IVF+PQ when the vector collection is huge and memory matters. The tradeoff is approximate distance: you save space and time, but lose some precision.
+
+### RRF = rank-only voting
+
+RRF, Reciprocal Rank Fusion, combines result lists without trusting their raw scores.
+
+That matters because BM25 and dense retrieval speak different score languages:
+
+```text
+BM25 score:        18.7
+dense similarity:  0.74
+```
+
+Those numbers are not naturally comparable. RRF ignores them and uses rank position:
+
+```text
+BM25 list:  docA #1, docB #2, docC #3
+dense list: docX #1, docA #2, docY #3
+
+docA gets credit from both lists
+docX survives because dense ranked it very high
+```
+
+Use RRF as a strong simple fusion method when lexical and dense retrievers both produce candidate lists. Its weakness is that it is not a learned, query-specific fusion model; it is a robust voting rule.
+
+### LambdaMART = tree ranker that cares about top swaps
+
+LambdaMART is easier if you split the name:
+
+```text
+MART   = many boosted regression trees
+Lambda = push harder on swaps that improve ranking metric most
+```
+
+Picture a committee of decision trees asking feature questions:
+
+```text
+Is BM25 high?
+Is the query in the title?
+Is the page fresh?
+Is the site trusted?
+Does spam score look bad?
+```
+
+The "lambda" part tells training to care more about mistakes near the top. Swapping result #1 and #2 matters much more than swapping #500 and #501, because users mostly see the top.
+
+Use LambdaMART when you have many ranking features and labels or click-derived signals. It is usually cheaper than a BERT cross-encoder and often very strong for production reranking. It is less directly language-aware than a transformer, so many modern systems combine tree rankers, neural features, and neural rerankers.
+
+### ColBERT = token-level middle ground
+
+ColBERT sits between the bi-encoder and cross-encoder.
+
+```text
+bi-encoder:     one vector for query, one vector for doc
+cross-encoder:  full query-document attention at scoring time
+ColBERT:        many token vectors, cheap late matching
+```
+
+It stores document token embeddings, not just one document vector. At query time, each query token looks for its best matching document token. This recovers some token-level precision without paying full cross-encoder cost for every candidate.
+
+The memory hook: **bi-encoder = one coordinate; cross-encoder = full conversation; ColBERT = token-level handshake.**
+
+The final decision rule:
 
 ```text
 Need exact strings, IDs, rare names?       -> BM25 / lexical retrieval
