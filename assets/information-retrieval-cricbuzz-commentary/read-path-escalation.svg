@@ -1,0 +1,107 @@
+<svg width="1080" height="620" viewBox="0 0 1080 620" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="rp-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="rp-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="rp-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="rp-m" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#7c8694"/></marker>
+    <marker id="rp-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b79bff"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="620" fill="#111317"/>
+
+  <text x="540" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="27" font-weight="bold">Read access &#8212; escalate from naive to right-fit</text>
+  <text x="540" y="68" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">a near-static, identical, tiny read set is the textbook case for a cache</text>
+
+  <!-- faint stage dividers -->
+  <line x1="358" y1="96" x2="358" y2="512" stroke="#2a3038" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <line x1="722" y1="96" x2="722" y2="512" stroke="#2a3038" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+  <!-- big stage arrows -->
+  <text x="358" y="300" text-anchor="middle" fill="#5b6470" font-family="sans-serif" font-size="34">&#8594;</text>
+  <text x="722" y="300" text-anchor="middle" fill="#5b6470" font-family="sans-serif" font-size="34">&#8594;</text>
+
+  <!-- stage labels -->
+  <text x="178" y="120" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">1 &#183; single node</text>
+  <text x="540" y="120" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">2 &#183; read replicas</text>
+  <text x="901" y="120" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">3 &#183; cache (chosen)</text>
+
+  <!-- ============ STAGE 1: single overloaded node ============ -->
+  <!-- viewers -->
+  <g stroke="#cbd5e1" stroke-width="2.2" fill="none">
+    <circle cx="60" cy="210" r="10"/><line x1="60" y1="220" x2="60" y2="246"/><line x1="44" y1="231" x2="76" y2="231"/><line x1="60" y1="246" x2="49" y2="264"/><line x1="60" y1="246" x2="71" y2="264"/>
+    <circle cx="60" cy="290" r="10"/><line x1="60" y1="300" x2="60" y2="326"/><line x1="44" y1="311" x2="76" y2="311"/><line x1="60" y1="326" x2="49" y2="344"/><line x1="60" y1="326" x2="71" y2="344"/>
+    <circle cx="60" cy="370" r="10"/><line x1="60" y1="380" x2="60" y2="406"/><line x1="44" y1="391" x2="76" y2="391"/><line x1="60" y1="406" x2="49" y2="424"/><line x1="60" y1="406" x2="71" y2="424"/>
+  </g>
+  <text x="60" y="446" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">all viewers</text>
+
+  <!-- overloaded MySQL: red glow -->
+  <path d="M210 250 a44 11 0 0 0 88 0 v66 a44 11 0 0 1 -88 0 z" fill="#1f1416" stroke="#ff8a8a" stroke-width="3"/>
+  <ellipse cx="254" cy="250" rx="44" ry="11" fill="#241719" stroke="#ff8a8a" stroke-width="3"/>
+  <ellipse cx="254" cy="284" rx="60" ry="40" fill="none" stroke="#ff8a8a" stroke-width="1.2" opacity="0.45"/>
+  <text x="254" y="296" text-anchor="middle" fill="#ffd7d7" font-family="sans-serif" font-size="14" font-weight="bold">MySQL</text>
+  <text x="254" y="352" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5" font-weight="bold">OVERLOADED</text>
+  <text x="254" y="370" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">single node, all reads</text>
+
+  <line x1="84" y1="240" x2="206" y2="262" stroke="#ff8a8a" stroke-width="2.2" marker-end="url(#rp-r)"/>
+  <line x1="84" y1="305" x2="206" y2="290" stroke="#ff8a8a" stroke-width="2.2" marker-end="url(#rp-r)"/>
+  <line x1="84" y1="372" x2="206" y2="318" stroke="#ff8a8a" stroke-width="2.2" marker-end="url(#rp-r)"/>
+
+  <!-- ============ STAGE 2: replicas ============ -->
+  <!-- primary -->
+  <path d="M408 196 a36 9 0 0 0 72 0 v48 a36 9 0 0 1 -72 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.4"/>
+  <ellipse cx="444" cy="196" rx="36" ry="9" fill="#1b1f25" stroke="#7c8694" stroke-width="2.4"/>
+  <text x="444" y="228" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">primary</text>
+
+  <!-- replicas -->
+  <g>
+    <path d="M560 168 a34 8 0 0 0 68 0 v44 a34 8 0 0 1 -68 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.2"/>
+    <ellipse cx="594" cy="168" rx="34" ry="8" fill="#1b1f25" stroke="#7c8694" stroke-width="2.2"/>
+    <text x="594" y="200" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">replica</text>
+    <path d="M560 268 a34 8 0 0 0 68 0 v44 a34 8 0 0 1 -68 0 z" fill="#16191e" stroke="#7c8694" stroke-width="2.2"/>
+    <ellipse cx="594" cy="268" rx="34" ry="8" fill="#1b1f25" stroke="#7c8694" stroke-width="2.2"/>
+    <text x="594" y="300" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">replica</text>
+  </g>
+  <!-- sync arrows primary->replicas -->
+  <line x1="476" y1="205" x2="558" y2="185" stroke="#7c8694" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#rp-m)"/>
+  <line x1="476" y1="225" x2="558" y2="282" stroke="#7c8694" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#rp-m)"/>
+  <text x="520" y="247" text-anchor="middle" fill="#7c8694" font-family="sans-serif" font-size="10.5">SYNC</text>
+
+  <!-- reads fanned across replicas -->
+  <line x1="408" y1="240" x2="444" y2="240" stroke="#93c5fd" stroke-width="2" marker-end="url(#rp-b)"/>
+  <text x="468" y="396" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">helps, but&#8230;</text>
+  <text x="540" y="418" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">every replica still runs the query</text>
+  <text x="540" y="434" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">per request &#8212; scaling the expensive path</text>
+
+  <!-- ============ INSIGHT BUBBLE (pivot, spans 2->3) ============ -->
+  <rect x="372" y="468" width="440" height="58" rx="14" fill="#1a1430" stroke="#b79bff" stroke-width="1.8"/>
+  <text x="592" y="491" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="13"><tspan fill="#b79bff" font-weight="bold">~99% of reads want the SAME ~15 latest balls</tspan></text>
+  <text x="592" y="512" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">of the live match &#8212; no per-user offset, just show the latest</text>
+  <path d="M812 497 L860 430" stroke="#b79bff" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#rp-p)"/>
+
+  <!-- ============ STAGE 3: Redis cache (chosen) ============ -->
+  <!-- green chosen ring -->
+  <rect x="788" y="150" width="226" height="232" rx="16" fill="none" stroke="#8aff8a" stroke-width="1.6" opacity="0.5"/>
+  <circle cx="1000" cy="166" r="14" fill="#8aff8a"/>
+  <text x="1000" y="172" text-anchor="middle" fill="#111317" font-family="sans-serif" font-size="16" font-weight="bold">&#10003;</text>
+
+  <!-- Redis cylinder (purple) -->
+  <path d="M848 196 a48 11 0 0 0 96 0 v54 a48 11 0 0 1 -96 0 z" fill="#16191e" stroke="#b79bff" stroke-width="2.6"/>
+  <ellipse cx="896" cy="196" rx="48" ry="11" fill="#1b1f25" stroke="#b79bff" stroke-width="2.6"/>
+  <text x="896" y="232" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="15" font-weight="bold">Redis</text>
+  <text x="896" y="278" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">latest ~15 balls / live match</text>
+  <text x="896" y="296" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="11.5">LPUSH + LTRIM (bounded)</text>
+
+  <!-- viewers (stage 3 read from cache) -->
+  <g stroke="#cbd5e1" stroke-width="2" fill="none">
+    <circle cx="824" cy="338" r="9"/><line x1="824" y1="347" x2="824" y2="368"/><line x1="811" y1="356" x2="837" y2="356"/><line x1="824" y1="368" x2="815" y2="382"/><line x1="824" y1="368" x2="833" y2="382"/>
+  </g>
+  <line x1="848" y1="330" x2="884" y2="262" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#rp-g)"/>
+  <text x="958" y="338" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5">served from memory</text>
+
+  <!-- cold pagination to DB -->
+  <text x="901" y="366" text-anchor="middle" fill="#7c8694" font-family="sans-serif" font-size="10.5">DB/replicas: cold pagination only</text>
+
+  <!-- ============ CAPTION STRIP ============ -->
+  <rect x="60" y="546" width="960" height="50" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="540" y="576" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="15.5"><tspan fill="#8aff8a" font-weight="bold">&#9733; key:</tspan>  replicas <tspan fill="#93c5fd" font-weight="bold">scale</tspan> the expensive query path; the cache <tspan fill="#8aff8a" font-weight="bold">removes</tspan> it &#8212; one hot answer, served to everyone from RAM</text>
+</svg>

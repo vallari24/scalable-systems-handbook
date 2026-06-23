@@ -1,0 +1,67 @@
+<svg width="1080" height="620" viewBox="0 0 1080 620" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1080" height="620" fill="#111317"/>
+
+  <text x="540" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="27" font-weight="bold">Storage &#8212; where does a ball of commentary live?</text>
+  <text x="540" y="67" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15">fit the flashy write-optimized store first &#8212; then size the data</text>
+
+  <line x1="540" y1="92" x2="540" y2="452" stroke="#3a414b" stroke-width="1.5" stroke-dasharray="5 6"/>
+
+  <!-- ============ LEFT: REJECTED ============ -->
+  <rect x="48" y="100" width="456" height="64" rx="11" fill="#1b1416" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="276" y="127" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">Time-keyed write-optimized KV store</text>
+  <text x="276" y="150" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12.5">key=timestamp &#8594; value=commentary &#183; sharded, global</text>
+
+  <!-- reject badge -->
+  <circle cx="474" cy="118" r="15" fill="#2a1416" stroke="#ff8a8a" stroke-width="2.5"/>
+  <line x1="467" y1="111" x2="481" y2="125" stroke="#ff8a8a" stroke-width="2.8"/>
+  <line x1="481" y1="111" x2="467" y2="125" stroke="#ff8a8a" stroke-width="2.8"/>
+
+  <rect x="66" y="196" width="420" height="58" rx="9" fill="#15181d" stroke="#6b3a3a" stroke-width="1.6"/>
+  <text x="84" y="221" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">Very high write throughput?</text>
+  <text x="84" y="243" fill="#ff8a8a" font-family="sans-serif" font-size="13.5">NO &#8212; ~1 ball / minute per match</text>
+
+  <rect x="66" y="268" width="420" height="58" rx="9" fill="#15181d" stroke="#6b3a3a" stroke-width="1.6"/>
+  <text x="84" y="293" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">Need to shard to hold the data?</text>
+  <text x="84" y="315" fill="#ff8a8a" font-family="sans-serif" font-size="13.5">NO &#8212; it all fits on one node</text>
+
+  <text x="276" y="370" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-style="italic">over-engineering &#8212; the write firehose it serves isn't here</text>
+
+  <!-- ============ RIGHT: CHOSEN ============ -->
+  <rect x="576" y="100" width="456" height="64" rx="11" fill="#101a12" stroke="#8aff8a" stroke-width="2"/>
+  <text x="792" y="130" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">Single relational DB (MySQL)</text>
+  <text x="792" y="152" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">small, structured, naturally relational</text>
+
+  <!-- chosen badge -->
+  <circle cx="600" cy="118" r="15" fill="#0f2113" stroke="#8aff8a" stroke-width="2.5"/>
+  <line x1="593" y1="119" x2="598" y2="125" stroke="#8aff8a" stroke-width="2.8"/>
+  <line x1="598" y1="125" x2="608" y2="111" stroke="#8aff8a" stroke-width="2.8"/>
+
+  <!-- schema chain -->
+  <rect x="590" y="188" width="150" height="32" rx="6" fill="#14171c" stroke="#5a6470" stroke-width="1.5"/>
+  <text x="665" y="209" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">team</text>
+  <line x1="665" y1="220" x2="665" y2="232" stroke="#5a6470" stroke-width="1.5"/>
+  <rect x="590" y="232" width="150" height="32" rx="6" fill="#14171c" stroke="#5a6470" stroke-width="1.5"/>
+  <text x="665" y="253" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">match</text>
+  <line x1="665" y1="264" x2="665" y2="276" stroke="#5a6470" stroke-width="1.5"/>
+  <rect x="590" y="276" width="150" height="32" rx="6" fill="#14171c" stroke="#5a6470" stroke-width="1.5"/>
+  <text x="665" y="297" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="14">innings</text>
+  <line x1="665" y1="308" x2="665" y2="322" stroke="#5a6470" stroke-width="1.5"/>
+  <rect x="590" y="322" width="442" height="40" rx="6" fill="#161b18" stroke="#8aff8a" stroke-width="1.6"/>
+  <text x="611" y="347" fill="#e8ffe8" font-family="monospace" font-size="14.5">ball(match_id, innings_id, over, ball, text)</text>
+
+  <!-- capacity box -->
+  <rect x="772" y="186" width="260" height="122" rx="10" fill="#1a1a12" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="902" y="210" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">capacity math</text>
+  <text x="788" y="237" fill="#cbd5e1" font-family="monospace" font-size="13">1KB &#215; 600 balls</text>
+  <text x="788" y="258" fill="#cbd5e1" font-family="monospace" font-size="13">&#215; 100,000 matches</text>
+  <text x="788" y="284" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">&#8776; 60 GB total</text>
+  <text x="788" y="302" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">fits ONE node &#183; hot slice in RAM</text>
+
+  <!-- ============ FOOTNOTE (purple) ============ -->
+  <rect x="60" y="468" width="960" height="46" rx="10" fill="#16121f" stroke="#b79bff" stroke-width="1.8"/>
+  <text x="540" y="496" text-anchor="middle" fill="#e6dcff" font-family="sans-serif" font-size="14.5">partition only <tspan font-weight="bold">LATER</tspan>, at real scale &#8212; by <tspan font-family="monospace">match_id</tspan> &#8212; not now</text>
+
+  <!-- ============ CAPTION ============ -->
+  <rect x="60" y="538" width="960" height="50" rx="12" fill="#101a12" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="540" y="569" text-anchor="middle" fill="#e8ffe8" font-family="sans-serif" font-size="16"><tspan fill="#8aff8a" font-weight="bold">&#9733;</tspan>  size the data before you choose the store &#8212; sharding solves a problem you don't have</text>
+</svg>

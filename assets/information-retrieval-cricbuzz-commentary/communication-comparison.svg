@@ -1,0 +1,140 @@
+<svg width="1180" height="720" viewBox="0 0 1180 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="cc-r" markerWidth="10" markerHeight="10" refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="cc-rs" markerWidth="10" markerHeight="10" refX="1.5" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M8,0 L0,4 L8,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="cc-o" markerWidth="10" markerHeight="10" refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+    <marker id="cc-g" markerWidth="10" markerHeight="10" refX="7.5" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="720" fill="#111317"/>
+
+  <text x="590" y="40" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="27" font-weight="bold">Keeping the screen fresh: four refresh mechanisms, one verdict</text>
+  <text x="590" y="68" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="15.5">new data arrives ~once a minute &#8212; let the event rate pick the mechanism</text>
+
+  <!-- ============ CARD 1: WebSocket ============ -->
+  <rect x="30" y="92" width="262" height="528" rx="14" fill="#15110f" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="48" y1="118" x2="60" y2="130" stroke="#ff8a8a" stroke-width="3"/>
+  <line x1="60" y1="118" x2="48" y2="130" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="166" y="129" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">WebSocket</text>
+  <line x1="46" y1="146" x2="276" y2="146" stroke="#3a414b" stroke-width="1.4"/>
+  <!-- icon: client <-> server two-headed -->
+  <rect x="52" y="168" width="48" height="30" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="76" y="187" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">client</text>
+  <rect x="222" y="168" width="48" height="30" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="246" y="187" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">server</text>
+  <line x1="102" y1="183" x2="220" y2="183" stroke="#cbd5e1" stroke-width="2.2" marker-end="url(#cc-r)" marker-start="url(#cc-rs)"/>
+  <text x="161" y="218" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">persistent TCP &#183; full-duplex</text>
+  <!-- pros -->
+  <text x="48" y="252" fill="#ffff99" font-family="sans-serif" font-size="12.5" font-weight="bold">PROS</text>
+  <text x="48" y="274" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">full-duplex, ms latency</text>
+  <text x="48" y="293" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">great for chat / games (Slack)</text>
+  <!-- con block -->
+  <rect x="44" y="312" width="234" height="294" rx="10" fill="#1c1012" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="58" y="338" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">WHY NOT HERE</text>
+  <text x="58" y="364" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">Holds millions of idle TCP</text>
+  <text x="58" y="383" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">connections + server RAM</text>
+  <text x="58" y="402" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">to deliver 1 ball / min.</text>
+  <text x="58" y="427" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">59s of every minute the</text>
+  <text x="58" y="446" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">socket sits wasted.</text>
+  <text x="58" y="478" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">Looks real-time &#8212;</text>
+  <text x="58" y="497" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">it isn't.</text>
+
+  <!-- ============ CARD 2: SSE ============ -->
+  <rect x="316" y="92" width="262" height="528" rx="14" fill="#15110f" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="334" y1="118" x2="346" y2="130" stroke="#ff8a8a" stroke-width="3"/>
+  <line x1="346" y1="118" x2="334" y2="130" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="452" y="129" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">Server-Sent Events</text>
+  <line x1="332" y1="146" x2="562" y2="146" stroke="#3a414b" stroke-width="1.4"/>
+  <!-- icon: server -> client one-way -->
+  <rect x="338" y="168" width="48" height="30" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="362" y="187" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">server</text>
+  <rect x="508" y="168" width="48" height="30" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="532" y="187" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">client</text>
+  <line x1="388" y1="183" x2="506" y2="183" stroke="#ffd27f" stroke-width="2.2" marker-end="url(#cc-o)"/>
+  <text x="447" y="218" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">one-way push &#183; held HTTP</text>
+  <!-- pros -->
+  <text x="334" y="252" fill="#ffff99" font-family="sans-serif" font-size="12.5" font-weight="bold">PROS</text>
+  <text x="334" y="274" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">one-way, lighter than</text>
+  <text x="334" y="293" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">a WebSocket</text>
+  <!-- con block -->
+  <rect x="330" y="312" width="234" height="294" rx="10" fill="#1c1012" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="344" y="338" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">WHY NOT HERE</text>
+  <text x="344" y="364" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">Same flaw, lighter: still a</text>
+  <text x="344" y="383" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">persistent connection per</text>
+  <text x="344" y="402" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">viewer, held open and idle</text>
+  <text x="344" y="421" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">for a 1 / min push.</text>
+  <text x="344" y="453" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">Shed the duplex weight,</text>
+  <text x="344" y="472" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">kept the expensive part.</text>
+
+  <!-- ============ CARD 3: Long polling ============ -->
+  <rect x="602" y="92" width="262" height="528" rx="14" fill="#15110f" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="620" y1="118" x2="632" y2="130" stroke="#ff8a8a" stroke-width="3"/>
+  <line x1="632" y1="118" x2="620" y2="130" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="738" y="129" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Long polling</text>
+  <line x1="618" y1="146" x2="848" y2="146" stroke="#3a414b" stroke-width="1.4"/>
+  <!-- icon: ask then held response -->
+  <rect x="624" y="166" width="46" height="28" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="647" y="184" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">client</text>
+  <rect x="796" y="166" width="46" height="28" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="819" y="184" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">server</text>
+  <line x1="672" y1="174" x2="794" y2="174" stroke="#93c5fd" stroke-width="2" marker-end="url(#cc-r)"/>
+  <line x1="794" y1="188" x2="674" y2="188" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#cc-rs)"/>
+  <text x="733" y="216" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">request held until new ball</text>
+  <!-- pros -->
+  <text x="620" y="252" fill="#ffff99" font-family="sans-serif" font-size="12.5" font-weight="bold">PROS</text>
+  <text x="620" y="274" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">low latency &#8212; the ball</text>
+  <text x="620" y="293" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">arrives the instant it's written</text>
+  <!-- con block -->
+  <rect x="616" y="312" width="234" height="294" rx="10" fill="#1c1012" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="630" y="338" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">WHY NOT HERE</text>
+  <text x="630" y="364" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">Every viewer ties up a</text>
+  <text x="630" y="383" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">request slot / thread for</text>
+  <text x="630" y="402" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">~a minute, looping</text>
+  <text x="630" y="421" fill="#f3d6d6" font-family="sans-serif" font-size="12.5">&#8220;new ball yet?&#8221;</text>
+  <text x="630" y="453" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">Millions of held requests</text>
+  <text x="630" y="472" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">&#8212; CPU + DB connections</text>
+  <text x="630" y="491" fill="#ffd27f" font-family="sans-serif" font-size="12.5" font-weight="bold">burned.</text>
+
+  <!-- ============ CARD 4: Short polling (CHOSEN) ============ -->
+  <rect x="888" y="92" width="262" height="528" rx="14" fill="#0f1a12" stroke="#8aff8a" stroke-width="3"/>
+  <polyline points="906,124 912,131 924,116" fill="none" stroke="#8aff8a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1024" y="129" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="19" font-weight="bold">Short polling</text>
+  <rect x="1066" y="98" width="74" height="22" rx="11" fill="#173a22" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="1103" y="113" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5" font-weight="bold">CHOSEN</text>
+  <line x1="904" y1="146" x2="1134" y2="146" stroke="#2f4636" stroke-width="1.4"/>
+  <!-- icon: client -> API -> cache, repeated -->
+  <rect x="906" y="166" width="44" height="28" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="928" y="184" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">client</text>
+  <rect x="982" y="166" width="40" height="28" rx="5" fill="#1a1f26" stroke="#8a95a3" stroke-width="1.6"/>
+  <text x="1002" y="184" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">API</text>
+  <path d="M1086 165 a22 6 0 0 0 44 0 v26 a22 6 0 0 1 -44 0 z" fill="#16191e" stroke="#b79bff" stroke-width="1.8"/>
+  <ellipse cx="1108" cy="165" rx="22" ry="6" fill="#1b1f25" stroke="#b79bff" stroke-width="1.8"/>
+  <text x="1108" y="210" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">Redis</text>
+  <line x1="950" y1="180" x2="980" y2="180" stroke="#8aff8a" stroke-width="2" marker-end="url(#cc-g)"/>
+  <line x1="1024" y1="180" x2="1084" y2="180" stroke="#8aff8a" stroke-width="2" marker-end="url(#cc-g)"/>
+  <text x="966" y="232" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">poll every ~10&#8211;30s, served from cache</text>
+  <!-- why it fits block -->
+  <rect x="902" y="252" width="234" height="354" rx="10" fill="#10210f" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="916" y="278" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">WHY IT FITS</text>
+  <text x="916" y="302" fill="#dff5df" font-family="sans-serif" font-size="12">stateless &#8220;newer than ball X?&#8221;,</text>
+  <text x="916" y="320" fill="#dff5df" font-family="sans-serif" font-size="12">answered instantly, then closed</text>
+  <text x="922" y="352" fill="#8aff8a" font-family="sans-serif" font-size="13">&#10003;</text>
+  <text x="940" y="352" fill="#dff5df" font-family="sans-serif" font-size="12.5">no held connections</text>
+  <text x="922" y="378" fill="#8aff8a" font-family="sans-serif" font-size="13">&#10003;</text>
+  <text x="940" y="378" fill="#dff5df" font-family="sans-serif" font-size="12.5">hits the cache, not the DB</text>
+  <text x="922" y="404" fill="#8aff8a" font-family="sans-serif" font-size="13">&#10003;</text>
+  <text x="940" y="404" fill="#dff5df" font-family="sans-serif" font-size="12.5">CDN / edge-cacheable</text>
+  <text x="922" y="430" fill="#8aff8a" font-family="sans-serif" font-size="13">&#10003;</text>
+  <text x="940" y="430" fill="#dff5df" font-family="sans-serif" font-size="12.5">rides existing HTTP infra</text>
+  <text x="922" y="456" fill="#8aff8a" font-family="sans-serif" font-size="13">&#10003;</text>
+  <text x="940" y="456" fill="#dff5df" font-family="sans-serif" font-size="12.5">latency more than enough</text>
+  <text x="940" y="473" fill="#dff5df" font-family="sans-serif" font-size="12.5">for a 1 / min update</text>
+  <text x="916" y="506" fill="#ffd27f" font-family="sans-serif" font-size="12" font-weight="bold">asking occasionally &#8804; cost of</text>
+  <text x="916" y="524" fill="#ffd27f" font-family="sans-serif" font-size="12" font-weight="bold">staying connected, when</text>
+  <text x="916" y="542" fill="#ffd27f" font-family="sans-serif" font-size="12" font-weight="bold">events are rare</text>
+
+  <!-- ============ BOTTOM BANNER ============ -->
+  <rect x="30" y="640" width="1120" height="58" rx="12" fill="#14140c" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="590" y="664" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15.5" font-weight="bold">The update RATE picks the mechanism</text>
+  <text x="590" y="686" text-anchor="middle" fill="#e6e6c8" font-family="sans-serif" font-size="14">frequent + bidirectional &#8594; WebSocket          &#183;          a once-a-minute one-way trickle &#8594; short polling</text>
+</svg>
