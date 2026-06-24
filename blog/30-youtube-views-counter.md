@@ -243,4 +243,4 @@ Every layer earns its place against a specific failure: the log exists because t
 - [Kafka vs RabbitMQ — AWS](https://aws.amazon.com/compare/the-difference-between-rabbitmq-and-kafka/)
 - [Kafka vs RabbitMQ: Key Differences & When to Use Each — DataCamp](https://www.datacamp.com/blog/kafka-vs-rabbitmq)
 - [When to use RabbitMQ or Apache Kafka — CloudAMQP](https://www.cloudamqp.com/blog/when-to-use-rabbitmq-or-apache-kafka.html)
-- [RabbitMQ vs Kafka: Use Cases, Performance & Architecture — Upsolver](https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case)
+- [Kafka versus RabbitMQ — Dobbelaere and Esmaili](https://arxiv.org/abs/1709.00333)

@@ -1164,7 +1164,7 @@ This is the same mental model Discord documents for Snowflake pagination: use `b
 
 ## Discord And Sonyflake
 
-Discord adopted [Snowflake-style IDs](https://docs.discord.com/developers/docs/reference#snowflakes) for its API objects.
+Discord adopted [Snowflake-style IDs](https://docs.discord.com/developers/reference#snowflakes) for its API objects.
 
 Their documented layout is:
 
@@ -1241,7 +1241,7 @@ The database also does not use plain auto-increment as the final ID.
 
 Instead, each logical shard has a small function that builds a 64-bit ID.
 
-Instagram described the layout in their engineering post on [Sharding & IDs](https://instagram-engineering.com/sharding-ids-at-instagram-1cf5a71e5a5c):
+Instagram-style sharded SQL IDs use this layout:
 
 ```text
 41 bits timestamp | 13 bits logical shard ID | 10 bits sequence

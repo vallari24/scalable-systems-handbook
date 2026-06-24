@@ -351,7 +351,7 @@ ACID per shard               a txn touching rows in ONE shard → full ACID, unc
 
 Instagram, Notion, and Pinterest all did exactly this at the single-node write ceiling:
 
-- **Instagram** — shard Postgres by `user_id`, logical shards *as Postgres schemas*, IDs generated in-DB (41-bit time + 13-bit shard + sequence) so an id sorts by time *and* names its own shard. ([Sharding & IDs at Instagram](https://instagram-engineering.com/sharding-ids-at-instagram-1cf5a71e5a5c))
+- **Instagram** — shard Postgres by `user_id`, logical shards *as Postgres schemas*, IDs generated in-DB (41-bit time + 13-bit shard + sequence) so an id sorts by time *and* names its own shard.
 - **Notion** — shard Postgres by `space_id` (workspace), because nearly every request is workspace-scoped, so a workspace's blocks/comments stay <span style="color:#ffff99"><strong>co-located on one shard</strong></span> — exactly where ACID still holds. They kept relational *specifically* to preserve transactions across the block model. ([Sharding Postgres at Notion](https://www.notion.com/blog/sharding-postgres-at-notion))
 - **Pinterest** — shard MySQL with the shard id embedded in a 64-bit object id, **deliberately giving up cross-shard joins/FKs** for app-side mapping lookups, keeping each shard a boring, fully-relational DB. ([Sharding Pinterest](https://medium.com/pinterest-engineering/sharding-pinterest-how-we-scaled-our-mysql-fleet-3f341e96ca6f))
 

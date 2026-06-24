@@ -496,7 +496,7 @@ The shape to remember: **a transactional database stays fast not by getting bigg
 ## Further reading
 
 - **[Designing Data-Intensive Applications, by Martin Kleppmann](https://dataintensive.net/)** — the foundational text for everything in this post: replication, partitioning, batch vs stream processing, and storage engines.
-- **[The Log: What every software engineer should know about real-time data's unifying abstraction, by Jay Kreps](https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying-abstraction)** — the essay behind Kappa architecture and log-centric data movement.
+- **[Questioning the Lambda Architecture, by Jay Kreps](https://www.oreilly.com/radar/questioning-the-lambda-architecture/)** — the essay behind Kappa architecture and log-centric data movement.
 - **[Building and operating a pretty big storage system (S3), by Andy Warfield](https://www.allthingsdistributed.com/2023/07/building-and-operating-a-pretty-big-storage-system.html)** — how the cold tier really works underneath.
 - **[The Google File System (2003)](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf)** and **[HDFS Architecture](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html)** — the origins of the distributed-file-system ideas in Section 10.
 - **[Apache Iceberg](https://iceberg.apache.org/), [Delta Lake](https://delta.io/), and [Apache Hudi](https://hudi.apache.org/)** — the open table formats that make the lakehouse possible.
