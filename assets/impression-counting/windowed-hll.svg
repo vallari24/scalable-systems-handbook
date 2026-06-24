@@ -1,0 +1,60 @@
+<svg width="1000" height="660" viewBox="0 0 1000 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="m-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="m-o" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffd27f"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="660" fill="#111317"/>
+
+  <text x="500" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">One HLL per post, per minute</text>
+  <text x="500" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">writes are O(1) PFADD; any range read = PFMERGE the minutes in window, then PFCOUNT</text>
+
+  <!-- TOP: key-schema callout -->
+  <rect x="232" y="92" width="536" height="36" rx="8" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="500" y="115" text-anchor="middle" fill="#ffff99" font-family="monospace" font-size="14" font-weight="bold">key = post-id : timestamp(minute)  &#8594;  value = HLL</text>
+
+  <!-- three monospace HLL rows for post p1729 -->
+  <rect x="160" y="142" width="680" height="34" rx="6" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="180" y="164" fill="#cbd5e1" font-family="monospace" font-size="14"><tspan fill="#ffff99">p1729:20220401_1200</tspan> = HLL{ a, b, c, d, e, f }</text>
+
+  <rect x="160" y="182" width="680" height="34" rx="6" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="180" y="204" fill="#cbd5e1" font-family="monospace" font-size="14"><tspan fill="#ffff99">p1729:20220401_1300</tspan> = HLL{ a, c, z, w, x }</text>
+
+  <rect x="160" y="222" width="680" height="34" rx="6" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="180" y="244" fill="#cbd5e1" font-family="monospace" font-size="14"><tspan fill="#ffff99">p1729:20220401_1400</tspan> = HLL{ c, d, f, l, z }</text>
+
+  <!-- pink write note -->
+  <rect x="140" y="270" width="720" height="40" rx="8" fill="#1a1410" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="500" y="295" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="13.5" font-weight="bold">each event &#8594; one PFADD into the current minute&#8217;s HLL  (O(1), fixed ~12 KB)</text>
+
+  <!-- divider between writes and reads -->
+  <line x1="60" y1="332" x2="940" y2="332" stroke="#3a3f47" stroke-width="2" stroke-dasharray="6 6"/>
+
+  <!-- BOTTOM: two query examples -->
+  <!-- Query 1 -->
+  <rect x="44" y="350" width="450" height="190" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="269" y="376" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Query 1: total unique across all 3 minutes</text>
+
+  <text x="66" y="412" fill="#cbd5e1" font-family="monospace" font-size="13"><tspan fill="#ffd27f">temp = PFMERGE(1200, 1300, 1400)</tspan></text>
+  <text x="86" y="432" fill="#9aa6b2" font-family="sans-serif" font-size="12">new HLL by union</text>
+  <line x1="66" y1="446" x2="472" y2="446" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="66" y="476" fill="#cbd5e1" font-family="monospace" font-size="13"><tspan fill="#8aff8a">return PFCOUNT(temp)</tspan></text>
+  <text x="86" y="496" fill="#9aa6b2" font-family="sans-serif" font-size="12">cardinality of the union</text>
+  <text x="269" y="524" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">{ a,b,c,d,e,f,z,w,x,l }  &#8594;  10</text>
+
+  <!-- Query 2 -->
+  <rect x="506" y="350" width="450" height="190" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="731" y="376" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Query 2: unique between 1200 and 1359</text>
+
+  <text x="528" y="412" fill="#cbd5e1" font-family="monospace" font-size="13"><tspan fill="#ffd27f">temp = PFMERGE(1200, 1300)</tspan></text>
+  <text x="548" y="432" fill="#9aa6b2" font-family="sans-serif" font-size="12">only the two in-window minutes</text>
+  <line x1="528" y1="446" x2="934" y2="446" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="528" y="476" fill="#cbd5e1" font-family="monospace" font-size="13"><tspan fill="#8aff8a">return PFCOUNT(temp)</tspan></text>
+  <text x="548" y="496" fill="#9aa6b2" font-family="sans-serif" font-size="12">cardinality of the union</text>
+  <text x="731" y="524" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">{ a,b,c,d,e,f,z,w,x }  &#8594;  9</text>
+
+  <!-- BOTTOM banner -->
+  <rect x="44" y="560" width="912" height="76" rx="12" fill="#1a1410" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="500" y="588" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">Every range query is the same two-step fold: PFMERGE the in-window minute-buckets, then PFCOUNT.</text>
+  <text x="500" y="612" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">n is chosen at query time &#8212; nothing is pre-aggregated. Per-minute HLLs are the universal building block.</text>
+</svg>

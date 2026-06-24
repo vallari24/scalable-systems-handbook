@@ -1,0 +1,128 @@
+<svg width="1120" height="800" viewBox="0 0 1120 800" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1120" height="800" fill="#111317"/>
+
+  <text x="560" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Two-tier storage: hot Redis, cold DynamoDB</text>
+  <text x="560" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">keep hot (still-written) minutes in Redis; flush finished, immutable HLLs to cheap DynamoDB blobs</text>
+
+  <!-- ============ TOP BAND: write path ============ -->
+
+  <!-- users (stick figures) -->
+  <g stroke="#ff8bd2" stroke-width="2.5" fill="none">
+    <circle cx="58" cy="150" r="11"/><line x1="58" y1="161" x2="58" y2="189"/><line x1="58" y1="169" x2="45" y2="181"/><line x1="58" y1="169" x2="71" y2="181"/><line x1="58" y1="189" x2="46" y2="209"/><line x1="58" y1="189" x2="70" y2="209"/>
+    <circle cx="58" cy="234" r="11"/><line x1="58" y1="245" x2="58" y2="273"/><line x1="58" y1="253" x2="45" y2="265"/><line x1="58" y1="253" x2="71" y2="265"/><line x1="58" y1="273" x2="46" y2="293"/><line x1="58" y1="273" x2="70" y2="293"/>
+  </g>
+  <text x="58" y="318" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">users</text>
+
+  <line x1="86" y1="195" x2="128" y2="205" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+  <line x1="86" y1="234" x2="128" y2="224" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+
+  <!-- Kafka tube (horizontal, blue) -->
+  <rect x="132" y="200" width="200" height="34" rx="17" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="150" y1="209" x2="314" y2="209" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="150" y1="217" x2="314" y2="217" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="150" y1="225" x2="314" y2="225" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <circle cx="150" cy="217" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="314" cy="217" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="232" y="186" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">Kafka (impressions)</text>
+
+  <!-- arrow Kafka -> consumers -->
+  <line x1="332" y1="217" x2="378" y2="217" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+
+  <!-- Counting consumers (pink stacked fleet) -->
+  <rect x="386" y="190" width="128" height="62" rx="10" fill="#241019" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="380" y="196" width="128" height="62" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="444" y="222" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13.5" font-weight="bold">Counting</text>
+  <text x="444" y="241" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13.5" font-weight="bold">consumers</text>
+
+  <!-- arrow consumers -> Redis, PFADD -->
+  <line x1="508" y1="227" x2="588" y2="227" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+  <text x="548" y="216" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="12.5" font-weight="bold">PFADD</text>
+
+  <!-- Redis cylinder (yellow) -->
+  <path d="M598,180 L598,266 A52,13 0 0 0 702,266 L702,180" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <ellipse cx="650" cy="180" rx="52" ry="13" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="650" y="216" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Redis</text>
+  <text x="650" y="236" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="11.5" font-weight="bold">HOT</text>
+  <text x="650" y="296" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">last ~30 min&#8211;1 hour</text>
+  <text x="650" y="313" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">of minute HLLs</text>
+
+  <!-- DynamoDB cylinder (yellow) far right -->
+  <path d="M928,180 L928,266 A58,13 0 0 0 1044,266 L1044,180" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <ellipse cx="986" cy="180" rx="58" ry="13" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="986" y="212" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">DynamoDB</text>
+  <text x="986" y="232" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11.5" font-weight="bold">COLD</text>
+  <text x="986" y="296" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">finished HLLs as serialized</text>
+  <text x="986" y="313" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">byte-blobs; cheap, immutable</text>
+
+  <!-- flush arrow Redis -> DynamoDB (pink) -->
+  <line x1="704" y1="200" x2="924" y2="200" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+  <text x="814" y="172" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12.5" font-weight="bold">flush &#183; every ~10 s</text>
+  <text x="814" y="190" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="11.5">GET key &#8594; raw bytes \x0a0b1x29&#8230;</text>
+
+  <!-- immutability note near DynamoDB -->
+  <rect x="906" y="334" width="160" height="56" rx="8" fill="#16191e" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="986" y="356" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">data is immutable once</text>
+  <text x="986" y="372" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">its minute closes</text>
+  <text x="986" y="386" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">(events move forward)</text>
+
+  <!-- ============ READ PATH (green) ============ -->
+
+  <!-- green arrow: DynamoDB -> Redis (pull cold blob up on miss) -->
+  <path d="M956,266 C940,330 800,330 704,260" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="826" y="350" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">pull cold blob up to Redis on miss</text>
+
+  <!-- ============ BOTTOM-LEFT: analytics read ============ -->
+
+  <!-- Customers (stick figures, green) -->
+  <g stroke="#8aff8a" stroke-width="2.5" fill="none">
+    <circle cx="58" cy="430" r="11"/><line x1="58" y1="441" x2="58" y2="469"/><line x1="58" y1="449" x2="45" y2="461"/><line x1="58" y1="449" x2="71" y2="461"/><line x1="58" y1="469" x2="46" y2="489"/><line x1="58" y1="469" x2="70" y2="489"/>
+    <circle cx="104" cy="430" r="11"/><line x1="104" y1="441" x2="104" y2="469"/><line x1="104" y1="449" x2="91" y2="461"/><line x1="104" y1="449" x2="117" y2="461"/><line x1="104" y1="469" x2="92" y2="489"/><line x1="104" y1="469" x2="116" y2="489"/>
+    <circle cx="150" cy="430" r="11"/><line x1="150" y1="441" x2="150" y2="469"/><line x1="150" y1="449" x2="137" y2="461"/><line x1="150" y1="449" x2="163" y2="461"/><line x1="150" y1="469" x2="138" y2="489"/><line x1="150" y1="469" x2="162" y2="489"/>
+  </g>
+  <text x="104" y="514" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">Customers (queries)</text>
+
+  <!-- arrow customers -> analytics engine -->
+  <line x1="172" y1="450" x2="226" y2="450" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+
+  <!-- Analytics engine (blue stacked fleet) -->
+  <rect x="240" y="420" width="148" height="66" rx="10" fill="#101826" stroke="#93c5fd" stroke-width="2"/>
+  <rect x="234" y="426" width="148" height="66" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="308" y="454" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">Analytics</text>
+  <text x="308" y="473" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">engine</text>
+
+  <!-- green arrow: analytics engine UP to Redis (PFMERGE/PFCOUNT) -->
+  <path d="M340,426 C360,360 540,330 632,270" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="470" y="392" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">read: PFMERGE / PFCOUNT in Redis</text>
+
+  <!-- ============ LIFECYCLE LIST (right open space) ============ -->
+  <rect x="438" y="430" width="630" height="222" rx="12" fill="#16191e" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="458" y="458" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Lifecycle</text>
+
+  <text x="458" y="488" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">1.</text>
+  <text x="480" y="488" fill="#cbd5e1" font-family="sans-serif" font-size="13">Periodically (~10 s) finished HLLs copied Redis &#8594; DynamoDB (HLL is just bytes).</text>
+
+  <text x="458" y="520" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">2.</text>
+  <text x="480" y="520" fill="#cbd5e1" font-family="sans-serif" font-size="13">Writes always hit Redis first (PFADD current minute).</text>
+
+  <text x="458" y="552" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">3.</text>
+  <text x="480" y="552" fill="#cbd5e1" font-family="sans-serif" font-size="13">Read / late-write miss: load blob from DynamoDB into Redis, then operate &#8212;</text>
+  <text x="480" y="570" fill="#cbd5e1" font-family="sans-serif" font-size="13">only Redis understands PFMERGE / PFCOUNT.</text>
+
+  <text x="458" y="602" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">4.</text>
+  <text x="480" y="602" fill="#cbd5e1" font-family="sans-serif" font-size="13">After the query the reloaded keys can carry a short TTL and expire again.</text>
+
+  <text x="458" y="636" fill="#9aa6b2" font-family="sans-serif" font-size="12">RAM holds only the working set; history lives cheaply in DynamoDB.</text>
+
+  <!-- ============ BOTTOM BANNER (yellow) ============ -->
+  <rect x="60" y="668" width="1000" height="84" rx="12" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="560" y="698" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Redis = hot write buffer + the only place PFMERGE/PFCOUNT run; DynamoDB = cheap immutable archive;</text>
+  <text x="560" y="720" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">analytics engine shuttles cold blobs up on demand.</text>
+  <text x="560" y="742" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">RAM cost tracks the working set, not all of history.</text>
+</svg>

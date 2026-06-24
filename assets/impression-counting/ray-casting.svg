@@ -1,0 +1,69 @@
+<svg width="1000" height="560" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="560" fill="#111317"/>
+
+  <text x="500" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Ray Casting: is this point inside the shape?</text>
+  <text x="500" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">shoot a ray, count edge crossings &#8212; odd is inside, even is outside</text>
+
+  <line x1="560" y1="92" x2="560" y2="540" stroke="#3a3f47" stroke-width="2" stroke-dasharray="6 6"/>
+
+  <!-- LEFT: the idea -->
+  <text x="280" y="118" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="bold">The idea</text>
+
+  <!-- polygon (airport shape) -->
+  <polygon points="140,250 260,180 400,230 410,340 300,410 170,380" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="270" y="250" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">geofence (airport polygon)</text>
+
+  <!-- inside point + ray -->
+  <line x1="270" y1="310" x2="525" y2="310" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <circle cx="270" cy="310" r="7" fill="#ff8a8a"/>
+  <circle cx="407" cy="310" r="4.5" fill="#fff"/>
+  <text x="270" y="338" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12">your dot</text>
+  <text x="470" y="300" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">1 crossing &#8594; INSIDE</text>
+
+  <!-- outside point + ray -->
+  <line x1="70" y1="150" x2="525" y2="150" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+  <circle cx="70" cy="150" r="7" fill="#93c5fd"/>
+  <circle cx="218" cy="150" r="4.5" fill="#fff"/>
+  <circle cx="324" cy="150" r="4.5" fill="#fff"/>
+  <text x="430" y="140" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">2 crossings &#8594; OUTSIDE</text>
+
+  <text x="280" y="452" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">white dots = where the ray crosses a polygon edge</text>
+
+  <!-- RIGHT: why it works -->
+  <text x="780" y="118" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17" font-weight="bold">Why parity works</text>
+  <text x="780" y="146" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">start at infinity (outside); each edge flips you</text>
+
+  <!-- toggling strip -->
+  <line x1="610" y1="200" x2="950" y2="200" stroke="#cbd5e1" stroke-width="2.5"/>
+  <g font-family="sans-serif" font-size="12" text-anchor="middle">
+    <line x1="690" y1="190" x2="690" y2="210" stroke="#ffff99" stroke-width="3"/>
+    <line x1="780" y1="190" x2="780" y2="210" stroke="#ffff99" stroke-width="3"/>
+    <line x1="870" y1="190" x2="870" y2="210" stroke="#ffff99" stroke-width="3"/>
+    <text x="645" y="232" fill="#93c5fd">OUT</text>
+    <text x="735" y="232" fill="#8aff8a">IN</text>
+    <text x="825" y="232" fill="#93c5fd">OUT</text>
+    <text x="915" y="232" fill="#8aff8a">IN</text>
+    <text x="690" y="180" fill="#ffff99">edge</text>
+    <text x="780" y="180" fill="#ffff99">edge</text>
+    <text x="870" y="180" fill="#ffff99">edge</text>
+  </g>
+  <text x="780" y="262" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">each wall toggles inside/outside, like a light switch</text>
+
+  <!-- circle case -->
+  <rect x="606" y="300" width="350" height="150" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="781" y="326" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">"within 5 m of the drop" is simpler</text>
+  <circle cx="670" cy="392" r="34" fill="none" stroke="#8aff8a" stroke-width="2" stroke-dasharray="4 4"/>
+  <circle cx="670" cy="392" r="4" fill="#ff8a8a"/>
+  <line x1="670" y1="392" x2="704" y2="392" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="688" y="384" fill="#cbd5e1" font-family="sans-serif" font-size="10">r</text>
+  <text x="838" y="384" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">a circle, not a polygon &#8212;</text>
+  <text x="838" y="406" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12.5">distance(you, drop) &lt; 5m</text>
+  <text x="838" y="428" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">one comparison, no ray</text>
+
+  <!-- caption -->
+  <text x="500" y="520" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14.5" font-weight="bold">A geofence is a polygon (point-in-polygon); proximity to a point is a circle (distance test).</text>
+</svg>

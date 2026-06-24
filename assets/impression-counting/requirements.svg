@@ -1,0 +1,109 @@
+<svg width="1000" height="740" viewBox="0 0 1000 740" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="740" fill="#111317"/>
+
+  <text x="500" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Impression Counting: the brief</text>
+  <text x="500" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">count distinct viewers over a sliding window &#8212; and &#8216;distinct&#8217;, not count, is the hard part</text>
+
+  <!-- ================= SECTION 1: everywhere ================= -->
+  <text x="56" y="106" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">This system is everywhere</text>
+  <rect x="44" y="116" width="456" height="222" rx="10" fill="#16191e" stroke="#3a3f47" stroke-width="2"/>
+
+  <!-- rows: platform (yellow) -> phrase (neutral) -->
+  <text x="76"  y="148" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">LinkedIn</text>
+  <text x="232" y="148" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8594;</text>
+  <text x="256" y="148" fill="#cbd5e1" font-family="sans-serif" font-size="13">views on a post</text>
+
+  <text x="76"  y="174" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">YouTube</text>
+  <text x="232" y="174" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8594;</text>
+  <text x="256" y="174" fill="#cbd5e1" font-family="sans-serif" font-size="13">views on a video</text>
+
+  <text x="76"  y="200" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">Google Search</text>
+  <text x="232" y="200" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8594;</text>
+  <text x="256" y="200" fill="#cbd5e1" font-family="sans-serif" font-size="13">impressions on a result</text>
+
+  <text x="76"  y="226" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">Reddit</text>
+  <text x="232" y="226" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8594;</text>
+  <text x="256" y="226" fill="#cbd5e1" font-family="sans-serif" font-size="13">views on a post</text>
+
+  <text x="76"  y="252" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">Google AdSense</text>
+  <text x="232" y="252" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8594;</text>
+  <text x="256" y="252" fill="#cbd5e1" font-family="sans-serif" font-size="13">impressions on an ad</text>
+
+  <text x="76"  y="278" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">Instagram</text>
+  <text x="232" y="278" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8594;</text>
+  <text x="256" y="278" fill="#cbd5e1" font-family="sans-serif" font-size="13">views on a photo</text>
+
+  <text x="76"  y="304" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">TikTok</text>
+  <text x="232" y="304" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8594;</text>
+  <text x="256" y="304" fill="#cbd5e1" font-family="sans-serif" font-size="13">views on a short video</text>
+
+  <!-- ================= SECTION 2: three metric defs ================= -->
+  <text x="544" y="106" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">The vocabulary</text>
+
+  <!-- IMPRESSION (neutral) -->
+  <rect x="532" y="116" width="140" height="120" rx="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="602" y="140" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5" font-weight="bold">IMPRESSION</text>
+  <text x="602" y="166" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">the thing was</text>
+  <text x="602" y="182" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">shown to a screen;</text>
+  <text x="602" y="198" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">counted every</text>
+  <text x="602" y="214" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">time seen</text>
+
+  <!-- REACTION (blue) -->
+  <rect x="684" y="116" width="140" height="120" rx="9" fill="#101826" stroke="#93c5fd" stroke-width="2"/>
+  <text x="754" y="140" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">REACTION</text>
+  <text x="754" y="166" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">an engagement:</text>
+  <text x="754" y="190" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">like / haha /</text>
+  <text x="754" y="206" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">angry</text>
+
+  <!-- CTR (yellow) -->
+  <rect x="836" y="116" width="120" height="120" rx="9" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="896" y="140" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">CTR</text>
+  <text x="896" y="166" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">clicks &#247;</text>
+  <text x="896" y="182" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">impressions</text>
+  <text x="896" y="206" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">what advertisers</text>
+  <text x="896" y="222" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">watch</text>
+
+  <!-- ================= SECTION 3: REACH headline metric ================= -->
+  <rect x="532" y="252" width="424" height="120" rx="10" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="552" y="280" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">REACH</text>
+  <text x="618" y="280" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8212; the headline metric</text>
+  <text x="552" y="308" fill="#cbd5e1" font-family="sans-serif" font-size="13">number of <tspan fill="#ffff99" font-weight="bold">UNIQUE</tspan> people who saw the ad</text>
+  <text x="552" y="330" fill="#cbd5e1" font-family="sans-serif" font-size="13">in the last <tspan fill="#ffff99" font-weight="bold">n</tspan> minutes</text>
+  <text x="552" y="352" fill="#9aa6b2" font-family="sans-serif" font-size="12">(n given at query time)</text>
+
+  <!-- tiny jagged live line-graph sketch -->
+  <rect x="828" y="296" width="112" height="62" rx="6" fill="#16191e" stroke="#3a3f47" stroke-width="1.5"/>
+  <polyline points="836,346 848,332 858,338 870,316 882,324 894,304 906,312 920,300 932,308" fill="none" stroke="#8aff8a" stroke-width="2"/>
+  <text x="884" y="354" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="9.5">live</text>
+
+  <!-- ================= SECTION 4: Requirements ================= -->
+  <text x="56" y="380" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Requirements</text>
+  <rect x="44" y="390" width="912" height="232" rx="10" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+
+  <!-- bullets -->
+  <circle cx="74" cy="424" r="3.5" fill="#8aff8a"/>
+  <text x="90" y="429" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#8aff8a" font-weight="bold">Real-time / near real-time</tspan> &#8212; answers within seconds of the events arriving.</text>
+
+  <circle cx="74" cy="462" r="3.5" fill="#ff8bd2"/>
+  <text x="90" y="467" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ff8bd2" font-weight="bold">NO pre-aggregation</tspan> &#8212; n is chosen at runtime, so you cannot precompute the window.</text>
+
+  <circle cx="74" cy="500" r="3.5" fill="#ffff99"/>
+  <text x="90" y="505" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ffff99" font-weight="bold">Each user counted ONCE per window</tspan> &#8212; reach is people, not page-loads.</text>
+
+  <circle cx="74" cy="538" r="3.5" fill="#ffd27f"/>
+  <text x="90" y="543" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ffd27f" font-weight="bold">A close APPROXIMATION is fine</tspan> &#8212; trade exactness for memory and speed.</text>
+
+  <circle cx="74" cy="576" r="3.5" fill="#ffd27f"/>
+  <text x="90" y="581" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan fill="#ffd27f" font-weight="bold">A rule engine filters unwanted events</tspan> &#8212; drop self-views, bot replays, fraud.</text>
+
+  <text x="90" y="606" fill="#9aa6b2" font-family="sans-serif" font-size="12">the filter runs before the counter ever sees the event</text>
+
+  <!-- ================= SECTION 5: bottom insight banner ================= -->
+  <rect x="60" y="644" width="880" height="72" rx="12" fill="#2a1414" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="500" y="676" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="16" font-weight="bold">This is COUNT DISTINCT over a sliding window.</text>
+  <text x="500" y="700" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">COUNT DISTINCT, not COUNT, is what makes it hard.</text>
+</svg>

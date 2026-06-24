@@ -1,0 +1,151 @@
+<svg width="1180" height="820" viewBox="0 0 1180 820" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-g" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="m-p" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="m-b" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-y" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#ffff99"/></marker>
+    <marker id="m-o" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#ffd27f"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="820" fill="#111317"/>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Impression Counting: the whole map</text>
+  <text x="590" y="72" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">two journeys meeting at Redis &#8212; fan in &amp; count, then merge &amp; read</text>
+
+  <!-- ===================== WRITE PATH (top) ===================== -->
+
+  <!-- users (stick figures) -->
+  <g stroke="#ff8bd2" stroke-width="2.5" fill="none">
+    <circle cx="62" cy="150" r="12"/><line x1="62" y1="162" x2="62" y2="192"/><line x1="62" y1="171" x2="48" y2="184"/><line x1="62" y1="171" x2="76" y2="184"/><line x1="62" y1="192" x2="49" y2="214"/><line x1="62" y1="192" x2="75" y2="214"/>
+    <circle cx="62" cy="238" r="12"/><line x1="62" y1="250" x2="62" y2="280"/><line x1="62" y1="259" x2="48" y2="272"/><line x1="62" y1="259" x2="76" y2="272"/><line x1="62" y1="280" x2="49" y2="302"/><line x1="62" y1="280" x2="75" y2="302"/>
+  </g>
+  <text x="62" y="330" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">users</text>
+  <text x="62" y="348" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">view a post</text>
+
+  <line x1="92" y1="195" x2="142" y2="205" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+  <line x1="92" y1="238" x2="142" y2="228" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+
+  <!-- API servers fleet -->
+  <rect x="162" y="190" width="128" height="64" rx="10" fill="#241019" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="156" y="196" width="128" height="64" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="220" y="224" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">API servers</text>
+  <text x="220" y="244" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">stateless fleet</text>
+
+  <text x="328" y="210" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12" font-weight="bold">emit</text>
+  <line x1="284" y1="228" x2="354" y2="228" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+
+  <!-- Kafka tube (horizontal blue) -->
+  <rect x="358" y="210" width="270" height="38" rx="19" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="378" y1="220" x2="608" y2="220" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="378" y1="229" x2="608" y2="229" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="378" y1="238" x2="608" y2="238" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <circle cx="378" cy="229" r="10" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="608" cy="229" r="10" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="493" y="200" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">Kafka (impression log)</text>
+  <text x="493" y="276" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">durable buffer &#183; partition by post_id</text>
+
+  <!-- fork (a): up to TSDB -->
+  <text x="563" y="142" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="bold">archive raw</text>
+  <line x1="540" y1="210" x2="540" y2="160" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+
+  <!-- TSDB cylinder -->
+  <ellipse cx="540" cy="112" rx="58" ry="14" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <path d="M482,112 v18 a58,14 0 0 0 116,0 v-18" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="540" y="118" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">TSDB</text>
+  <text x="660" y="108" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">system of record</text>
+  <text x="660" y="125" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">(raw, immutable)</text>
+
+  <!-- fork (b): into Rule engine (orange) -->
+  <text x="690" y="220" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="bold">stream</text>
+  <line x1="628" y1="229" x2="700" y2="229" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+
+  <!-- Rule engine / filter box (orange) -->
+  <rect x="704" y="192" width="166" height="74" rx="10" fill="#1f1608" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="787" y="216" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="13.5" font-weight="bold">Rule engine / filter</text>
+  <text x="787" y="236" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">drop self-views, short</text>
+  <text x="787" y="252" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">views, bot replays</text>
+
+  <text x="908" y="216" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="12" font-weight="bold">filtered</text>
+  <line x1="870" y1="229" x2="940" y2="229" stroke="#ffd27f" stroke-width="2.5" marker-end="url(#m-o)"/>
+
+  <!-- Counting consumers fleet (pink) -->
+  <rect x="950" y="190" width="140" height="68" rx="10" fill="#241019" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="944" y="196" width="140" height="68" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="1014" y="222" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13.5" font-weight="bold">Counting</text>
+  <text x="1014" y="241" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13.5" font-weight="bold">consumers</text>
+  <!-- PFADD arrow down to Redis -->
+  <line x1="1014" y1="264" x2="1014" y2="352" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+  <text x="1058" y="312" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="13" font-weight="bold">PFADD</text>
+
+  <!-- ===================== REDIS HOT (center-right) ===================== -->
+  <ellipse cx="1014" cy="372" rx="76" ry="16" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <path d="M938,372 v70 a76,16 0 0 0 152,0 v-70" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="1014" y="408" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Redis (HOT)</text>
+  <text x="1014" y="428" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">per-post-per-minute</text>
+  <text x="1014" y="444" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">HLLs &#183; last ~1 h</text>
+
+  <!-- ===================== STORAGE TIER: flush to DynamoDB COLD ===================== -->
+  <text x="900" y="500" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12" font-weight="bold">flush every ~10 s</text>
+  <line x1="1014" y1="458" x2="1014" y2="528" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+
+  <!-- DynamoDB COLD cylinder -->
+  <ellipse cx="1014" cy="548" rx="80" ry="16" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <path d="M934,548 v66 a80,16 0 0 0 160,0 v-66" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="1014" y="582" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">DynamoDB (COLD)</text>
+  <text x="1014" y="602" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">finished HLLs as byte-blobs</text>
+  <text x="1014" y="618" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">cheap &amp; immutable</text>
+
+  <!-- ===================== READ PATH (bottom) ===================== -->
+
+  <!-- customers (stick figures) -->
+  <g stroke="#8aff8a" stroke-width="2.5" fill="none">
+    <circle cx="62" cy="610" r="12"/><line x1="62" y1="622" x2="62" y2="652"/><line x1="62" y1="631" x2="48" y2="644"/><line x1="62" y1="631" x2="76" y2="644"/><line x1="62" y1="652" x2="49" y2="674"/><line x1="62" y1="652" x2="75" y2="674"/>
+  </g>
+  <text x="62" y="700" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">customers</text>
+  <text x="62" y="718" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12">ask for reach</text>
+
+  <line x1="92" y1="618" x2="152" y2="618" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+
+  <!-- Analytics engine fleet (blue) -->
+  <rect x="168" y="584" width="156" height="68" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <rect x="162" y="590" width="156" height="68" rx="10" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="240" y="618" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">Analytics engine</text>
+  <text x="240" y="638" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">query fleet</text>
+
+  <!-- reads recent minute HLLs from Redis -->
+  <path d="M318,604 C520,560 800,440 938,408" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="600" y="520" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">recent minutes from Redis (HOT)</text>
+
+  <!-- older pulled up from DynamoDB -->
+  <path d="M324,636 C560,700 820,660 934,592" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="610" y="712" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">older minutes pulled up from DynamoDB (COLD)</text>
+
+  <!-- PFMERGE + PFCOUNT -> dashboard -->
+  <line x1="324" y1="618" x2="394" y2="618" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+
+  <rect x="400" y="584" width="186" height="68" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="493" y="610" text-anchor="middle" fill="#8aff8a" font-family="monospace" font-size="13.5" font-weight="bold">PFMERGE + PFCOUNT</text>
+  <text x="493" y="632" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">union in-window minutes</text>
+  <text x="493" y="648" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">one estimate, &#177;0.8%</text>
+
+  <line x1="586" y1="618" x2="648" y2="618" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="617" y="608" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11" font-weight="bold">reach</text>
+
+  <!-- Dashboard -->
+  <rect x="654" y="584" width="160" height="68" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="734" y="612" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Dashboard</text>
+  <text x="734" y="634" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">"unique reach" number</text>
+
+  <!-- ===================== LEGEND (bottom-right corner) ===================== -->
+  <rect x="858" y="660" width="278" height="118" rx="10" fill="#16191e" stroke="#3a3f47" stroke-width="1.6"/>
+  <text x="997" y="682" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">Legend</text>
+  <line x1="874" y1="700" x2="904" y2="700" stroke="#8aff8a" stroke-width="3"/><text x="912" y="705" fill="#cbd5e1" font-family="sans-serif" font-size="12">read / serve path</text>
+  <line x1="874" y1="720" x2="904" y2="720" stroke="#ff8bd2" stroke-width="3"/><text x="912" y="725" fill="#cbd5e1" font-family="sans-serif" font-size="12">write / count path</text>
+  <line x1="874" y1="740" x2="904" y2="740" stroke="#93c5fd" stroke-width="3"/><text x="912" y="745" fill="#cbd5e1" font-family="sans-serif" font-size="12">async plane: Kafka, TSDB, analytics</text>
+  <rect x="874" y="754" width="14" height="11" fill="#20200f" stroke="#ffff99" stroke-width="1.8"/><text x="896" y="764" fill="#cbd5e1" font-family="sans-serif" font-size="12">HLL storage</text>
+  <rect x="1010" y="754" width="14" height="11" fill="#1f1608" stroke="#ffd27f" stroke-width="1.8"/><text x="1032" y="764" fill="#cbd5e1" font-family="sans-serif" font-size="12">rule engine</text>
+
+  <!-- ===================== BOTTOM SUMMARY ===================== -->
+  <text x="445" y="752" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="13.5" font-weight="bold">Fan in via Kafka + rule engine &#8594; counting consumers PFADD per-minute HLLs in hot Redis &#8594;</text>
+  <text x="445" y="772" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="13.5" font-weight="bold">finished HLLs age out to cheap DynamoDB blobs &#8594; reach queries PFMERGE+PFCOUNT the in-window minutes.</text>
+  <text x="445" y="798" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-style="italic">A 1200 GB set problem becomes a kilobyte sketch problem.</text>
+</svg>

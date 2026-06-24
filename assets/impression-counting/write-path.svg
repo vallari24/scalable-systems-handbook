@@ -1,0 +1,112 @@
+<svg width="1120" height="640" viewBox="0 0 1120 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="m-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+    <marker id="m-o" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffd27f"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1120" height="640" fill="#111317"/>
+
+  <text x="560" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">The write path: from view event to HLL</text>
+  <text x="560" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">absorb the firehose &#8594; archive raw &#8594; filter non-views &#8594; PFADD survivors into per-minute HLLs</text>
+
+  <!-- 1. USERS -->
+  <g stroke="#8aff8a" stroke-width="2.5" fill="none">
+    <circle cx="58" cy="186" r="11"/><line x1="58" y1="197" x2="58" y2="224"/><line x1="58" y1="205" x2="45" y2="217"/><line x1="58" y1="205" x2="71" y2="217"/><line x1="58" y1="224" x2="46" y2="244"/><line x1="58" y1="224" x2="70" y2="244"/>
+    <circle cx="58" cy="268" r="11"/><line x1="58" y1="279" x2="58" y2="306"/><line x1="58" y1="287" x2="45" y2="299"/><line x1="58" y1="287" x2="71" y2="299"/><line x1="58" y1="306" x2="46" y2="326"/><line x1="58" y1="306" x2="70" y2="326"/>
+  </g>
+  <text x="58" y="354" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">viewers</text>
+
+  <!-- arrows users -> API -->
+  <line x1="84" y1="218" x2="142" y2="232" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <line x1="84" y1="276" x2="142" y2="262" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="116" y="206" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5" font-weight="bold">view events</text>
+
+  <!-- 2. API server fleet -->
+  <rect x="152" y="222" width="118" height="64" rx="10" fill="#101a12" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="146" y="228" width="118" height="64" rx="10" fill="#13201a" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="205" y="256" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">API servers</text>
+  <text x="205" y="278" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">append &amp; return</text>
+
+  <!-- arrow API -> Kafka -->
+  <line x1="264" y1="260" x2="318" y2="260" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+
+  <!-- 3. KAFKA TUBE -->
+  <rect x="332" y="242" width="240" height="36" rx="18" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="350" y1="251" x2="554" y2="251" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="350" y1="260" x2="554" y2="260" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="350" y1="269" x2="554" y2="269" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="350" cy="260" rx="10" ry="18" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <ellipse cx="554" cy="260" rx="10" ry="18" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="452" y="306" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">Kafka (absorbs the firehose)</text>
+
+  <!-- 4. fork UP to TSDB -->
+  <line x1="452" y1="240" x2="452" y2="178" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+  <text x="468" y="214" text-anchor="start" fill="#93c5fd" font-family="sans-serif" font-size="11.5">archive raw events</text>
+  <text x="468" y="230" text-anchor="start" fill="#9aa6b2" font-family="sans-serif" font-size="11">(system of record)</text>
+
+  <!-- TSDB cylinder -->
+  <path d="M372,110 L372,156 A40,11 0 0 0 452,156 L452,110" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <ellipse cx="412" cy="110" rx="40" ry="11" fill="#101826" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="412" y="140" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">TSDB</text>
+  <!-- time series lines beside cylinder -->
+  <g stroke="#93c5fd" stroke-width="1.5" opacity="0.7">
+    <line x1="466" y1="108" x2="540" y2="108"/>
+    <line x1="466" y1="120" x2="540" y2="120"/>
+    <line x1="466" y1="132" x2="540" y2="132"/>
+    <line x1="466" y1="144" x2="540" y2="144"/>
+  </g>
+  <polyline points="466,156 484,150 502,160 520,148 540,154" fill="none" stroke="#93c5fd" stroke-width="2"/>
+  <text x="503" y="92" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">raw event time series</text>
+
+  <!-- 5. Kafka -> Rule engine -->
+  <line x1="574" y1="260" x2="638" y2="260" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+
+  <!-- Rules cylinder feeding filter -->
+  <path d="M662,360 L662,402 A36,10 0 0 0 734,402 L734,360" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <ellipse cx="698" cy="360" rx="36" ry="10" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="698" y="388" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">Rules</text>
+  <line x1="698" y1="349" x2="698" y2="304" stroke="#ffff99" stroke-width="2" marker-end="url(#m-y)"/>
+  <text x="748" y="332" text-anchor="start" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">load rules</text>
+
+  <!-- Rule engine / Filter box -->
+  <rect x="642" y="224" width="148" height="72" rx="10" fill="#1f1608" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="716" y="254" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">Rule engine</text>
+  <text x="716" y="274" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">/ Filter</text>
+
+  <!-- dropped cases list -->
+  <text x="642" y="440" text-anchor="start" fill="#ff8a8a" font-family="sans-serif" font-size="11.5" font-weight="bold">dropped (&#8594; 0 views):</text>
+  <text x="642" y="460" text-anchor="start" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">&#10007; user watches own video</text>
+  <text x="642" y="478" text-anchor="start" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">&#10007; min watch time 5 min</text>
+  <text x="642" y="496" text-anchor="start" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">&#10007; &gt;10 views/min = bot &#8658; 0</text>
+
+  <!-- 6. Filter -> Counting consumers -->
+  <line x1="790" y1="260" x2="852" y2="260" stroke="#ffd27f" stroke-width="2.5" marker-end="url(#m-o)"/>
+  <text x="821" y="246" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="11" font-weight="bold">views to count</text>
+
+  <!-- Counting consumers fleet (pink) -->
+  <rect x="862" y="222" width="130" height="64" rx="10" fill="#1a1410" stroke="#ff8bd2" stroke-width="2"/>
+  <rect x="856" y="228" width="130" height="64" rx="10" fill="#241019" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="921" y="254" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13.5" font-weight="bold">Counting</text>
+  <text x="921" y="273" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13.5" font-weight="bold">consumers</text>
+
+  <!-- 7. Counting consumers -> Redis -->
+  <line x1="921" y1="298" x2="921" y2="372" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+  <text x="921" y="320" text-anchor="middle" fill="#ff8bd2" font-family="monospace" font-size="12">PFADD  p1729:20220401_1720  user_123</text>
+
+  <!-- Redis cylinder (yellow) -->
+  <path d="M846,396 L846,452 A75,13 0 0 0 996,452 L996,396" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <ellipse cx="921" cy="396" rx="75" ry="13" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="921" y="424" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13.5" font-weight="bold">Redis</text>
+  <text x="921" y="444" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">per-post-per-minute HLLs</text>
+
+  <!-- forward-in-time note -->
+  <rect x="148" y="528" width="490" height="56" rx="10" fill="#101826" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="168" y="552" text-anchor="start" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">events always move forward in time</text>
+  <text x="168" y="572" text-anchor="start" fill="#cbd5e1" font-family="sans-serif" font-size="12">&#8594; consumers only touch the current/recent minute</text>
+
+  <!-- BOTTOM caption -->
+  <text x="560" y="616" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="13.5" font-weight="bold">Kafka absorbs the firehose; the rule engine filters; counting consumers PFADD survivors into per-minute HLLs; raw log is archived to the TSDB in parallel.</text>
+</svg>
