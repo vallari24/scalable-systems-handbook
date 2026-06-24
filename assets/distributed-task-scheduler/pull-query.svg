@@ -1,0 +1,79 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="760" fill="#111317"/>
+  <defs>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The pull query — claim disjoint rows without colliding or waiting</text>
+
+  <!-- SQL panel -->
+  <rect x="40" y="74" width="600" height="260" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <g font-family="monospace" font-size="17">
+    <text x="64" y="112" fill="#93c5fd">SELECT</text><text x="138" y="112" fill="#cbd5e1">* FROM tasks</text>
+    <text x="64" y="142" fill="#93c5fd">WHERE</text><text x="130" y="142" fill="#cbd5e1">scheduled_at &lt;= now() + 2min</text>
+    <text x="130" y="170" fill="#93c5fd">AND</text><text x="178" y="170" fill="#cbd5e1">picked_at IS NULL</text>
+    <text x="64" y="200" fill="#93c5fd">ORDER BY</text><text x="170" y="200" fill="#cbd5e1">scheduled_at ASC</text>
+    <text x="64" y="228" fill="#ffff99">LIMIT 10</text>
+    <text x="64" y="258" fill="#ff8bd2">FOR UPDATE SKIP LOCKED;</text>
+  </g>
+  <line x1="64" y1="282" x2="616" y2="282" stroke="#3a3f47" stroke-width="1.2"/>
+  <text x="64" y="308" fill="#ff8bd2" font-family="monospace" font-size="15">UPDATE ... SET picked_at = now();</text>
+  <text x="380" y="308" fill="#9aa6b2" font-family="sans-serif" font-size="13">all in one transaction</text>
+
+  <!-- clause annotations -->
+  <g font-family="sans-serif" font-size="14">
+    <rect x="664" y="84" width="496" height="44" rx="7" fill="#101622" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="678" y="103" fill="#93c5fd" font-weight="bold">+ 2min lookahead buffer</text>
+    <text x="678" y="122" fill="#cbd5e1">pull jobs before due → staged in broker → fire on time</text>
+
+    <rect x="664" y="138" width="496" height="40" rx="7" fill="#16191e" stroke="#9aa6b2" stroke-width="1.3"/>
+    <text x="678" y="163" fill="#cbd5e1"><tspan fill="#ffffff" font-weight="bold">picked_at IS NULL</tspan> — only unclaimed rows</text>
+
+    <rect x="664" y="188" width="496" height="40" rx="7" fill="#2a1320" stroke="#ff8bd2" stroke-width="1.5"/>
+    <text x="678" y="213" fill="#cbd5e1"><tspan fill="#ff8bd2" font-weight="bold">FOR UPDATE</tspan> — row-lock so no other puller claims these</text>
+
+    <rect x="664" y="238" width="496" height="40" rx="7" fill="#2a1320" stroke="#ff8bd2" stroke-width="1.5"/>
+    <text x="678" y="263" fill="#cbd5e1"><tspan fill="#ff8bd2" font-weight="bold">SKIP LOCKED</tspan> — don't wait on locked rows; skip them</text>
+
+    <rect x="664" y="288" width="496" height="40" rx="7" fill="#1a1a10" stroke="#ffff99" stroke-width="1.5"/>
+    <text x="678" y="313" fill="#cbd5e1"><tspan fill="#ffff99" font-weight="bold">LIMIT 10</tspan> — bounded batch → deterministic claim latency</text>
+  </g>
+
+  <!-- concurrency picture -->
+  <text x="40" y="392" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Three pullers, one query, three disjoint batches</text>
+
+  <!-- DB -->
+  <g fill="#1a1a10" stroke="#ffff99" stroke-width="2.2">
+    <path d="M520,430 L520,560 A44,14 0 0 0 608,560 L608,430"/><ellipse cx="564" cy="430" rx="44" ry="14"/>
+  </g>
+  <text x="564" y="600" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">tasks (sorted by scheduled_at)</text>
+  <text x="564" y="500" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">rows 1..30</text>
+
+  <!-- puller A -->
+  <rect x="80" y="430" width="170" height="46" rx="8" fill="#0f2018" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="165" y="459" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">puller A</text>
+  <line x1="518" y1="450" x2="254" y2="452" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#g)"/>
+  <text x="300" y="440" fill="#8aff8a" font-family="sans-serif" font-size="13">locks rows 1&#8211;10</text>
+  <!-- puller B -->
+  <rect x="80" y="494" width="170" height="46" rx="8" fill="#101622" stroke="#93c5fd" stroke-width="2.2"/>
+  <text x="165" y="523" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">puller B</text>
+  <line x1="518" y1="510" x2="254" y2="516" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#b)"/>
+  <text x="300" y="504" fill="#93c5fd" font-family="sans-serif" font-size="13">skips, gets 11&#8211;20</text>
+  <!-- puller C -->
+  <rect x="80" y="558" width="170" height="46" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2.2"/>
+  <text x="165" y="587" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">puller C</text>
+  <line x1="518" y1="558" x2="254" y2="580" stroke="#ffd27f" stroke-width="2.2" marker-end="url(#o)"/>
+  <text x="300" y="568" fill="#ffd27f" font-family="sans-serif" font-size="13">skips, gets 21&#8211;30</text>
+
+  <!-- anti-pattern -->
+  <rect x="700" y="430" width="460" height="120" rx="10" fill="#1c1113" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="724" y="464" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">FOR UPDATE without SKIP LOCKED</text>
+  <text x="724" y="494" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Puller B <tspan fill="#ff8a8a" font-weight="bold">waits in line</tspan> behind A's locked rows.</text>
+  <text x="724" y="520" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Pullers serialize → throughput collapses → SLA missed.</text>
+
+  <text x="700" y="600" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">SELECT &#8230; FOR UPDATE SKIP LOCKED LIMIT N</text>
+  <text x="700" y="624" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">= the disjoint, bounded, wait-free claim primitive.</text>
+  <text x="700" y="648" fill="#9aa6b2" font-family="sans-serif" font-size="14">A concurrent work queue on a relational table.</text>
+</svg>

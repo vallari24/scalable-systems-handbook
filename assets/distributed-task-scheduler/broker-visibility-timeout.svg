@@ -1,0 +1,58 @@
+<svg width="1080" height="660" viewBox="0 0 1080 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1080" height="660" fill="#111317"/>
+  <defs>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/></marker>
+  </defs>
+
+  <text x="40" y="46" fill="#ffff99" font-family="sans-serif" font-size="24" font-weight="bold">Visibility timeout — read but not deleted &#8594; resurface</text>
+  <text x="40" y="74" fill="#9aa6b2" font-family="sans-serif" font-size="15">A claim a crashed consumer never acknowledged must come back, not vanish.</text>
+
+  <!-- timeline -->
+  <line x1="80" y1="200" x2="1000" y2="200" stroke="#3a3f47" stroke-width="2"/>
+  <!-- visibility window shading -->
+  <rect x="150" y="186" width="640" height="28" fill="#1c2233" opacity="0.8"/>
+  <text x="470" y="178" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13">10-minute visibility window</text>
+
+  <!-- t0 receive -->
+  <circle cx="150" cy="200" r="8" fill="#8aff8a"/>
+  <text x="150" y="240" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">t0 &#183; received</text>
+  <text x="150" y="262" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">picked_at set &#183; invisible</text>
+
+  <!-- crash -->
+  <circle cx="380" cy="200" r="8" fill="#ff8a8a"/>
+  <text x="380" y="240" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">consumer crashes</text>
+  <text x="380" y="262" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">never calls DELETE &#183; deleted_at NULL</text>
+
+  <!-- resurface -->
+  <circle cx="790" cy="200" r="8" fill="#93c5fd"/>
+  <text x="790" y="240" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">t0 + 10min &#183; resurface</text>
+  <text x="790" y="262" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">sweeper clears the claim</text>
+
+  <!-- stranded note -->
+  <rect x="150" y="300" width="500" height="86" rx="10" fill="#1c1113" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="174" y="332" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">Without a timeout: stranded forever</text>
+  <text x="174" y="360" fill="#cbd5e1" font-family="sans-serif" font-size="14">picked_at set + deleted_at NULL = invisible to all,</text>
+  <text x="174" y="380" fill="#cbd5e1" font-family="sans-serif" font-size="14">acknowledged by none. The message is lost.</text>
+
+  <!-- cron job -->
+  <rect x="40" y="416" width="600" height="172" rx="12" fill="#101622" stroke="#93c5fd" stroke-width="2"/>
+  <text x="64" y="450" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">The sweeper (a cron per queue)</text>
+  <g font-family="monospace" font-size="15">
+    <text x="64" y="486" fill="#ff8bd2">UPDATE</text><text x="132" y="486" fill="#cbd5e1">messages</text>
+    <text x="64" y="510" fill="#ff8bd2">SET</text><text x="108" y="510" fill="#cbd5e1">picked_at = NULL</text>
+    <text x="64" y="534" fill="#ff8bd2">WHERE</text><text x="124" y="534" fill="#cbd5e1">picked_at &lt; now() - 10min</text>
+    <text x="124" y="556" fill="#93c5fd">AND</text><text x="166" y="556" fill="#cbd5e1">deleted_at IS NULL;</text>
+  </g>
+
+  <!-- right note -->
+  <rect x="664" y="416" width="376" height="172" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="688" y="450" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Back to the front of the queue</text>
+  <text x="688" y="480" fill="#cbd5e1" font-family="sans-serif" font-size="14">picked_at = NULL &#8594; available again, and its old</text>
+  <text x="688" y="500" fill="#cbd5e1" font-family="sans-serif" font-size="14">created_at sorts it to the FRONT (FIFO).</text>
+  <text x="688" y="534" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">&#8658; at-least-once delivery</text>
+  <text x="688" y="558" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">a slow-but-alive consumer may finish late &#8594;</text>
+  <text x="688" y="576" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">processed twice. Consumers must be idempotent.</text>
+
+  <text x="40" y="620" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">The visibility timeout turns a crashed consumer into a redelivery instead of a lost message.</text>
+</svg>

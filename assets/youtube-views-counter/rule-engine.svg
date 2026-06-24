@@ -1,0 +1,84 @@
+<svg width="1020" height="740" viewBox="0 0 1020 740" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="m-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1020" height="740" fill="#111317"/>
+
+  <text x="510" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Rule Engine: Not Every Watch Is a View</text>
+  <text x="510" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a consumer reads each event, consults the rules, and drops the ones that don&#8217;t count</text>
+
+  <!-- Rules DB -->
+  <path d="M372,104 L372,150 A42,11 0 0 0 456,150 L456,104" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <ellipse cx="414" cy="104" rx="42" ry="11" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="414" y="136" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">Rules DB</text>
+  <text x="414" y="172" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">rules as data, not hardcoded</text>
+  <line x1="414" y1="183" x2="414" y2="222" stroke="#ffff99" stroke-width="2" marker-end="url(#m-y)"/>
+
+  <!-- Kafka tube -->
+  <rect x="56" y="244" width="210" height="34" rx="17" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="74" y1="255" x2="248" y2="255" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="74" y1="267" x2="248" y2="267" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <circle cx="73" cy="261" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="249" cy="261" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="161" y="306" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">Kafka (raw views)</text>
+
+  <line x1="266" y1="261" x2="332" y2="261" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+
+  <!-- Rule Engine fleet -->
+  <rect x="342" y="232" width="150" height="66" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2"/>
+  <rect x="336" y="238" width="150" height="66" rx="10" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="411" y="266" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Rule Engine</text>
+  <text x="411" y="286" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">consumer fleet</text>
+
+  <line x1="486" y1="271" x2="540" y2="271" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#m-w)"/>
+  <text x="513" y="261" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">evaluate</text>
+
+  <!-- checklist -->
+  <rect x="546" y="150" width="438" height="232" rx="12" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="566" y="178" fill="#cbd5e1" font-family="sans-serif" font-size="13.5" font-weight="bold">For each event { u, v, watched_seconds }:</text>
+  <text x="566" y="208" fill="#ff8a8a" font-family="sans-serif" font-size="13"><tspan font-weight="bold">DROP</tspan> &#8212; u owns v (creator watching own video)</text>
+  <text x="566" y="236" fill="#ff8a8a" font-family="sans-serif" font-size="13"><tspan font-weight="bold">DROP</tspan> &#8212; watched_seconds below threshold (mis-tap)</text>
+  <text x="566" y="264" fill="#ff8a8a" font-family="sans-serif" font-size="13"><tspan font-weight="bold">DROP</tspan> &#8212; (u,v) already counted recently (replay/loop)</text>
+  <text x="566" y="292" fill="#ff8a8a" font-family="sans-serif" font-size="13"><tspan font-weight="bold">DROP</tspan> &#8212; u is a known bot / click-farm IP (fraud)</text>
+  <text x="566" y="328" fill="#8aff8a" font-family="sans-serif" font-size="13"><tspan font-weight="bold">KEEP</tspan> &#8212; otherwise: it&#8217;s a real view</text>
+  <text x="566" y="360" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">policy team edits the Rules DB &#8212; no redeploy</text>
+
+  <!-- in/out streams -->
+  <rect x="56" y="400" width="908" height="96" rx="12" fill="#16191e" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="150" y="430" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13" font-weight="bold">raw stream in</text>
+  <text x="150" y="464" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">{u1,v1} {u2,v2} {u3,v3}</text>
+  <text x="150" y="484" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">{u1,v1} {owner,v2}</text>
+
+  <line x1="300" y1="448" x2="372" y2="448" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="336" y="438" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11">filter</text>
+
+  <text x="560" y="430" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">clean stream out</text>
+  <text x="510" y="466" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">{u1,v1}  {u2,v2}  {u3,v3}</text>
+  <text x="800" y="448" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">{u1,v1} dup</text>
+  <line x1="752" y1="444" x2="848" y2="444" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="800" y="476" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13">{owner,v2}</text>
+  <line x1="758" y1="472" x2="842" y2="472" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="900" y="462" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">dropped</text>
+
+  <!-- rule engines everywhere -->
+  <rect x="56" y="516" width="440" height="176" rx="12" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="276" y="544" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Rule engines are everywhere</text>
+  <text x="80" y="574" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; Ad-click fraud &#8212; Google Ads / InMobi (billable clicks)</text>
+  <text x="80" y="600" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; Surge / dynamic pricing &#8212; Uber / Swiggy</text>
+  <text x="80" y="626" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; Payment fraud scoring</text>
+  <text x="80" y="652" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; Feed-ranking eligibility</text>
+  <text x="80" y="680" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">same shape: a firehose of events, rules decide which count</text>
+
+  <!-- takeaway -->
+  <rect x="512" y="516" width="452" height="176" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="738" y="544" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Separation of concerns</text>
+  <text x="738" y="578" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">Filtering is its own stage with its own data</text>
+  <text x="738" y="600" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">(the Rules DB).</text>
+  <text x="738" y="634" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">It does NOT belong in the API (just produce</text>
+  <text x="738" y="656" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">events fast) or in the counter (just count).</text>
+  <text x="738" y="682" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">One component, one job.</text>
+</svg>

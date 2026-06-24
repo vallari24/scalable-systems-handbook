@@ -1,0 +1,53 @@
+<svg width="1000" height="760" viewBox="0 0 1000 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1000" height="760" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+  </defs>
+
+  <text x="40" y="50" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Distributed Task Scheduler <tspan fill="#9aa6b2" font-size="20" font-weight="normal">[ without retries ]</tspan></text>
+  <text x="40" y="82" fill="#93c5fd" font-family="sans-serif" font-size="17">Production: dkron, AWS EventBridge Scheduler (CloudWatch Events)</text>
+
+  <!-- core job -->
+  <rect x="40" y="112" width="320" height="46" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="200" y="141" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Schedule a task to be executed</text>
+
+  <!-- branch FIXED -->
+  <line x1="200" y1="158" x2="200" y2="186" stroke="#cbd5e1" stroke-width="2"/>
+  <line x1="200" y1="186" x2="130" y2="210" stroke="#cbd5e1" stroke-width="2" marker-end="url(#w)"/>
+  <line x1="200" y1="186" x2="640" y2="210" stroke="#cbd5e1" stroke-width="2" marker-end="url(#w)"/>
+
+  <rect x="40" y="214" width="320" height="90" rx="10" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="60" y="244" fill="#ffd27f" font-family="sans-serif" font-size="19" font-weight="bold">FIXED</text>
+  <text x="60" y="270" fill="#cbd5e1" font-family="sans-serif" font-size="15">run once at an absolute time</text>
+  <text x="60" y="292" fill="#9aa6b2" font-family="sans-serif" font-size="14">e.g. shut down staging at 11pm tonight</text>
+
+  <rect x="560" y="214" width="400" height="90" rx="10" fill="#101622" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="580" y="244" fill="#93c5fd" font-family="sans-serif" font-size="19" font-weight="bold">RECURRING <tspan fill="#9aa6b2" font-size="15" font-weight="normal">[ cron ]</tspan></text>
+  <text x="580" y="270" fill="#cbd5e1" font-family="sans-serif" font-size="15">run on a repeating schedule</text>
+  <text x="580" y="292" fill="#9aa6b2" font-family="sans-serif" font-size="14">e.g. every day at 3pm</text>
+
+  <!-- SLA -->
+  <rect x="40" y="340" width="920" height="124" rx="12" fill="#1c1113" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="64" y="378" fill="#ff8a8a" font-family="sans-serif" font-size="22" font-weight="bold">30-second SLA</text>
+  <text x="64" y="410" fill="#cbd5e1" font-family="sans-serif" font-size="16">A task scheduled at <tspan fill="#ffffff" font-weight="bold">10:01:00 am</tspan> must start executing</text>
+  <text x="64" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="16">before <tspan fill="#ffff99" font-weight="bold">10:01:30 am</tspan> — within 30s of its scheduled time.</text>
+  <text x="600" y="410" fill="#9aa6b2" font-family="sans-serif" font-size="15">+ minute-level granularity</text>
+  <text x="600" y="436" fill="#9aa6b2" font-family="sans-serif" font-size="15">→ polling the table is good enough</text>
+
+  <!-- Brainstorm -->
+  <text x="40" y="528" fill="#ffff99" font-family="sans-serif" font-size="24" font-weight="bold">Brainstorm</text>
+  <rect x="60" y="556" width="220" height="64" rx="10" fill="#16191e" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="170" y="595" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">STORE</text>
+  <line x1="280" y1="588" x2="386" y2="588" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#w)"/>
+  <rect x="390" y="556" width="220" height="64" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="500" y="595" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="20" font-weight="bold">PICK</text>
+  <line x1="610" y1="588" x2="716" y2="588" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#w)"/>
+  <rect x="720" y="556" width="220" height="64" rx="10" fill="#16191e" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="830" y="595" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="20" font-weight="bold">EXECUTE</text>
+
+  <text x="60" y="664" fill="#9aa6b2" font-family="sans-serif" font-size="15">Where do we durably store a task? How do many workers pick the due ones without colliding?</text>
+  <text x="60" y="688" fill="#9aa6b2" font-family="sans-serif" font-size="15">How do we run them on heavy specialized machines fast enough to hit the SLA?</text>
+  <text x="60" y="724" fill="#ff8a8a" font-family="sans-serif" font-size="15">Scope cut: no retries — at-least-once redelivery is out of scope, so we focus on the on-time spine.</text>
+</svg>

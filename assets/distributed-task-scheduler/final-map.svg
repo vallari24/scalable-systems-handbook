@@ -1,0 +1,100 @@
+<svg width="1320" height="860" viewBox="0 0 1320 860" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1320" height="860" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+    <marker id="p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="u" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#c4b5fd"/></marker>
+  </defs>
+
+  <text x="40" y="50" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">The complete distributed task scheduler</text>
+
+  <!-- user -->
+  <g stroke="#cbd5e1" stroke-width="2.5" fill="none">
+    <circle cx="70" cy="250" r="14"/>
+    <line x1="70" y1="264" x2="70" y2="300"/>
+    <line x1="70" y1="276" x2="54" y2="290"/><line x1="70" y1="276" x2="86" y2="290"/>
+    <line x1="70" y1="300" x2="55" y2="324"/><line x1="70" y1="300" x2="85" y2="324"/>
+  </g>
+  <text x="70" y="348" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">user</text>
+
+  <!-- Task API -->
+  <rect x="120" y="226" width="140" height="56" rx="8" fill="#2a1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="190" y="252" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">Task API</text>
+  <text x="190" y="272" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12">register (write)</text>
+  <line x1="100" y1="254" x2="116" y2="254" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#w)"/>
+
+  <!-- DB: tasks + jobs sharded -->
+  <rect x="300" y="180" width="220" height="200" rx="12" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="410" y="208" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Relational store</text>
+  <g fill="#15171c" stroke="#ffff99" stroke-width="2">
+    <path d="M330,228 L330,268 A22,8 0 0 0 374,268 L374,228"/><ellipse cx="352" cy="228" rx="22" ry="8"/>
+    <path d="M388,228 L388,268 A22,8 0 0 0 432,268 L432,228"/><ellipse cx="410" cy="228" rx="22" ry="8"/>
+    <path d="M446,228 L446,268 A22,8 0 0 0 490,268 L490,228"/><ellipse cx="468" cy="228" rx="22" ry="8"/>
+  </g>
+  <text x="410" y="300" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">tasks + jobs</text>
+  <text x="410" y="322" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">sharded, scheduled_at index</text>
+  <text x="410" y="356" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">MySQL / PostgreSQL</text>
+  <line x1="260" y1="254" x2="296" y2="254" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#p)"/>
+
+  <!-- pullers -->
+  <rect x="600" y="186" width="130" height="44" rx="7" fill="#0f2018" stroke="#8aff8a" stroke-width="2.2"/>
+  <rect x="600" y="238" width="130" height="44" rx="7" fill="#0f2018" stroke="#8aff8a" stroke-width="2.2"/>
+  <rect x="600" y="290" width="130" height="44" rx="7" fill="#0f2018" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="665" y="213" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">puller</text>
+  <text x="665" y="265" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">puller</text>
+  <text x="665" y="317" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">puller</text>
+  <text x="665" y="160" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">SKIP LOCKED claim</text>
+  <line x1="520" y1="230" x2="596" y2="208" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#g)"/>
+  <line x1="520" y1="258" x2="596" y2="260" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#g)"/>
+  <line x1="520" y1="286" x2="596" y2="312" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#g)"/>
+
+  <!-- broker -->
+  <rect x="800" y="232" width="200" height="56" rx="28" fill="#101622" stroke="#93c5fd" stroke-width="2.8"/>
+  <text x="900" y="258" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">broker</text>
+  <text x="900" y="277" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">SQS / RabbitMQ</text>
+  <line x1="730" y1="208" x2="796" y2="244" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#g)"/>
+  <line x1="730" y1="260" x2="796" y2="260" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#g)"/>
+  <line x1="730" y1="312" x2="796" y2="276" stroke="#8aff8a" stroke-width="2.2" marker-end="url(#g)"/>
+
+  <!-- executors -->
+  <rect x="1080" y="180" width="190" height="50" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <rect x="1080" y="244" width="190" height="50" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <rect x="1080" y="308" width="190" height="50" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="1175" y="211" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">executor &#183; GPU</text>
+  <text x="1175" y="275" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">executor &#183; CPU</text>
+  <text x="1175" y="339" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">executor &#183; RAM</text>
+  <line x1="1000" y1="248" x2="1076" y2="210" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#b)"/>
+  <line x1="1000" y1="260" x2="1076" y2="268" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#b)"/>
+  <line x1="1000" y1="272" x2="1076" y2="328" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#b)"/>
+
+  <!-- executors write started/completed back -->
+  <path d="M1080,350 C760,440 560,420 430,386" fill="none" stroke="#ff8bd2" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#p)"/>
+  <text x="720" y="430" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13">executor writes started_at / completed_at / failed_at back to DB</text>
+
+  <!-- orchestrator -->
+  <rect x="300" y="500" width="260" height="80" rx="10" fill="#1a1426" stroke="#c4b5fd" stroke-width="2.8"/>
+  <text x="430" y="536" text-anchor="middle" fill="#c4b5fd" font-family="sans-serif" font-size="18" font-weight="bold">Orchestrator</text>
+  <text x="430" y="562" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">reads the future, scales both fleets</text>
+  <path d="M410,498 L410,384" fill="none" stroke="#c4b5fd" stroke-width="2.2" marker-end="url(#u)"/>
+  <text x="424" y="450" fill="#c4b5fd" font-family="sans-serif" font-size="12.5">reads jobs due next ~10 min</text>
+  <path d="M560,520 L665,520 L665,338" fill="none" stroke="#c4b5fd" stroke-width="2.2" marker-end="url(#u)"/>
+  <path d="M560,560 L1175,560 L1175,362" fill="none" stroke="#c4b5fd" stroke-width="2.2" marker-end="url(#u)"/>
+  <text x="870" y="552" fill="#c4b5fd" font-family="sans-serif" font-size="12.5">predictive scaling: pre-warm pullers &amp; executors</text>
+
+  <!-- legend -->
+  <rect x="40" y="640" width="1240" height="180" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="64" y="676" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Legend</text>
+  <g font-family="sans-serif" font-size="14">
+    <rect x="64" y="692" width="22" height="14" fill="#ff8bd2"/><text x="96" y="704" fill="#cbd5e1">register / write path</text>
+    <rect x="300" y="692" width="22" height="14" fill="#8aff8a"/><text x="332" y="704" fill="#cbd5e1">claim / read path</text>
+    <rect x="520" y="692" width="22" height="14" fill="#ffff99"/><text x="552" y="704" fill="#cbd5e1">durable store + invariants</text>
+    <rect x="820" y="692" width="22" height="14" fill="#93c5fd"/><text x="852" y="704" fill="#cbd5e1">broker (async plane)</text>
+    <rect x="1050" y="692" width="22" height="14" fill="#ffd27f"/><text x="1082" y="704" fill="#cbd5e1">heavy execution</text>
+    <rect x="64" y="722" width="22" height="14" fill="#c4b5fd"/><text x="96" y="734" fill="#cbd5e1">orchestrator (control plane)</text>
+  </g>
+  <text x="64" y="776" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">A task scheduler = a timestamp-indexed table of jobs, claimed atomically in bounded batches by cheap pullers</text>
+  <text x="64" y="800" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">(FOR UPDATE SKIP LOCKED), run by heavy executors behind a broker, scaled predictively from the known-in-advance future.</text>
+</svg>

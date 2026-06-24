@@ -1,0 +1,87 @@
+<svg width="1200" height="780" viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="780" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+    <marker id="p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Pick &#8800; execute — split the two jobs into two fleets</text>
+
+  <!-- PANEL 1 WRONG -->
+  <rect x="40" y="74" width="1120" height="184" rx="12" fill="#1c1113" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="64" y="108" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">WRONG &#183; one worker pulls AND runs</text>
+  <!-- worker -->
+  <rect x="120" y="140" width="200" height="76" rx="8" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="220" y="172" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">worker</text>
+  <text x="220" y="196" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">poll DB + run command</text>
+  <text x="360" y="166" fill="#ff8a8a" font-family="sans-serif" font-size="15">While it runs a 4-minute build, it stops polling —</text>
+  <text x="360" y="192" fill="#ff8a8a" font-family="sans-serif" font-size="15">every task due in that window misses the 30s SLA.</text>
+  <text x="360" y="222" fill="#9aa6b2" font-family="sans-serif" font-size="14">The slow job starves the fast job.</text>
+
+  <!-- PANEL 2 RIGHT -->
+  <rect x="40" y="282" width="1120" height="442" rx="12" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="64" y="316" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">RIGHT &#183; split pull from execute, with a broker between</text>
+
+  <!-- user -->
+  <g stroke="#cbd5e1" stroke-width="2.5" fill="none">
+    <circle cx="92" cy="420" r="13"/>
+    <line x1="92" y1="433" x2="92" y2="466"/>
+    <line x1="92" y1="444" x2="78" y2="458"/><line x1="92" y1="444" x2="106" y2="458"/>
+    <line x1="92" y1="466" x2="79" y2="488"/><line x1="92" y1="466" x2="105" y2="488"/>
+  </g>
+  <text x="92" y="512" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">user</text>
+  <!-- task api -->
+  <rect x="138" y="402" width="120" height="50" rx="8" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="198" y="432" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Task API</text>
+  <line x1="116" y1="427" x2="134" y2="427" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#w)"/>
+  <!-- DB -->
+  <g fill="#1a1a10" stroke="#ffff99" stroke-width="2.2">
+    <path d="M300,400 L300,452 A30,10 0 0 0 360,452 L360,400"/><ellipse cx="330" cy="400" rx="30" ry="10"/>
+  </g>
+  <text x="330" y="436" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">tasks</text>
+  <text x="330" y="488" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">MySQL</text>
+  <line x1="258" y1="424" x2="296" y2="424" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#p)"/>
+
+  <!-- pullers (lightweight, 3 small) -->
+  <text x="500" y="338" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Pullers (lightweight, many)</text>
+  <rect x="442" y="356" width="116" height="42" rx="6" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="442" y="408" width="116" height="42" rx="6" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="442" y="460" width="116" height="42" rx="6" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="500" y="383" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">puller</text>
+  <text x="500" y="435" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">puller</text>
+  <text x="500" y="487" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">puller</text>
+  <!-- DB -> pullers (claim) -->
+  <line x1="362" y1="420" x2="438" y2="395" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="362" y1="426" x2="438" y2="429" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="362" y1="432" x2="438" y2="463" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="400" y="384" fill="#8aff8a" font-family="sans-serif" font-size="12">claim</text>
+
+  <!-- broker tube -->
+  <rect x="600" y="408" width="180" height="44" rx="22" fill="#101622" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="690" y="436" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">broker</text>
+  <line x1="560" y1="377" x2="598" y2="420" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="560" y1="431" x2="598" y2="431" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="560" y1="481" x2="598" y2="442" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+
+  <!-- executors (big, specialized) -->
+  <text x="980" y="338" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">Executors (heavy, specialized)</text>
+  <rect x="880" y="352" width="200" height="58" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <rect x="880" y="420" width="200" height="58" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <rect x="880" y="488" width="200" height="58" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="2.5"/>
+  <text x="980" y="387" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">executor &#183; GPU</text>
+  <text x="980" y="455" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">executor &#183; CPU</text>
+  <text x="980" y="523" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">executor &#183; RAM</text>
+  <line x1="782" y1="420" x2="876" y2="388" stroke="#93c5fd" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="782" y1="430" x2="876" y2="448" stroke="#93c5fd" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="782" y1="440" x2="876" y2="510" stroke="#93c5fd" stroke-width="2" marker-end="url(#b)"/>
+
+  <!-- executor writes started_at back -->
+  <path d="M880,540 C700,610 480,560 360,464" fill="none" stroke="#ff8bd2" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#p)"/>
+  <text x="600" y="600" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="13.5">executor writes started_at back to DB (satisfies the SLA clock)</text>
+
+  <text x="64" y="660" fill="#cbd5e1" font-family="sans-serif" font-size="15">Pullers stay free to keep claiming; executors are sized to the work — a task may need a GPU or 64 GB RAM.</text>
+  <text x="64" y="690" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">A puller must NEVER execute. Find-work and do-work scale for different reasons.</text>
+</svg>

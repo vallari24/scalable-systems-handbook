@@ -1,0 +1,85 @@
+<svg width="1200" height="780" viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="780" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/></marker>
+    <marker id="o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+    <marker id="u" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#c4b5fd"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Handling bursts — predictive scaling via the orchestrator</text>
+  <text x="40" y="78" fill="#9aa6b2" font-family="sans-serif" font-size="16">Scale on the future, not the present — every scheduled_at is already known.</text>
+
+  <!-- DB -->
+  <g fill="#1a1a10" stroke="#ffff99" stroke-width="2.2">
+    <path d="M300,118 L300,176 A36,12 0 0 0 372,176 L372,118"/><ellipse cx="336" cy="118" rx="36" ry="12"/>
+  </g>
+  <text x="336" y="156" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">jobs</text>
+  <text x="290" y="206" text-anchor="end" fill="#9aa6b2" font-family="sans-serif" font-size="13">MySQL</text>
+
+  <!-- task api -->
+  <rect x="120" y="124" width="130" height="48" rx="8" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="185" y="153" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Scheduler</text>
+  <line x1="250" y1="148" x2="296" y2="148" stroke="#ff8bd2" stroke-width="2.2" marker-end="url(#w)"/>
+
+  <!-- pullers -->
+  <rect x="470" y="104" width="120" height="40" rx="6" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="470" y="152" width="120" height="40" rx="6" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="470" y="200" width="120" height="40" rx="6" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="530" y="129" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">puller</text>
+  <text x="530" y="177" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">puller</text>
+  <text x="530" y="225" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">puller</text>
+  <line x1="374" y1="140" x2="466" y2="124" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="374" y1="148" x2="466" y2="172" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="374" y1="156" x2="466" y2="220" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+
+  <!-- broker -->
+  <rect x="680" y="148" width="220" height="46" rx="23" fill="#101622" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="790" y="170" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">broker</text>
+  <text x="790" y="188" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">SQS / RabbitMQ</text>
+  <line x1="590" y1="124" x2="676" y2="158" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="590" y1="172" x2="676" y2="172" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="590" y1="220" x2="676" y2="186" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+
+  <!-- executors -->
+  <rect x="990" y="104" width="170" height="44" rx="7" fill="#1c1810" stroke="#ffd27f" stroke-width="2.2"/>
+  <rect x="990" y="156" width="170" height="44" rx="7" fill="#1c1810" stroke="#ffd27f" stroke-width="2.2"/>
+  <rect x="990" y="208" width="170" height="44" rx="7" fill="#1c1810" stroke="#ffd27f" stroke-width="2.2"/>
+  <text x="1075" y="131" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">executor</text>
+  <text x="1075" y="183" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">executor</text>
+  <text x="1075" y="235" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">executor</text>
+  <line x1="902" y1="160" x2="986" y2="128" stroke="#93c5fd" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="902" y1="172" x2="986" y2="178" stroke="#93c5fd" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="902" y1="184" x2="986" y2="228" stroke="#93c5fd" stroke-width="2" marker-end="url(#b)"/>
+
+  <!-- ORCHESTRATOR -->
+  <rect x="120" y="360" width="260" height="80" rx="10" fill="#1a1426" stroke="#c4b5fd" stroke-width="2.8"/>
+  <text x="250" y="396" text-anchor="middle" fill="#c4b5fd" font-family="sans-serif" font-size="19" font-weight="bold">Orchestrator</text>
+  <text x="250" y="422" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">control plane</text>
+  <!-- reads DB -->
+  <path d="M250,358 L250,300 L336,300 L336,190" fill="none" stroke="#c4b5fd" stroke-width="2.2" marker-end="url(#u)"/>
+  <text x="262" y="318" fill="#c4b5fd" font-family="sans-serif" font-size="13">reads jobs due next ~10 min</text>
+  <!-- scales pullers -->
+  <path d="M380,388 L530,388 L530,244" fill="none" stroke="#c4b5fd" stroke-width="2.2" marker-end="url(#u)"/>
+  <text x="540" y="320" fill="#c4b5fd" font-family="sans-serif" font-size="13">scale pullers</text>
+  <!-- scales executors -->
+  <path d="M380,410 L1075,410 L1075,256" fill="none" stroke="#c4b5fd" stroke-width="2.2" marker-end="url(#u)"/>
+  <text x="900" y="402" fill="#c4b5fd" font-family="sans-serif" font-size="13">scale executors up &amp; down ahead of demand</text>
+
+  <!-- formula + reactive note -->
+  <rect x="120" y="468" width="540" height="120" rx="10" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="144" y="500" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">Predictive, not reactive</text>
+  <text x="144" y="528" fill="#cbd5e1" font-family="monospace" font-size="13.5">future_due &#215; avg_runtime &#247; capacity &#8776; executors</text>
+  <text x="144" y="552" fill="#cbd5e1" font-family="monospace" font-size="13.5">future_due &#247; claim_rate          &#8776; pullers</text>
+  <text x="144" y="578" fill="#ff8a8a" font-family="sans-serif" font-size="13.5">booting a GPU box takes minutes; the SLA is 30s — pre-warm.</text>
+
+  <!-- metrics panel -->
+  <rect x="690" y="468" width="470" height="120" rx="10" fill="#101622" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="714" y="500" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Key metrics (all SLA inputs)</text>
+  <text x="714" y="528" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; tasks pulled / min  &#8212; puller throughput</text>
+  <text x="714" y="552" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; task wait time (started_at &#8722; scheduled_at) &#8212; the SLA</text>
+  <text x="714" y="576" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">&#8226; avg time to completion &#8212; the forecast input</text>
+
+  <text x="120" y="636" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">A scheduler knows its own future load exactly — so it can have the machines warm before the burst lands.</text>
+</svg>

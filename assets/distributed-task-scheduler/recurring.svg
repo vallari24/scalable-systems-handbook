@@ -1,0 +1,87 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="720" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Recurring tasks — cron &#8594; absolute &#8594; the same regular flow</text>
+  <text x="40" y="78" fill="#9aa6b2" font-family="sans-serif" font-size="16">Recurrence never reaches the executor — it only ever sees concrete fixed jobs.</text>
+
+  <!-- tasks table -->
+  <text x="40" y="124" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">tasks <tspan fill="#9aa6b2" font-size="14" font-weight="normal">(the definitions)</tspan></text>
+  <g font-family="sans-serif">
+    <rect x="40" y="138" width="70"  height="42" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="110" y="138" width="150" height="42" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="260" y="138" width="180" height="42" fill="#1c2430" stroke="#3a3f47"/>
+    <text x="75"  y="165" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">id</text>
+    <text x="185" y="165" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">command</text>
+    <text x="350" y="165" text-anchor="middle" fill="#ffff99" font-size="14" font-weight="bold">schedule (cron)</text>
+    <rect x="40" y="180" width="70"  height="42" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="110" y="180" width="150" height="42" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="260" y="180" width="180" height="42" fill="#15171c" stroke="#3a3f47"/>
+    <text x="75"  y="207" text-anchor="middle" fill="#ff8bd2" font-size="14" font-weight="bold">2</text>
+    <text x="185" y="207" text-anchor="middle" fill="#cbd5e1" font-size="13">send-report</text>
+    <text x="350" y="207" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="13">0 15 * * *</text>
+  </g>
+
+  <!-- materialize arrow -->
+  <path d="M240,222 L240,300" fill="none" stroke="#ff8bd2" stroke-width="2.2" marker-end="url(#p)"/>
+  <text x="252" y="270" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">materialize</text>
+
+  <!-- jobs table -->
+  <text x="40" y="334" fill="#ffff99" font-family="sans-serif" font-size="18" font-weight="bold">jobs <tspan fill="#9aa6b2" font-size="14" font-weight="normal">(concrete fixed executions — the fixed-job schema)</tspan></text>
+  <g font-family="sans-serif">
+    <rect x="40" y="348" width="80"  height="42" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="120" y="348" width="90"  height="42" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="210" y="348" width="180" height="42" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="390" y="348" width="240" height="42" fill="#1c2430" stroke="#3a3f47"/>
+    <text x="80"  y="375" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">id</text>
+    <text x="165" y="375" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="bold">task_id</text>
+    <text x="300" y="375" text-anchor="middle" fill="#ffd27f" font-size="14" font-weight="bold">scheduled_at</text>
+    <text x="510" y="375" text-anchor="middle" fill="#9aa6b2" font-size="13">picked / started / done</text>
+    <!-- row 1 -->
+    <rect x="40" y="390" width="80"  height="40" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="120" y="390" width="90"  height="40" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="210" y="390" width="180" height="40" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="390" y="390" width="240" height="40" fill="#15171c" stroke="#3a3f47"/>
+    <text x="80"  y="416" text-anchor="middle" fill="#cbd5e1" font-size="13">20972</text>
+    <text x="165" y="416" text-anchor="middle" fill="#ff8bd2" font-size="13">2</text>
+    <text x="300" y="416" text-anchor="middle" fill="#cbd5e1" font-size="12">2026-06-23 15:00</text>
+    <text x="510" y="416" text-anchor="middle" fill="#9aa6b2" font-size="13">NULL &#183; NULL &#183; NULL</text>
+    <!-- row 2 -->
+    <rect x="40" y="430" width="80"  height="40" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="120" y="430" width="90"  height="40" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="210" y="430" width="180" height="40" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="390" y="430" width="240" height="40" fill="#15171c" stroke="#3a3f47"/>
+    <text x="80"  y="456" text-anchor="middle" fill="#cbd5e1" font-size="13">20973</text>
+    <text x="165" y="456" text-anchor="middle" fill="#ff8bd2" font-size="13">2</text>
+    <text x="300" y="456" text-anchor="middle" fill="#cbd5e1" font-size="12">2026-06-24 15:00</text>
+    <text x="510" y="456" text-anchor="middle" fill="#9aa6b2" font-size="13">NULL &#183; NULL &#183; NULL</text>
+  </g>
+
+  <!-- rules -->
+  <rect x="680" y="138" width="480" height="110" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="704" y="170" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">1 &#183; When a recurring task is CREATED</text>
+  <text x="704" y="200" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">parse the cron rule, compute the next ~10</text>
+  <text x="704" y="224" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">absolute times, INSERT 10 rows into jobs.</text>
+
+  <rect x="680" y="266" width="480" height="120" rx="10" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="704" y="298" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">2 &#183; When a job is PICKED</text>
+  <text x="704" y="328" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">the puller also computes the NEXT execution</text>
+  <text x="704" y="352" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">and INSERTs one new job row.</text>
+  <text x="704" y="378" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">pick one, add one</text>
+
+  <rect x="680" y="404" width="480" height="92" rx="10" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="704" y="436" fill="#ffffff" font-family="sans-serif" font-size="15" font-weight="bold">jobs = a sliding window</text>
+  <text x="704" y="464" fill="#cbd5e1" font-family="sans-serif" font-size="14">always ~10 ahead, never runs dry, never</text>
+  <text x="704" y="486" fill="#cbd5e1" font-family="sans-serif" font-size="14">infinite — a constant number of rows per task.</text>
+
+  <!-- bottom takeaway -->
+  <rect x="40" y="540" width="1120" height="140" rx="12" fill="#101622" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="64" y="578" fill="#93c5fd" font-family="sans-serif" font-size="20" font-weight="bold">CRON &#8594; ABSOLUTE &#8594; regular flow</text>
+  <text x="64" y="612" fill="#cbd5e1" font-family="sans-serif" font-size="15">A recurring rule is just a machine that keeps emitting fixed jobs; once fixed, a job flows through the</text>
+  <text x="64" y="638" fill="#cbd5e1" font-family="sans-serif" font-size="15">exact same pipeline as everything else. A fixed task is the trivial case: one tasks row, one jobs row.</text>
+  <text x="64" y="668" fill="#ff8bd2" font-family="sans-serif" font-size="14.5">Like Google Calendar recurring meetings: the rule lives once, each occurrence is a concrete, movable event.</text>
+</svg>

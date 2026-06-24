@@ -1,0 +1,81 @@
+<svg width="1000" height="720" viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="720" fill="#111317"/>
+
+  <text x="500" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Three Locking-Read Modes &#8212; and Where SKIP LOCKED Shows Up</text>
+  <text x="500" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">when the row you want is locked, you may wait, fail fast, or skip</text>
+
+  <!-- Panel 1: FOR UPDATE (wait) -->
+  <rect x="36" y="94" width="300" height="240" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.2"/>
+  <text x="186" y="120" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">FOR UPDATE &#183; WAIT</text>
+  <rect x="246" y="138" width="60" height="30" rx="4" fill="#3a1a1a" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="276" y="158" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="11">locked</text>
+  <g stroke="#ff8a8a" stroke-width="2">
+    <g transform="translate(80,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="18"/></g>
+    <g transform="translate(80,182)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="18"/></g>
+    <g transform="translate(80,214)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="18"/></g>
+  </g>
+  <line x1="98" y1="153" x2="240" y2="153" stroke="#ff8a8a" stroke-width="1.8" marker-end="url(#m-r)" stroke-dasharray="4 4"/>
+  <line x1="98" y1="185" x2="240" y2="155" stroke="#ff8a8a" stroke-width="1.8" marker-end="url(#m-r)" stroke-dasharray="4 4"/>
+  <line x1="98" y1="217" x2="240" y2="157" stroke="#ff8a8a" stroke-width="1.8" marker-end="url(#m-r)" stroke-dasharray="4 4"/>
+  <text x="186" y="260" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">workers queue single-file</text>
+  <text x="186" y="280" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">behind the locked row</text>
+  <text x="186" y="308" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5" font-weight="bold">the hot-row convoy again</text>
+
+  <!-- Panel 2: NOWAIT (fail fast) -->
+  <rect x="350" y="94" width="300" height="240" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.2"/>
+  <text x="500" y="120" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">NOWAIT &#183; FAIL FAST</text>
+  <rect x="560" y="138" width="60" height="30" rx="4" fill="#16202e" stroke="#93c5fd" stroke-width="1.6"/>
+  <text x="590" y="158" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11">locked</text>
+  <g transform="translate(400,168)"><circle cx="0" cy="0" r="6" fill="#93c5fd"/><line x1="0" y1="6" x2="0" y2="22" stroke="#93c5fd" stroke-width="2"/></g>
+  <line x1="416" y1="165" x2="552" y2="155" stroke="#93c5fd" stroke-width="1.8" marker-end="url(#m-b)"/>
+  <text x="470" y="200" fill="#ffd27f" font-family="sans-serif" font-size="22" font-weight="bold">&#9889;</text>
+  <text x="520" y="200" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">error</text>
+  <text x="500" y="248" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">returns an error instantly</text>
+  <text x="500" y="268" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">instead of waiting</text>
+  <text x="500" y="304" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">caller must retry</text>
+
+  <!-- Panel 3: SKIP LOCKED -->
+  <rect x="664" y="94" width="300" height="240" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.2"/>
+  <text x="814" y="120" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">SKIP LOCKED &#183; SKIP</text>
+  <rect x="700" y="140" width="54" height="26" rx="4" fill="#1a3324" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="727" y="158" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="10.5">locked</text>
+  <rect x="700" y="174" width="54" height="26" rx="4" fill="#16191e" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="727" y="192" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="10.5">free</text>
+  <rect x="700" y="208" width="54" height="26" rx="4" fill="#16191e" stroke="#8aff8a" stroke-width="1.4"/>
+  <text x="727" y="226" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="10.5">free</text>
+  <g transform="translate(900,150)"><circle cx="0" cy="0" r="6" fill="#8aff8a"/><line x1="0" y1="6" x2="0" y2="22" stroke="#8aff8a" stroke-width="2"/></g>
+  <g transform="translate(900,205)"><circle cx="0" cy="0" r="6" fill="#8aff8a"/><line x1="0" y1="6" x2="0" y2="22" stroke="#8aff8a" stroke-width="2"/></g>
+  <line x1="884" y1="153" x2="760" y2="185" stroke="#8aff8a" stroke-width="1.8" marker-end="url(#m-g)"/>
+  <line x1="884" y1="208" x2="760" y2="219" stroke="#8aff8a" stroke-width="1.8" marker-end="url(#m-g)"/>
+  <text x="814" y="262" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">step over locked rows,</text>
+  <text x="814" y="282" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">grab the next free one</text>
+  <text x="814" y="310" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">parallel, non-blocking</text>
+
+  <!-- use cases -->
+  <rect x="36" y="354" width="928" height="180" rx="12" fill="#16191e" stroke="#8aff8a" stroke-width="2"/>
+  <text x="500" y="382" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">SKIP LOCKED is a general concurrent-queue primitive</text>
+
+  <text x="70" y="416" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">&#9679; Seat / ticket booking</text>
+  <text x="90" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">many buyers claim distinct seats from a fixed pool</text>
+  <text x="70" y="466" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">&#9679; Database-backed job queue</text>
+  <text x="90" y="486" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">workers pull distinct pending jobs (scheduler pullers)</text>
+
+  <text x="520" y="416" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">&#9679; A message broker on a table</text>
+  <text x="540" y="436" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">multiple consumers dequeue distinct messages</text>
+  <text x="520" y="466" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">&#9679; Batch processing</text>
+  <text x="540" y="486" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">each worker grabs a distinct batch of unlocked rows</text>
+
+  <text x="500" y="518" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">available in PostgreSQL 9.5+, MySQL 8+, Oracle, DB2</text>
+
+  <!-- safety -->
+  <rect x="36" y="552" width="928" height="120" rx="12" fill="#20200f" stroke="#ffff99" stroke-width="2.2"/>
+  <text x="500" y="582" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Bonus: the lock is tied to the transaction</text>
+  <text x="500" y="612" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14">A worker that crashes mid-claim has its transaction rolled back &#8212; the row becomes free again automatically.</text>
+  <text x="500" y="640" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">No orphaned locks, no manual cleanup. Pick WAIT for low contention, FAIL FAST when blocking is unacceptable,</text>
+  <text x="500" y="660" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">SKIP LOCKED whenever many workers claim distinct rows from a shared pool in parallel.</text>
+</svg>

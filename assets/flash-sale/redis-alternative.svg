@@ -1,0 +1,77 @@
+<svg width="1000" height="720" viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="720" fill="#111317"/>
+
+  <text x="500" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Seats, Not Quantities: Redis for Atomic Grabs</text>
+  <text x="500" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">when units are specific (14A &#8800; 14B) or you want extreme throughput, do the grab as one atomic op</text>
+
+  <!-- Redis set -->
+  <rect x="60" y="100" width="300" height="150" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="210" y="128" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Redis (in-memory)</text>
+  <text x="210" y="150" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">SET of available seats &#183; flight AI302</text>
+  <g font-family="monospace" font-size="13">
+    <rect x="84" y="166" width="56" height="30" rx="5" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="112" y="186" text-anchor="middle" fill="#8aff8a">14A</text>
+    <rect x="150" y="166" width="56" height="30" rx="5" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="178" y="186" text-anchor="middle" fill="#8aff8a">14B</text>
+    <rect x="216" y="166" width="56" height="30" rx="5" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="244" y="186" text-anchor="middle" fill="#8aff8a">14C</text>
+    <rect x="282" y="166" width="56" height="30" rx="5" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="310" y="186" text-anchor="middle" fill="#8aff8a">22F</text>
+    <rect x="117" y="204" width="56" height="30" rx="5" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="145" y="224" text-anchor="middle" fill="#8aff8a">31D</text>
+    <rect x="183" y="204" width="56" height="30" rx="5" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="211" y="224" text-anchor="middle" fill="#8aff8a">&#8230;</text>
+  </g>
+
+  <!-- buyers + ops -->
+  <g stroke="#8aff8a" stroke-width="2">
+    <g transform="translate(560,128)"><circle cx="0" cy="0" r="6" fill="#8aff8a" stroke="none"/><line x1="0" y1="6" x2="0" y2="22"/></g>
+    <g transform="translate(560,168)"><circle cx="0" cy="0" r="6" fill="#8aff8a" stroke="none"/><line x1="0" y1="6" x2="0" y2="22"/></g>
+    <g transform="translate(560,208)"><circle cx="0" cy="0" r="6" fill="#8aff8a" stroke="none"/><line x1="0" y1="6" x2="0" y2="22"/></g>
+  </g>
+  <line x1="540" y1="132" x2="370" y2="180" stroke="#8aff8a" stroke-width="2" marker-end="url(#m-g)"/>
+  <line x1="540" y1="172" x2="370" y2="188" stroke="#8aff8a" stroke-width="2" marker-end="url(#m-g)"/>
+  <line x1="540" y1="212" x2="370" y2="196" stroke="#8aff8a" stroke-width="2" marker-end="url(#m-g)"/>
+  <rect x="600" y="118" width="360" height="120" rx="10" fill="#16191e" stroke="#8aff8a" stroke-width="1.8"/>
+  <text x="780" y="144" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">one atomic command per grab</text>
+  <text x="618" y="172" fill="#cbd5e1" font-family="monospace" font-size="13">SPOP flight:AI302:seats</text>
+  <text x="618" y="190" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">&#8594; pop &amp; return ANY free seat</text>
+  <text x="618" y="216" fill="#cbd5e1" font-family="monospace" font-size="13">SREM flight:AI302:seats 14A</text>
+  <text x="618" y="234" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">&#8594; claim a SPECIFIC seat (1=yours, 0=taken)</text>
+
+  <!-- single threaded panel -->
+  <rect x="60" y="266" width="440" height="120" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="280" y="292" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Why it&#8217;s safe: single-threaded</text>
+  <text x="280" y="318" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Redis runs one command at a time, so each</text>
+  <text x="280" y="338" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">SPOP / SREM is atomic by construction &#8212;</text>
+  <text x="280" y="360" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">no check-then-set race, no lock needed</text>
+
+  <!-- not slow panel -->
+  <rect x="520" y="266" width="440" height="120" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="740" y="292" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">But isn&#8217;t single-threaded slow?</text>
+  <text x="740" y="318" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">No &#8212; I/O multiplexing (epoll) services thousands</text>
+  <text x="740" y="338" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">of connections concurrently; only command</text>
+  <text x="740" y="360" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">I/O is parallelized; CPU work is one call at a time</text>
+
+  <!-- durability panel -->
+  <rect x="60" y="404" width="440" height="116" rx="10" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="280" y="430" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Durability: turn on AOF</text>
+  <text x="280" y="456" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Redis is in-memory, so a crash forgets which</text>
+  <text x="280" y="476" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">seats were sold. AOF (append-only file) keeps</text>
+  <text x="280" y="496" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">the inventory durable across a restart.</text>
+
+  <!-- caution panel -->
+  <rect x="520" y="404" width="440" height="116" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="740" y="430" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">A single point of pressure</text>
+  <text x="740" y="456" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">let an unbounded crowd flood it and it can be</text>
+  <text x="740" y="476" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">overwhelmed &#8212; keep it behind admission control.</text>
+  <text x="740" y="496" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">On payment fail/timeout, SADD the seat back.</text>
+
+  <!-- takeaway -->
+  <rect x="60" y="540" width="900" height="150" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="510" y="570" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Relational table vs Redis &#8212; pick by the unit</text>
+  <text x="84" y="600" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">units table + SKIP LOCKED</text>
+  <text x="84" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">fungible units, durable, rich queries, transactional</text>
+  <text x="84" y="642" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">releases &#8212; the default for any-one-will-do inventory</text>
+  <text x="540" y="600" fill="#8aff8a" font-family="sans-serif" font-size="13" font-weight="bold">atomic Redis op</text>
+  <text x="540" y="622" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">specific seats or extreme throughput &#8212; raw speed,</text>
+  <text x="540" y="642" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">trading the table&#8217;s richness for it, AOF for durability</text>
+  <text x="510" y="676" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">both still need a payment webhook to finalize, a release on failure, and a gate in front</text>
+</svg>

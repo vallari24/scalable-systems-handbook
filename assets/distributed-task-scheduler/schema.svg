@@ -1,0 +1,72 @@
+<svg width="1200" height="660" viewBox="0 0 1200 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="660" fill="#111317"/>
+  <defs>
+    <marker id="y" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffff99"/></marker>
+    <marker id="o" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ffd27f"/></marker>
+    <marker id="r" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8a8a"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The tasks table — what exactly do we store?</text>
+  <text x="40" y="76" fill="#9aa6b2" font-family="sans-serif" font-size="16">Each gap between two timestamps measures one stage of the pipeline.</text>
+
+  <!-- annotations above columns -->
+  <text x="312" y="150" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">INDEX here</text>
+  <line x1="312" y1="158" x2="312" y2="186" stroke="#ffff99" stroke-width="2" marker-end="url(#y)"/>
+  <text x="600" y="150" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14" font-weight="bold">SLA gate</text>
+  <line x1="600" y1="158" x2="600" y2="186" stroke="#ffd27f" stroke-width="2" marker-end="url(#o)"/>
+
+  <!-- table -->
+  <g font-family="sans-serif">
+    <!-- header row -->
+    <rect x="40" y="190" width="80"  height="48" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="120" y="190" width="150" height="48" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="270" y="190" width="180" height="48" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="450" y="190" width="150" height="48" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="600" y="190" width="150" height="48" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="750" y="190" width="170" height="48" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="920" y="190" width="150" height="48" fill="#1c2430" stroke="#3a3f47"/>
+    <text x="80"  y="220" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="bold">id</text>
+    <text x="195" y="220" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="bold">command</text>
+    <text x="360" y="220" text-anchor="middle" fill="#ffff99" font-size="15" font-weight="bold">scheduled_at</text>
+    <text x="525" y="220" text-anchor="middle" fill="#ff8bd2" font-size="15" font-weight="bold">picked_at</text>
+    <text x="675" y="220" text-anchor="middle" fill="#ffd27f" font-size="15" font-weight="bold">started_at</text>
+    <text x="835" y="220" text-anchor="middle" fill="#8aff8a" font-size="15" font-weight="bold">completed_at</text>
+    <text x="995" y="220" text-anchor="middle" fill="#ff8a8a" font-size="15" font-weight="bold">failed_at</text>
+    <!-- data row -->
+    <rect x="40" y="238" width="80"  height="48" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="120" y="238" width="150" height="48" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="270" y="238" width="180" height="48" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="450" y="238" width="150" height="48" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="600" y="238" width="150" height="48" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="750" y="238" width="170" height="48" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="920" y="238" width="150" height="48" fill="#15171c" stroke="#3a3f47"/>
+    <text x="80"  y="268" text-anchor="middle" fill="#cbd5e1" font-size="14">1</text>
+    <text x="195" y="268" text-anchor="middle" fill="#cbd5e1" font-size="14">build</text>
+    <text x="360" y="268" text-anchor="middle" fill="#cbd5e1" font-size="13">13/01/23 10:00</text>
+    <text x="525" y="268" text-anchor="middle" fill="#9aa6b2" font-size="14">NULL</text>
+    <text x="675" y="268" text-anchor="middle" fill="#9aa6b2" font-size="14">NULL</text>
+    <text x="835" y="268" text-anchor="middle" fill="#9aa6b2" font-size="14">NULL</text>
+    <text x="995" y="268" text-anchor="middle" fill="#9aa6b2" font-size="14">NULL</text>
+  </g>
+
+  <text x="40" y="318" fill="#9aa6b2" font-family="sans-serif" font-size="14">scheduled_at is a UTC TIMESTAMP — never local time, or DST fires your job an hour off.</text>
+
+  <!-- SLA ledger callout -->
+  <rect x="450" y="338" width="300" height="46" rx="8" fill="#1c1810" stroke="#ffd27f" stroke-width="1.8"/>
+  <text x="600" y="367" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="14">the SLA ledger (Section 6)</text>
+
+  <!-- status tradeoff -->
+  <rect x="40" y="408" width="1120" height="216" rx="12" fill="#15171c" stroke="#ff8a8a" stroke-width="1.8" stroke-dasharray="7 5"/>
+  <text x="64" y="444" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">Do we need an explicit status column?  Derive it instead.</text>
+  <text x="64" y="478" fill="#cbd5e1" font-family="monospace" font-size="14.5">started_at IS NULL AND failed_at IS NULL  &#8594;  pending</text>
+  <text x="64" y="504" fill="#cbd5e1" font-family="monospace" font-size="14.5">failed_at    IS NOT NULL                  &#8594;  failed</text>
+  <text x="64" y="530" fill="#cbd5e1" font-family="monospace" font-size="14.5">completed_at IS NOT NULL                  &#8594;  success</text>
+
+  <text x="620" y="478" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Derive:</text>
+  <text x="700" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">always correct, never drifts, tiny CASE on read.</text>
+  <text x="620" y="510" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Store:</text>
+  <text x="700" y="510" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">faster to read, but can drift out of sync</text>
+  <text x="700" y="532" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">after a crash → needs a reconciliation job.</text>
+  <text x="620" y="572" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Tradeoff, not a law:</text>
+  <text x="620" y="596" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">a redundant column buys read-speed at the price of consistency.</text>
+</svg>

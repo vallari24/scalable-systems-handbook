@@ -1,0 +1,63 @@
+<svg width="1200" height="740" viewBox="0 0 1200 740" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="740" fill="#111317"/>
+  <defs>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Scaling out — sharding the jobs store</text>
+  <text x="40" y="78" fill="#9aa6b2" font-family="sans-serif" font-size="16">Only when one primary can't absorb the writes + claims. Pick a key that spreads load AND keeps the range scan.</text>
+
+  <!-- key options -->
+  <rect x="40" y="104" width="360" height="150" rx="10" fill="#1c1113" stroke="#ff8a8a" stroke-width="1.8"/>
+  <text x="60" y="136" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">A &#183; shard by task_id</text>
+  <text x="60" y="166" fill="#cbd5e1" font-family="sans-serif" font-size="14">keeps a task's executions together,</text>
+  <text x="60" y="188" fill="#cbd5e1" font-family="sans-serif" font-size="14">but a hot per-minute task piles</text>
+  <text x="60" y="210" fill="#cbd5e1" font-family="sans-serif" font-size="14">its whole stream onto one shard.</text>
+  <text x="60" y="240" fill="#9aa6b2" font-family="sans-serif" font-size="13">→ skew risk</text>
+
+  <rect x="420" y="104" width="360" height="150" rx="10" fill="#1c1810" stroke="#ffd27f" stroke-width="1.8"/>
+  <text x="440" y="136" fill="#ffd27f" font-family="sans-serif" font-size="16" font-weight="bold">B &#183; shard by time bucket</text>
+  <text x="440" y="166" fill="#cbd5e1" font-family="sans-serif" font-size="14">floor(scheduled_at to min) mod N —</text>
+  <text x="440" y="188" fill="#cbd5e1" font-family="sans-serif" font-size="14">spreads same-minute jobs evenly,</text>
+  <text x="440" y="210" fill="#cbd5e1" font-family="sans-serif" font-size="14">but one popular minute (9:00am)</text>
+  <text x="440" y="240" fill="#9aa6b2" font-family="sans-serif" font-size="13">→ can still hotspot a bucket</text>
+
+  <rect x="800" y="104" width="360" height="150" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="820" y="136" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">C &#183; hybrid &#9733; recommended</text>
+  <text x="820" y="166" fill="#cbd5e1" font-family="sans-serif" font-size="14">hash(task_id) across shards for</text>
+  <text x="820" y="188" fill="#cbd5e1" font-family="sans-serif" font-size="14">even spread, + a scheduled_at index</text>
+  <text x="820" y="210" fill="#cbd5e1" font-family="sans-serif" font-size="14"><tspan font-weight="bold" fill="#ffff99">within</tspan> each shard for the range scan.</text>
+  <text x="820" y="240" fill="#8aff8a" font-family="sans-serif" font-size="13">→ balanced AND log-time due-query</text>
+
+  <!-- shards -->
+  <g fill="#1a1a10" stroke="#ffff99" stroke-width="2.2">
+    <path d="M270,360 L270,452 A40,13 0 0 0 350,452 L350,360"/><ellipse cx="310" cy="360" rx="40" ry="13"/>
+    <path d="M560,360 L560,452 A40,13 0 0 0 640,452 L640,360"/><ellipse cx="600" cy="360" rx="40" ry="13"/>
+    <path d="M850,360 L850,452 A40,13 0 0 0 930,452 L930,360"/><ellipse cx="890" cy="360" rx="40" ry="13"/>
+  </g>
+  <text x="310" y="492" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Shard 0</text>
+  <text x="600" y="492" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Shard 1</text>
+  <text x="890" y="492" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">Shard 2</text>
+  <text x="310" y="414" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">+scheduled_at idx</text>
+  <text x="600" y="414" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">+scheduled_at idx</text>
+  <text x="890" y="414" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">+scheduled_at idx</text>
+
+  <!-- pullers bound to shards -->
+  <rect x="250" y="300" width="120" height="40" rx="7" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="540" y="300" width="120" height="40" rx="7" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="830" y="300" width="120" height="40" rx="7" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="310" y="325" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">puller</text>
+  <text x="600" y="325" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">puller</text>
+  <text x="890" y="325" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13">puller</text>
+  <line x1="310" y1="340" x2="310" y2="356" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="600" y1="340" x2="600" y2="356" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="890" y1="340" x2="890" y2="356" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="600" y="280" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14">each puller bound to a shard → SKIP LOCKED contention stays local</text>
+
+  <!-- takeaways -->
+  <rect x="40" y="540" width="1120" height="150" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="64" y="576" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Why this scales</text>
+  <text x="64" y="606" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">&#8226; Lock contention is local to a shard — pullers on shard 0 never contend with pullers on shard 1.</text>
+  <text x="64" y="632" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">&#8226; Total claim throughput scales roughly linearly with shard count.</text>
+  <text x="64" y="658" fill="#93c5fd" font-family="sans-serif" font-size="14.5">&#8226; Map many <tspan font-weight="bold">logical</tspan> shards onto fewer physical nodes (the S3 trick) → adding a node is "move a shard", not "re-key every row".</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1200" height="720" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">The timestamp ledger — each gap measures one pipeline stage</text>
+
+  <!-- timeline -->
+  <line x1="80" y1="180" x2="1120" y2="180" stroke="#3a3f47" stroke-width="2"/>
+  <!-- instants -->
+  <g font-family="sans-serif">
+    <circle cx="120" cy="180" r="8" fill="#ffff99"/>
+    <text x="120" y="150" text-anchor="middle" fill="#ffff99" font-size="15" font-weight="bold">scheduled_at</text>
+    <text x="120" y="210" text-anchor="middle" fill="#9aa6b2" font-size="13">due</text>
+
+    <circle cx="420" cy="180" r="8" fill="#ff8bd2"/>
+    <text x="420" y="150" text-anchor="middle" fill="#ff8bd2" font-size="15" font-weight="bold">picked_at</text>
+    <text x="420" y="210" text-anchor="middle" fill="#9aa6b2" font-size="13">puller claimed</text>
+
+    <circle cx="760" cy="180" r="8" fill="#ffd27f"/>
+    <text x="760" y="150" text-anchor="middle" fill="#ffd27f" font-size="15" font-weight="bold">started_at</text>
+    <text x="760" y="210" text-anchor="middle" fill="#9aa6b2" font-size="13">executor began</text>
+
+    <circle cx="1080" cy="180" r="8" fill="#8aff8a"/>
+    <text x="1080" y="150" text-anchor="middle" fill="#8aff8a" font-size="15" font-weight="bold">completed_at</text>
+    <text x="1080" y="210" text-anchor="middle" fill="#ff8a8a" font-size="13">or failed_at</text>
+  </g>
+
+  <!-- gap A -->
+  <rect x="130" y="244" width="280" height="92" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="270" y="274" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="15" font-weight="bold">Gap A &#183; puller throughput</text>
+  <text x="270" y="300" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">how long a due job waits to be claimed</text>
+  <text x="270" y="324" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13.5">grows? &#8594; add PULLERS</text>
+
+  <!-- gap B -->
+  <rect x="450" y="244" width="280" height="92" rx="10" fill="#1c1810" stroke="#ffd27f" stroke-width="2"/>
+  <text x="590" y="274" text-anchor="middle" fill="#ffd27f" font-family="sans-serif" font-size="15" font-weight="bold">Gap B &#183; queue + executor</text>
+  <text x="590" y="300" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">how long a claimed job waits for a slot</text>
+  <text x="590" y="324" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="13.5">grows? &#8594; add EXECUTORS</text>
+
+  <!-- gap C -->
+  <rect x="770" y="244" width="320" height="92" rx="10" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="930" y="274" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Gap C &#183; execution time</text>
+  <text x="930" y="300" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">how long the command itself ran</text>
+  <text x="930" y="324" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13.5">&#8811; historical avg? &#8594; dying machine</text>
+
+  <!-- SLA bracket -->
+  <line x1="120" y1="392" x2="760" y2="392" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="120" y1="384" x2="120" y2="400" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="760" y1="384" x2="760" y2="400" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="440" y="382" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">THE SLA: scheduled_at &#8594; started_at must be &#8804; 30s</text>
+  <text x="440" y="420" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">budget: ~4s claim+enqueue &#183; ~1s broker handoff &#183; ~25s slack to start</text>
+
+  <!-- why both -->
+  <rect x="40" y="460" width="1120" height="222" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="64" y="496" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Why keep BOTH completed_at and failed_at?</text>
+
+  <text x="64" y="532" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">completed_at &#8722; started_at = runtime</text>
+  <text x="64" y="562" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">1. Anomaly detection — a run far past its historical mean signals a stuck or dying executor.</text>
+  <text x="64" y="590" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">2. Predictive scaling — average runtime lets the orchestrator forecast how many executors a burst needs.</text>
+
+  <text x="64" y="636" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">failed_at disambiguates "errored" from "still running"</text>
+  <text x="64" y="664" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">a NULL completed_at alone is ambiguous — the separate column makes the two states distinct.</text>
+</svg>

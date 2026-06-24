@@ -1,0 +1,119 @@
+<svg width="1180" height="940" viewBox="0 0 1180 940" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="940" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Parallelism &amp; the Hot Partition</text>
+  <text x="590" y="78" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">consumer groups split partitions across machines &#8212; until one video goes viral</text>
+
+  <!-- ===================== TOP: consumer-group mechanism ===================== -->
+  <text x="455" y="112" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">The mechanism: a consumer group splits the partitions</text>
+
+  <!-- Kafka tube -->
+  <rect x="290" y="124" width="600" height="40" rx="20" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="308" cy="144" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="872" cy="144" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="590" y="150" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Kafka topic: filtered-views &#8212; 8 partitions</text>
+
+  <!-- 8 partition chips -->
+  <g font-family="sans-serif" font-size="14" font-weight="bold">
+    <rect x="300" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="330" y="212" text-anchor="middle" fill="#93c5fd">P0</text>
+    <rect x="374" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="404" y="212" text-anchor="middle" fill="#93c5fd">P1</text>
+    <rect x="448" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="478" y="212" text-anchor="middle" fill="#93c5fd">P2</text>
+    <rect x="522" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="552" y="212" text-anchor="middle" fill="#93c5fd">P3</text>
+    <rect x="596" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="626" y="212" text-anchor="middle" fill="#93c5fd">P4</text>
+    <rect x="670" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="700" y="212" text-anchor="middle" fill="#93c5fd">P5</text>
+    <rect x="744" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="774" y="212" text-anchor="middle" fill="#93c5fd">P6</text>
+    <rect x="818" y="185" width="60" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="848" y="212" text-anchor="middle" fill="#93c5fd">P7</text>
+  </g>
+
+  <text x="590" y="265" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">Counter consumer group (4 machines) &#8212; each owns a disjoint pair</text>
+
+  <!-- assignment arrows -->
+  <g stroke="#93c5fd" stroke-width="2" marker-end="url(#m-b)">
+    <line x1="330" y1="229" x2="350" y2="282"/><line x1="404" y1="229" x2="384" y2="282"/>
+    <line x1="478" y1="229" x2="498" y2="282"/><line x1="552" y1="229" x2="532" y2="282"/>
+    <line x1="626" y1="229" x2="646" y2="282"/><line x1="700" y1="229" x2="680" y2="282"/>
+    <line x1="774" y1="229" x2="794" y2="282"/><line x1="848" y1="229" x2="828" y2="282"/>
+  </g>
+
+  <!-- consumer boxes -->
+  <g font-family="sans-serif">
+    <rect x="307" y="286" width="120" height="58" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/><text x="367" y="312" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="bold">C1</text><text x="367" y="332" text-anchor="middle" fill="#9aa6b2" font-size="12">owns P0, P1</text>
+    <rect x="455" y="286" width="120" height="58" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/><text x="515" y="312" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="bold">C2</text><text x="515" y="332" text-anchor="middle" fill="#9aa6b2" font-size="12">owns P2, P3</text>
+    <rect x="603" y="286" width="120" height="58" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/><text x="663" y="312" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="bold">C3</text><text x="663" y="332" text-anchor="middle" fill="#9aa6b2" font-size="12">owns P4, P5</text>
+    <rect x="751" y="286" width="120" height="58" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/><text x="811" y="312" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="bold">C4</text><text x="811" y="332" text-anchor="middle" fill="#9aa6b2" font-size="12">owns P6, P7</text>
+  </g>
+
+  <!-- right caption -->
+  <rect x="918" y="150" width="224" height="160" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="1030" y="178" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">One consumer = all videos?</text>
+  <text x="1030" y="202" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">NO.</text>
+  <text x="930" y="228" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">The group splits partitions, so</text>
+  <text x="930" y="248" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">each machine owns a disjoint</text>
+  <text x="930" y="268" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">slice of videos and counts in</text>
+  <text x="930" y="288" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">parallel &#8212; no coordination.</text>
+
+  <!-- note -->
+  <rect x="290" y="368" width="580" height="50" rx="10" fill="#16191e" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="580" y="390" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">Parallelism is capped by the partition count. Add a 5th consumer to 8 partitions and Kafka</text>
+  <text x="580" y="409" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13"><tspan fill="#93c5fd" font-weight="bold">rebalances</tspan> &#8212; handing it some partitions automatically. To go faster: more partitions + more consumers.</text>
+
+  <line x1="60" y1="446" x2="1120" y2="446" stroke="#3a3f47" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+  <!-- ===================== BOTTOM: hot partition ===================== -->
+  <rect x="40" y="466" width="1100" height="430" rx="14" fill="none" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="590" y="498" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="19" font-weight="bold">The hot partition: one viral video melts one consumer</text>
+
+  <!-- mini tube + chips, P3 hot -->
+  <rect x="80" y="528" width="440" height="34" rx="17" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <circle cx="96" cy="545" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <circle cx="504" cy="545" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="300" y="550" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">premiere: tens of millions of concurrent viewers of video A</text>
+
+  <g font-family="sans-serif" font-size="12" font-weight="bold">
+    <rect x="92" y="590" width="44" height="38" rx="7" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="114" y="614" text-anchor="middle" fill="#93c5fd">P0</text>
+    <rect x="146" y="590" width="44" height="38" rx="7" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="168" y="614" text-anchor="middle" fill="#93c5fd">P1</text>
+    <rect x="200" y="590" width="44" height="38" rx="7" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="222" y="614" text-anchor="middle" fill="#93c5fd">P2</text>
+    <rect x="252" y="578" width="48" height="62" rx="7" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/><text x="276" y="604" text-anchor="middle" fill="#ff8a8a">P3</text><text x="276" y="624" text-anchor="middle" fill="#ff8a8a" font-size="11">hot</text>
+    <rect x="308" y="590" width="44" height="38" rx="7" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="330" y="614" text-anchor="middle" fill="#93c5fd">P4</text>
+    <rect x="362" y="590" width="44" height="38" rx="7" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="384" y="614" text-anchor="middle" fill="#93c5fd">P5</text>
+    <rect x="416" y="590" width="44" height="38" rx="7" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="438" y="614" text-anchor="middle" fill="#93c5fd">P6</text>
+    <rect x="470" y="590" width="44" height="38" rx="7" fill="#16191e" stroke="#93c5fd" stroke-width="2"/><text x="492" y="614" text-anchor="middle" fill="#93c5fd">P7</text>
+  </g>
+
+  <g font-family="sans-serif">
+    <rect x="93" y="676" width="96" height="48" rx="9" fill="#16191e" stroke="#3a3f47" stroke-width="2"/><text x="141" y="700" text-anchor="middle" fill="#9aa6b2" font-size="14" font-weight="bold">C1</text><text x="141" y="717" text-anchor="middle" fill="#9aa6b2" font-size="11">idle</text>
+    <rect x="201" y="668" width="96" height="58" rx="9" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/><text x="249" y="692" text-anchor="middle" fill="#ff8a8a" font-size="14" font-weight="bold">C2</text><text x="249" y="711" text-anchor="middle" fill="#ff8a8a" font-size="11">drowning</text>
+    <rect x="309" y="676" width="96" height="48" rx="9" fill="#16191e" stroke="#3a3f47" stroke-width="2"/><text x="357" y="700" text-anchor="middle" fill="#9aa6b2" font-size="14" font-weight="bold">C3</text><text x="357" y="717" text-anchor="middle" fill="#9aa6b2" font-size="11">idle</text>
+    <rect x="417" y="676" width="96" height="48" rx="9" fill="#16191e" stroke="#3a3f47" stroke-width="2"/><text x="465" y="700" text-anchor="middle" fill="#9aa6b2" font-size="14" font-weight="bold">C4</text><text x="465" y="717" text-anchor="middle" fill="#9aa6b2" font-size="11">idle</text>
+  </g>
+  <line x1="276" y1="640" x2="252" y2="664" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#m-r)"/>
+
+  <text x="300" y="752" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">All of A's events hash to <tspan fill="#ff8a8a" font-weight="bold">P3 &#8594; C2 drowns</tspan> while C1, C3, C4 sit idle.</text>
+  <text x="300" y="772" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12.5">The skew, not the average, is the problem.</text>
+
+  <!-- mitigations -->
+  <text x="850" y="528" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Three cures</text>
+
+  <rect x="590" y="540" width="520" height="92" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="606" y="565" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">1 &#183; Split the key (sharded counter)</text>
+  <text x="606" y="588" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Append a suffix so A spreads across K partitions: A#0, A#1, &#8230; A#K.</text>
+  <text x="606" y="608" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">Count each shard in parallel, then <tspan fill="#8aff8a" font-weight="bold">SUM the K shards at read time</tspan></text>
+  <text x="606" y="626" fill="#9aa6b2" font-family="sans-serif" font-size="12">(trade a tiny read-side add for write-side parallelism).</text>
+
+  <rect x="590" y="644" width="520" height="92" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="606" y="669" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">2 &#183; Local pre-aggregation (batching)</text>
+  <text x="606" y="692" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">The consumer already batches in memory, so even a hot partition</text>
+  <text x="606" y="712" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">emits only <tspan fill="#ffff99" font-weight="bold">one batched write per window</tspan> &#8212; absorbing most of</text>
+  <text x="606" y="730" fill="#9aa6b2" font-family="sans-serif" font-size="12">the spike before it ever reaches the Count DB.</text>
+
+  <rect x="590" y="748" width="520" height="70" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="606" y="773" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">3 &#183; More partitions up front</text>
+  <text x="606" y="796" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">So a hot key has neighbours and the blast radius of any one stays small.</text>
+
+  <text x="590" y="922" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">Consumer groups give coordination-free parallelism bounded by partition count; a viral video makes a hot partition &#8212; cured by sharding the key and summing on read.</text>
+</svg>

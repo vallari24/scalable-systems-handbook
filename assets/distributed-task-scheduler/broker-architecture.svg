@@ -1,0 +1,78 @@
+<svg width="1120" height="660" viewBox="0 0 1120 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1120" height="660" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+    <marker id="p" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#ff8bd2"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#8aff8a"/></marker>
+  </defs>
+
+  <text x="40" y="46" fill="#ffff99" font-family="sans-serif" font-size="24" font-weight="bold">The messages table &amp; the broker topology</text>
+  <text x="40" y="74" fill="#9aa6b2" font-family="sans-serif" font-size="15">Very similar to the distributed task scheduler — the puller's table, renamed.</text>
+
+  <!-- table -->
+  <g font-family="sans-serif">
+    <rect x="40"  y="96" width="70"  height="44" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="110" y="96" width="150" height="44" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="260" y="96" width="180" height="44" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="440" y="96" width="150" height="44" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="590" y="96" width="150" height="44" fill="#1c2430" stroke="#3a3f47"/>
+    <rect x="740" y="96" width="200" height="44" fill="#1c2430" stroke="#3a3f47"/>
+    <text x="75"  y="124" text-anchor="middle" fill="#ffff99" font-size="14" font-weight="bold">id</text>
+    <text x="185" y="124" text-anchor="middle" fill="#ff8bd2" font-size="14" font-weight="bold">msg</text>
+    <text x="350" y="124" text-anchor="middle" fill="#ffff99" font-size="14" font-weight="bold">created_at</text>
+    <text x="515" y="124" text-anchor="middle" fill="#ff8bd2" font-size="14" font-weight="bold">picked_at</text>
+    <text x="665" y="124" text-anchor="middle" fill="#ff8bd2" font-size="14" font-weight="bold">deleted_at</text>
+    <text x="840" y="124" text-anchor="middle" fill="#ffff99" font-size="14" font-weight="bold">receipt_handle</text>
+    <!-- data row -->
+    <rect x="40"  y="140" width="70"  height="42" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="110" y="140" width="150" height="42" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="260" y="140" width="180" height="42" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="440" y="140" width="150" height="42" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="590" y="140" width="150" height="42" fill="#15171c" stroke="#3a3f47"/>
+    <rect x="740" y="140" width="200" height="42" fill="#15171c" stroke="#3a3f47"/>
+    <text x="75"  y="167" text-anchor="middle" fill="#9aa6b2" font-size="12">AUTO_INC</text>
+    <text x="185" y="167" text-anchor="middle" fill="#cbd5e1" font-size="13">"build #42"</text>
+    <text x="350" y="167" text-anchor="middle" fill="#cbd5e1" font-size="12">10:00:01</text>
+    <text x="515" y="167" text-anchor="middle" fill="#9aa6b2" font-size="13">NULL</text>
+    <text x="665" y="167" text-anchor="middle" fill="#9aa6b2" font-size="13">NULL</text>
+    <text x="840" y="167" text-anchor="middle" fill="#cbd5e1" font-size="13">uuid-1</text>
+  </g>
+  <text x="40" y="208" fill="#9aa6b2" font-family="sans-serif" font-size="13">id AUTO_INC = free FIFO &#183; picked_at = visibility flag (NULL = available) &#183; deleted_at = soft-delete ack &#183; receipt_handle minted on claim</text>
+
+  <!-- topology -->
+  <!-- DB -->
+  <g fill="#1a1a10" stroke="#ffff99" stroke-width="2.2">
+    <path d="M90,300 L90,372 A34,11 0 0 0 158,372 L158,300"/><ellipse cx="124" cy="300" rx="34" ry="11"/>
+  </g>
+  <text x="124" y="408" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="14">MySQL</text>
+  <text x="124" y="344" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">messages</text>
+
+  <!-- Broker API fleet -->
+  <rect x="320" y="300" width="200" height="56" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="314" y="306" width="200" height="56" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="308" y="312" width="200" height="56" rx="8" fill="#16191e" stroke="#ffff99" stroke-width="2.2"/>
+  <text x="408" y="346" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="17" font-weight="bold">Broker API</text>
+  <line x1="160" y1="338" x2="304" y2="338" stroke="#cbd5e1" stroke-width="2.2" marker-end="url(#w)"/>
+
+  <!-- endpoints under broker -->
+  <text x="300" y="416" fill="#ff8bd2" font-family="monospace" font-size="14">PUT /messages/q</text>
+  <text x="300" y="440" fill="#8aff8a" font-family="monospace" font-size="14">GET /messages/q?n=10</text>
+  <text x="300" y="464" fill="#ff8bd2" font-family="monospace" font-size="14">DELETE /messages/q/{receipt}</text>
+
+  <!-- consumers -->
+  <rect x="900" y="270" width="170" height="48" rx="8" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="900" y="336" width="170" height="48" rx="8" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <rect x="900" y="402" width="170" height="48" rx="8" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="985" y="300" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Consumer 1</text>
+  <text x="985" y="366" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Consumer 2</text>
+  <text x="985" y="432" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Consumer 3</text>
+  <line x1="510" y1="332" x2="896" y2="294" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="510" y1="340" x2="896" y2="360" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="510" y1="348" x2="896" y2="426" stroke="#8aff8a" stroke-width="2" marker-end="url(#g)"/>
+
+  <!-- note -->
+  <rect x="40" y="520" width="1040" height="104" rx="10" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="64" y="554" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Stateless Broker API, table = single source of truth</text>
+  <text x="64" y="582" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Any Broker API instance serves any consumer — just like the stateless API tiers in S3 and the scheduler.</text>
+  <text x="64" y="608" fill="#ffff99" font-family="sans-serif" font-size="14.5">Enqueue is an INSERT; everything interesting happens on GET (claim) and DELETE (acknowledge).</text>
+</svg>

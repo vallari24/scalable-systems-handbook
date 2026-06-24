@@ -1,0 +1,83 @@
+<svg width="1100" height="730" viewBox="0 0 1100 730" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="m-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1100" height="730" fill="#111317"/>
+
+  <text x="550" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Choosing the Queue: Kafka vs RabbitMQ</text>
+  <text x="550" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">match the tool to the bottleneck &#8212; a firehose wants a log, not a broker</text>
+
+  <!-- producer -->
+  <rect x="460" y="98" width="180" height="50" rx="10" fill="#2a1622" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="550" y="120" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">API producer</text>
+  <text x="550" y="138" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">append a view event &#8594; which queue?</text>
+
+  <line x1="470" y1="148" x2="300" y2="188" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+  <line x1="630" y1="148" x2="800" y2="188" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#m-p)"/>
+
+  <!-- LEFT: RabbitMQ -->
+  <rect x="60" y="192" width="470" height="262" rx="12" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="295" y="220" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">RabbitMQ &#8212; a broker</text>
+
+  <rect x="100" y="238" width="180" height="44" rx="9" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="190" y="265" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">broker</text>
+  <line x1="280" y1="252" x2="350" y2="252" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#m-r)"/>
+  <text x="316" y="242" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="10.5">PUSH</text>
+  <rect x="354" y="238" width="120" height="44" rx="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="414" y="265" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">consumer</text>
+  <text x="295" y="302" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">pushes each message; deletes it on ack</text>
+
+  <text x="86" y="332" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; flexible routing (exchanges, routing keys)</text>
+  <text x="86" y="356" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; per-message acknowledgement</text>
+  <text x="86" y="380" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; low-latency task delivery, request/response</text>
+  <text x="86" y="404" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; great for work queues &amp; routed tasks</text>
+
+  <rect x="86" y="418" width="418" height="26" rx="8" fill="#1a1113" stroke="#ff8a8a" stroke-width="1.5"/>
+  <text x="295" y="436" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">throughput &#8776; tens of thousands msgs/sec</text>
+
+  <!-- RIGHT: Kafka -->
+  <rect x="570" y="192" width="470" height="262" rx="12" fill="#16191e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="805" y="220" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="18" font-weight="bold">Kafka &#8212; a log</text>
+
+  <rect x="610" y="236" width="270" height="36" rx="18" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="628" y1="245" x2="862" y2="245" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="628" y1="254" x2="862" y2="254" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <line x1="628" y1="263" x2="862" y2="263" stroke="#ffff99" stroke-width="1" opacity="0.5"/>
+  <circle cx="628" cy="254" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="862" cy="254" r="9" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <line x1="884" y1="254" x2="954" y2="254" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+  <text x="919" y="244" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="10.5">PULL</text>
+  <rect x="958" y="232" width="64" height="44" rx="9" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="990" y="259" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">offset</text>
+  <text x="805" y="302" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">append-only; consumers pull; messages retained</text>
+
+  <text x="596" y="332" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; sequential disk I/O (log-structured)</text>
+  <text x="596" y="356" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; pull at your own offset &#183; replay anytime</text>
+  <text x="596" y="380" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; partitions give horizontal parallelism</text>
+  <text x="596" y="404" fill="#cbd5e1" font-family="sans-serif" font-size="13">&#8226; built for high-volume event streams</text>
+
+  <rect x="596" y="418" width="418" height="26" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="805" y="436" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">throughput &#8776; 1,000,000+ msgs/sec</text>
+
+  <!-- reasoning band -->
+  <text x="550" y="492" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="15" font-weight="bold">Why Kafka here &#8212; for the right reason, not the seductive ones</text>
+
+  <rect x="120" y="506" width="380" height="44" rx="9" fill="#16191e" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="310" y="533" text-anchor="middle" fill="#6b7280" font-family="sans-serif" font-size="13" font-weight="bold">&#10007; &#8220;because of retention / replay&#8221;</text>
+  <line x1="150" y1="528" x2="470" y2="528" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="310" y="568" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">not the deciding reason &#8212; both can be configured to retain</text>
+
+  <rect x="600" y="506" width="380" height="44" rx="9" fill="#16191e" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="790" y="533" text-anchor="middle" fill="#6b7280" font-family="sans-serif" font-size="13" font-weight="bold">&#10007; &#8220;because of stream processing&#8221;</text>
+  <line x1="628" y1="528" x2="952" y2="528" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="790" y="568" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">not it &#8212; we are just counting, not windowed joins</text>
+
+  <!-- the right reason banner -->
+  <rect x="120" y="600" width="860" height="96" rx="12" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="550" y="632" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">&#10003; THROUGHPUT &#8212; the bottleneck is raw write rate</text>
+  <text x="550" y="660" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">A view firehose is millions of events/sec. A log&#8217;s sequential I/O sustains it;</text>
+  <text x="550" y="682" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">a broker&#8217;s push-and-ack model buckles. Firehose &#8594; log; routed tasks &#8594; broker.</text>
+</svg>

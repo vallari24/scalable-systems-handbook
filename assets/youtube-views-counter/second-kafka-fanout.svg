@@ -1,0 +1,119 @@
+<svg width="1180" height="772" viewBox="0 0 1180 772" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="m-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-g" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#8aff8a"/></marker>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-y" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ffff99"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="772" fill="#111317"/>
+
+  <text x="590" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">Why Re-Ingest Into a Second Kafka?</text>
+  <text x="590" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">filtering is expensive and valuable &#8212; do it once and share the clean stream</text>
+
+  <!-- ============ TOP: BAD DESIGN ============ -->
+  <text x="590" y="116" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="18" font-weight="bold">THE BAD DESIGN &#8212; every team re-runs the heavy filter on the raw firehose</text>
+
+  <!-- raw kafka tube -->
+  <rect x="60" y="232" width="190" height="34" rx="17" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="78" cy="249" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="232" cy="249" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="155" y="254" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">raw Kafka</text>
+  <text x="155" y="290" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">the firehose</text>
+
+  <!-- 3 rule engine copies -->
+  <rect x="326" y="150" width="178" height="48" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="415" y="172" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">Rule Engine</text>
+  <text x="415" y="190" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">owned by Views</text>
+
+  <rect x="326" y="232" width="178" height="48" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="415" y="254" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">Rule Engine</text>
+  <text x="415" y="272" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">owned by Monetization</text>
+
+  <rect x="326" y="314" width="178" height="48" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="415" y="336" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">Rule Engine</text>
+  <text x="415" y="354" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">owned by Recommendations</text>
+
+  <!-- arrows raw kafka -> 3 copies -->
+  <line x1="250" y1="245" x2="322" y2="176" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#m-w)"/>
+  <line x1="252" y1="249" x2="322" y2="256" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#m-w)"/>
+  <line x1="250" y1="253" x2="322" y2="336" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#m-w)"/>
+  <text x="284" y="206" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">read 3&#215;</text>
+
+  <!-- 3 problems -->
+  <rect x="566" y="148" width="574" height="58" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="582" y="172" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">(1) WASTED COMPUTE</text>
+  <text x="582" y="194" fill="#cbd5e1" font-family="sans-serif" font-size="13">the heavy rule engine runs three times over the same firehose</text>
+
+  <rect x="566" y="230" width="574" height="58" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="582" y="254" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">(2) INCONSISTENT TRUTH</text>
+  <text x="582" y="276" fill="#cbd5e1" font-family="sans-serif" font-size="13">filters differ &#8594; Views &amp; Monetization disagree on what counted (billing bug)</text>
+
+  <rect x="566" y="312" width="574" height="58" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="582" y="336" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">(3) TIGHT COUPLING</text>
+  <text x="582" y="358" fill="#cbd5e1" font-family="sans-serif" font-size="13">every new consumer must re-implement filtering and re-read the raw stream</text>
+
+  <line x1="504" y1="174" x2="562" y2="176" stroke="#ff8a8a" stroke-width="2" marker-end="url(#m-r)"/>
+  <line x1="504" y1="256" x2="562" y2="258" stroke="#ff8a8a" stroke-width="2" marker-end="url(#m-r)"/>
+  <line x1="504" y1="338" x2="562" y2="340" stroke="#ff8a8a" stroke-width="2" marker-end="url(#m-r)"/>
+
+  <!-- divider -->
+  <line x1="40" y1="406" x2="1140" y2="406" stroke="#3a3f47" stroke-width="1.5" stroke-dasharray="6 6"/>
+
+  <!-- ============ BOTTOM: GOOD DESIGN ============ -->
+  <text x="590" y="446" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">THE GOOD DESIGN &#8212; filter once, publish the clean stream, fan out many</text>
+
+  <!-- raw kafka tube -->
+  <rect x="48" y="556" width="166" height="34" rx="17" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="66" cy="573" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="196" cy="573" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="131" y="578" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">raw Kafka</text>
+
+  <!-- one rule engine fleet (stacked) -->
+  <rect x="276" y="542" width="138" height="62" rx="10" fill="#1d2530" stroke="#93c5fd" stroke-width="2"/>
+  <rect x="270" y="548" width="138" height="62" rx="10" fill="#1d2530" stroke="#93c5fd" stroke-width="2"/>
+  <rect x="264" y="554" width="138" height="62" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="333" y="582" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Rule Engine</text>
+  <text x="333" y="600" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">filter ONCE</text>
+
+  <line x1="214" y1="573" x2="258" y2="578" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#m-w)"/>
+
+  <!-- second kafka tube -->
+  <rect x="468" y="555" width="252" height="36" rx="18" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="487" cy="573" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <circle cx="701" cy="573" r="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="594" y="578" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Kafka #2</text>
+  <text x="594" y="618" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">filtered-views &#8212; single source of clean truth</text>
+
+  <line x1="402" y1="578" x2="464" y2="573" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <text x="436" y="544" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">publish once</text>
+
+  <!-- fan out consumer groups -->
+  <rect x="812" y="486" width="244" height="56" rx="10" fill="#0f2417" stroke="#8aff8a" stroke-width="2.5"/>
+  <text x="934" y="510" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Views Counter</text>
+  <text x="934" y="529" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">batch &amp; count &#8594; Count DB</text>
+
+  <rect x="812" y="556" width="244" height="48" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="934" y="580" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Monetization</text>
+  <text x="934" y="597" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">compute payouts</text>
+
+  <rect x="812" y="618" width="244" height="46" rx="10" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="934" y="646" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">Recommendations</text>
+
+  <line x1="720" y1="569" x2="808" y2="514" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#m-g)"/>
+  <line x1="722" y1="573" x2="808" y2="580" stroke="#93c5fd" stroke-width="2.5" marker-end="url(#m-b)"/>
+  <line x1="720" y1="577" x2="808" y2="640" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#m-w)"/>
+  <text x="766" y="540" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">fan out</text>
+
+  <!-- count db cylinder -->
+  <path d="M1078,492 L1078,532 A30,9 0 0 0 1138,532 L1138,492" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <ellipse cx="1108" cy="492" rx="30" ry="9" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="1108" y="560" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12.5" font-weight="bold">Count DB</text>
+  <line x1="1056" y1="514" x2="1074" y2="512" stroke="#ffff99" stroke-width="2.5" marker-end="url(#m-y)"/>
+
+  <!-- principle callout -->
+  <rect x="60" y="690" width="1080" height="56" rx="12" fill="#10243a" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="600" y="714" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">FILTER ONCE &#8594; FAN OUT MANY</text>
+  <text x="600" y="734" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">the heavy filter runs a single time, every downstream sees identical events, and a new consumer is free &#8212; the same fan-out-with-no-join Kafka is built for</text>
+</svg>

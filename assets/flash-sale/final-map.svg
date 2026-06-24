@@ -1,0 +1,114 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-b" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-p" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+    <marker id="m-w" markerWidth="12" markerHeight="12" refX="8.5" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1280" height="760" fill="#111317"/>
+
+  <text x="640" y="44" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Complete Flash Sale</text>
+  <text x="640" y="74" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">fixed inventory + contention = locking</text>
+
+  <!-- crowd -->
+  <g stroke="#cbd5e1" stroke-width="1.6" fill="#cbd5e1">
+    <g transform="translate(44,150)"><circle cx="0" cy="0" r="4" stroke="none"/><line x1="0" y1="4" x2="0" y2="14"/></g>
+    <g transform="translate(70,150)"><circle cx="0" cy="0" r="4" stroke="none"/><line x1="0" y1="4" x2="0" y2="14"/></g>
+    <g transform="translate(44,176)"><circle cx="0" cy="0" r="4" stroke="none"/><line x1="0" y1="4" x2="0" y2="14"/></g>
+    <g transform="translate(70,176)"><circle cx="0" cy="0" r="4" stroke="none"/><line x1="0" y1="4" x2="0" y2="14"/></g>
+    <g transform="translate(44,202)"><circle cx="0" cy="0" r="4" stroke="none"/><line x1="0" y1="4" x2="0" y2="14"/></g>
+    <g transform="translate(70,202)"><circle cx="0" cy="0" r="4" stroke="none"/><line x1="0" y1="4" x2="0" y2="14"/></g>
+  </g>
+  <text x="58" y="238" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">the crowd</text>
+
+  <line x1="100" y1="180" x2="148" y2="180" stroke="#93c5fd" stroke-width="2.4" marker-end="url(#m-b)"/>
+
+  <!-- waiting room -->
+  <rect x="150" y="128" width="150" height="108" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.4"/>
+  <text x="225" y="158" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Waiting</text>
+  <text x="225" y="178" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Room</text>
+  <text x="225" y="202" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">token bucket;</text>
+  <text x="225" y="218" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">match to inventory</text>
+
+  <line x1="300" y1="180" x2="348" y2="180" stroke="#93c5fd" stroke-width="2.4" marker-end="url(#m-b)"/>
+  <text x="324" y="170" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="10">trickle</text>
+
+  <!-- API servers -->
+  <rect x="358" y="142" width="140" height="62" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="350" y="134" width="140" height="62" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="420" y="170" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">API servers</text>
+  <text x="420" y="188" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">stateless fleet</text>
+
+  <!-- grab arrow to units -->
+  <line x1="490" y1="165" x2="560" y2="200" stroke="#ff8bd2" stroke-width="2.6" marker-end="url(#m-p)"/>
+  <text x="520" y="172" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="11" font-weight="bold">grab</text>
+
+  <!-- units DB -->
+  <ellipse cx="650" cy="208" rx="80" ry="16" fill="#20200f" stroke="#ffff99" stroke-width="2.4"/>
+  <path d="M570,208 v66 a80,16 0 0 0 160,0 v-66" fill="#20200f" stroke="#ffff99" stroke-width="2.4"/>
+  <text x="650" y="244" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="14" font-weight="bold">units DB</text>
+  <text x="650" y="264" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">N rows / item</text>
+  <text x="650" y="300" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="11.5" font-weight="bold">SELECT &#8230; FOR UPDATE SKIP LOCKED</text>
+  <text x="650" y="318" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">commit fast; empty result = sold out</text>
+
+  <!-- redis alt -->
+  <rect x="558" y="338" width="184" height="62" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="650" y="362" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">Redis (seats)</text>
+  <text x="650" y="382" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">atomic SPOP/SREM + AOF</text>
+  <line x1="650" y1="324" x2="650" y2="336" stroke="#93c5fd" stroke-width="1.8" stroke-dasharray="3 3" marker-end="url(#m-b)"/>
+  <text x="804" y="362" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">OR &#8212; use instead</text>
+  <text x="804" y="376" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10.5">of units, never both</text>
+
+  <!-- reaper -->
+  <circle cx="940" cy="270" r="44" fill="#16202e" stroke="#93c5fd" stroke-width="2.4"/>
+  <line x1="940" y1="270" x2="940" y2="244" stroke="#93c5fd" stroke-width="2.4"/>
+  <line x1="940" y1="270" x2="960" y2="280" stroke="#93c5fd" stroke-width="2.4"/>
+  <text x="940" y="334" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">Cron Reaper</text>
+  <text x="940" y="352" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">releases stale unpaid units</text>
+  <line x1="896" y1="262" x2="734" y2="234" stroke="#93c5fd" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#m-b)"/>
+  <text x="820" y="232" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="10.5">null picked_at where old &amp; unpaid</text>
+
+  <!-- transaction boundary -->
+  <line x1="650" y1="420" x2="650" y2="470" stroke="#ff8a8a" stroke-width="2.6" stroke-dasharray="8 5"/>
+  <text x="650" y="490" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12" font-weight="bold">TRANSACTION BOUNDARY &#8212; grab and payment never share a transaction</text>
+
+  <!-- payment service -->
+  <rect x="430" y="510" width="200" height="64" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="530" y="538" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13.5" font-weight="bold">Payment Service</text>
+  <text x="530" y="558" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">external &#183; slow</text>
+  <line x1="600" y1="476" x2="560" y2="508" stroke="#cbd5e1" stroke-width="2" marker-end="url(#m-w)"/>
+  <text x="600" y="500" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10.5">buyer pays</text>
+
+  <!-- webhook -->
+  <rect x="680" y="510" width="200" height="64" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="780" y="538" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">webhook handler</text>
+  <text x="780" y="558" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">reconciles the result</text>
+  <line x1="630" y1="542" x2="676" y2="542" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#m-b)"/>
+  <text x="654" y="532" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="10">webhook</text>
+
+  <!-- success/fail -->
+  <rect x="430" y="600" width="200" height="64" rx="8" fill="#1c1320" stroke="#ff8bd2" stroke-width="1.8"/>
+  <text x="530" y="626" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12.5" font-weight="bold">success</text>
+  <text x="530" y="646" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">set purchased_by; create order</text>
+  <rect x="680" y="600" width="200" height="64" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="780" y="626" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12.5" font-weight="bold">failure</text>
+  <text x="780" y="646" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">null picked_at &#8594; back to pool</text>
+  <line x1="760" y1="576" x2="560" y2="598" stroke="#ff8bd2" stroke-width="2" marker-end="url(#m-p)"/>
+  <line x1="800" y1="576" x2="790" y2="598" stroke="#93c5fd" stroke-width="2" marker-end="url(#m-b)"/>
+
+  <!-- legend -->
+  <rect x="960" y="430" width="290" height="234" rx="10" fill="#16191e" stroke="#3a3f47" stroke-width="1.6"/>
+  <text x="1105" y="458" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">Legend</text>
+  <line x1="980" y1="480" x2="1010" y2="480" stroke="#ff8bd2" stroke-width="3"/><text x="1018" y="485" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">grab / write path</text>
+  <rect x="980" y="500" width="28" height="12" fill="#20200f" stroke="#ffff99" stroke-width="1.6"/><text x="1018" y="510" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">durable inventory, exact-N</text>
+  <line x1="980" y1="530" x2="1010" y2="530" stroke="#93c5fd" stroke-width="3"/><text x="1018" y="535" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">control / async plane</text>
+  <line x1="980" y1="552" x2="1010" y2="552" stroke="#ff8a8a" stroke-width="3" stroke-dasharray="6 4"/><text x="1018" y="557" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">failure modes defended</text>
+  <text x="980" y="586" fill="#9aa6b2" font-family="sans-serif" font-size="11">defends: hot-row contention,</text>
+  <text x="980" y="604" fill="#9aa6b2" font-family="sans-serif" font-size="11">oversell, under-sell,</text>
+  <text x="980" y="622" fill="#9aa6b2" font-family="sans-serif" font-size="11">distributed transaction</text>
+  <text x="980" y="650" fill="#cbd5e1" font-family="sans-serif" font-size="11.5" font-style="italic">claim N rows, not one counter</text>
+
+  <!-- bottom sentence -->
+  <rect x="30" y="690" width="1220" height="54" rx="10" fill="#1c1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="640" y="714" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14">Fixed inventory split into N claimable rows, grabbed atomically with FOR UPDATE SKIP LOCKED, slow payment reconciled out-of-band by a webhook,</text>
+  <text x="640" y="734" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">abandoned carts reaped by cron, and the crowd shaped by a waiting room before it ever reaches the database.</text>
+</svg>

@@ -1,0 +1,89 @@
+<svg width="1000" height="720" viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="720" fill="#111317"/>
+
+  <text x="500" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Day Zero: One Counter, Decremented in a Transaction</text>
+  <text x="500" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">logically perfect, operationally fatal &#8212; correctness is fine, concurrency is the problem</text>
+
+  <!-- divider -->
+  <line x1="500" y1="92" x2="500" y2="700" stroke="#3a3f47" stroke-width="2" stroke-dasharray="6 6"/>
+
+  <!-- LEFT: naive design -->
+  <text x="250" y="118" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">The naive design (correct)</text>
+
+  <g transform="translate(36,138)"><circle cx="0" cy="0" r="6" fill="#cbd5e1"/><line x1="0" y1="6" x2="0" y2="24" stroke="#cbd5e1" stroke-width="2"/><line x1="0" y1="24" x2="-7" y2="36" stroke="#cbd5e1" stroke-width="2"/><line x1="0" y1="24" x2="7" y2="36" stroke="#cbd5e1" stroke-width="2"/></g>
+  <text x="36" y="190" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">buyer</text>
+  <line x1="52" y1="150" x2="92" y2="150" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#m-w)"/>
+  <text x="74" y="142" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="10">add to cart</text>
+
+  <rect x="96" y="124" width="120" height="56" rx="8" fill="#16191e" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="156" y="148" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">API</text>
+  <text x="156" y="166" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">server</text>
+
+  <!-- transaction box -->
+  <rect x="34" y="210" width="432" height="132" rx="10" fill="#1a1410" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="50" y="232" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">BEGIN  (one transaction)</text>
+  <text x="58" y="262" fill="#cbd5e1" font-family="monospace" font-size="12.5">UPDATE inventory SET quantity = quantity - 1</text>
+  <text x="58" y="282" fill="#cbd5e1" font-family="monospace" font-size="12.5">  WHERE item_id = 720 AND quantity &gt; 0;</text>
+  <text x="58" y="308" fill="#cbd5e1" font-family="monospace" font-size="12.5">INSERT INTO cart (user, item) VALUES (..);</text>
+  <text x="50" y="332" fill="#ff8bd2" font-family="sans-serif" font-size="13" font-weight="bold">COMMIT</text>
+
+  <!-- inventory table single row -->
+  <text x="250" y="378" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">inventory</text>
+  <rect x="80" y="390" width="340" height="58" rx="6" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <line x1="193" y1="390" x2="193" y2="448" stroke="#ffff99" stroke-width="1.5"/>
+  <line x1="306" y1="390" x2="306" y2="448" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="136" y="412" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">item_id</text>
+  <text x="250" y="412" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">quantity</text>
+  <text x="363" y="412" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">&#8230;</text>
+  <text x="136" y="436" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">720</text>
+  <text x="250" y="436" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">10000</text>
+  <text x="250" y="478" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5">one unit leaves the shelf, lands in one cart, atomically</text>
+  <text x="250" y="498" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5">the WHERE guard means it can never go below zero</text>
+
+  <!-- RIGHT: why it melts -->
+  <text x="750" y="118" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="17" font-weight="bold">Why it melts at scale</text>
+
+  <!-- crowd onto one row -->
+  <g stroke="#ff8a8a" stroke-width="2">
+    <g transform="translate(548,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+    <g transform="translate(584,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+    <g transform="translate(620,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+    <g transform="translate(656,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+    <g transform="translate(692,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+    <g transform="translate(728,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+    <g transform="translate(764,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+    <g transform="translate(800,150)"><circle cx="0" cy="0" r="5" fill="#ff8a8a" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/></g>
+  </g>
+  <text x="674" y="200" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5" font-weight="bold">a million buyers, all item 720, same second</text>
+
+  <!-- arrows converging to one row -->
+  <line x1="600" y1="212" x2="700" y2="250" stroke="#ff8a8a" stroke-width="2" marker-end="url(#m-r)"/>
+  <line x1="750" y1="212" x2="750" y2="250" stroke="#ff8a8a" stroke-width="2" marker-end="url(#m-r)"/>
+  <line x1="900" y1="212" x2="800" y2="250" stroke="#ff8a8a" stroke-width="2" marker-end="url(#m-r)"/>
+
+  <rect x="640" y="258" width="220" height="50" rx="6" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="750" y="280" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">the ONE quantity row</text>
+  <text x="750" y="298" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">every txn locks it until commit</text>
+
+  <!-- failure labels -->
+  <rect x="534" y="328" width="432" height="46" rx="8" fill="#2a1414" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="552" y="348" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">1 &#183; Row-lock contention</text>
+  <text x="552" y="366" fill="#cbd5e1" font-family="sans-serif" font-size="12">writes serialize single-file behind one lock</text>
+
+  <rect x="534" y="382" width="432" height="46" rx="8" fill="#2a1414" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="552" y="402" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">2 &#183; Lock held for the whole transaction</text>
+  <text x="552" y="420" fill="#cbd5e1" font-family="sans-serif" font-size="12">any slow step stalls everyone behind it</text>
+
+  <rect x="534" y="436" width="432" height="46" rx="8" fill="#2a1414" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="552" y="456" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">3 &#183; Adding API servers makes it WORSE</text>
+  <text x="552" y="474" fill="#cbd5e1" font-family="sans-serif" font-size="12">more servers just pile more txns onto the hot row</text>
+
+  <!-- bottom banner -->
+  <rect x="60" y="528" width="880" height="64" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="500" y="556" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">The single counter row is the bottleneck &#8212; the crowd doesn&#8217;t get spread, it gets queued.</text>
+  <text x="500" y="580" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">The fix is not a faster database. The fix is to stop making everyone fight over one row.</text>
+</svg>

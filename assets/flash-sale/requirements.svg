@@ -1,0 +1,88 @@
+<svg width="1000" height="852" viewBox="0 0 1000 852" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="852" fill="#111317"/>
+
+  <text x="500" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="30" font-weight="bold">The Brief: A Flash Sale</text>
+  <text x="500" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">fixed inventory + contention = locking</text>
+
+  <!-- crowd -->
+  <g stroke="#cbd5e1" stroke-width="2" fill="#cbd5e1">
+    <g transform="translate(110,118)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(150,118)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(190,118)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(230,118)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(130,162)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(170,162)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(210,162)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(250,162)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(110,206)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(150,206)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(190,206)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+    <g transform="translate(230,206)"><circle cx="0" cy="0" r="5" fill="#cbd5e1" stroke="none"/><line x1="0" y1="5" x2="0" y2="20"/><line x1="0" y1="20" x2="-6" y2="30"/><line x1="0" y1="20" x2="6" y2="30"/></g>
+  </g>
+  <text x="180" y="262" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">&#8776; 1,000,000 buyers, one instant</text>
+
+  <!-- arrow -->
+  <line x1="300" y1="172" x2="560" y2="172" stroke="#cbd5e1" stroke-width="3" marker-end="url(#m-w)"/>
+  <text x="430" y="160" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">all press &#8220;Buy&#8221;</text>
+
+  <!-- store with 10,000 items -->
+  <rect x="600" y="116" width="300" height="116" rx="10" fill="#16191e" stroke="#ffff99" stroke-width="2.5"/>
+  <g fill="#ffff99">
+    <rect x="620" y="134" width="14" height="14" rx="2"/><rect x="642" y="134" width="14" height="14" rx="2"/><rect x="664" y="134" width="14" height="14" rx="2"/><rect x="686" y="134" width="14" height="14" rx="2"/><rect x="708" y="134" width="14" height="14" rx="2"/><rect x="730" y="134" width="14" height="14" rx="2"/><rect x="752" y="134" width="14" height="14" rx="2"/><rect x="774" y="134" width="14" height="14" rx="2"/>
+    <rect x="620" y="156" width="14" height="14" rx="2"/><rect x="642" y="156" width="14" height="14" rx="2"/><rect x="664" y="156" width="14" height="14" rx="2"/><rect x="686" y="156" width="14" height="14" rx="2"/><rect x="708" y="156" width="14" height="14" rx="2"/><rect x="730" y="156" width="14" height="14" rx="2"/><rect x="752" y="156" width="14" height="14" rx="2"/><rect x="774" y="156" width="14" height="14" rx="2"/>
+  </g>
+  <text x="750" y="200" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="22" font-weight="bold">10,000 items</text>
+  <text x="750" y="222" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="13">fixed &#183; can&#8217;t make more</text>
+  <text x="500" y="284" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">a fixed set of items, a crowd that arrives in a short window</text>
+
+  <!-- three requirements -->
+  <text x="500" y="316" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">Three requirements &#8212; each forces a layer later in the post</text>
+
+  <rect x="40" y="336" width="296" height="152" rx="12" fill="#20200f" stroke="#ffff99" stroke-width="2.5"/>
+  <text x="188" y="364" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">1 &#183; Sell exactly N</text>
+  <text x="188" y="390" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">never the 10,001st;</text>
+  <text x="188" y="410" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">never leave items unsold</text>
+  <text x="188" y="442" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">&#8594; an EXACT-COUNT</text>
+  <text x="188" y="462" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="13" font-weight="bold">invariant, not approximate</text>
+
+  <rect x="352" y="336" width="296" height="152" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="500" y="364" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">2 &#183; Throughput</text>
+  <text x="500" y="390" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">a million want the same</text>
+  <text x="500" y="410" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">small pool at once</text>
+  <text x="500" y="442" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">&#8594; many must succeed in</text>
+  <text x="500" y="462" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="13" font-weight="bold">PARALLEL, no shared row</text>
+
+  <rect x="664" y="336" width="296" height="152" rx="12" fill="#16202e" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="812" y="364" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">3 &#183; Payment boundary</text>
+  <text x="812" y="390" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">payment is slow, separate,</text>
+  <text x="812" y="410" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13">third-party</text>
+  <text x="812" y="442" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">&#8594; NO distributed txn</text>
+  <text x="812" y="462" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">across grab + payment</text>
+
+  <!-- three hard problems -->
+  <text x="500" y="534" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">The three hard problems, attacked in order</text>
+  <rect x="60" y="554" width="270" height="92" rx="10" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="195" y="588" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">CONTENTION</text>
+  <text x="195" y="614" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">a million writes aimed</text>
+  <text x="195" y="632" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">at one counter row</text>
+
+  <rect x="365" y="554" width="270" height="92" rx="10" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="500" y="588" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">CORRECTNESS</text>
+  <text x="500" y="614" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">exactly N &#8212; no oversell,</text>
+  <text x="500" y="632" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">no undersell</text>
+
+  <rect x="670" y="554" width="270" height="92" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="805" y="588" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">PAYMENT BOUNDARY</text>
+  <text x="805" y="614" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">keep the slow payment</text>
+  <text x="805" y="632" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">out of the fast grab</text>
+
+  <!-- the unlock banner -->
+  <rect x="60" y="682" width="880" height="120" rx="12" fill="#1c1320" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="500" y="714" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="16" font-weight="bold">THE UNLOCK</text>
+  <text x="500" y="742" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="15">Don&#8217;t decrement one shared counter.</text>
+  <text x="500" y="768" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">Split the inventory into N individually claimable rows and let each buyer atomically claim one &#8212;</text>
+  <text x="500" y="790" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">contention spreads across rows, and &#8220;exactly N&#8221; is true by construction.</text>
+</svg>

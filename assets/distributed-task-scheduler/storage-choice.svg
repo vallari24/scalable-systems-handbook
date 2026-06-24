@@ -1,0 +1,72 @@
+<svg width="1180" height="740" viewBox="0 0 1180 740" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1180" height="740" fill="#111317"/>
+  <defs>
+    <marker id="w" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,4 L0,8 Z" fill="#cbd5e1"/></marker>
+  </defs>
+
+  <text x="40" y="48" fill="#ffff99" font-family="sans-serif" font-size="26" font-weight="bold">Where do we store a task?  Queue vs NoSQL vs SQL</text>
+  <text x="40" y="78" fill="#9aa6b2" font-family="sans-serif" font-size="16">Decide by the operations the workload needs — not by brand.</text>
+
+  <!-- QUEUE (rejected) -->
+  <rect x="40" y="104" width="350" height="210" rx="12" fill="#1c1113" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="64" y="140" fill="#ff8a8a" font-family="sans-serif" font-size="20" font-weight="bold">QUEUE</text>
+  <text x="330" y="140" fill="#ff8a8a" font-family="sans-serif" font-size="26" font-weight="bold">&#10007;</text>
+  <!-- tube -->
+  <rect x="64" y="158" width="300" height="34" rx="17" fill="#16191e" stroke="#ff8a8a" stroke-width="2"/>
+  <line x1="120" y1="175" x2="120" y2="158" stroke="#ff8a8a" stroke-width="1.5"/>
+  <line x1="180" y1="192" x2="180" y2="158" stroke="#ff8a8a" stroke-width="1.5"/>
+  <text x="64" y="226" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Delivers "now", not "at 3pm tomorrow".</text>
+  <text x="64" y="250" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">No time-range query; capped delayed delivery.</text>
+  <text x="64" y="288" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">A transport, not a time-indexed store.</text>
+
+  <!-- NoSQL -->
+  <rect x="416" y="104" width="350" height="210" rx="12" fill="#16191e" stroke="#9aa6b2" stroke-width="2"/>
+  <text x="440" y="140" fill="#cbd5e1" font-family="sans-serif" font-size="20" font-weight="bold">NoSQL</text>
+  <g fill="#16191e" stroke="#9aa6b2" stroke-width="2">
+    <path d="M690,118 L690,158 A24,8 0 0 0 738,158 L738,118"/><ellipse cx="714" cy="118" rx="24" ry="8"/>
+  </g>
+  <text x="440" y="180" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Great at point lookups by id and at</text>
+  <text x="440" y="204" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">massive write scale.</text>
+  <text x="440" y="240" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Can range-scan a sort key — but the</text>
+  <text x="440" y="264" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">atomic per-row <tspan fill="#ffff99">claim</tspan> primitive is a</text>
+  <text x="440" y="288" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">relational strength, not a native one.</text>
+
+  <!-- SQL (chosen) -->
+  <rect x="792" y="104" width="348" height="210" rx="12" fill="#1a1a10" stroke="#ffff99" stroke-width="2.8"/>
+  <text x="816" y="140" fill="#ffff99" font-family="sans-serif" font-size="20" font-weight="bold">SQL / relational</text>
+  <g fill="#16191e" stroke="#ffff99" stroke-width="2">
+    <path d="M1066,118 L1066,158 A24,8 0 0 0 1114,158 L1114,118"/><ellipse cx="1090" cy="118" rx="24" ry="8"/>
+  </g>
+  <text x="816" y="184" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">MySQL / PostgreSQL.</text>
+  <text x="816" y="216" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">A time-range read + a transactional</text>
+  <text x="816" y="240" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">claim — exactly what a B-tree index on</text>
+  <text x="816" y="264" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">a timestamp + row locks were built for.</text>
+  <text x="816" y="298" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">&#9733; the choice</text>
+
+  <!-- three operations -->
+  <rect x="40" y="356" width="1100" height="252" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="64" y="392" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">The three operations that decide it</text>
+
+  <rect x="64" y="412" width="340" height="172" rx="10" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="84" y="446" fill="#ff8bd2" font-family="sans-serif" font-size="17" font-weight="bold">1 &#183; WRITE a task</text>
+  <text x="84" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">A single-row INSERT.</text>
+  <text x="84" y="504" fill="#9aa6b2" font-family="sans-serif" font-size="14">Both store types do this trivially.</text>
+  <text x="84" y="544" fill="#ff8bd2" font-family="sans-serif" font-size="14.5">Registering a task = one INSERT</text>
+  <text x="84" y="566" fill="#ff8bd2" font-family="sans-serif" font-size="14.5">into the tasks table.</text>
+
+  <rect x="420" y="412" width="340" height="172" rx="10" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="440" y="446" fill="#8aff8a" font-family="sans-serif" font-size="17" font-weight="bold">2 &#183; READ due tasks</text>
+  <text x="440" y="478" fill="#cbd5e1" font-family="monospace" font-size="14">scheduled_at &lt;= now()</text>
+  <text x="440" y="510" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">A range scan, answered in log time</text>
+  <text x="440" y="534" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">by a <tspan fill="#ffff99">B-tree index on scheduled_at</tspan>.</text>
+
+  <rect x="776" y="412" width="340" height="172" rx="10" fill="#1a1a10" stroke="#ffff99" stroke-width="2.2"/>
+  <text x="796" y="446" fill="#ffff99" font-family="sans-serif" font-size="17" font-weight="bold">3 &#183; CLAIM atomically</text>
+  <text x="796" y="478" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">Many workers, each grabs a disjoint</text>
+  <text x="796" y="502" fill="#cbd5e1" font-family="sans-serif" font-size="14.5">set of due rows — no double-pick.</text>
+  <text x="796" y="540" fill="#ffff99" font-family="monospace" font-size="14">FOR UPDATE SKIP LOCKED</text>
+  <text x="796" y="566" fill="#9aa6b2" font-family="sans-serif" font-size="14">the killer requirement — SQL wins.</text>
+
+  <text x="40" y="652" fill="#ffffff" font-family="sans-serif" font-size="16">Verdict: modest writes + a time-range read + a transactional multi-reader claim →</text>
+  <text x="40" y="678" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">a plain relational table. No sharding on day one.</text>
+</svg>

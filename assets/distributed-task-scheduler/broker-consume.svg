@@ -1,0 +1,49 @@
+<svg width="1140" height="700" viewBox="0 0 1140 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1140" height="700" fill="#111317"/>
+  <text x="40" y="46" fill="#ffff99" font-family="sans-serif" font-size="24" font-weight="bold">GET = claim,  DELETE = acknowledge</text>
+
+  <!-- RECEIVE lane -->
+  <rect x="40" y="74" width="540" height="350" rx="12" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="64" y="108" fill="#8aff8a" font-family="sans-serif" font-size="18" font-weight="bold">RECEIVE &#183; GET (one transaction)</text>
+  <g font-family="monospace" font-size="14.5">
+    <text x="64" y="146" fill="#93c5fd">SELECT</text><text x="132" y="146" fill="#cbd5e1">* FROM messages</text>
+    <text x="64" y="170" fill="#93c5fd">WHERE</text><text x="124" y="170" fill="#cbd5e1">picked_at IS NULL</text>
+    <text x="124" y="192" fill="#93c5fd">AND</text><text x="166" y="192" fill="#cbd5e1">deleted_at IS NULL</text>
+    <text x="64" y="216" fill="#93c5fd">ORDER BY</text><text x="166" y="216" fill="#cbd5e1">created_at ASC</text>
+    <text x="64" y="238" fill="#ffff99">LIMIT n</text>
+    <text x="64" y="262" fill="#ff8bd2">FOR UPDATE SKIP LOCKED;</text>
+  </g>
+  <line x1="64" y1="282" x2="556" y2="282" stroke="#2a3a2e" stroke-width="1.2"/>
+  <g font-family="monospace" font-size="14.5">
+    <text x="64" y="308" fill="#ff8bd2">UPDATE</text><text x="132" y="308" fill="#cbd5e1">messages</text>
+    <text x="64" y="330" fill="#ff8bd2">SET</text><text x="110" y="330" fill="#cbd5e1">picked_at = now(),</text>
+    <text x="110" y="352" fill="#ffff99">receipt_handle = uuid()</text>
+    <text x="64" y="374" fill="#ff8bd2">WHERE</text><text x="124" y="374" fill="#cbd5e1">id IN (...);</text>
+  </g>
+  <text x="64" y="404" fill="#8aff8a" font-family="sans-serif" font-size="13">FIFO via created_at &#183; SKIP LOCKED = disjoint, no waiting &#183; one txn = atomic claim &#8594; invisible to others</text>
+
+  <!-- DELETE lane -->
+  <rect x="600" y="74" width="500" height="200" rx="12" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="624" y="108" fill="#ff8bd2" font-family="sans-serif" font-size="18" font-weight="bold">ACKNOWLEDGE &#183; DELETE</text>
+  <text x="624" y="142" fill="#cbd5e1" font-family="monospace" font-size="14.5">DELETE /messages/q/{receipt_handle}</text>
+  <text x="624" y="172" fill="#cbd5e1" font-family="monospace" font-size="14.5">  &#8594; UPDATE messages</text>
+  <text x="624" y="194" fill="#cbd5e1" font-family="monospace" font-size="14.5">    SET <tspan fill="#ff8bd2">deleted_at = now()</tspan></text>
+  <text x="624" y="216" fill="#cbd5e1" font-family="monospace" font-size="14.5">    WHERE <tspan fill="#ffff99">receipt_handle = :rh</tspan></text>
+  <text x="624" y="250" fill="#9aa6b2" font-family="sans-serif" font-size="13.5">soft delete — not a physical row removal; a GC reclaims space later</text>
+
+  <!-- security contrast -->
+  <rect x="600" y="294" width="500" height="130" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="624" y="326" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">Why delete by receipt handle, not id?</text>
+  <text x="624" y="356" fill="#ff8a8a" font-family="sans-serif" font-size="14"><tspan font-weight="bold">id (e.g. /q/42):</tspan> sequential &amp; guessable — any caller</text>
+  <text x="640" y="376" fill="#ff8a8a" font-family="sans-serif" font-size="14">can delete another consumer's message. Insecure.</text>
+  <text x="624" y="402" fill="#ffff99" font-family="sans-serif" font-size="14"><tspan font-weight="bold">receipt handle:</tspan> unguessable UUID, handed only to the</text>
+  <text x="640" y="420" fill="#ffff99" font-family="sans-serif" font-size="14">receiver — a capability. Only the rightful consumer can ack.</text>
+
+  <!-- takeaway -->
+  <rect x="40" y="448" width="1060" height="200" rx="12" fill="#101622" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="64" y="484" fill="#93c5fd" font-family="sans-serif" font-size="17" font-weight="bold">The two-step consume lifecycle</text>
+  <text x="64" y="518" fill="#cbd5e1" font-family="sans-serif" font-size="15">1.  <tspan fill="#8aff8a" font-weight="bold">GET</tspan> claims a batch with the puller's exact SKIP LOCKED query — the read sets picked_at and mints a</text>
+  <text x="92" y="542" fill="#cbd5e1" font-family="sans-serif" font-size="15">fresh receipt_handle, making the message invisible to every other consumer.</text>
+  <text x="64" y="576" fill="#cbd5e1" font-family="sans-serif" font-size="15">2.  The consumer processes, then <tspan fill="#ff8bd2" font-weight="bold">DELETE</tspan>s by that receipt handle — a soft delete (deleted_at = now()).</text>
+  <text x="64" y="616" fill="#ffff99" font-family="sans-serif" font-size="15" font-weight="bold">Same claim machinery as Part 1's puller; the only additions are the receipt handle and the soft-delete ack.</text>
+</svg>

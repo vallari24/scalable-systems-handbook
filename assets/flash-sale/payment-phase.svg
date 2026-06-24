@@ -1,0 +1,65 @@
+<svg width="1000" height="700" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-w" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#cbd5e1"/></marker>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-p" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8bd2"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="700" fill="#111317"/>
+
+  <text x="500" y="42" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Phase 2: Payment Is a Separate Transaction</text>
+  <text x="500" y="70" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="16">commit the grab first, pay second &#8212; reconcile out-of-band via a webhook</text>
+
+  <!-- LEFT: grab committed -->
+  <text x="200" y="116" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Phase 1: grab (already COMMITTED)</text>
+  <rect x="60" y="132" width="300" height="86" rx="8" fill="#20200f" stroke="#ffff99" stroke-width="2"/>
+  <text x="210" y="156" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="12">units &#183; row id 2</text>
+  <text x="210" y="180" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="12.5">picked_at = 10:01  picked_by = 1023</text>
+  <text x="210" y="202" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5">purchased_by = NULL</text>
+  <text x="200" y="240" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">&#10003; lock released, item reserved</text>
+
+  <!-- boundary -->
+  <line x1="420" y1="100" x2="420" y2="470" stroke="#ff8a8a" stroke-width="3" stroke-dasharray="8 6"/>
+  <text x="420" y="492" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5" font-weight="bold">TRANSACTION BOUNDARY</text>
+  <text x="420" y="510" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11.5">grab and payment are NEVER in one transaction</text>
+
+  <!-- RIGHT: payment service -->
+  <text x="710" y="116" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="15" font-weight="bold">Phase 2: payment (separate, slow)</text>
+  <rect x="560" y="132" width="300" height="74" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="710" y="162" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Payment Service</text>
+  <text x="710" y="186" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">external / third-party &#183; seconds&#8211;minutes</text>
+
+  <!-- buyer to payment -->
+  <line x1="360" y1="175" x2="552" y2="169" stroke="#cbd5e1" stroke-width="2" marker-end="url(#m-w)"/>
+  <text x="470" y="160" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="11">buyer pays</text>
+
+  <!-- webhook back -->
+  <line x1="640" y1="208" x2="500" y2="280" stroke="#93c5fd" stroke-width="2.4" marker-end="url(#m-b)"/>
+  <text x="560" y="244" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="bold">webhook (async callback)</text>
+
+  <!-- webhook node -->
+  <rect x="360" y="286" width="280" height="44" rx="8" fill="#16191e" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="500" y="313" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="13" font-weight="bold">our webhook handler</text>
+
+  <!-- success branch -->
+  <line x1="440" y1="330" x2="300" y2="372" stroke="#ff8bd2" stroke-width="2.2" marker-end="url(#m-p)"/>
+  <rect x="60" y="378" width="380" height="92" rx="10" fill="#1c1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="250" y="404" text-anchor="middle" fill="#ff8bd2" font-family="sans-serif" font-size="14" font-weight="bold">On SUCCESS</text>
+  <text x="250" y="430" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12">UPDATE units SET purchased_by = 1023,</text>
+  <text x="250" y="448" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12">purchased_at = NOW() WHERE id = 2</text>
+  <text x="250" y="464" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5">+ create order &#8212; permanently sold</text>
+
+  <!-- failure branch -->
+  <line x1="560" y1="330" x2="700" y2="372" stroke="#93c5fd" stroke-width="2.2" marker-end="url(#m-b)"/>
+  <rect x="560" y="378" width="380" height="92" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2"/>
+  <text x="750" y="404" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">On FAILURE</text>
+  <text x="750" y="430" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12">UPDATE units SET picked_at = NULL,</text>
+  <text x="750" y="448" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="12">picked_by = NULL WHERE id = 2</text>
+  <text x="750" y="464" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="11.5">unit falls back into the pool</text>
+
+  <!-- red callout -->
+  <rect x="60" y="540" width="880" height="120" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="500" y="570" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">&#9733; You cannot have a distributed transaction spanning add-to-cart and payment.</text>
+  <text x="500" y="600" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="14">Holding a row lock across a slow external call would destroy throughput and blow the SLA.</text>
+  <text x="500" y="626" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">So we commit the grab first and reconcile payment afterward. The webhook is the coordination</text>
+  <text x="500" y="648" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="13.5">point that replaces the distributed transaction &#8212; at most one outcome applied per unit.</text>
+</svg>

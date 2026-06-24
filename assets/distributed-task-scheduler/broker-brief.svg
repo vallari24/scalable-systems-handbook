@@ -1,0 +1,41 @@
+<svg width="1000" height="640" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="1000" height="640" fill="#111317"/>
+  <text x="40" y="50" fill="#ffff99" font-family="sans-serif" font-size="28" font-weight="bold">Message broker on a relational DB <tspan fill="#9aa6b2" font-size="19" font-weight="normal">— we are SQS now</tspan></text>
+
+  <!-- requirements -->
+  <rect x="40" y="88" width="540" height="320" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="64" y="124" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">Requirements</text>
+  <text x="64" y="166" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">1 &#183; FIFO</text>
+  <text x="90" y="190" fill="#9aa6b2" font-family="sans-serif" font-size="14">out in the order they went in</text>
+  <text x="64" y="226" fill="#8aff8a" font-family="sans-serif" font-size="16" font-weight="bold">2 &#183; consumer reads, then deletes</text>
+  <text x="90" y="250" fill="#9aa6b2" font-family="sans-serif" font-size="14">consume = receive, process, acknowledge</text>
+  <text x="64" y="286" fill="#cbd5e1" font-family="sans-serif" font-size="16" font-weight="bold">3 &#183; high throughput</text>
+  <text x="90" y="310" fill="#9aa6b2" font-family="sans-serif" font-size="14">many consumers pulling at once</text>
+  <text x="64" y="346" fill="#ff8a8a" font-family="sans-serif" font-size="16" font-weight="bold">4 &#183; read &#8594; invisible to others</text>
+  <text x="90" y="370" fill="#9aa6b2" font-family="sans-serif" font-size="14">one claimer only — never processed twice at once</text>
+
+  <!-- API -->
+  <rect x="608" y="88" width="352" height="320" rx="12" fill="#15171c" stroke="#3a3f47" stroke-width="1.5"/>
+  <text x="632" y="124" fill="#ffffff" font-family="sans-serif" font-size="18" font-weight="bold">The 3-verb API</text>
+
+  <rect x="632" y="148" width="304" height="68" rx="8" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="648" y="176" fill="#ff8bd2" font-family="monospace" font-size="15" font-weight="bold">PUT /messages/q</text>
+  <text x="648" y="200" fill="#cbd5e1" font-family="sans-serif" font-size="13">enqueue — a single INSERT</text>
+
+  <rect x="632" y="228" width="304" height="68" rx="8" fill="#0f2018" stroke="#8aff8a" stroke-width="2"/>
+  <text x="648" y="256" fill="#8aff8a" font-family="monospace" font-size="15" font-weight="bold">GET /messages/q?n=10</text>
+  <text x="648" y="280" fill="#cbd5e1" font-family="sans-serif" font-size="13">receive a batch — atomically claim</text>
+
+  <rect x="632" y="308" width="304" height="80" rx="8" fill="#2a1320" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="648" y="336" fill="#ff8bd2" font-family="monospace" font-size="14" font-weight="bold">DELETE /messages/q/{receipt}</text>
+  <text x="648" y="360" fill="#cbd5e1" font-family="sans-serif" font-size="13">acknowledge — by receipt handle,</text>
+  <text x="648" y="378" fill="#cbd5e1" font-family="sans-serif" font-size="13">not by id (see receipt-handle section)</text>
+
+  <!-- callback -->
+  <rect x="40" y="436" width="920" height="80" rx="10" fill="#101622" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="64" y="470" fill="#93c5fd" font-family="sans-serif" font-size="16" font-weight="bold">This is the scheduler's "task puller" generalized.</text>
+  <text x="64" y="498" fill="#cbd5e1" font-family="sans-serif" font-size="15">Swap "due jobs" for "any message" and requirement #4 is the same exactly-one-claimer rule — solved by SKIP LOCKED.</text>
+
+  <text x="40" y="556" fill="#9aa6b2" font-family="sans-serif" font-size="14">Kafka is a different model (a log with committed offsets). This is a competing-consumers queue with per-message</text>
+  <text x="40" y="578" fill="#9aa6b2" font-family="sans-serif" font-size="14">claim + acknowledge — exactly what a Postgres-backed queue does behind the scenes.</text>
+</svg>

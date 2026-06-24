@@ -1,0 +1,99 @@
+<svg width="1180" height="760" viewBox="0 0 1180 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="m-b" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#93c5fd"/></marker>
+    <marker id="m-r" markerWidth="11" markerHeight="11" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 Z" fill="#ff8a8a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="760" fill="#111317"/>
+
+  <text x="590" y="46" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="29" font-weight="bold">Pods: Isolate the Whole Stack, Not Just the Data</text>
+  <text x="590" y="76" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="17">a flash sale melts one pod &#8212; everyone else never feels it</text>
+
+  <!-- edge router -->
+  <rect x="430" y="100" width="320" height="56" rx="10" fill="#16202e" stroke="#93c5fd" stroke-width="2.2"/>
+  <text x="590" y="124" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="14" font-weight="bold">Edge router (Nginx + Lua)</text>
+  <text x="590" y="144" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">sends each shop&#8217;s request to its own pod</text>
+
+  <!-- arrows to pods -->
+  <line x1="500" y1="158" x2="240" y2="196" stroke="#93c5fd" stroke-width="2" marker-end="url(#m-b)"/>
+  <line x1="590" y1="158" x2="590" y2="196" stroke="#93c5fd" stroke-width="2" marker-end="url(#m-b)"/>
+  <line x1="680" y1="158" x2="940" y2="196" stroke="#93c5fd" stroke-width="2" marker-end="url(#m-b)"/>
+
+  <!-- POD 1 (healthy) -->
+  <rect x="60" y="200" width="320" height="250" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.4"/>
+  <text x="220" y="226" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Pod 1 &#183; healthy</text>
+  <text x="220" y="248" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">shops A, B</text>
+  <rect x="84" y="262" width="272" height="40" rx="6" fill="#16191e" stroke="#cbd5e1" stroke-width="1.6"/>
+  <text x="220" y="287" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">app workers (stateless)</text>
+  <ellipse cx="160" cy="338" rx="46" ry="12" fill="#20200f" stroke="#ffff99" stroke-width="1.8"/>
+  <path d="M114,338 v40 a46,12 0 0 0 92,0 v-40" fill="#20200f" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="160" y="366" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12" font-weight="bold">MySQL</text>
+  <text x="160" y="382" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">own shard</text>
+  <rect x="248" y="322" width="100" height="56" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="298" y="348" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="bold">Redis</text>
+  <text x="298" y="366" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">own cache</text>
+  <text x="220" y="426" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">&#10003; calm &#183; unaffected</text>
+
+  <!-- POD 2 (flash sale, hot) -->
+  <rect x="430" y="200" width="320" height="250" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="3"/>
+  <text x="590" y="226" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="15" font-weight="bold">Pod 2 &#183; FLASH SALE &#128293;</text>
+  <text x="590" y="248" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">shop C (Kanye drop), shop D</text>
+  <rect x="454" y="262" width="272" height="40" rx="6" fill="#1c1010" stroke="#ff8a8a" stroke-width="1.6"/>
+  <text x="590" y="287" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">app workers (slammed)</text>
+  <ellipse cx="530" cy="338" rx="46" ry="12" fill="#2a1410" stroke="#ff8a8a" stroke-width="1.8"/>
+  <path d="M484,338 v40 a46,12 0 0 0 92,0 v-40" fill="#2a1410" stroke="#ff8a8a" stroke-width="1.8"/>
+  <text x="530" y="366" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12" font-weight="bold">MySQL</text>
+  <text x="530" y="382" text-anchor="middle" fill="#ffcaca" font-family="sans-serif" font-size="10">hot shard</text>
+  <rect x="618" y="322" width="100" height="56" rx="8" fill="#2a1410" stroke="#ff8a8a" stroke-width="1.8"/>
+  <text x="668" y="348" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12" font-weight="bold">Redis</text>
+  <text x="668" y="366" text-anchor="middle" fill="#ffcaca" font-family="sans-serif" font-size="10">busy</text>
+  <text x="590" y="426" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12.5" font-weight="bold">all the heat is trapped in here</text>
+
+  <!-- POD 3 (healthy) -->
+  <rect x="800" y="200" width="320" height="250" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2.4"/>
+  <text x="960" y="226" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="15" font-weight="bold">Pod 3 &#183; healthy</text>
+  <text x="960" y="248" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11.5">shops E, F</text>
+  <rect x="824" y="262" width="272" height="40" rx="6" fill="#16191e" stroke="#cbd5e1" stroke-width="1.6"/>
+  <text x="960" y="287" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12.5">app workers (stateless)</text>
+  <ellipse cx="900" cy="338" rx="46" ry="12" fill="#20200f" stroke="#ffff99" stroke-width="1.8"/>
+  <path d="M854,338 v40 a46,12 0 0 0 92,0 v-40" fill="#20200f" stroke="#ffff99" stroke-width="1.8"/>
+  <text x="900" y="366" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="12" font-weight="bold">MySQL</text>
+  <text x="900" y="382" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">own shard</text>
+  <rect x="988" y="322" width="100" height="56" rx="8" fill="#16202e" stroke="#93c5fd" stroke-width="1.8"/>
+  <text x="1038" y="348" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="12" font-weight="bold">Redis</text>
+  <text x="1038" y="366" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="10">own cache</text>
+  <text x="960" y="426" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12.5" font-weight="bold">&#10003; calm &#183; unaffected</text>
+
+  <text x="590" y="478" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14" font-weight="bold">A pod is a complete mini-Shopify &#8212; its own app + MySQL + Redis. Blast radius of a flash sale = one pod.</text>
+
+  <!-- why not logical shards -->
+  <line x1="40" y1="500" x2="1140" y2="500" stroke="#3a3f47" stroke-width="1.4"/>
+  <text x="590" y="528" text-anchor="middle" fill="#ffff99" font-family="sans-serif" font-size="16" font-weight="bold">Why pods and not the logical shards from the S3 post?</text>
+
+  <!-- logical shards panel -->
+  <rect x="60" y="544" width="520" height="170" rx="12" fill="#2a1414" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="320" y="570" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="14" font-weight="bold">Logical shards &#8212; share one fleet</text>
+  <rect x="84" y="584" width="472" height="40" rx="6" fill="#1c1010" stroke="#9aa6b2" stroke-width="1.4"/>
+  <text x="320" y="608" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="12">ONE app fleet + ONE connection pool</text>
+  <g font-family="sans-serif" font-size="11">
+    <rect x="110" y="632" width="80" height="28" rx="4" fill="#2a1410" stroke="#ff8a8a" stroke-width="1.4"/><text x="150" y="650" text-anchor="middle" fill="#ff8a8a">shard (hot)</text>
+    <rect x="200" y="632" width="80" height="28" rx="4" fill="#16191e" stroke="#9aa6b2" stroke-width="1.2"/><text x="240" y="650" text-anchor="middle" fill="#cbd5e1">shard</text>
+    <rect x="290" y="632" width="80" height="28" rx="4" fill="#16191e" stroke="#9aa6b2" stroke-width="1.2"/><text x="330" y="650" text-anchor="middle" fill="#cbd5e1">shard</text>
+    <rect x="380" y="632" width="80" height="28" rx="4" fill="#16191e" stroke="#9aa6b2" stroke-width="1.2"/><text x="420" y="650" text-anchor="middle" fill="#cbd5e1">shard</text>
+  </g>
+  <text x="320" y="684" text-anchor="middle" fill="#ff8a8a" font-family="sans-serif" font-size="12" font-weight="bold">a hot shard starves its neighbors&#8217; connections &amp; CPU</text>
+  <text x="320" y="703" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">great for spreading load + cheap moves &#8212; weak blast-radius isolation</text>
+
+  <!-- pods panel -->
+  <rect x="600" y="544" width="520" height="170" rx="12" fill="#0f2417" stroke="#8aff8a" stroke-width="2"/>
+  <text x="860" y="570" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="14" font-weight="bold">Pods &#8212; isolate the whole stack</text>
+  <g font-family="sans-serif" font-size="11">
+    <rect x="630" y="588" width="140" height="72" rx="6" fill="#2a1414" stroke="#ff8a8a" stroke-width="1.6"/><text x="700" y="610" text-anchor="middle" fill="#ff8a8a" font-weight="bold">Pod (hot)</text><text x="700" y="628" text-anchor="middle" fill="#ffcaca">own app+DB+pool</text><text x="700" y="646" text-anchor="middle" fill="#ffcaca">heat stays inside</text>
+    <rect x="790" y="588" width="140" height="72" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="860" y="610" text-anchor="middle" fill="#8aff8a" font-weight="bold">Pod</text><text x="860" y="628" text-anchor="middle" fill="#cbd5e1">own app+DB+pool</text><text x="860" y="646" text-anchor="middle" fill="#cbd5e1">calm</text>
+    <rect x="950" y="588" width="140" height="72" rx="6" fill="#0f2417" stroke="#8aff8a" stroke-width="1.4"/><text x="1020" y="610" text-anchor="middle" fill="#8aff8a" font-weight="bold">Pod</text><text x="1020" y="628" text-anchor="middle" fill="#cbd5e1">own app+DB+pool</text><text x="1020" y="646" text-anchor="middle" fill="#cbd5e1">calm</text>
+  </g>
+  <text x="860" y="684" text-anchor="middle" fill="#8aff8a" font-family="sans-serif" font-size="12" font-weight="bold">a noisy merchant literally can&#8217;t touch another pod</text>
+  <text x="860" y="703" text-anchor="middle" fill="#9aa6b2" font-family="sans-serif" font-size="11">flash sale wants hard isolation &#8594; pods win</text>
+
+  <!-- bottom line -->
+  <text x="590" y="744" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="13.5" font-weight="bold">Logical shards split the data on a shared fleet; pods split the data AND the fleet &#8212; so one sale can&#8217;t take down the rest.</text>
+</svg>
