@@ -1,0 +1,64 @@
+<svg width="1180" height="660" viewBox="0 0 1180 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1180" height="660" fill="#0d1117"/>
+  <text x="40" y="52" fill="#e6edf3" font-size="34" font-weight="700">Bucketed counter: one count per second, not per request</text>
+  <text x="40" y="84" fill="#9aa7b4" font-size="18">Keep a small map of epoch-second &#8594; count. Admit if the sum of in-window buckets is below N.</text>
+
+  <!-- nested dict structure -->
+  <text x="60" y="135" fill="#93c5fd" font-size="17" font-weight="700">requests_store[ "user:241531" ] = { second &#8594; count }</text>
+
+  <!-- cutoff -->
+  <line x1="430" y1="170" x2="430" y2="430" stroke="#ffff99" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <text x="430" y="455" fill="#ffff99" font-size="15" text-anchor="middle">cutoff = now &#8722; T</text>
+
+  <!-- buckets: x positions every 100, bars rise from baseline y=410 -->
+  <!-- baseline -->
+  <line x1="70" y1="410" x2="1130" y2="410" stroke="#3b4654" stroke-width="2"/>
+
+  <!-- evicted buckets (left of cutoff) -->
+  <g text-anchor="middle">
+    <rect x="90" y="350" width="64" height="60" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="122" y="385" fill="#ff8a8a" font-size="20" font-weight="700">3</text>
+    <text x="122" y="432" fill="#9aa7b4" font-size="13">:38</text>
+
+    <rect x="200" y="330" width="64" height="80" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="232" y="375" fill="#ff8a8a" font-size="20" font-weight="700">5</text>
+    <text x="232" y="432" fill="#9aa7b4" font-size="13">:39</text>
+
+    <rect x="310" y="360" width="64" height="50" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="342" y="392" fill="#ff8a8a" font-size="20" font-weight="700">2</text>
+    <text x="342" y="432" fill="#9aa7b4" font-size="13">:40</text>
+  </g>
+  <text x="232" y="478" fill="#ff8a8a" font-size="14" text-anchor="middle">dropped: older than now &#8722; T</text>
+
+  <!-- in-window buckets (right of cutoff) -->
+  <g text-anchor="middle">
+    <rect x="470" y="340" width="64" height="70" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="502" y="382" fill="#8aff8a" font-size="20" font-weight="700">4</text>
+    <text x="502" y="432" fill="#9aa7b4" font-size="13">:41</text>
+
+    <rect x="580" y="360" width="64" height="50" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="612" y="392" fill="#8aff8a" font-size="20" font-weight="700">2</text>
+    <text x="612" y="432" fill="#9aa7b4" font-size="13">:42</text>
+
+    <rect x="690" y="320" width="64" height="90" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="722" y="372" fill="#8aff8a" font-size="20" font-weight="700">6</text>
+    <text x="722" y="432" fill="#9aa7b4" font-size="13">:43</text>
+
+    <rect x="800" y="370" width="64" height="40" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="832" y="398" fill="#8aff8a" font-size="20" font-weight="700">1</text>
+    <text x="832" y="432" fill="#9aa7b4" font-size="13">:44</text>
+
+    <rect x="910" y="350" width="64" height="60" fill="#161b22" stroke="#ffd27f" stroke-width="2.5"/>
+    <text x="942" y="385" fill="#ffd27f" font-size="20" font-weight="700">+1</text>
+    <text x="942" y="432" fill="#9aa7b4" font-size="13">:45</text>
+  </g>
+  <text x="700" y="478" fill="#8aff8a" font-size="14" text-anchor="middle">summed &#8594; 4 + 2 + 6 + 1 = 13</text>
+  <text x="942" y="478" fill="#ffd27f" font-size="14" text-anchor="middle">this request bumps</text>
+  <text x="942" y="497" fill="#ffd27f" font-size="14" text-anchor="middle">the current second</text>
+
+  <!-- decision -->
+  <rect x="60" y="520" width="1060" height="115" rx="12" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+  <text x="85" y="555" fill="#e6edf3" font-size="19" font-weight="700">On each request:</text>
+  <text x="85" y="588" fill="#cdd9e5" font-size="16">sum the buckets with second &gt; (now &#8722; T), drop the rest, compare to N &#8212; then increment the current second.</text>
+  <text x="85" y="618" fill="#9aa7b4" font-size="16">A 60s window holds at most ~60 buckets instead of thousands of timestamps:  <tspan fill="#8aff8a" font-weight="700">memory bounded by the window, not by traffic.</tspan></text>
+</svg>

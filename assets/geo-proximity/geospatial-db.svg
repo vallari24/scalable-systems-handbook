@@ -1,0 +1,57 @@
+<svg width="1100" height="600" viewBox="0 0 1100 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="gd-p" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#ff8bd2"/></marker>
+    <marker id="gd-g" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#8aff8a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1100" height="600" fill="#0d1117"/>
+  <text x="40" y="50" fill="#e6edf3" font-size="31" font-weight="700">Don't hand-roll it: geospatial databases give you the primitive</text>
+  <text x="40" y="82" fill="#9aa7b4" font-size="17">Insert/update a (lat, long), then ask: give me the points within a 5 km radius of (lat, long).</text>
+
+  <!-- write command -->
+  <rect x="40" y="150" width="330" height="70" rx="10" fill="#241726" stroke="#ff8bd2" stroke-width="2"/>
+  <text x="58" y="178" fill="#ff8bd2" font-size="14" font-weight="700">WRITE / update a moving point</text>
+  <text x="58" y="204" fill="#cdd9e5" font-size="14.5" font-family="ui-monospace, Menlo, Consolas, monospace">GEOADD drivers &lt;long&gt; &lt;lat&gt; driver:42</text>
+  <line x1="372" y1="185" x2="455" y2="240" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#gd-p)"/>
+
+  <!-- read command -->
+  <rect x="40" y="360" width="380" height="90" rx="10" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+  <text x="58" y="388" fill="#8aff8a" font-size="14" font-weight="700">READ / range-search around a point</text>
+  <text x="58" y="412" fill="#cdd9e5" font-size="13.5" font-family="ui-monospace, Menlo, Consolas, monospace">GEOSEARCH drivers FROMLONLAT &lt;long&gt; &lt;lat&gt;</text>
+  <text x="58" y="433" fill="#cdd9e5" font-size="13.5" font-family="ui-monospace, Menlo, Consolas, monospace">  BYRADIUS 5 km ASC</text>
+  <line x1="422" y1="400" x2="455" y2="350" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#gd-g)"/>
+
+  <!-- redis cylinder -->
+  <g>
+    <ellipse cx="580" cy="200" rx="120" ry="26" fill="#161b22" stroke="#ff8a8a" stroke-width="2.5"/>
+    <rect x="460" y="200" width="240" height="200" fill="#161b22" stroke="#ff8a8a" stroke-width="2.5"/>
+    <ellipse cx="580" cy="400" rx="120" ry="26" fill="#161b22" stroke="#ff8a8a" stroke-width="2.5"/>
+    <line x1="460" y1="200" x2="460" y2="400" stroke="#ff8a8a" stroke-width="2.5"/>
+    <line x1="700" y1="200" x2="700" y2="400" stroke="#ff8a8a" stroke-width="2.5"/>
+  </g>
+  <text x="580" y="195" fill="#ff8a8a" font-size="20" font-weight="700" text-anchor="middle">Redis</text>
+  <!-- sorted set of geohash scores -->
+  <text x="580" y="242" fill="#9aa7b4" font-size="12.5" text-anchor="middle">sorted set (score = 52-bit geohash)</text>
+  <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.5" text-anchor="middle">
+    <text x="580" y="272" fill="#e6edf3">driver:17 &#8594; 1000101101</text>
+    <text x="580" y="296" fill="#93c5fd">driver:42 &#8594; 1000101110</text>
+    <text x="580" y="320" fill="#93c5fd">driver:08 &#8594; 1000101111</text>
+    <text x="580" y="344" fill="#e6edf3">driver:91 &#8594; 1000110001</text>
+  </g>
+  <text x="580" y="378" fill="#9aa7b4" font-size="12" text-anchor="middle">geohash-adjacent = near = range on score</text>
+
+  <!-- other engines -->
+  <rect x="760" y="180" width="300" height="90" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+  <text x="780" y="212" fill="#e6edf3" font-size="17" font-weight="700">Elasticsearch</text>
+  <text x="780" y="240" fill="#9aa7b4" font-size="14" font-family="ui-monospace, Menlo, Consolas, monospace">geo_point / geo_distance</text>
+  <text x="780" y="260" fill="#9aa7b4" font-size="13">same primitive, denormalized &amp; filterable</text>
+
+  <rect x="760" y="290" width="300" height="90" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+  <text x="780" y="322" fill="#e6edf3" font-size="17" font-weight="700">MongoDB</text>
+  <text x="780" y="350" fill="#9aa7b4" font-size="14" font-family="ui-monospace, Menlo, Consolas, monospace">2dsphere index / $near</text>
+  <text x="780" y="370" fill="#9aa7b4" font-size="13">same primitive, in a document store</text>
+
+  <!-- bottom note -->
+  <rect x="40" y="490" width="1020" height="70" rx="10" fill="#161b22" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="60" y="522" fill="#93c5fd" font-size="16" font-weight="700">The design, productized:</text>
+  <text x="60" y="548" fill="#cdd9e5" font-size="15.5">the sorted-set-of-geohash-scores under Redis GEO is exactly the 2D&#8594;1D-then-range-query design from Half A — you just call it.</text>
+</svg>

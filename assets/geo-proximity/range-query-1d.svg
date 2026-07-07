@@ -1,0 +1,53 @@
+<svg width="1100" height="560" viewBox="0 0 1100 560" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1100" height="560" fill="#0d1117"/>
+  <text x="40" y="50" fill="#e6edf3" font-size="32" font-weight="700">Warm-up in 1D: the range query is solved</text>
+  <text x="40" y="82" fill="#9aa7b4" font-size="17">On a line, near = inside an interval [p &#8722; k, p + k]. Finding points inside an interval is a range query.</text>
+
+  <!-- highlighted window -->
+  <rect x="380" y="150" width="300" height="120" fill="#2a2438" stroke="#ffff99" stroke-width="2" rx="6"/>
+  <!-- number line -->
+  <line x1="100" y1="210" x2="1000" y2="210" stroke="#3b4654" stroke-width="2.5"/>
+  <g stroke="#3b4654" stroke-width="2">
+    <line x1="180" y1="200" x2="180" y2="220"/><line x1="280" y1="200" x2="280" y2="220"/>
+    <line x1="380" y1="198" x2="380" y2="222"/><line x1="480" y1="200" x2="480" y2="220"/>
+    <line x1="580" y1="200" x2="580" y2="220"/><line x1="680" y1="198" x2="680" y2="222"/>
+    <line x1="780" y1="200" x2="780" y2="220"/><line x1="880" y1="200" x2="880" y2="220"/>
+  </g>
+  <!-- window brackets -->
+  <text x="380" y="145" fill="#ffff99" font-size="20" font-weight="700" text-anchor="middle">[ 15</text>
+  <text x="680" y="145" fill="#ffff99" font-size="20" font-weight="700" text-anchor="middle">25 ]</text>
+  <text x="530" y="300" fill="#ffff99" font-size="16" text-anchor="middle" font-weight="700">query window [15, 25]</text>
+
+  <!-- points on line -->
+  <g fill="#ff8bd2">
+    <circle cx="210" cy="210" r="7"/><circle cx="320" cy="210" r="7"/>
+    <circle cx="450" cy="210" r="7"/><circle cx="600" cy="210" r="7"/>
+    <circle cx="840" cy="210" r="7"/><circle cx="920" cy="210" r="7"/>
+  </g>
+  <!-- x inside -->
+  <circle cx="530" cy="210" r="9" fill="#8aff8a"/>
+  <text x="530" y="185" fill="#8aff8a" font-size="18" font-weight="700" text-anchor="middle">x</text>
+  <text x="530" y="248" fill="#8aff8a" font-size="13" text-anchor="middle">inside &#10003;</text>
+  <!-- B near 25 -->
+  <circle cx="672" cy="210" r="7" fill="#93c5fd"/>
+  <text x="672" y="185" fill="#93c5fd" font-size="15" font-weight="700" text-anchor="middle">B</text>
+  <!-- z outside -->
+  <circle cx="760" cy="210" r="9" fill="#ff8a8a"/>
+  <text x="760" y="185" fill="#ff8a8a" font-size="18" font-weight="700" text-anchor="middle">z</text>
+  <text x="760" y="248" fill="#ff8a8a" font-size="13" text-anchor="middle">outside</text>
+
+  <!-- SQL -->
+  <rect x="120" y="350" width="500" height="80" rx="10" fill="#11161d" stroke="#2b3441" stroke-width="1.5"/>
+  <text x="140" y="382" fill="#9aa7b4" font-size="13">the everyday BETWEEN:</text>
+  <text x="140" y="412" fill="#e6edf3" font-size="16" font-family="ui-monospace, Menlo, Consolas, monospace">WHERE coordinate &#62; 15 AND coordinate &#60; 25</text>
+
+  <!-- two structures -->
+  <rect x="660" y="350" width="400" height="140" rx="10" fill="#11161d" stroke="#2b3441" stroke-width="1.5"/>
+  <text x="680" y="380" fill="#ffff99" font-size="15" font-weight="700">Two cheap ways to answer it</text>
+  <text x="680" y="410" fill="#e6edf3" font-size="14.5">• <tspan fill="#8aff8a" font-weight="700">Sorted array + binary search</tspan> to the two ends:</text>
+  <text x="698" y="432" fill="#9aa7b4" font-size="13.5">O(log N) to locate, then O(result-size).</text>
+  <text x="680" y="460" fill="#e6edf3" font-size="14.5">• <tspan fill="#93c5fd" font-weight="700">Segment tree / balanced BST</tspan>:</text>
+  <text x="698" y="482" fill="#9aa7b4" font-size="13.5">range query in O(log N + result), fast updates.</text>
+
+  <text x="40" y="530" fill="#9aa7b4" font-size="15" font-style="italic">Either way you never touch the points outside the window. The whole plan: turn the 2D problem into this 1D one.</text>
+</svg>

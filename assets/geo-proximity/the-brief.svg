@@ -1,0 +1,56 @@
+<svg width="1100" height="600" viewBox="0 0 1100 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="brf-a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#cdd9e5"/></marker>
+    <marker id="brf-p" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#ff8bd2"/></marker>
+    <marker id="brf-g" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#8aff8a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1100" height="600" fill="#0d1117"/>
+  <text x="40" y="50" fill="#e6edf3" font-size="32" font-weight="700">The brief: keep a live map, answer "who's near me?"</text>
+  <text x="40" y="82" fill="#9aa7b4" font-size="17">Two operations at very different rates — update a moving point (write-heavy), and range-search around a point (latency-critical).</text>
+
+  <!-- write path: phones -->
+  <text x="60" y="150" fill="#ff8bd2" font-size="19" font-weight="700">Driver phones</text>
+  <g fill="#161b22" stroke="#3b4654" stroke-width="2">
+    <rect x="60" y="170" width="60" height="90" rx="8"/>
+    <rect x="60" y="280" width="60" height="90" rx="8"/>
+    <rect x="60" y="390" width="60" height="90" rx="8"/>
+  </g>
+  <text x="90" y="220" fill="#e6edf3" font-size="22" text-anchor="middle">📍</text>
+  <text x="90" y="330" fill="#e6edf3" font-size="22" text-anchor="middle">📍</text>
+  <text x="90" y="440" fill="#e6edf3" font-size="22" text-anchor="middle">📍</text>
+  <text x="90" y="510" fill="#9aa7b4" font-size="13" text-anchor="middle">(lat, long)</text>
+  <text x="90" y="528" fill="#9aa7b4" font-size="13" text-anchor="middle">every few sec</text>
+
+  <!-- arrows to service -->
+  <line x1="128" y1="215" x2="360" y2="300" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#brf-p)"/>
+  <line x1="128" y1="325" x2="360" y2="315" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#brf-p)"/>
+  <line x1="128" y1="435" x2="360" y2="330" stroke="#ff8bd2" stroke-width="2.5" marker-end="url(#brf-p)"/>
+  <text x="250" y="255" fill="#ff8bd2" font-size="14" text-anchor="middle" font-weight="600">update a moving point</text>
+
+  <!-- service box -->
+  <rect x="365" y="235" width="280" height="130" rx="12" fill="#161b22" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="505" y="285" fill="#93c5fd" font-size="23" font-weight="700" text-anchor="middle">Proximity</text>
+  <text x="505" y="314" fill="#93c5fd" font-size="23" font-weight="700" text-anchor="middle">Service</text>
+  <text x="505" y="345" fill="#9aa7b4" font-size="14" text-anchor="middle">live map of the city</text>
+
+  <!-- read path: rider -->
+  <line x1="890" y1="290" x2="652" y2="300" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#brf-g)"/>
+  <line x1="650" y1="330" x2="888" y2="345" stroke="#cdd9e5" stroke-width="2.5" marker-end="url(#brf-a)"/>
+  <rect x="895" y="200" width="180" height="90" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+  <text x="985" y="228" fill="#e6edf3" font-size="16" font-weight="700" text-anchor="middle">Rider query</text>
+  <text x="985" y="252" fill="#9aa7b4" font-size="13" text-anchor="middle">within 5 km of</text>
+  <text x="985" y="272" fill="#9aa7b4" font-size="13" text-anchor="middle">(lat, long)?</text>
+  <rect x="895" y="320" width="180" height="70" rx="10" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+  <text x="985" y="350" fill="#8aff8a" font-size="15" font-weight="700" text-anchor="middle">nearby driver ids</text>
+  <text x="985" y="372" fill="#9aa7b4" font-size="13" text-anchor="middle">a small set</text>
+  <text x="820" y="285" fill="#8aff8a" font-size="14" text-anchor="middle" font-weight="600">range-search</text>
+
+  <!-- requirements -->
+  <rect x="40" y="410" width="1020" height="150" rx="10" fill="#11161d" stroke="#2b3441" stroke-width="1.5"/>
+  <text x="60" y="440" fill="#ffff99" font-size="16" font-weight="700">Four requirements</text>
+  <text x="60" y="470" fill="#e6edf3" font-size="14.5">• <tspan fill="#ff8bd2" font-weight="700">Write-heavy</tspan> — every device reports continuously; writes dominate reads.</text>
+  <text x="60" y="497" fill="#e6edf3" font-size="14.5">• <tspan fill="#93c5fd" font-weight="700">Low latency</tspan> — on the critical path of matching; budget well under a second.</text>
+  <text x="560" y="470" fill="#e6edf3" font-size="14.5">• <tspan fill="#8aff8a" font-weight="700">Horizontally scalable</tspan> — 100k+ active users per city.</text>
+  <text x="560" y="497" fill="#e6edf3" font-size="14.5">• <tspan fill="#ffd27f" font-weight="700">Approximate is fine</tspan> — locations are already stale by seconds.</text>
+  <text x="60" y="537" fill="#9aa7b4" font-size="14" font-style="italic">That tolerance for a little error is the budget every optimization in this post spends.</text>
+</svg>

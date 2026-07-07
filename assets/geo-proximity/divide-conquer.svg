@@ -1,0 +1,78 @@
+<svg width="1100" height="640" viewBox="0 0 1100 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1100" height="640" fill="#0d1117"/>
+  <text x="40" y="48" fill="#e6edf3" font-size="31" font-weight="700">Building a geohash: halve the world, append a bit each time</text>
+  <text x="40" y="80" fill="#9aa7b4" font-size="17">Odd bits split vertically (left 0 / right 1), even bits split horizontally (top 0 / bottom 1).</text>
+
+  <!-- STEP 1 -->
+  <g>
+    <text x="70" y="122" fill="#ffff99" font-size="15" font-weight="700">Step 1 &#8212; vertical</text>
+    <rect x="70" y="135" width="180" height="150" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+    <line x1="160" y1="135" x2="160" y2="285" stroke="#ffff99" stroke-width="2"/>
+    <text x="115" y="215" fill="#9aa7b4" font-size="20" text-anchor="middle">0</text>
+    <text x="205" y="215" fill="#8aff8a" font-size="22" font-weight="700" text-anchor="middle">1</text>
+    <rect x="160" y="135" width="90" height="150" fill="#8aff8a" opacity="0.10"/>
+    <circle cx="205" cy="195" r="6" fill="#ff8bd2"/>
+    <text x="160" y="308" fill="#e6edf3" font-size="15" text-anchor="middle">point on right &#8594; <tspan fill="#8aff8a" font-weight="700">1</tspan></text>
+  </g>
+
+  <!-- STEP 2 -->
+  <g>
+    <text x="300" y="122" fill="#ffff99" font-size="15" font-weight="700">Step 2 &#8212; horizontal</text>
+    <rect x="300" y="135" width="180" height="150" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+    <line x1="390" y1="135" x2="390" y2="285" stroke="#3b4654" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="390" y1="210" x2="480" y2="210" stroke="#ffff99" stroke-width="2"/>
+    <text x="435" y="180" fill="#8aff8a" font-size="22" font-weight="700" text-anchor="middle">0</text>
+    <text x="435" y="255" fill="#9aa7b4" font-size="20" text-anchor="middle">1</text>
+    <rect x="390" y="135" width="90" height="75" fill="#8aff8a" opacity="0.10"/>
+    <circle cx="435" cy="175" r="6" fill="#ff8bd2"/>
+    <text x="390" y="308" fill="#e6edf3" font-size="15" text-anchor="middle">point on top &#8594; <tspan fill="#8aff8a" font-weight="700">0</tspan></text>
+  </g>
+
+  <!-- STEP 3 -->
+  <g>
+    <text x="530" y="122" fill="#ffff99" font-size="15" font-weight="700">Step 3 &#8212; vertical</text>
+    <rect x="530" y="135" width="180" height="150" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+    <line x1="620" y1="135" x2="620" y2="285" stroke="#3b4654" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="620" y1="210" x2="710" y2="210" stroke="#3b4654" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="665" y1="135" x2="665" y2="210" stroke="#ffff99" stroke-width="2"/>
+    <text x="642" y="180" fill="#9aa7b4" font-size="18" text-anchor="middle">0</text>
+    <text x="688" y="180" fill="#8aff8a" font-size="20" font-weight="700" text-anchor="middle">1</text>
+    <rect x="665" y="135" width="45" height="75" fill="#8aff8a" opacity="0.12"/>
+    <circle cx="688" cy="172" r="6" fill="#ff8bd2"/>
+    <text x="620" y="308" fill="#e6edf3" font-size="15" text-anchor="middle">right &#8594; <tspan fill="#8aff8a" font-weight="700">1</tspan></text>
+  </g>
+
+  <!-- STEP 4 -->
+  <g>
+    <text x="760" y="122" fill="#ffff99" font-size="15" font-weight="700">Step 4 &#8212; horizontal</text>
+    <rect x="760" y="135" width="180" height="150" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+    <line x1="850" y1="135" x2="850" y2="285" stroke="#3b4654" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="850" y1="210" x2="940" y2="210" stroke="#3b4654" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="895" y1="135" x2="895" y2="210" stroke="#3b4654" stroke-width="1" stroke-dasharray="3 3"/>
+    <line x1="895" y1="172" x2="940" y2="172" stroke="#ffff99" stroke-width="2"/>
+    <text x="917" y="160" fill="#8aff8a" font-size="16" font-weight="700" text-anchor="middle">0</text>
+    <text x="917" y="198" fill="#9aa7b4" font-size="15" text-anchor="middle">1</text>
+    <rect x="895" y="135" width="45" height="37" fill="#8aff8a" opacity="0.14"/>
+    <circle cx="917" cy="155" r="5" fill="#ff8bd2"/>
+    <text x="850" y="308" fill="#e6edf3" font-size="15" text-anchor="middle">top &#8594; <tspan fill="#8aff8a" font-weight="700">1</tspan></text>
+  </g>
+
+  <!-- resulting bit string -->
+  <text x="70" y="380" fill="#9aa7b4" font-size="18">the bits, left to right:</text>
+  <text x="360" y="384" fill="#8aff8a" font-size="48" font-weight="700" letter-spacing="10">10011</text>
+  <text x="640" y="384" fill="#e6edf3" font-size="18">&#8230; keep going for a finer cell</text>
+
+  <!-- zoom callouts -->
+  <rect x="70" y="420" width="470" height="70" rx="10" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+  <text x="90" y="450" fill="#8aff8a" font-size="16" font-weight="700">Zoom in</text>
+  <text x="90" y="475" fill="#cdd9e5" font-size="15">= add more bits on the right = smaller, more precise cell</text>
+
+  <rect x="560" y="420" width="470" height="70" rx="10" fill="#241a10" stroke="#ffd27f" stroke-width="2"/>
+  <text x="580" y="450" fill="#ffd27f" font-size="16" font-weight="700">Zoom out</text>
+  <text x="580" y="475" fill="#cdd9e5" font-size="15">= drop bits from the right = a bigger cell</text>
+
+  <!-- banner -->
+  <rect x="70" y="520" width="960" height="80" rx="12" fill="#161b22" stroke="#ff8bd2" stroke-width="2.5"/>
+  <text x="550" y="553" fill="#ff8bd2" font-size="19" font-weight="700" text-anchor="middle">Core idea &#8212; Divide and conquer</text>
+  <text x="550" y="583" fill="#e6edf3" font-size="17" text-anchor="middle">halve the world every time; each split appends one bit; the bit string IS the geohash.</text>
+</svg>

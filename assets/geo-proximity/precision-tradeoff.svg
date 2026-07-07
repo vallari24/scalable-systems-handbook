@@ -1,0 +1,43 @@
+<svg width="1100" height="580" viewBox="0 0 1100 580" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1100" height="580" fill="#0d1117"/>
+  <text x="40" y="50" fill="#e6edf3" font-size="31" font-weight="700">The boundary edge case, and the precision-vs-range dial</text>
+  <text x="40" y="82" fill="#9aa7b4" font-size="17">Two near points on opposite sides of a split share a short prefix — the price of squashing 2D onto 1D.</text>
+
+  <!-- LEFT: rectangle with vertical split -->
+  <rect x="60" y="140" width="440" height="290" fill="#12202e" stroke="#3b4654" stroke-width="2"/>
+  <line x1="280" y1="140" x2="280" y2="430" stroke="#ff8a8a" stroke-width="4"/>
+  <text x="170" y="168" fill="#9aa7b4" font-size="15" text-anchor="middle">left half &#8594; 0...</text>
+  <text x="390" y="168" fill="#9aa7b4" font-size="15" text-anchor="middle">right half &#8594; 1...</text>
+  <!-- two near points -->
+  <circle cx="262" cy="290" r="10" fill="#ff8bd2"/>
+  <circle cx="298" cy="290" r="10" fill="#8aff8a"/>
+  <text x="235" y="330" fill="#ff8bd2" font-size="14" text-anchor="middle">0xxxx</text>
+  <text x="325" y="330" fill="#8aff8a" font-size="14" text-anchor="middle">1xxxx</text>
+  <text x="280" y="410" fill="#e6edf3" font-size="14" text-anchor="middle">centimeters apart &#8212; but geohashes</text>
+  <text x="280" y="428" fill="#e6edf3" font-size="14" text-anchor="middle">diverge at the very first bit</text>
+
+  <rect x="60" y="450" width="440" height="118" rx="10" fill="#2a1c1c" stroke="#ff8a8a" stroke-width="1.5"/>
+  <text x="78" y="476" fill="#ff8a8a" font-size="15" font-weight="700">Edge case:</text>
+  <text x="78" y="498" fill="#cdd9e5" font-size="13.5">points near in space may be far in geohash when a</text>
+  <text x="78" y="516" fill="#cdd9e5" font-size="13.5">split line runs between them.</text>
+  <text x="78" y="540" fill="#9aa7b4" font-size="13.5"><tspan fill="#8aff8a">Fix:</tspan> query the 8 neighbor cells too, or accept the miss.</text>
+
+  <!-- RIGHT: table -->
+  <text x="580" y="168" fill="#93c5fd" font-size="17" font-weight="700">Shorter hash = bigger cell</text>
+  <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="16">
+    <rect x="580" y="188" width="470" height="46" rx="8" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+    <text x="600" y="217" fill="#e6edf3">64 bits</text><text x="800" y="217" fill="#8aff8a">&#8776; 1 cm&#178;   (finest)</text>
+    <rect x="580" y="240" width="470" height="46" rx="8" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+    <text x="600" y="269" fill="#e6edf3">&#8722; ~13 bits</text><text x="800" y="269" fill="#8aff8a">&#8776; 1 m&#178;</text>
+    <rect x="580" y="292" width="470" height="46" rx="8" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+    <text x="600" y="321" fill="#e6edf3">&#8722; ~33 bits</text><text x="800" y="321" fill="#8aff8a">&#8776; 1 km&#178;   (coarse)</text>
+  </g>
+  <text x="580" y="372" fill="#ffd27f" font-size="14">remove bits to grow the cell &#183; each base-32 char (5 bits) = 32&#215; area</text>
+
+  <rect x="580" y="392" width="470" height="148" rx="10" fill="#161b22" stroke="#ffd27f" stroke-width="1.5"/>
+  <text x="600" y="422" fill="#ffd27f" font-size="15" font-weight="700">Speed vs accuracy</text>
+  <text x="600" y="450" fill="#cdd9e5" font-size="14">You trade precision for a wider net by choosing prefix length.</text>
+  <text x="600" y="476" fill="#cdd9e5" font-size="14">At city scale with millions of points the boundary misses are</text>
+  <text x="600" y="498" fill="#cdd9e5" font-size="14">rare and cheap — the result set changes by one or two.</text>
+  <text x="600" y="524" fill="#8aff8a" font-size="14" font-weight="600">And you were going to zoom out anyway.</text>
+</svg>

@@ -1,0 +1,63 @@
+<svg width="1180" height="660" viewBox="0 0 1180 660" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1180" height="660" fill="#0d1117"/>
+  <text x="40" y="52" fill="#e6edf3" font-size="34" font-weight="700">Sliding window log: store every timestamp, exact but heavy</text>
+  <text x="40" y="84" fill="#9aa7b4" font-size="18">A Redis sorted set per key. On each request: evict the old, count what remains, admit if there is room.</text>
+
+  <!-- cutoff -->
+  <text x="270" y="150" fill="#ff8a8a" font-size="16" text-anchor="middle">older than now &#8722; T</text>
+  <text x="820" y="150" fill="#8aff8a" font-size="16" text-anchor="middle">inside the window [now &#8722; T, now]</text>
+
+  <line x1="520" y1="170" x2="520" y2="320" stroke="#ffff99" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <text x="520" y="345" fill="#ffff99" font-size="15" text-anchor="middle">cutoff = now &#8722; T</text>
+
+  <!-- sorted set label -->
+  <text x="60" y="205" fill="#93c5fd" font-size="17" font-weight="700">ZSET key = user:241531  (score = timestamp)</text>
+
+  <!-- evicted entries -->
+  <g font-size="15" text-anchor="middle">
+    <rect x="60" y="225" width="90" height="60" rx="8" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="105" y="261" fill="#ff8a8a">12:00:01</text>
+    <rect x="165" y="225" width="90" height="60" rx="8" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="210" y="261" fill="#ff8a8a">12:00:03</text>
+    <rect x="270" y="225" width="90" height="60" rx="8" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="315" y="261" fill="#ff8a8a">12:00:04</text>
+    <rect x="375" y="225" width="90" height="60" rx="8" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+    <text x="420" y="261" fill="#ff8a8a">12:00:05</text>
+  </g>
+  <text x="270" y="312" fill="#9aa7b4" font-size="14" text-anchor="middle">ZREMRANGEBYSCORE removes these</text>
+
+  <!-- counted entries -->
+  <g font-size="15" text-anchor="middle">
+    <rect x="540" y="225" width="90" height="60" rx="8" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="585" y="261" fill="#8aff8a">12:00:42</text>
+    <rect x="645" y="225" width="90" height="60" rx="8" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="690" y="261" fill="#8aff8a">12:00:50</text>
+    <rect x="750" y="225" width="90" height="60" rx="8" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="795" y="261" fill="#8aff8a">12:00:58</text>
+    <rect x="855" y="225" width="90" height="60" rx="8" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+    <text x="900" y="261" fill="#8aff8a">12:00:59</text>
+  </g>
+  <text x="742" y="312" fill="#9aa7b4" font-size="14" text-anchor="middle">ZCARD counts these &#8594; 4</text>
+
+  <!-- algorithm steps -->
+  <rect x="60" y="390" width="1060" height="160" rx="12" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+  <text x="85" y="425" fill="#e6edf3" font-size="19" font-weight="700">On request at time now (one atomic transaction):</text>
+  <g font-size="17">
+    <text x="95" y="462" fill="#ff8a8a" font-weight="700">1.</text>
+    <text x="120" y="462" fill="#cdd9e5">ZREMRANGEBYSCORE key 0 (now &#8722; T)</text>
+    <text x="560" y="462" fill="#9aa7b4" font-size="15">drop timestamps that fell out of the window</text>
+
+    <text x="95" y="496" fill="#ffff99" font-weight="700">2.</text>
+    <text x="120" y="496" fill="#cdd9e5">count = ZCARD key</text>
+    <text x="560" y="496" fill="#9aa7b4" font-size="15">how many requests remain inside [now &#8722; T, now]</text>
+
+    <text x="95" y="530" fill="#8aff8a" font-weight="700">3.</text>
+    <text x="120" y="530" fill="#cdd9e5">if count &lt; N: ZADD key now now  &#8594; allow,  else &#8594; reject</text>
+    <text x="700" y="530" fill="#9aa7b4" font-size="15">admit and record, or shed</text>
+  </g>
+
+  <!-- cost note -->
+  <rect x="60" y="575" width="1060" height="60" rx="10" fill="#1b222c" stroke="#ff8a8a" stroke-width="1.5"/>
+  <text x="85" y="612" fill="#ff8a8a" font-size="16" font-weight="700">Cost:</text>
+  <text x="150" y="612" fill="#cdd9e5" font-size="16">one stored entry per request &#8212; a key doing 10k req/min holds 10k timestamps. Exact, but memory grows with traffic.</text>
+</svg>

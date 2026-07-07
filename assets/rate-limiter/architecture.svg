@@ -1,0 +1,98 @@
+<svg width="1280" height="780" viewBox="0 0 1280 780" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a-w" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#cdd9e5"/></marker>
+    <marker id="a-g" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#8aff8a"/></marker>
+    <marker id="a-r" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#ff8a8a"/></marker>
+    <marker id="a-b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#93c5fd"/></marker>
+    <marker id="a-y" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#ffff99"/></marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="780" fill="#0d1117"/>
+  <text x="40" y="52" fill="#e6edf3" font-size="34" font-weight="700">The complete rate limiter</text>
+  <text x="40" y="84" fill="#9aa7b4" font-size="18">A stateless decision fleet reads each key&#8217;s rule from config and its live count from a sharded counter store.</text>
+
+  <!-- legend -->
+  <g font-size="14">
+    <rect x="40" y="108" width="1200" height="40" rx="8" fill="#11161d" stroke="#2b3441" stroke-width="1"/>
+    <line x1="60" y1="128" x2="100" y2="128" stroke="#cdd9e5" stroke-width="3" marker-end="url(#a-w)"/><text x="108" y="133" fill="#9aa7b4">request</text>
+    <line x1="220" y1="128" x2="260" y2="128" stroke="#8aff8a" stroke-width="3" marker-end="url(#a-g)"/><text x="268" y="133" fill="#9aa7b4">allowed &#8594; upstream</text>
+    <line x1="470" y1="128" x2="510" y2="128" stroke="#ff8a8a" stroke-width="3" marker-end="url(#a-r)"/><text x="518" y="133" fill="#9aa7b4">rejected 429</text>
+    <line x1="660" y1="128" x2="700" y2="128" stroke="#93c5fd" stroke-width="3" marker-end="url(#a-b)"/><text x="708" y="133" fill="#9aa7b4">config read (control plane)</text>
+    <line x1="960" y1="128" x2="1000" y2="128" stroke="#ffff99" stroke-width="3" marker-end="url(#a-y)"/><text x="1008" y="133" fill="#9aa7b4">count read / increment</text>
+  </g>
+
+  <!-- client -->
+  <rect x="40" y="370" width="150" height="110" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+  <text x="115" y="420" fill="#e6edf3" font-size="20" font-weight="600" text-anchor="middle">Client</text>
+  <text x="115" y="447" fill="#9aa7b4" font-size="14" text-anchor="middle">key&#8217;d traffic</text>
+
+  <!-- load balancer -->
+  <rect x="250" y="375" width="150" height="100" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+  <text x="325" y="418" fill="#e6edf3" font-size="19" font-weight="600" text-anchor="middle">Load</text>
+  <text x="325" y="442" fill="#e6edf3" font-size="19" font-weight="600" text-anchor="middle">balancer</text>
+
+  <!-- decision fleet (stacked) -->
+  <rect x="475" y="360" width="220" height="130" rx="10" fill="#1a2230" stroke="#93c5fd" stroke-width="1.5"/>
+  <rect x="465" y="350" width="220" height="130" rx="10" fill="#1a2230" stroke="#93c5fd" stroke-width="1.5"/>
+  <rect x="455" y="340" width="220" height="130" rx="10" fill="#161b22" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="565" y="378" fill="#93c5fd" font-size="19" font-weight="700" text-anchor="middle">Decision engine</text>
+  <text x="565" y="402" fill="#9aa7b4" font-size="14" text-anchor="middle">stateless fleet</text>
+  <text x="565" y="430" fill="#e6edf3" font-size="15" text-anchor="middle">count(key, last T) &lt; N ?</text>
+  <text x="565" y="453" fill="#9aa7b4" font-size="13" text-anchor="middle">holds no state itself</text>
+
+  <!-- config store (top, blue) -->
+  <path d="M820,180 a90,20 0 0,0 180,0 v70 a90,20 0 0,1 -180,0 z" fill="#15233a" stroke="#93c5fd" stroke-width="2"/>
+  <ellipse cx="910" cy="180" rx="90" ry="20" fill="#15233a" stroke="#93c5fd" stroke-width="2"/>
+  <text x="910" y="220" fill="#93c5fd" font-size="18" font-weight="700" text-anchor="middle">Config store</text>
+  <text x="910" y="243" fill="#9aa7b4" font-size="13" text-anchor="middle">NoSQL + cache</text>
+  <text x="910" y="292" fill="#9aa7b4" font-size="14" text-anchor="middle">{ key: {T, N} } &#8212; rarely changes</text>
+
+  <!-- request/count store (bottom, yellow) sharded redis via proxy -->
+  <rect x="760" y="560" width="120" height="36" rx="8" fill="#161b22" stroke="#ffff99" stroke-width="1.5"/>
+  <text x="820" y="584" fill="#ffff99" font-size="14" text-anchor="middle">shard proxy</text>
+
+  <g>
+    <path d="M700,640 a55,16 0 0,0 110,0 v60 a55,16 0 0,1 -110,0 z" fill="#26210f" stroke="#ffff99" stroke-width="2"/>
+    <ellipse cx="755" cy="640" rx="55" ry="16" fill="#26210f" stroke="#ffff99" stroke-width="2"/>
+    <text x="755" y="690" fill="#ffff99" font-size="14" text-anchor="middle">shard A</text>
+
+    <path d="M845,640 a55,16 0 0,0 110,0 v60 a55,16 0 0,1 -110,0 z" fill="#26210f" stroke="#ffff99" stroke-width="2"/>
+    <ellipse cx="900" cy="640" rx="55" ry="16" fill="#26210f" stroke="#ffff99" stroke-width="2"/>
+    <text x="900" y="690" fill="#ffff99" font-size="14" text-anchor="middle">shard B</text>
+  </g>
+  <text x="828" y="730" fill="#ffff99" font-size="16" font-weight="700" text-anchor="middle">Counter store (Redis)</text>
+  <text x="828" y="752" fill="#9aa7b4" font-size="13" text-anchor="middle">buckets / sorted set per key &#8212; atomic increment, TTL eviction</text>
+
+  <!-- upstream (allowed) -->
+  <rect x="1060" y="360" width="170" height="100" rx="10" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+  <text x="1145" y="403" fill="#8aff8a" font-size="18" font-weight="700" text-anchor="middle">Upstream</text>
+  <text x="1145" y="427" fill="#8aff8a" font-size="18" font-weight="700" text-anchor="middle">service</text>
+
+  <!-- reject (429) -->
+  <rect x="475" y="560" width="180" height="80" rx="10" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="565" y="595" fill="#ff8a8a" font-size="18" font-weight="700" text-anchor="middle">429 reject</text>
+  <text x="565" y="620" fill="#9aa7b4" font-size="13" text-anchor="middle">shed the request</text>
+
+  <!-- arrows request path -->
+  <line x1="192" y1="420" x2="246" y2="420" stroke="#cdd9e5" stroke-width="3" marker-end="url(#a-w)"/>
+  <line x1="402" y1="418" x2="451" y2="410" stroke="#cdd9e5" stroke-width="3" marker-end="url(#a-w)"/>
+
+  <!-- allowed -->
+  <line x1="677" y1="395" x2="1056" y2="400" stroke="#8aff8a" stroke-width="3" marker-end="url(#a-g)"/>
+  <text x="870" y="385" fill="#8aff8a" font-size="14" text-anchor="middle">allow &#8594; forward</text>
+
+  <!-- rejected -->
+  <line x1="565" y1="472" x2="565" y2="556" stroke="#ff8a8a" stroke-width="3" marker-end="url(#a-r)"/>
+
+  <!-- config read (blue) -->
+  <path d="M650,360 C760,300 800,280 845,258" fill="none" stroke="#93c5fd" stroke-width="3" marker-end="url(#a-b)"/>
+  <text x="800" y="318" fill="#93c5fd" font-size="14" text-anchor="middle">read rule for key</text>
+
+  <!-- count read/increment (yellow) -->
+  <path d="M620,472 C700,505 740,525 790,553" fill="none" stroke="#ffff99" stroke-width="3" marker-end="url(#a-y)"/>
+  <text x="640" y="505" fill="#ffff99" font-size="14" text-anchor="end">get + increment count</text>
+
+  <!-- proxy to shards -->
+  <line x1="790" y1="596" x2="765" y2="628" stroke="#ffff99" stroke-width="2.5" marker-end="url(#a-y)"/>
+  <line x1="855" y1="596" x2="890" y2="628" stroke="#ffff99" stroke-width="2.5" marker-end="url(#a-y)"/>
+</svg>

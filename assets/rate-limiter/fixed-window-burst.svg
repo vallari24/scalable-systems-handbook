@@ -1,0 +1,54 @@
+<svg width="1180" height="620" viewBox="0 0 1180 620" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1180" height="620" fill="#0d1117"/>
+  <text x="40" y="52" fill="#e6edf3" font-size="34" font-weight="700">The fixed-window burst: 2&#215;N at the boundary</text>
+  <text x="40" y="84" fill="#9aa7b4" font-size="18">Limit = 5 requests per 60s window. Each window is legal on its own, yet 10 land in one real second-pair.</text>
+
+  <!-- timeline -->
+  <line x1="80" y1="300" x2="1140" y2="300" stroke="#3b4654" stroke-width="2"/>
+
+  <!-- window 1 -->
+  <rect x="120" y="200" width="440" height="120" fill="#1b222c" stroke="#3b4654" stroke-width="1.5"/>
+  <text x="340" y="180" fill="#9aa7b4" font-size="16" text-anchor="middle">window 1  [00:00 &#8211; 01:00)</text>
+  <text x="340" y="345" fill="#8aff8a" font-size="17" font-weight="700" text-anchor="middle">counter = 5  &#8804; 5  &#10003;</text>
+
+  <!-- window 2 -->
+  <rect x="560" y="200" width="440" height="120" fill="#1b222c" stroke="#3b4654" stroke-width="1.5"/>
+  <text x="780" y="180" fill="#9aa7b4" font-size="16" text-anchor="middle">window 2  [01:00 &#8211; 02:00)</text>
+  <text x="780" y="345" fill="#8aff8a" font-size="17" font-weight="700" text-anchor="middle">counter = 5  &#8804; 5  &#10003;</text>
+
+  <!-- boundary -->
+  <line x1="560" y1="160" x2="560" y2="360" stroke="#ffff99" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="560" y="150" fill="#ffff99" font-size="15" text-anchor="middle">reset at 01:00</text>
+
+  <!-- requests clustered at end of w1 -->
+  <g fill="#cdd9e5">
+    <circle cx="455" cy="260" r="9"/>
+    <circle cx="480" cy="260" r="9"/>
+    <circle cx="505" cy="260" r="9"/>
+    <circle cx="530" cy="260" r="9"/>
+    <circle cx="545" cy="285" r="9"/>
+  </g>
+  <text x="495" y="232" fill="#9aa7b4" font-size="14" text-anchor="middle">5 sent at 00:59</text>
+
+  <!-- requests clustered at start of w2 -->
+  <g fill="#cdd9e5">
+    <circle cx="575" cy="260" r="9"/>
+    <circle cx="590" cy="285" r="9"/>
+    <circle cx="615" cy="260" r="9"/>
+    <circle cx="640" cy="260" r="9"/>
+    <circle cx="665" cy="260" r="9"/>
+  </g>
+  <text x="625" y="232" fill="#9aa7b4" font-size="14" text-anchor="middle">5 sent at 01:01</text>
+
+  <!-- the real sliding window catching 10 -->
+  <rect x="445" y="405" width="230" height="150" rx="10" fill="#2a1517" stroke="#ff8a8a" stroke-width="2.5"/>
+  <text x="560" y="437" fill="#ff8a8a" font-size="18" font-weight="700" text-anchor="middle">the real 2-second span</text>
+  <text x="560" y="468" fill="#e6edf3" font-size="32" font-weight="700" text-anchor="middle">10 requests</text>
+  <text x="560" y="498" fill="#ff8a8a" font-size="17" text-anchor="middle">= 2&#215; the limit</text>
+  <text x="560" y="528" fill="#9aa7b4" font-size="14" text-anchor="middle">no fixed window ever</text>
+  <text x="560" y="547" fill="#9aa7b4" font-size="14" text-anchor="middle">saw more than 5</text>
+
+  <line x1="560" y1="300" x2="560" y2="401" stroke="#ff8a8a" stroke-width="2" stroke-dasharray="4 4"/>
+
+  <text x="80" y="600" fill="#9aa7b4" font-size="15">Take-home: counting inside a static window blinds the limiter to traffic that straddles the reset.</text>
+</svg>

@@ -1,0 +1,75 @@
+<svg width="1180" height="640" viewBox="0 0 1180 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="brf-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#cdd9e5"/>
+    </marker>
+    <marker id="brf-green" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#8aff8a"/>
+    </marker>
+    <marker id="brf-red" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#ff8a8a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="640" fill="#0d1117"/>
+  <text x="40" y="52" fill="#e6edf3" font-size="34" font-weight="700">The brief: cap how often a key may call you</text>
+  <text x="40" y="84" fill="#9aa7b4" font-size="18">One rule, asked on every request: has this key exceeded N requests in the last T seconds?</text>
+
+  <!-- client -->
+  <rect x="40" y="180" width="170" height="150" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="2"/>
+  <text x="125" y="225" fill="#e6edf3" font-size="20" font-weight="600" text-anchor="middle">Client</text>
+  <text x="125" y="252" fill="#9aa7b4" font-size="15" text-anchor="middle">key = user:241531</text>
+  <circle cx="80" cy="290" r="9" fill="#cdd9e5"/>
+  <circle cx="110" cy="290" r="9" fill="#cdd9e5"/>
+  <circle cx="140" cy="290" r="9" fill="#cdd9e5"/>
+  <circle cx="170" cy="290" r="9" fill="#cdd9e5"/>
+  <text x="125" y="318" fill="#9aa7b4" font-size="14" text-anchor="middle">a stream of requests</text>
+
+  <!-- limiter -->
+  <rect x="400" y="155" width="320" height="200" rx="12" fill="#161b22" stroke="#93c5fd" stroke-width="2.5"/>
+  <text x="560" y="195" fill="#93c5fd" font-size="22" font-weight="700" text-anchor="middle">Rate limiter</text>
+  <line x1="430" y1="212" x2="690" y2="212" stroke="#2b3441" stroke-width="1.5"/>
+  <text x="560" y="248" fill="#e6edf3" font-size="19" text-anchor="middle">allow if</text>
+  <text x="560" y="284" fill="#ffff99" font-size="22" font-weight="700" text-anchor="middle">count(key, last T) &lt; N</text>
+  <text x="560" y="322" fill="#9aa7b4" font-size="15" text-anchor="middle">else reject and shed the load</text>
+
+  <line x1="212" y1="255" x2="396" y2="255" stroke="#cdd9e5" stroke-width="2.5" marker-end="url(#brf-arrow)"/>
+  <text x="305" y="243" fill="#9aa7b4" font-size="14" text-anchor="middle">request</text>
+
+  <!-- allow -->
+  <rect x="900" y="170" width="240" height="78" rx="10" fill="#13241a" stroke="#8aff8a" stroke-width="2"/>
+  <text x="1020" y="205" fill="#8aff8a" font-size="20" font-weight="700" text-anchor="middle">200 — pass through</text>
+  <text x="1020" y="230" fill="#9aa7b4" font-size="14" text-anchor="middle">under the limit, count it</text>
+
+  <!-- reject -->
+  <rect x="900" y="270" width="240" height="78" rx="10" fill="#2a1517" stroke="#ff8a8a" stroke-width="2"/>
+  <text x="1020" y="305" fill="#ff8a8a" font-size="20" font-weight="700" text-anchor="middle">429 — discard</text>
+  <text x="1020" y="330" fill="#9aa7b4" font-size="14" text-anchor="middle">over the limit, shed load</text>
+
+  <path d="M722,235 C800,210 830,209 896,209" fill="none" stroke="#8aff8a" stroke-width="2.5" marker-end="url(#brf-green)"/>
+  <path d="M722,275 C800,300 830,309 896,309" fill="none" stroke="#ff8a8a" stroke-width="2.5" marker-end="url(#brf-red)"/>
+
+  <!-- requirements row -->
+  <text x="40" y="430" fill="#e6edf3" font-size="20" font-weight="700">What it must satisfy</text>
+  <g font-size="15">
+    <rect x="40" y="450" width="260" height="120" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+    <text x="60" y="482" fill="#ffff99" font-size="17" font-weight="700">Per-key config</text>
+    <text x="60" y="510" fill="#9aa7b4">Each key sets its own N and</text>
+    <text x="60" y="532" fill="#9aa7b4">T (per user, IP, API token).</text>
+
+    <rect x="320" y="450" width="260" height="120" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+    <text x="340" y="482" fill="#93c5fd" font-size="17" font-weight="700">Distributed</text>
+    <text x="340" y="510" fill="#9aa7b4">Many limiter nodes share</text>
+    <text x="340" y="532" fill="#9aa7b4">one count for a key.</text>
+
+    <rect x="600" y="450" width="260" height="120" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+    <text x="620" y="482" fill="#8aff8a" font-size="17" font-weight="700">Low latency</text>
+    <text x="620" y="510" fill="#9aa7b4">It sits in front of every</text>
+    <text x="620" y="532" fill="#9aa7b4">request; must be ~1ms.</text>
+
+    <rect x="880" y="450" width="260" height="120" rx="10" fill="#161b22" stroke="#3b4654" stroke-width="1.5"/>
+    <text x="900" y="482" fill="#ffd27f" font-size="17" font-weight="700">Accurate enough</text>
+    <text x="900" y="510" fill="#9aa7b4">No big bursts past N; a</text>
+    <text x="900" y="532" fill="#9aa7b4">small error is acceptable.</text>
+  </g>
+</svg>
