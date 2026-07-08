@@ -292,6 +292,35 @@ Do this and the system lands where you want it: Gojek reported their geo-search 
 
 ---
 
+## Section 15 — From nearby candidates to a real match
+
+**Question: a geo query gives you nearby drivers or Dashers. Is the match done?**
+
+No. The geo service only answers <span style="color:#8aff8a"><strong>"who could possibly work?"</strong></span> A dispatcher answers a harder question: <span style="color:#ffff99"><strong>"which assignment should we commit right now, given everyone else who also needs a match?"</strong></span>
+
+That difference is the line between a proximity service and a real Lyft/Uber/DoorDash-style marketplace. A radius search around a rider might return 200 drivers. The nearest one is not always the right one. Maybe that driver is about to enter a high-demand zone. Maybe another rider will appear in 20 seconds and the second-nearest driver gives the whole market a lower average wait. For food delivery, the closest Dasher to the customer is often irrelevant; the important point is the <span style="color:#ff8bd2"><strong>merchant pickup location</strong></span>, the order-ready time, and whether the Dasher can batch another nearby order without making either customer late.
+
+So production dispatch is a pipeline:
+
+<img src="../assets/geo-proximity/matching-deep-dive.svg" alt="A deep-dive diagram showing how nearby candidates become a committed match. A rider or order enters a Geo Candidate Service that queries Redis GEO, H3, or S2 cells and returns a small candidate set instead of scanning the whole city. A State Filter removes impossible matches, Feature and ETA services compute pickup time, route time, prep time, acceptance likelihood, and future demand, and those values become weighted edges in a candidate graph. A Batch Optimizer solves a one-to-one bipartite matching problem for ride hailing or a mixed-integer problem for delivery batching, then an Atomic Reservation step writes the assignment exactly once before sending an offer. Declines or timeouts loop back to the optimizer, while feedback events train models and tune the optimizer." width="1180">
+
+Read the diagram left to right:
+
+1. <span style="color:#8aff8a"><strong>Retrieve candidates.</strong></span> Use geohash / Redis GEO / S2 / H3 to pull a small local set. This is the fast pruning step. The output is not "the winner"; it is "the only drivers worth considering."
+2. <span style="color:#ff8bd2"><strong>Filter state.</strong></span> Drop drivers who are stale, offline, already reserved, on the wrong product, too far from the pickup, or incompatible with the order. This is where TTL, availability, vehicle type, batching capacity, and fraud/safety rules cut the set down.
+3. <span style="color:#ffd27f"><strong>Score edges.</strong></span> For each feasible request-driver pair, compute features: pickup ETA, route time, predicted traffic, order prep time, parking/walking time, acceptance probability, cancellation risk, and sometimes future demand. This turns "driver D is near request R" into "edge `(R, D)` has value `w`."
+4. <span style="color:#93c5fd"><strong>Solve a batch.</strong></span> Build a graph of current requests and drivers, then solve for the best set of assignments. For simple ride hailing this is usually a weighted bipartite matching problem. For food delivery, where one Dasher can batch multiple orders and timing constraints matter, it becomes a mixed-integer optimization problem.
+5. <span style="color:#ffff99"><strong>Commit exactly once.</strong></span> Before sending the offer, atomically reserve the driver / Dasher and write the assignment record. This prevents two dispatch workers from offering the same driver two conflicting jobs. If the driver declines or times out, release the reservation and loop back with fresh state.
+6. <span style="color:#93c5fd"><strong>Learn from the outcome.</strong></span> Accepted offers, declined offers, late pickups, cancellations, and completed trips become feedback events. Those events train ETA and acceptance models, tune optimizer weights, and feed simulations.
+
+This is why "nearest driver" is the right first interview answer and the wrong final design. Nearest-driver dispatch is <span style="color:#ff8a8a"><strong>myopic</strong></span>: it optimizes one request using only the current snapshot. Real dispatch optimizes a small market window. It deliberately waits a few seconds, builds a candidate graph, and chooses a set of assignments that reduces total wait time, protects delivery quality, and keeps future supply usable.
+
+The public systems line up with this split. [Lyft's dispatch write-up](https://eng.lyft.com/solving-dispatch-in-a-ridesharing-problem-space-821d9606c3ff) models riders and drivers as a weighted bipartite graph, with batch length as a latency-vs-quality dial. [DoorDash's DeepRed](https://careersatdoordash.com/blog/using-ml-and-optimization-to-solve-doordashs-dispatch-problem/) describes three layers: offer candidate generation, ML estimates for each offer, then a mixed-integer optimizer that decides batching and dispatch timing. [Uber's H3 work](https://www.uber.com/in/en/blog/h3/) shows the spatial side of the same idea: bucket marketplace events into cells so supply, demand, pricing, and dispatch decisions can be made at city scale.
+
+> **Memory hook:** *geo retrieval is candidate generation, not matching. The real dispatcher does six steps: retrieve nearby candidates → filter impossible ones → score each request-driver edge → solve a short batch → atomically reserve the chosen assignment → feed outcomes back into the models. Nearest-driver is myopic; production matching optimizes the local marketplace, not one request in isolation.*
+
+---
+
 ## How the big platforms actually do it
 
 We built one coherent design; the real companies each made different bets on the same problem. Here's how three of them index geography and match supply to demand — and where they diverge from the Redis-geohash system above.
